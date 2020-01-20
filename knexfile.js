@@ -1,49 +1,55 @@
-// Update with your config settings.
-
+const keys = require('./api/config/env-config'); 
+//set the development config for knex to connect to pgsql 
 module.exports = {
-
   development: {
-    client: 'mysql',
+    client: 'pg',
     connection: {
-      database: 'heroku_241a0556662d230',
-      user:     'b2026cd7a3898b',
-      password: 'a6a31581', 
-      host: '@us-cdbr-iron-east-05.cleardb.net',
+      host : 'localhost',
+      user : 'postgres',
+      password : 'root',
+      database : 'hair_authority',
+      charset: 'utf8', 
+    },
+    migrations: {
+      directory: __dirname + '/knex/migrations',
+    },
+    seeds: {
+      directory: __dirname + '/knex/seeds'
+    }
+  },
+  staging: {
+    client: 'pg',
+    connection: {
+      host : keys.dbHost,
+      user : keys.dbUser,
+      password : keys.dbPassword,
+      database : keys.db,
       charset: 'utf8', 
       ssl: true
+    },
+    migrations: {
+      directory: __dirname + '/knex/migrations',
+    },
+    seeds: {
+      directory: __dirname + '/knex/seeds'
     }
   },
 
-  staging: {
-    client: 'postgresql',
+  production:{
+    client: 'pg',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
+      host : keys.dbHost,
+      user : keys.dbUser,
+      password : keys.dbPassword,
+      database : keys.db,
+      charset: 'utf8', 
+      ssl: true
     },
     migrations: {
-      tableName: 'knex_migrations'
+      directory: __dirname + '/knex/migrations',
+    },
+    seeds: {
+      directory: __dirname + '/knex/seeds'
     }
   },
-
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  }
-
 };
