@@ -1,24 +1,30 @@
-const express = require('express'); 
-const app = express(); 
-const bodyParser = require('body-parser'); 
-const authRoutes = require('./api/routes/auth_routes'); 
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+const authRoutes = require("./api/routes/auth.routes");
+const jwt = require("express-jwt");
+const apiRoutes = require('./api/routes/api.routes'); 
 
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 
-//express middleware 
-app.use(express.urlencoded({
+const auth = jwt({
+  secret: process.env.PRIVATE_KEY
+});
+//express middleware
+app.use(
+  express.urlencoded({
     extended: true
-  }));
-  app.use(express.json());
-  app.use(bodyParser.json());
+  })
+);
+app.use(express.json());
+app.use(bodyParser.json());
 
-app.use('/auth', authRoutes); 
+app.use(express.static("public"));
 
-app.get('/', (req, res) => {
-    res.json({ hair_authority: 'day 1' }); 
-}); 
-
+app.use("/auth", authRoutes);
+app.use(auth);
+app.use("/api", apiRoutes);
 
 app.listen(PORT, () => {
-    console.log('app listening on port ', PORT); 
-}); 
+  console.log("app listening on port ", PORT);
+});
