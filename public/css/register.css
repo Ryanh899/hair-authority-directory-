@@ -1,0 +1,16 @@
+#form-container {
+    width: 100%; 
+    position: relative;
+
+}
+
+#form {
+    position: relative;
+    width: 50%; 
+    align-self: center;
+}
+
+#register-form-header {
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+}
