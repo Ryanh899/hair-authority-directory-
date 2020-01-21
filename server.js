@@ -7,9 +7,9 @@ const apiRoutes = require('./api/routes/api.routes');
 
 const PORT = process.env.PORT || 3000;
 
-const auth = jwt({
-  secret: process.env.PRIVATE_KEY
-});
+// const auth = jwt({
+//   secret: process.env.PRIVATE_KEY
+// });
 //express middleware
 app.use(
   express.urlencoded({
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.use("/auth", authRoutes);
-app.use(auth);
+// app.use(auth);
 app.use("/api", apiRoutes);
 
 app.listen(PORT, () => {

@@ -15,14 +15,14 @@ myAxios.interceptors.response.use(function (response) {
 })
 var authHelper = {
     isLoggedIn () {
-        var token = localStorage.getItem('token')
+        const token = localStorage.getItem('token')
         if(token) {
             var userData = this.parseToken(token);
             var expirationDate = new Date(userData.exp * 1000)
             if(Date.now() > expirationDate) this.logOut()
+            return true 
         } else { 
-            alert('not logged in')
-            window.location.assign('sign-in.html')
+            return false
         }
     },
     parseToken (token) {
@@ -35,19 +35,11 @@ var authHelper = {
 }
 
 $( document ).ready(function() {
-    $( '#submit' ).on('click', function () {
-        const userInfo = {
-            email: $('#email').val().trim(), 
-            password: $('#password').val().trim()
-        }
-        axios.post('http://localhost:3000/auth/register', userInfo)
-            .then(response => {
-                console.log(response)
-                window.location.assign('sign-in.html')
-            })
-            .catch(err => {
-                alert('user already exists')
-                window.location.assign('sign-in.html')
-            })
-    })
+    if (authHelper.isLoggedIn()) {
+        const user = authHelper.parseToken(localStorage.getItem('token'))
+        
+    }
+    
 });
+  
+  

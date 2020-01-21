@@ -4,16 +4,21 @@ const Auth = require('../models/auth');
 const _ = require('lodash'); 
 
 router.post('/register', (req, res) => {
-    console.log(req.body)
     const userInfo = _.pick(req.body, 'email', 'password'); 
-    console.log(userInfo)
     Auth.register(userInfo, res); 
 });     
 
 router.post('/login', (req, res) => {
     const attemptedUser = _.pick(req.body, 'email', 'password'); 
     Auth.logIn(attemptedUser, res)
-})
+}); 
+
+router.post('/user-professional', async (req, res) => {
+    const user = await User.findEmail('ryan2@gmail.com')
+    console.log('user', user)
+    // const token = _.pick(req.headers, 'authorization'); 
+    // User.userToProfessional(token)
+}); 
 
 
 

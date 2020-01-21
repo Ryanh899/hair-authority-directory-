@@ -1,41 +1,83 @@
 var myAxios = axios.create({
-    headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-    }
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("token")
+  }
 });
-myAxios.interceptors.response.use(function (response) {
+myAxios.interceptors.response.use(
+  function(response) {
     return response;
-  }, function (error) {
+  },
+  function(error) {
     if (error.response.status === 401) {
-        return authHelper.logOut('./sign-in.html')
+      return authHelper.logOut("./sign-in.html");
+    } else {
+      return Promise.reject(error);
     }
-    else {
-        return Promise.reject(error)
-    } 
-})
+  }
+);
 var authHelper = {
-    isLoggedIn () {
-        var token = localStorage.getItem('token')
-        if(token) {
-            var userData = this.parseToken(token);
-            var expirationDate = new Date(userData.exp * 1000)
-            if(Date.now() > expirationDate) this.logOut()
-        } else { 
-            alert('not logged in')
-            window.location.assign('sign-in.html')
-        }
-    },
-    parseToken (token) {
-        return JSON.parse(window.atob(token.split('.')[1]))
-    },
-    logOut (path = './sign-in.html') {
-        localStorage.removeItem('token')
-        window.location.assign(path)
+  isLoggedIn() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      var userData = this.parseToken(token);
+      var expirationDate = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate) this.logOut();
+      return true;
+    } else {
+      return false;
     }
-}
+  },
+  parseToken(token) {
+    return JSON.parse(window.atob(token.split(".")[1]));
+  },
+  logOut() {
+    localStorage.removeItem("token");
+  }
+};
 
-$( document ).ready(function() {
+$(document).ready(function() {
+  if (authHelper.isLoggedIn()) {
+    const token = localStorage.getItem("token");
+    const userInfo = authHelper.parseToken(token);
+    if (userInfo.isClientUser) {
+      $("#auth-buttons").html(
+        `<button id="saved-listings" class="ui button" >My Listings</button>`
+      );
+    } else if (userInfo.isProfessionalUser) {
+      $("#auth-buttons").html(
+        `<button id="dashboard-button" class="ui button" >My Dashboard</button>`
+      );
+    } else if (userInfo.isAdminUser) {
+      $("#auth-buttons").html(
+        `<button id="admin-portal-button" class="ui button" >Admin Portal</button>`
+      );
+    }
+  } else {
+    console.log("not logged in");
+    $( '#logout-div' ).html('')
+  }
+  $('body').on('click', '#sign-in-button', function() {
+    event.preventDefault();
+    window.location.assign("sign-in.html");
+  });
 
+  $('body').on('click', '#register-button', function() {
+    event.preventDefault();
+    window.location.assign("register.html");
+  });
+
+  $('body').on('click', '#dashboard-button', function() {
+    event.preventDefault();
+    window.location.assign("dashboard.html");
+  });
+
+  $('body').on('click', '#logout-button', function() {
+    event.preventDefault();
+    authHelper.logOut()
+    $("#auth-buttons").html(
+        `<button id="sign-in-button" class="ui button" >Sign In</button>
+        <button id="register-button" class="ui button">Register</button>`
+      );
+    $( '#logout-div' ).html('')
+  });
 });
-  
-  
