@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 router.post('/register', (req, res) => {
     const userInfo = _.pick(req.body, 'email', 'password'); 
+    console.log(userInfo)
     Auth.register(userInfo, res); 
 });     
 
@@ -14,10 +15,16 @@ router.post('/login', (req, res) => {
 }); 
 
 router.post('/user-professional', async (req, res) => {
-    const user = await User.findEmail('ryan2@gmail.com')
+    // need to set up authentication on this route for admin only 
+    const user = await User.findEmail('ryan@gmail.com')
     console.log('user', user)
-    // const token = _.pick(req.headers, 'authorization'); 
-    // User.userToProfessional(token)
+    if (user.length !== 0) {
+        User.userToProfessional(user, res)
+    } else {
+        console.log('user not found')
+        res.status(400).json({ message: 'user not found' })
+    }
+
 }); 
 
 

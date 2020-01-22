@@ -1,3 +1,6 @@
+
+const API_URL = 'http://localhost:3000/api/' 
+
 var myAxios = axios.create({
     headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -35,10 +38,22 @@ var authHelper = {
 }
 
 $( document ).ready(function() {
-    if (authHelper.isLoggedIn()) {
-        const user = authHelper.parseToken(localStorage.getItem('token'))
-        
-    }
+    // style js 
+    $('.vertical.menu .item').tab();
+
+    $('body').on('click', '#listings-tab', function() {
+        fetch(API_URL + 'listings', {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              }, 
+            body: JSON.stringify(localStorage.getItem('token'))
+        }).then(response => {
+            console.log(response)
+        }).catch(err => console.log(err)); 
+      });
+    
     
 });
   

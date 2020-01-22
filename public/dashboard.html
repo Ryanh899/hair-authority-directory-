@@ -1,15 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Dashboard</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>International Hair Authority</title>
+    <!-- You MUST include jQuery before Fomantic -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script> -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
+      integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:100&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    />
 
-
-    <script src='./js/dashboard.js'></script>
-</body>
+    <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
+    <link rel="stylesheet" href="./css/search.css" />
+  </head>
+  <body>
+    <header>
+      <div class="ui top attached menu">
+        <div class="ui dropdown icon item">
+          <i class="wrench icon"></i>
+          <div class="menu">
+            <div class="item">
+              <i class="dropdown icon"></i>
+              <span class="text">New</span>
+              <div class="menu">
+                <div class="item">Document</div>
+                <div class="item">Image</div>
+              </div>
+            </div>
+            <div class="item">
+              Open...
+            </div>
+            <div class="item">
+              Save...
+            </div>
+            <div class="item">Edit Permissions</div>
+            <div class="divider"></div>
+            <div class="header">
+              Export
+            </div>
+            <div class="item">
+              Share...
+            </div>
+          </div>
+        </div>
+        <div class="right menu">
+          <div class="ui right aligned category search item">
+            <div class="ui transparent icon input">
+              <input
+                class="prompt"
+                type="text"
+                placeholder="Search animals..."
+              />
+              <i class="search link icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ui bottom attached segment">
+        <p></p>
+      </div>
+    </header>
+    <main>
+      <div id="dashboard-container" class="ui grid container">
+        <div class="three wide column">
+          <div id="side-menu" class="ui vertical pointing tabular menu">
+                <a class="active item" data-tab="home" > <i class="home icon"></i> Home </a>
+                <a id="listings-tab" class="item" data-tab="listings" > <i class="list layout icon"></i></i> My Listings </a>
+                <a class="item" data-tab="profile"> <i class="user icon"></i> Profile </a>
+                <a class="item" data-tab="billing" > <i class="paypal icon"></i></i> Billing </a>
+          </div>
+        </div>
+        <div class="thirteen wide column">
+          <div data-tab="home" class="ui right attached active tab item tab-div">
+            <p>home</p>
+          </div>
+          <div data-tab="listings" class="ui right attached tab item tab-div">
+            <p>listings</p>
+            </div>
+            <div data-tab="profile" class="ui right attached tab item tab-div">
+                <p>profile</p>
+            </div>
+            <div data-tab="billing" class="ui right attached tab item tab-div">
+                <p>billing</p>
+            </div>
+        </div>
+      </div>
+    </main>
+    <script src="./js/dashboard.js"></script>
+  </body>
 </html>

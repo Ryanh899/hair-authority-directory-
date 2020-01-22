@@ -8,7 +8,7 @@ const keys = require('../config/env-config');
 module.exports = {
     async register(userInfo, cb) {
         const userTest = await User.findEmail(userInfo.email);
-        console.log( userTest)
+        console.log(userTest)
             if (userTest.length === 0) {
                 const salt = Auth.generateSalt();
                 const hash = Auth.generateHash(salt, userInfo.password);

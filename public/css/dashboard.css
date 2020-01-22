@@ -1,0 +1,17 @@
+#side-menu {
+    height: 90vh;
+    margin: 0px; 
+}
+
+#dashboard-container {
+    margin: 0px; 
+    width: 100%
+}
+
+.tab-div {
+    border: solid;
+    border-width: 5px;
+    background: 'black';
+    padding: 5rem;
+    height: 100%;
+}

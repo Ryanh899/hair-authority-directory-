@@ -8,7 +8,11 @@ const User = {
     // determines if email exists in either client or business table
     let user = await knex("users")
       .select()
-      .where("email", userInfo);
+      .where("email", userInfo)
+      .then(response => {
+        return response; 
+      }).catch(err => console.log(err)); 
+    console.log(user)
     if (user.length !== 0) {
       console.log("client_user");
       user = user[0];
@@ -32,18 +36,20 @@ const User = {
           admin_user = admin_user[0];
           admin_user.isAdminUser = true;
           return admin_user;
+        } else {
+          return []; 
         }
       }
     }
   },
-  async userToProfessional(userInfo) {
-    const token = userInfo.authorization.split(" ")[1];
-    const decodedInfo = jwt.decode(token);
-    console.log(decodedInfo);
-    const user = await this.findEmail(decodedInfo.email);
+  async userToProfessional(user, cb) {
+    // const token = userInfo.authorization.split(" ")[1];
+    // const decodedInfo = jwt.decode(token);
+    // console.log(decodedInfo);
+    // const user = await this.findEmail(decodedInfo.email);
     knex("professional_users")
       .insert({
-        id: user.client_id,
+        id: user.id,
         email: user.email,
         hash: user.hash,
         salt: user.salt
@@ -56,9 +62,10 @@ const User = {
       });
     knex("users")
       .delete()
-      .where("email", decodedInfo.email.toLowerCase())
+      .where("email", user.email)
       .then(resp => {
         console.log(resp);
+        cb.status(200).send('user moved from client to professional')
       })
       .catch(err => {
         console.log(err);
