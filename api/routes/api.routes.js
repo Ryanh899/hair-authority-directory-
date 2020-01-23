@@ -4,12 +4,11 @@ const jwt = require('jsonwebtoken');
 const Listings = require('../models/listings'); 
 
 router.post('/listings', async (req, res) => {
-    const token = _.pick(req.body, 'token'); 
-    const user = await jwt.decode(token); 
+    const user = _.pick(req.body, 'id', 'email')
     const listings = Listings.getListings(user); 
     listings.then(response => {
-        console.log(response)
-    })
+        res.json(response)
+    }).catch(err => console.log(err)); 
 })
 
 

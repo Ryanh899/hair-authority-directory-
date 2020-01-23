@@ -4,7 +4,7 @@ const Listings = {
     getListings(userInfo) {
         return knex('listings')
             .select()
-            .where('professional_id', userInfo.id)
+            .where('id', userInfo.id)
             .catch(err => console.log(err))
     }
 }

@@ -48,11 +48,24 @@ $( document ).ready(function() {
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
               }, 
-            body: JSON.stringify(localStorage.getItem('token'))
-        }).then(response => {
-            console.log(response)
-        }).catch(err => console.log(err)); 
+            body: JSON.stringify(authHelper.parseToken(localStorage.getItem('token')))
+        }).then(res => res.json())
+        .then(response => {
+            console.log(response); 
+            if (response.length === 0) {
+                $( '#listings-div' ).html(`<h1 class="h1" >You have no listings</h1>
+                                           <h2 class="h2">But you could... </h2>
+                                           <button id="add-listing-button" class="ui button">Make a listing</button>`); 
+            } else {
+                console.log('wtf')
+            }
+        })
+        .catch(err => console.log(err)); 
       });
+
+      $('body').on('click', '#add-listing-button', function() {
+        window.location.assign('listing.form.html'); 
+      })
     
     
 });
