@@ -28,7 +28,9 @@ var authHelper = {
     }
   },
   parseToken(token) {
-    return JSON.parse(window.atob(token.split(".")[1]));
+    if (token) {
+      return JSON.parse(window.atob(token.split(".")[1]));
+    }
   },
   logOut() {
     localStorage.removeItem("token");

@@ -6,6 +6,17 @@ const Listings = {
             .select()
             .where('id', userInfo.id)
             .catch(err => console.log(err))
+    }, 
+    addListing(listing, userInfo) {
+        console.log(listing)
+        return knex('listings')
+            .insert(listing)
+            .then(resp => {
+                console.log(resp)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 }
 

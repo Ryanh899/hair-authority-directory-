@@ -42,15 +42,14 @@ $( document ).ready(function() {
     $('.vertical.menu .item').tab();
 
     $('body').on('click', '#listings-tab', function() {
-        myAxios.get(API_URL + 'listings', {
+        myAxios.get(API_URL + 'listings/' + localStorage.getItem('token'), {
             headers: {
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
               }, 
-            body: JSON.stringify(authHelper.parseToken(localStorage.getItem('token')))
-        }).then(res => res.json())
-        .then(response => {
-            console.log(response); 
+        })
+        .then(resp => {
+            const response = resp.data; 
             if (response.length === 0) {
                 $( '#listings-div' ).html(`<h1 class="h1" >You have no listings</h1>
                                            <h2 class="h2">But you could... </h2>
