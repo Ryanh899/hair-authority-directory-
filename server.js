@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/auth.routes");
 const jwt = require("express-jwt");
 const apiRoutes = require('./api/routes/api.routes'); 
+const morgan = require('morgan')
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,6 +19,8 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.json());
+
+app.use(morgan('dev'))
 
 app.use(express.static("public"));
 

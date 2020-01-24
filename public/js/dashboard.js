@@ -42,8 +42,7 @@ $( document ).ready(function() {
     $('.vertical.menu .item').tab();
 
     $('body').on('click', '#listings-tab', function() {
-        fetch(API_URL + 'listings', {
-            method: "POST", 
+        myAxios.get(API_URL + 'listings', {
             headers: {
                 'Content-Type': 'application/json'
                 // 'Content-Type': 'application/x-www-form-urlencoded',
