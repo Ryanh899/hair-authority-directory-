@@ -24,55 +24,63 @@
 <body>
     <div id="form-container">
         <h1>Make a listing</h1>
-        <div class="ui equal width form">
+        <form class="ui equal width form" id="listings">
             <div class="field">
                 <label>Business Title</label>
-                <input type="text" placeholder="Business Title">
+                <input type="text" placeholder="Business Title" name="businessTitle">
             </div>
             <div class="field">
                 <label>Business Subtitle</label>
-                <input type="text" placeholder="Business Subtitle">
+                <input type="text" placeholder="Business Subtitle" name="businessSubtitle">
             </div>
             <div class="fields">
                 <div class="field">
                     <label>Street Address</label>
-                    <input type="text" placeholder="Street Address">
+                    <input type="text" placeholder="Street Address" name="streetAddress">
                 </div>
                 <div class="field">
                     <label>City</label>
-                    <input type="text" placeholder="City">
+                    <input type="text" placeholder="City" name="city">
                 </div>
             </div>
             <div class="fields">
                 <div class="field">
                     <label>State</label>
-                    <input type="text" placeholder="State">
+                    <input type="text" placeholder="State" name="state">
                 </div>
                 <div class="field">
                     <label>Zip</label>
-                    <input type="text" placeholder="Zip">
+                    <input type="text" placeholder="Zip" name="zip">
                 </div>
             </div>
             <div id='opening-hours-field' class="fields"></div>
             <div id='closing-hours-field' class="fields"></div>
             <div class="field">
                 <label>Website</label>
-                <input type="text" placeholder="www.example.com">
+                <input type="text" name="website" placeholder="www.example.com">
             </div>
             <div id="category-field" class="field"></div>
             <div class="fields">
                 <div class="field">
                     <label>Phone</label>
-                    <input type='number' placeholder="999-999-9999" >
+                    <input type='number' name="phone" placeholder="999-999-9999">
                 </div>
                 <div class="field">
                     <label>Email</label>
-                    <input type="email" placeholder="example@example.com" >
+                    <input name='email' type="email" placeholder="example@example.com">
                 </div>
             </div>
-            <div id="social-media" ></div>
-
-        </div>
+            <div id="social-media"></div>
+            <div id="faq-section">
+                <label>FAQs</label>
+                <i id="add-faq" class="large plus circle icon"></i>
+            </div>
+            <div class="field">
+                <label>Extra Info</label>
+                <textarea id="extra-info" name='extraInfo'></textarea>
+            </div>
+            <button id="listing-submit" class="ui button" >Submit</button>
+        </form>
     </div>
 
     <script src="./js/listing.form.js"></script>
