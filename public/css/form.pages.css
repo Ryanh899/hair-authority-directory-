@@ -12,7 +12,31 @@
     border-color: rgba(39, 76, 119, 1);
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
+    /* display: none; */
+}
+
+#form-2 {
+    width: 50%; 
+    margin: 0 auto; 
+    border: solid; 
+    border-width: .5rem;
+    padding: 2.5rem;
+    border-color: rgba(39, 76, 119, 1);
+    margin-top: 2.5rem;
     display: none;
+    margin-bottom: 2.5rem;
+}
+
+#form-3 {
+    width: 50%; 
+    margin: 0 auto; 
+    border: solid; 
+    border-width: .5rem;
+    padding: 2.5rem;
+    border-color: rgba(39, 76, 119, 1);
+    margin-top: 2.5rem;
+    display: none;
+    margin-bottom: 2.5rem;
 }
 
 #labels-1 {
@@ -59,17 +83,7 @@
     text-align: center;
 }
 
-#form-2 {
-    width: 50%; 
-    margin: 0 auto; 
-    border: solid; 
-    border-width: .5rem;
-    padding: 2.5rem;
-    border-color: rgba(39, 76, 119, 1);
-    margin-top: 2.5rem;
-    /* display: none; */
-    margin-bottom: 2.5rem;
-}
+
 
 #footer {
     width: 100%;
@@ -97,14 +111,3 @@
         font-size: 18px;
 }
 
-#form-3 {
-    width: 50%; 
-    margin: 0 auto; 
-    border: solid; 
-    border-width: .5rem;
-    padding: 2.5rem;
-    border-color: rgba(39, 76, 119, 1);
-    margin-top: 2.5rem;
-    display: none;
-    margin-bottom: 2.5rem;
-}

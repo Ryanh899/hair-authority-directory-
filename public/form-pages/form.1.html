@@ -35,14 +35,14 @@
             <h3 class="form-h3">Let's get started... </h3>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">What's the name of your business?</label>
-                <div style="margin-top: 1rem;" class="ui transparent left icon input">
+                <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                     <input name="businessTitle" type="text" placeholder="Ex. Google">
                     <i class="building outline icon"></i>
                 </div>
             </div>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Give a quick description of what you do</label>
-                <div style="margin-top: 1rem;" class="ui transparent left icon input">
+                <div id="businessDescription-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                     <input name="businessDescription" type="text"
                         placeholder="Ex. At the Hair Authority Directory we...">
                     <i class="edit icon"></i>
@@ -56,14 +56,14 @@
             <div class="fields">
                 <div class="field">
                     <label id="labels-1">Street Address</label>
-                    <div style="margin-top: 1rem;" class="ui transparent left icon input">
-                        <input name="streetAddress" type="text" placeholder="Ex. 9999 Silva Rd.">
+                    <div id="streetAddress-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input class="ui input" id="streetAddress" name="streetAddress" type="text" placeholder="Ex. 9999 Silva Rd.">
                         <i class="map signs icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <label id="labels-1">City</label>
-                    <div style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <div id="city-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                         <input name="city" type="text" placeholder="Ex. Los Angeles">
                         <i class="city icon"></i>
                     </div style="margin-top: 2rem;">
@@ -72,7 +72,7 @@
             <div class="fields">
                 <div class="field">
                     <label id="labels-1">State</label>
-                    <div style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <div id="state-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                         <select id="state" name="state" class="ui search dropdown">
                             <option value="">State</option>
                             <option value="AL">Alabama</option>
@@ -131,15 +131,23 @@
                 </div>
                 <div class="field">
                     <label id="labels-1">Zip</label>
-                    <div style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <div id="zip-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                         <input name="zip" type="text" placeholder="Ex. 99999">
                         <i class="hashtag icon"></i>
                     </div style="margin-top: 2rem;">
                 </div>
             </div>
             <h3 class="form-h3" >Store Hours</h3>
-            <div id='opening-hours-field' class="fields"></div>
-            <div id='closing-hours-field' class="fields"></div>
+            <div id="hours-div" >
+                <div id='opening-hours-field' style="display: inline-block; width: 50%;" class="fields"></div>
+                <div id='closing-hours-field' style="display: inline-block; width: 50%; " class="fields"></div>
+            </div>
+            <div class="field">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" tabindex="0" name="24hours" class="hidden">
+                    <label>24 Hours</label>
+                  </div>
+            </div>
             <a id="submit2">
                 <div  class="submit-button">Next <i class="right arrow icon"></i></div>
             </a>
