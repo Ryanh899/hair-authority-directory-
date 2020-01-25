@@ -12,7 +12,6 @@
     border-color: rgba(39, 76, 119, 1);
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
-    display: none;
 }
 
 #form-2 {
@@ -83,7 +82,7 @@
     padding: 2.5rem;
     border-color: rgba(39, 76, 119, 1);
     margin-top: 2.5rem;
-    /* display: none; */
+    display: none;
     margin-bottom: 2.5rem;
 }
 
