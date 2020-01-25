@@ -57,7 +57,8 @@
                 <div class="field">
                     <label id="labels-1">Street Address</label>
                     <div id="streetAddress-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                        <input class="ui input" id="streetAddress" name="streetAddress" type="text" placeholder="Ex. 9999 Silva Rd.">
+                        <input class="ui input" id="streetAddress" name="streetAddress" type="text"
+                            placeholder="Ex. 9999 Silva Rd.">
                         <i class="map signs icon"></i>
                     </div>
                 </div>
@@ -126,7 +127,7 @@
                             <option value="WV">West Virginia</option>
                             <option value="WI">Wisconsin</option>
                             <option value="WY">Wyoming</option>
-                          </select>
+                        </select>
                     </div>
                 </div>
                 <div class="field">
@@ -137,8 +138,8 @@
                     </div style="margin-top: 2rem;">
                 </div>
             </div>
-            <h3 class="form-h3" >Store Hours</h3>
-            <div id="hours-div" >
+            <h3 class="form-h3">Store Hours</h3>
+            <div id="hours-div">
                 <div id='opening-hours-field' style="display: inline-block; width: 50%;" class="fields"></div>
                 <div id='closing-hours-field' style="display: inline-block; width: 50%; " class="fields"></div>
             </div>
@@ -146,37 +147,125 @@
                 <div class="ui toggle checkbox">
                     <input type="checkbox" tabindex="0" name="24hours" class="hidden">
                     <label>24 Hours</label>
-                  </div>
+                </div>
             </div>
             <a id="submit2">
-                <div  class="submit-button">Next <i class="right arrow icon"></i></div>
+                <div class="submit-button">Next <i class="right arrow icon"></i></div>
             </a>
-            <p style="float: right;" >Don't have an address? <a>Skip </a></p>
+            <p style="float: right;">Don't have an address? <a>Skip </a></p>
         </form>
 
         <!-- form 3 -->
         <form id="form-3" class="ui equal width form">
             <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">Let's get started... </h3>
+            <h3 class="form-h3">This is your online presence</h3>
             <div class="field">
-                <label style="margin-top: 2rem;" id="labels-1">What's the name of your business?</label>
+                <label style="margin-top: 2rem;" id="labels-1">Website</label>
                 <div style="margin-top: 1rem;" class="ui transparent left icon input">
-                    <input name="businessTitle" type="text" placeholder="Ex. Google">
-                    <i class="building outline icon"></i>
+                    <input name="website" type="text" placeholder="Ex. https://www.google.com">
+                    <i class="search icon"></i>
                 </div>
             </div>
             <div class="field">
-                <label style="margin-top: 2rem;" id="labels-1">Give a quick description of what you do</label>
-                <div style="margin-top: 1rem;" class="ui transparent left icon input">
-                    <input name="businessDescription" type="text"
-                        placeholder="Ex. At the Hair Authority Directory we...">
-                    <i class="edit icon"></i>
-                </div style="margin-top: 2rem;">
+                <label style="margin-top: 2rem;" id="labels-1">Social Media</label>
+                <div id="instagram-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="instagram" type="text" placeholder="  Ex. https://www.instagram.com/john_smith">
+                    <i class="large instagram icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div id="facebook-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="facebook" type="text" placeholder="  Ex. https://www.facebook.com/johnsmith">
+                    <i class="large facebook icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div id="twitter-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="twitter" type="text" placeholder="  Ex. https://twitter.com/johnsmith">
+                    <i class="large twitter icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div id="linkedIn-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="linkedin" type="text" placeholder="  Ex. https://www.google.com">
+                    <i class="large linkedin icon"></i>
+                </div>
             </div>
             <div id="submit3" class="submit-button">Next <i class="right arrow icon"></i></div>
         </form>
 
+        <!-- form 4 -->
+        <form id="form-4" class="ui equal width form">
+            <h1 class="form-h1">International Authority Directory</h1>
+            <h3 class="form-h3">Lets Get Your Contact Info</h3>
+            <div class="field">
+                <label style="margin-top: 2rem;" id="labels-1">Email</label>
+                <div id="email-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="email" type="text" placeholder="Ex. johnsmith@gmail.com">
+                    <i class="envelope icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <label style="margin-top: 2rem;" id="labels-1">Phone</label>
+                <div id="phone-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="phone" type="text" placeholder="Ex. 999-999-9999">
+                    <i class="phone icon"></i>
+                </div>
+            </div>
+            <div id="submit4" class="submit-button">Next <i class="right arrow icon"></i></div>
+        </form>
 
+        <!-- form 5 -->
+        <form id="form-5" class="ui equal width form">
+            <h1 class="form-h1">International Authority Directory</h1>
+            <h3 class="form-h3">Tell us about your business</h3>
+            <div class="field">
+                <label style="margin-top: 2rem;" id="labels-1">Mission Statement</label>
+                <div id="ms-div" style="margin-top: 1rem;" class="ui left icon input">
+                    <textarea name="ms" type="text"
+                        placeholder="Ex. Patagonia: Build the best product, cause no unnecessary harm, use business to inspire and implement solutions to the environmental crisis."></textarea>
+                </div>
+            </div>
+            <div class="field">
+                <label style="margin-top: 2rem;" id="labels-1">About</label>
+                <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
+                    <textarea name="about" type="text" placeholder="Ex. The history, the story"></textarea>
+                </div>
+            </div>
+            <div id="submit5" class="submit-button">Next <i class="right arrow icon"></i></div>
+        </form>
+
+        <!-- form 6 -->
+        <form id="form-6" class="ui equal width form">
+            <h1 class="form-h1">International Authority Directory</h1>
+            <h3 class="form-h3">Images & Media</h3>
+            <div class="field">
+                <label style="margin-top: 2rem;" id="labels-1">Images</label>
+                <button style="margin-top: 1rem;" class="ui button">Upload an image</button>
+            </div>
+            <div class="field">
+                <label style="margin-top: 2rem;" id="labels-1">Youtube</label>
+                <div id="youtube-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                    <input name="youtube" type="text" placeholder="Ex. https://www.youtube.com/">
+                    <i class="youtube icon"></i>
+                </div>
+            </div>
+            <div id="submit6" class="submit-button">Next <i class="right arrow icon"></i></div>
+        </form>
+
+        <!-- form 7 -->
+        <form id="form-7" class="ui equal width form">
+            <h1 class="form-h1">International Authority Directory</h1>
+            <h3 class="form-h3">Frequently Asked Questions</h3>
+            <div id="faq-section">
+                <i id="add-faq" class="large plus circle icon"></i>
+                <div class="field" id="0faq" style="display: block;"><label>FAQ #1<label
+                            style="display: block;">Question:<input
+                                name="faq-question-0"></label><label>Answer:<textarea
+                                name="faq-answer-0"></textarea></label></label></div>
+            </div>
+            <div id="submit7" class="submit-button">Next <i class="right arrow icon"></i></div>
+        </form>
 
         <!-- footer  -->
         <div id="footer" class="ui large breadcrumb">
@@ -184,9 +273,9 @@
             <i class="right chevron icon divider"></i>
             <div id="storefrontInfo" class="section bread">Storefront Info</div>
             <i class="right chevron icon divider"></i>
-            <div id="website" class="section bread">Website</div>
+            <div id="website" class="section bread">Website + Social Media</div>
             <i class="right chevron icon divider"></i>
-            <div id="smContact" class="section bread">Social Media & Contact</div>
+            <div id="contact" class="section bread">Contact</div>
             <i class="right chevron icon divider"></i>
             <div id="about" class="section bread">About your Business</div>
             <i class="right chevron icon divider"></i>

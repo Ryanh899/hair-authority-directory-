@@ -18,7 +18,7 @@ const API_URL = 'http://localhost:3000/api/'
 
 $(document).ready(function() {
   $("select.dropdown").dropdown();
-  localStorage.setItem("faq", 0);
+  // localStorage.setItem("faq", 0);
   const hours = [
     "--",
     "12:00 am",

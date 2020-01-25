@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    sessionStorage.setItem("faq", 1);
     $('.ui.checkbox')
         .checkbox({
             onChecked: function () {
@@ -9,7 +9,7 @@ $(document).ready(function () {
 
                 $(openingHours).fadeOut()
                 $(closingHours).fadeOut()
-            }, 
+            },
             onUnchecked: function () {
                 console.log('checked')
                 const openingHours = document.querySelector('#opening-hours-field')
@@ -19,10 +19,26 @@ $(document).ready(function () {
                 $(closingHours).fadeIn()
             }
         });
+
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    function validatePhone(str) {
+        const isPhone = /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(str);
+        return isPhone
+    }
+
+
     // grabbing elements 
     const form1 = document.querySelector('form#form-1')
     const form2 = document.querySelector('form#form-2')
     const form3 = document.querySelector('form#form-3')
+    const form4 = document.querySelector('form#form-4')
+    const form5 = document.querySelector('form#form-5')
+    const form6 = document.querySelector('form#form-6')
+    const form7 = document.querySelector('form#form-7')
     const breadCrumb = document.querySelector('#footer')
     const submitButton = document.querySelector('#submit')
 
@@ -117,35 +133,17 @@ $(document).ready(function () {
         });
     });
 
-    // first submit (business title and description)
-    // $('body').on('click', '#submit1', function () {
-    //     event.preventDefault();
-    //     const formData = new FormData(form1);
-    //     console.log(...formData)
-    //     if (formData.get('businessTitle') && formData.get('businessDescription')) {
-    //         finalForm.businessTitle = formData.get('businessTitle')
-    //         finalForm.businessDescription = formData.get('businessDescription')
-    //         $(form1).css('display', 'none')
-    //         $(form2).css('display', 'block')
-    //         $('#businessTitle').css('color', 'black')
-    //         $('#businessTitle').css('font-weight', '100')
-    //         console.log(finalForm)
-    //     } else {
-    //         alert('Please Fill Out all info')
-    //     }
-
-    // })
-
+    //submit first form
     $('body').on('click', '#submit1', function () {
         event.preventDefault();
         const formData = new FormData(form1);
         console.log(...formData)
         if (formData.get('businessTitle') === "" || undefined) {
-            $( '#businessTitle-div' ).css('border', 'solid')
-            $( '#businessTitle-div' ).css('border-color', 'red')
+            $('#businessTitle-div').css('border', 'solid')
+            $('#businessTitle-div').css('border-color', 'red')
         } else if (formData.get('businessDescription') === "" || undefined) {
-            $( '#businessDescription-div' ).css('border', 'solid')
-            $( '#businessDescription-div' ).css('border-color', 'red')
+            $('#businessDescription-div').css('border', 'solid')
+            $('#businessDescription-div').css('border-color', 'red')
         } else {
             finalForm.businessTitle = formData.get('businessTitle')
             finalForm.businessDescription = formData.get('businessDescription')
@@ -157,26 +155,26 @@ $(document).ready(function () {
         }
     })
 
+    // submit second form
     $('body').on('click', '#submit2', function () {
         event.preventDefault();
         const formData = new FormData(form2);
-        console.log(...formData)
 
         if (formData.get('streetAddress') === "" || undefined) {
-            $( '#streetAddress-div' ).css('border', 'solid')
-            $( '#streetAddress-div' ).css('border-color', 'red')
+            $('#streetAddress-div').css('border', 'solid')
+            $('#streetAddress-div').css('border-color', 'red')
         } else if (formData.get('city') === "" || undefined) {
-            $( '#city-div' ).css('border', 'solid')
-            $( '#city-div' ).css('border-color', 'red')
+            $('#city-div').css('border', 'solid')
+            $('#city-div').css('border-color', 'red')
         } else if (formData.get('state') === "" || undefined) {
-            $( '#state-div' ).css('border', 'solid')
-            $( '#state-div' ).css('border-color', 'red')
+            $('#state-div').css('border', 'solid')
+            $('#state-div').css('border-color', 'red')
         } else if (formData.get('zip') === '' || undefined) {
-            $( '#zip-div' ).css('border', 'solid')
-            $( '#zip-div' ).css('border-color', 'red')
+            $('#zip-div').css('border', 'solid')
+            $('#zip-div').css('border-color', 'red')
         } else if (formData.get('hours') === null || undefined) {
-            $( '#hours-div' ).css('border', 'solid')
-            $( '#hours-div' ).css('border-color', 'red')
+            $('#hours-div').css('border', 'solid')
+            $('#hours-div').css('border-color', 'red')
         } else {
             finalForm.streetAddress = formData.get("streetAddress"),
                 finalForm.city = formData.get("city"),
@@ -210,9 +208,145 @@ $(document).ready(function () {
             $(form3).css('display', 'block')
             $('#storefrontInfo').css('color', 'black')
             $('#storefrontInfo').css('font-weight', 100)
+            console.log(finalForm)
+        }
+    })
+
+    //submit third form
+    $('body').on('click', '#submit3', function () {
+        event.preventDefault()
+        const formData = new FormData(form3);
+        if (formData.get('website') !== "" || undefined) finalForm.website = formData.get('website')
+
+        if (formData.get('instagram') !== "" || undefined) finalForm.instagram = formData.get('instagram')
+
+        if (formData.get('facebook') !== "" || undefined) finalForm.facebook = formData.get('facebook')
+
+        if (formData.get('twitter') !== "" || undefined) finalForm.twitter = formData.get('twitter')
+
+        if (formData.get('linkedin') !== "" || undefined) finalForm.linkedin = formData.get('linkedin')
+
+        $(form3).css('display', 'none')
+        $(form4).css('display', 'block')
+        $('#website').css('color', 'black')
+        $('#website').css('font-weight', 100)
+        console.log(finalForm)
+    })
+
+    //submit fourth form
+    $('body').on('click', '#submit4', function () {
+        event.preventDefault()
+        const formData = new FormData(form4);
+        if (formData.get('email') !== "" && validateEmail(formData.get('email'))) {
+            finalForm.email = formData.get('email')
+            $('#email-div').css('border', 'none')
+        } else {
+            $('#email-div').css('border', 'solid')
+            $('#email-div').css('border-color', 'red')
+        }
+        if (formData.get('phone') !== "" && validatePhone(formData.get('phone'))) {
+            finalForm.phone = formData.get('phone')
+            $('#phone-div').css('border', 'none')
+            console.log(finalForm)
+        } else {
+            $('#phone-div').css('border', 'solid')
+            $('#phone-div').css('border-color', 'red')
         }
 
 
-
+        $(form4).css('display', 'none')
+        $(form5).css('display', 'block')
+        $('#contact').css('color', 'black')
+        $('#contact').css('font-weight', 100)
+        console.log(finalForm)
     })
+
+    //submit fifth form
+    $('body').on('click', '#submit5', function () {
+        event.preventDefault()
+        const formData = new FormData(form5);
+
+        if (formData.get('ms') !== null || formData.get('ms') !== '') finalForm.missionStatement = formData.get('ms')
+        if (formData.get('about') !== null || formData.get('about') !== '') finalForm.about = formData.get('about')
+
+        $(form5).css('display', 'none')
+        $(form6).css('display', 'block')
+        $('#about').css('color', 'black')
+        $('#about').css('font-weight', 100)
+        console.log(finalForm)
+    })
+
+    //submit sixth form
+    $('body').on('click', '#submit6', function () {
+        event.preventDefault()
+        const formData = new FormData(form6);
+        // will be if for images
+        // if (formData.get('ms') !== null || formData.get('ms') !== '') finalForm.missionStatement = formData.get('ms')
+        if (formData.get('youtube') !== null || formData.get('youtube') !== '') finalForm.youtube = formData.get('youtube')
+
+        $(form6).css('display', 'none')
+        $(form7).css('display', 'block')
+        $('#images').css('color', 'black')
+        $('#images').css('font-weight', 100)
+        console.log(finalForm)
+    })
+
+     //submit seventh form
+     $('body').on('click', '#submit7', function () {
+        event.preventDefault()
+        const formData = new FormData(form7);
+        
+        if (formData.get('faq-question-1') !== null || formData.get('faq-question-1') !== '') {
+            finalForm.faq = {}; 
+            finalForm.faq.question1 = formData.get('faq-question-1')
+        }
+        if (formData.get('faq-answer-1') !== null || formData.get('faq-answer-1') !== '') finalForm.faq.answer1 = formData.get('faq-answer-1')
+        if (formData.get('faq-question-2') !== null || formData.get('faq-question-2') !== '') finalForm.faq.question2 = formData.get('faq-question-2')
+        if (formData.get('faq-answer-2') !== null || formData.get('faq-answer-2') !== '') finalForm.faq.answer2 = formData.get('faq-answer-2')
+        if (formData.get('faq-question-3') !== null || formData.get('faq-question-3') !== '') finalForm.faq.question3 = formData.get('faq-question-3')
+        if (formData.get('faq-answer-3') !== null || formData.get('faq-answer-3') !== '') finalForm.faq.answer3 = formData.get('faq-answer-3')
+
+        console.log(finalForm)
+        alert('done')
+    })
+
+    // faq js
+    const FAQ = document.querySelector("#faq-section");
+
+    for (var i = 0; i < 3; i++) {
+        const faqLabel = document.createElement("label");
+
+        const faqField = document.createElement("div");
+        faqField.className = "field";
+        faqField.id = i + "faq";
+        $(faqField).css("display", "none");
+
+        const questionLabel = document.createElement("label");
+        questionLabel.textContent = "Question:";
+        $(questionLabel).css("display", "block");
+
+        const faqQuestion = document.createElement("input");
+        faqQuestion.name = "faq-question-" + i;
+
+        const answerLabel = document.createElement("label");
+        answerLabel.textContent = "Answer:";
+
+        const faqAnswer = document.createElement("textarea");
+        faqLabel.textContent = "FAQ #" + (i + 1);
+        faqAnswer.name = "faq-answer-" + i;
+
+        FAQ.append(faqField);
+        faqField.append(faqLabel);
+        faqLabel.append(questionLabel);
+        questionLabel.append(faqQuestion);
+        faqLabel.append(answerLabel);
+        answerLabel.append(faqAnswer);
+    }
+
+    $("body").on("click", "#add-faq", function (e) {
+        let questionNumber = sessionStorage.getItem("faq");
+        const question = questionNumber + "faq";
+        $(`#${question}`).css("display", "block");
+        sessionStorage.setItem("faq", Number(questionNumber) + 1);
+    });
 })
