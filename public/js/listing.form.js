@@ -220,6 +220,10 @@ $(document).ready(function() {
         return obj; 
   };
 
+  function validateHours (form) {
+    
+  }
+
 
 
   $("body").on("click", "#listing-submit", function(e) {

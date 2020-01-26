@@ -43,10 +43,7 @@ const User = {
     }
   },
   async userToProfessional(user, cb) {
-    // const token = userInfo.authorization.split(" ")[1];
-    // const decodedInfo = jwt.decode(token);
-    // console.log(decodedInfo);
-    // const user = await this.findEmail(decodedInfo.email);
+
     knex("professional_users")
       .insert({
         id: user.id,

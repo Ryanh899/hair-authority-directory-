@@ -7,7 +7,7 @@ const Listings = {
             .where('id', userInfo.id)
             .catch(err => console.log(err))
     }, 
-    addListing(listing, userInfo) {
+    addListing(listing) {
         console.log(listing)
         return knex('listings')
             .insert(listing)
