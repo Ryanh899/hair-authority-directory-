@@ -67,6 +67,15 @@ const User = {
       .catch(err => {
         console.log(err);
       });
+  }, 
+  getProfessionalProfile (user, cb) {
+    knex('professional_users')
+      .select()
+      .where('id', user.id)
+      .then(response => {
+        cb.json(response)
+      })
+      .catch(err => console.log(err))
   }
 };
 

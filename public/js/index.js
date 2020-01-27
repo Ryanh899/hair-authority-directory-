@@ -41,6 +41,7 @@ $(document).ready(function() {
   if (authHelper.isLoggedIn()) {
     const token = localStorage.getItem("token");
     const userInfo = authHelper.parseToken(token);
+    console.log(userInfo)
     if (userInfo.isClientUser) {
       $("#auth-buttons").html(
         `<button id="saved-listings" class="ui button" >My Listings</button>`

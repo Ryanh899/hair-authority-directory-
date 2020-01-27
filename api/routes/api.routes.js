@@ -2,6 +2,7 @@ const router = require("express").Router();
 const _ = require('lodash'); 
 const jwt = require('jsonwebtoken'); 
 const Listings = require('../models/listings'); 
+const User = require('../models/user'); 
 
 
 router.get('/listings/:token', async (req, res) => {
@@ -29,9 +30,13 @@ router.post('/newListing', (req, res) => {
     }
    }
        
-    
-    
-   res.json('test')
+   res.json('listing created')
+})
+
+router.get('/profile/:token', (req, res) => {
+    const user = jwt.decode(req.params.token); 
+    console.log(user)
+    User.getProfessionalProfile(user, res)
 })
 
 

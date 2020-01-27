@@ -41,71 +41,84 @@
   </head>
   <body>
     <header>
-      <div class="ui top attached menu">
-        <div class="ui dropdown icon item">
-          <i class="wrench icon"></i>
-          <div class="menu">
-            <div class="item">
-              <i class="dropdown icon"></i>
-              <span class="text">New</span>
-              <div class="menu">
-                <div class="item">Document</div>
-                <div class="item">Image</div>
-              </div>
-            </div>
-            <div class="item">
-              Open...
-            </div>
-            <div class="item">
-              Save...
-            </div>
-            <div class="item">Edit Permissions</div>
-            <div class="divider"></div>
-            <div class="header">
-              Export
-            </div>
-            <div class="item">
-              Share...
-            </div>
-          </div>
+      <div id="navbar" class="ui top attached menu">
+        <div class="four wide center aligned column " >
+          <p id="nav-welcome" class="h2" style="margin-left: 1rem; color: white; margin-top: .5rem;" >Welcome, </p>
         </div>
         <div class="right menu">
-          <div class="ui right aligned category search item">
-            <div class="ui transparent icon input">
-              <input
-                class="prompt"
-                type="text"
-                placeholder="Search animals..."
-              />
-              <i class="search link icon"></i>
-            </div>
-            <div class="results"></div>
-          </div>
+          <div class="submit-button">Logout</i></div>
         </div>
-      </div>
-      <div class="ui bottom attached segment">
-        <p></p>
       </div>
     </header>
     <main>
       <div id="dashboard-container" class="ui grid container">
         <div class="three wide column">
           <div id="side-menu" class="ui vertical pointing tabular menu">
-                <a class="active item" data-tab="home" > <i class="home icon"></i> Home </a>
-                <a id="listings-tab" class="item" data-tab="listings" > <i class="list layout icon"></i></i> My Listings </a>
-                <a class="item" data-tab="profile"> <i class="user icon"></i> Profile </a>
-                <a class="item" data-tab="billing" > <i class="paypal icon"></i></i> Billing </a>
+            <a id="profile-tab" class="item sideTab" data-tab="profile"> <i class="user icon"></i> Profile </a>
+                <a id="listings-tab" class="item sideTab" data-tab="listings" > <i class="list layout icon"></i></i> My Listings </a>
+                <a id="billing-tab" class="item sideTab" data-tab="billing" > <i class="paypal icon"></i></i> Billing </a>
           </div>
         </div>
         <div class="thirteen wide column">
-          <div data-tab="home" class="ui right attached active tab item tab-div">
-            <p>home</p>
+          <div data-tab="profile" class="ui right attached active tab item tab-div">
+            <div class="ui grid container">
+              <!-- image and name row  -->
+              <div class="row">
+                <div class="six wide column">
+                  <div class="ui image" >
+                    <img src="https://via.placeholder.com/250" alt="">
+                  </div>
+                </div>
+                  <div class="ten wide column">
+                    <h1>Ryan Hazzard</h1>
+                    <p>Doctor, Trichology</p>
+                  </div>
+              </div>
+
+              <!-- profile info  -->
+              <div class="row">
+                <div class="sixteen wide column">
+                    <form id="profile-form" class="ui equal width form">
+                      <p class="form-header" >Profile Info</p>
+                      <hr style="border: solid; color: rgba(39, 76, 119, 1);" >
+                      <div class="fields">
+                        <div class="field">
+                          <label style="margin-top: 2rem;" id="labels-1">First Name</label>
+                          <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                              <input id="firstName" name="firstName" type="text" placeholder="Ex. John" >
+                              <i class="edit icon" ></i>
+                          </div>
+                      </div>
+                      <div class="field">
+                        <label style="margin-top: 2rem;" class="profileLabel" id="labels-1">Last Name</label>
+                        <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                            <input name="lastName" id="lastName" type="text" placeholder="Ex. Smith" >
+                            <i class="edit icon" ></i>
+                        </div>
+                    </div>
+                      </div>
+                      <div class="fields">
+                        <div class="field">
+                          <label style="margin-top: 2rem;" id="labels-1">Email</label>
+                          <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                              <input id="email" name="email" type="text" placeholder="Ex. ryan@gmail.com" >
+                              <i class="mail icon" ></i>
+                          </div>
+                      </div>
+                      <div class="field">
+                        <label style="margin-top: 2rem;" id="labels-1">Phone</label>
+                        <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                            <input name="phone" id="phone" type="text" placeholder="Ex. 999-999-9999" >
+                            <i class="phone icon" ></i>
+                        </div>
+                    </div>
+                      </div>
+                    </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div data-tab="listings" id="listings-div" class="ui right attached tab item tab-div">
-            </div>
-            <div data-tab="profile" class="ui right attached tab item tab-div">
-                <p>profile</p>
-            </div>
+          <div data-tab="listings" id="listings-div" class="ui right attached tab item tab-div"></div>
             <div data-tab="billing" class="ui right attached tab item tab-div">
                 <p>billing</p>
             </div>
