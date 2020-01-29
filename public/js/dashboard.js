@@ -69,6 +69,7 @@ $(document).ready(function () {
                 },
             })
             .then(resp => {
+                $('#listings-div').html('')
                 const response = resp.data;
                 if (response.length === 0) {
                     $('#listings-div').html(`<h1 class="h1" >You have no listings</h1>

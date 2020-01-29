@@ -57,7 +57,7 @@ $(document).ready(function() {
     }
   } else {
     console.log("not logged in");
-    $( '#logout-div' ).html('')
+    $( '#logout-button' ).css('display', 'none')
   }
   $('body').on('click', '#sign-in-button', function() {
     event.preventDefault();

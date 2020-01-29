@@ -16,15 +16,11 @@ router.get('/listings/:token', async (req, res) => {
 })
 
 router.post('/newListing', (req, res) => {
-   console.log(req.body)
-   console.log(req.headers)
    if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedInfo = jwt.decode(token);
-    console.log(decodedInfo);
     let listing = req.body.data
     listing.professional_id = decodedInfo.id
-    console.log(listing)
     if (decodedInfo.isProfessionalUser) {
         Listings.addListing(listing)
     }
@@ -35,7 +31,6 @@ router.post('/newListing', (req, res) => {
 
 router.get('/profile/:token', (req, res) => {
     const user = jwt.decode(req.params.token); 
-    console.log(user)
     User.getProfessionalProfile(user, res)
 })
 
