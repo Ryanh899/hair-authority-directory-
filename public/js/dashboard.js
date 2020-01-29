@@ -76,6 +76,7 @@ $(document).ready(function () {
                                            <button id="add-listing-button" class="ui button">Make a listing</button>`);
                 } else {
                     console.log(response)
+                    $('#listings-div').html('')
                     response.forEach(listing => {
                         $('#listings-div').append(`
                         <div class="listingItem ui grid">
@@ -88,8 +89,8 @@ $(document).ready(function () {
                             </div>
                             <div class="six wide column"></div>
                             <div class="four wide column">
-                                <div style="color: white;" class="listing-buttons"> <i class="edit icon"></i> Edit</div>
-                                <div style="color: white;" class="listing-buttons"> <i style="color: red;" class="delete icon"></i> Delete</div>
+                                <div style="color: white;" class="listing-buttons editButton" id="${listing.id}"> <i class="edit icon"></i> Edit</div>
+                                <div style="color: white;" class="listing-buttons deleteButton"> <i style="color: red;" class="delete icon"></i> Delete</div>
                             </div>
                             </div>
                         </div>
@@ -103,6 +104,20 @@ $(document).ready(function () {
 
     $('body').on('click', '#add-listing-button', function () {
         window.location.assign('listing.form.html');
+    })
+
+    $('body').on('click', '#logout-button', function () {
+        localStorage.removeItem('token')
+        window.location.assign('index.html')
+    })
+
+    $('body').on('click', '.editButton', function (e) {
+        localStorage.setItem('listingId', e.target.id)
+        window.location.assign('edit.listing.html')
+    })
+
+    $('body').on('click', '.deleteButton', function () {
+        alert('edit')
     })
 
 

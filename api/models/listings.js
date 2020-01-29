@@ -17,6 +17,17 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
+    }, 
+    findOne(id, cb) {
+        knex('listings')
+            .select()
+            .where('id', id)
+            .then(response => {
+                cb.json(response[0])
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 }
 
