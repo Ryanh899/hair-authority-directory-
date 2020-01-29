@@ -1,0 +1,8 @@
+.form-container {
+    border: solid;
+    border-width: 5px;
+    border-color: rgba(39, 76, 119, 1);
+    width: 50%;
+    margin: 0 auto;
+    padding: 2.5rem;
+}

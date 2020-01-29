@@ -34,5 +34,10 @@ router.get('/profile/:token', (req, res) => {
     User.getProfessionalProfile(user, res)
 })
 
+router.get('/listing/:id', (req, res) =>  {
+    const listing = req.params.id; 
+    console.log(listing)
+    Listings.findOne(listing, res)
+})
 
 module.exports = router; 

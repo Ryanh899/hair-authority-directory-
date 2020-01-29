@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>International Hair Authority</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
+        integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:100&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="./css/edit.listing.css">
+</head>
+
+<body>
+    <div id="navbar" class="ui top attached menu">
+        <div class="four wide center aligned column ">
+            <p id="nav-welcome" class="h2" style="margin-left: 1rem; color: white; margin-top: .5rem;">Edit: </p>
+        </div>
+        <div class="right menu">
+            <div id="logout-button" class="submit-button">Logout</i></div>
+        </div>
+    </div>
+
+    <div class="form-container ui equal width form">
+        <div class="fields">
+            <div class="field">
+                <label id="business_title">Business Title</label>
+                <input id="business_title" name="business_title" type="text" class="ui input">
+            </div>
+        </div>
+        <div class="fields">
+            <div class="field">
+                <label id="business_description">Business Description</label>
+                <input id="business_description" name="business_description" type="text" class="ui input">
+            </div>
+        </div>
+        <div class="fields">
+            <div class="field">
+                <label id="street_address">Street Address</label>
+                <input id="street_address" name="street_address" type="text" class="ui input">
+            </div>
+            <div class="field">
+                <label id="city">City</label>
+                <input id="city" name="city" type="text" class="ui input">
+            </div>
+        </div>
+        <div class="fields">
+            <div class="field">
+                <label id="state">State</label>
+                <input id="state" name="state" type="text" class="ui input">
+            </div>
+            <div class="field">
+                <label id="zip">Zip</label>
+                <input id="zip" name="zip" type="text" class="ui input">
+            </div>
+        </div>
+        <div class="field">
+            <label id="mission_statement">Mission Statement</label>
+            <textarea id="mission_statement" name="mission_statement" type="text" class="ui input"></textarea>
+        </div>
+        <div class="field">
+            <label id="about">About</label>
+            <textarea id="about" name="about" type="text" class="ui input"></textarea>
+        </div>
+    </div>
+
+    <script src='./js/edit.listing.js'></script>
+</body>
+
+</html>
