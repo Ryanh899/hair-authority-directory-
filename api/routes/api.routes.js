@@ -40,4 +40,12 @@ router.get('/listing/:id', (req, res) =>  {
     Listings.findOne(listing, res)
 })
 
+router.put('/updateListing/:id', (req, res) => {
+    const id = req.params.id;
+    console.log(req.body)
+    const listing = req.body
+    console.log(listing)
+    Listings.updateListing(listing, id)
+})
+
 module.exports = router; 

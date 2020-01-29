@@ -426,4 +426,8 @@ $(document).ready(function() {
     $(`#${question}`).css("display", "block");
     sessionStorage.setItem("faq", Number(questionNumber) + 1);
   });
+
+  $("body").on("click", "#home-button", function(e) {
+    window.location.assign('dashboard.html')
+});
 });

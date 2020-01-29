@@ -28,6 +28,17 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
+    }, 
+    updateListing(listing, id) {
+        knex('listings')
+            .where('id', id)
+            .update(listing)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 }
 

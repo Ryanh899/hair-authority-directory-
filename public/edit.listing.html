@@ -25,14 +25,14 @@
 <body>
     <div id="navbar" class="ui top attached menu">
         <div class="four wide center aligned column ">
-            <p id="nav-welcome" class="h2" style="margin-left: 1rem; color: white; margin-top: .5rem;">Edit: </p>
+            <button id="back-button" class="ui button">Back</button>
         </div>
         <div class="right menu">
             <div id="logout-button" class="submit-button">Logout</i></div>
         </div>
     </div>
 
-    <div class="form-container ui equal width form">
+    <form id="form-container" class="form-container ui equal width form">
         <div class="fields">
             <div class="field">
                 <label id="business_title">Business Title</label>
@@ -65,15 +65,66 @@
                 <input id="zip" name="zip" type="text" class="ui input">
             </div>
         </div>
+        <div class="fields">
+            <div class="field">
+                <label id="phone">Phone</label>
+                <input id="phone" name="phone" type="text" class="ui input">
+            </div>
+            <div class="field">
+                <label id="email">Email</label>
+                <input id="email" name="email" type="text" class="ui input">
+            </div>
+        </div>
         <div class="field">
             <label id="mission_statement">Mission Statement</label>
             <textarea id="mission_statement" name="mission_statement" type="text" class="ui input"></textarea>
         </div>
         <div class="field">
+            <label id="website">Website</label>
+            <input id="website" name="website" class="ui input" >
+        </div>
+        <div class="field">
+            <label id="instagram">Instagram</label>
+            <input id="instagram" name="instagram" type="text" class="ui input"></input>
+        </div>
+        <div class="field">
+            <label id="about">Facebook</label>
+            <input id="facebook" name="facebook" type="text" class="ui input"></input>
+        </div>
+        <div class="field">
+            <label id="about">Twitter</label>
+            <input id="twitter" name="twitter" type="text" class="ui input"></input>
+        </div>
+        <div class="field">
+            <label id="about">Linkedin</label>
+            <input id="linkedin" name="linkedin" type="text" class="ui input"></input>
+        </div>
+        <div class="field">
+            <label id="about">Youtube</label>
+            <input id="youtube" name="youtube" type="text" class="ui input"></input>
+        </div>
+        <div class="field">
             <label id="about">About</label>
             <textarea id="about" name="about" type="text" class="ui input"></textarea>
         </div>
-    </div>
+        <div class="field">
+            <label for="" id="faq0">FAQ #1</label>
+            <input id="faq0" name="faq0" class="ui input" >
+            <textarea style="margin-top: 1rem;" id="answer0" name="answer0" class="ui input" ></textarea>
+        </div>
+        <div class="field">
+            <label for="" id="faq1">FAQ #2</label>
+            <input id="faq1" name="faq1" class="ui input" >
+            <textarea style="margin-top: 1rem;" id="answer1" name="answer1" class="ui input" ></textarea>
+        </div>
+        <div class="field">
+            <label for="" id="faq2">FAQ #3</label>
+            <input id="faq2" name="faq2" class="ui input" >
+            <textarea style="margin-top: 1rem;" id="answer2" name="answer2" class="ui input" ></textarea>
+        </div>
+        <button class="ui button" id="update" >Update</button>
+        <button class="ui button" id="cancel" >Cancel</button>
+    </form>
 
     <script src='./js/edit.listing.js'></script>
 </body>

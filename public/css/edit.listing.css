@@ -6,3 +6,10 @@
     margin: 0 auto;
     padding: 2.5rem;
 }
+
+.formHeader {
+    font-size: 35px;
+    font-family: 'Montserrat' ;
+    font-weight: 700;
+    color: rgba(39, 76, 119, 1);
+}

@@ -90,8 +90,8 @@ $(document).ready(function () {
                             </div>
                             <div class="six wide column"></div>
                             <div class="four wide column">
-                                <div style="color: white;" class="listing-buttons editButton" id="${listing.id}"> <i class="edit icon"></i> Edit</div>
-                                <div style="color: white;" class="listing-buttons deleteButton"> <i style="color: red;" class="delete icon"></i> Delete</div>
+                                <a id="${listing.id}" class="editButton" ><div style="color: white;" class="listing-buttons " id="${listing.id}"> <i style="pointer-events:none" class="edit icon"></i> Edit</div></a>
+                                <a id="${listing.id}" class="editButton" ><div style="color: white;" class="listing-buttons "> <i style="pointer-events:none" style="color: red;" class="delete icon"></i> Delete</div></a>
                             </div>
                             </div>
                         </div>
@@ -119,6 +119,15 @@ $(document).ready(function () {
 
     $('body').on('click', '.deleteButton', function () {
         alert('edit')
+    })
+
+    $('body').on('click', '#newListing', function () {
+        window.location.assign('listing.form.html')
+    })
+
+    $('body').on('click', '#logout-button', function () {
+        localStorage.removeItem('token')
+        window.location.assign('index.html')
     })
 
 
