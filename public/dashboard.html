@@ -1,133 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>International Hair Authority</title>
-    <!-- You MUST include jQuery before Fomantic -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script> -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
-      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-      crossorigin="anonymous"
-    ></script>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
-      integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g="
-      crossorigin="anonymous"
-    ></script>
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:100&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
-    />
 
-    <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
-    <link rel="stylesheet" href="./css/search.css" />
-  </head>
-  <body>
-    <header>
-      <div id="navbar" class="ui top attached menu">
-        <div class="four wide center aligned column " >
-          <p id="nav-welcome" class="h2" style="margin-left: 1rem; color: white; margin-top: .5rem;" >Welcome, </p>
-        </div>
-        <div class="right menu">
-            <div id="newListing" style="margin-right: 1rem;" class="submit-button">New Listing</i></div>
-          <div id="logout-button" class="submit-button">Logout</i></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>International Hair Authority</title>
+  <!-- You MUST include jQuery before Fomantic -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
+    integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g=" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:100&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+
+  <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
+  <link rel="stylesheet" href="./css/search.css" />
+</head>
+
+<body>
+  <header>
+    <div id="navbar" class="ui top attached menu">
+      <div class="four wide center aligned column ">
+        <p id="nav-welcome" class="h2" style="margin-left: 1rem; color: white; margin-top: .5rem;">Welcome, </p>
+      </div>
+      <div class="right menu">
+        <div id="newListing" style="margin-right: 1rem;" class="submit-button">New Listing</i></div>
+        <div id="logout-button" class="submit-button">Logout</i></div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div id="dashboard-container" class="ui grid container">
+      <div class="three wide column">
+        <div id="side-menu" class="ui vertical pointing tabular menu">
+          <a id="profile-tab" class="item sideTab" data-tab="profile"> <i class="user icon"></i> Profile </a>
+          <a id="listings-tab" class="item sideTab" data-tab="listings"> <i class="list layout icon"></i></i> My
+            Listings </a>
+          <a id="billing-tab" class="item sideTab" data-tab="billing"> <i class="paypal icon"></i></i> Billing </a>
         </div>
       </div>
-    </header>
-    <main>
-      <div id="dashboard-container" class="ui grid container">
-        <div class="three wide column">
-          <div id="side-menu" class="ui vertical pointing tabular menu">
-            <a id="profile-tab" class="item sideTab" data-tab="profile"> <i class="user icon"></i> Profile </a>
-                <a id="listings-tab" class="item sideTab" data-tab="listings" > <i class="list layout icon"></i></i> My Listings </a>
-                <a id="billing-tab" class="item sideTab" data-tab="billing" > <i class="paypal icon"></i></i> Billing </a>
-          </div>
-        </div>
-        <div class="thirteen wide column">
-          <div data-tab="profile" class="ui right attached active tab item tab-div">
-            <div class="ui grid container">
-              <!-- image and name row  -->
-              <div class="row">
-                <div class="six wide column">
-                  <div class="ui image" >
-                    <img src="https://via.placeholder.com/250" alt="">
-                  </div>
+      <div class="thirteen wide column">
+        <div data-tab="profile" class="ui right attached active tab item tab-div">
+          <div class="ui grid container">
+            <!-- image and name row  -->
+            <div class="row">
+              <div class="six wide column">
+                <div class="ui image">
+                  <img src="https://via.placeholder.com/250" id="profile-image" alt="">
                 </div>
-                  <div class="ten wide column">
-                    <h1>Ryan Hazzard</h1>
-                    <p>Doctor, Trichology</p>
-                  </div>
               </div>
+              <div class="ten wide column">
+                <h1 id="name"></h1>
+                <p id="title"></p>
+                <p id="category"></p id="category">
+              </div>
+            </div>
 
-              <!-- profile info  -->
-              <div class="row">
-                <div class="sixteen wide column">
-                    <form id="profile-form" class="ui equal width form">
-                      <p class="form-header" >Profile Info</p>
-                      <hr style="border: solid; color: rgba(39, 76, 119, 1);" >
-                      <div class="fields">
-                        <div class="field">
-                          <label style="margin-top: 2rem;" id="labels-1">First Name</label>
-                          <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                              <input id="firstName" name="firstName" type="text" placeholder="Ex. John" >
-                              <i class="edit icon" ></i>
-                          </div>
+            <!-- profile info  -->
+            <div class="row">
+              <div class="sixteen wide column">
+                <form id="profile-form" class="ui equal width form">
+                  <p class="form-header">Profile Info</p>
+                  <hr style="border: solid; color: rgba(39, 76, 119, 1);">
+                  <div class="fields">
+                    <div class="field">
+                      <label style="margin-top: 2rem;" class="profileLabels" id="first_name">First Name</label>
+                      <div id="firstName-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="first-name" name="first_name" type="text" >
+                        <i class="edit icon"></i>
                       </div>
-                      <div class="field">
-                        <label style="margin-top: 2rem;" class="profileLabel" id="labels-1">Last Name</label>
-                        <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                            <input name="lastName" id="lastName" type="text" placeholder="Ex. Smith" >
-                            <i class="edit icon" ></i>
-                        </div>
                     </div>
+                    <div class="field">
+                      <label style="margin-top: 2rem;" class="profileLabel" id="last_name">Last Name</label>
+                      <div id="lastName-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="last-name" name="last_name" id="lastName" type="text" >
+                        <i class="edit icon"></i>
                       </div>
-                      <div class="fields">
-                        <div class="field">
-                          <label style="margin-top: 2rem;" id="labels-1">Email</label>
-                          <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                              <input id="email" name="email" type="text" placeholder="Ex. ryan@gmail.com" >
-                              <i class="mail icon" ></i>
-                          </div>
-                      </div>
-                      <div class="field">
-                        <label style="margin-top: 2rem;" id="labels-1">Phone</label>
-                        <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                            <input name="phone" id="phone" type="text" placeholder="Ex. 999-999-9999" >
-                            <i class="phone icon" ></i>
-                        </div>
                     </div>
+                  </div>
+                  <div class="fields">
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="email">Email</label>
+                      <div id="email-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="email-input" name="email" type="text" >
+                        <i class="mail icon"></i>
                       </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="phone">Phone</label>
+                      <div id="phone-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input name="phone" id="phone-input" type="text" >
+                        <i class="phone icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fields">
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="instagram">Instagram</label>
+                      <div id="instagram-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="instagram-input" name="instagram" type="text" >
+                        <i class="instagram icon"></i>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="facebook">Facebook</label>
+                      <div id="facebook-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input name="facebook" id="facebook-input"  type="text" >
+                        <i class="facebook icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fields">
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="twitter">Twitter</label>
+                      <div id="twitter-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="twitter-input" name="twitter" type="text" >
+                        <i class="twitter icon"></i>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="linkedin">Linkedin</label>
+                      <div id="linkedin-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="linkedin-input" name="linkedin" type="text">
+                        <i class="linkedin icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fields">
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="youtube">Youtube</label>
+                      <div id="youtube-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="youtube-input"  name="youtube" type="text" >
+                        <i class="youtube icon"></i>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label style="margin-top: 2rem;" id="website">Website</label>
+                      <div id="website-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                        <input id="website-input"  name="website" type="text" >
+                        <i class="edit icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label style="margin-top: 2rem;" id="about">About</label>
+                    <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
+                      <textarea id="about-input" name="about" type="text" ></textarea>
+                      <i class="edit icon"></i>
+                    </div>
+                  </div>
+                  <button class="ui button" id="update-profile" >Update</button>
+                </form>
               </div>
             </div>
           </div>
-          <div data-tab="listings" id="listings-div" class="ui right attached tab item tab-div">
-            
-          </div>
-            <div data-tab="billing" class="ui right attached tab item tab-div">
-                <p>billing</p>
-            </div>
+        </div>
+        <div data-tab="listings" id="listings-div" class="ui right attached tab item tab-div">
+
+        </div>
+        <div data-tab="billing" class="ui right attached tab item tab-div">
+          <p>billing</p>
         </div>
       </div>
-    </main>
-    <script src="./js/dashboard.js"></script>
-  </body>
+    </div>
+  </main>
+  <script src="./js/dashboard.js"></script>
+</body>
+
 </html>

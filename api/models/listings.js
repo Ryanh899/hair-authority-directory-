@@ -2,9 +2,10 @@ const knex = require('../config/knex/knex');
 
 const Listings = {
     getListings(userInfo) {
+        console.log(userInfo)
         return knex('listings')
             .select()
-            .where('id', userInfo.id)
+            .where('professional_id', userInfo.id)
             .catch(err => console.log(err))
     }, 
     addListing(listing) {

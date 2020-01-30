@@ -42,15 +42,15 @@ $(document).ready(function() {
     const token = localStorage.getItem("token");
     const userInfo = authHelper.parseToken(token);
     console.log(userInfo)
-    if (userInfo.isClientUser) {
+    if (userInfo && userInfo.isClientUser) {
       $("#auth-buttons").html(
         `<button id="saved-listings" class="ui button" >My Listings</button>`
       );
-    } else if (userInfo.isProfessionalUser) {
+    } else if (userInfo && userInfo.isProfessionalUser) {
       $("#auth-buttons").html(
         `<button id="dashboard-button" class="ui button" >My Dashboard</button>`
       );
-    } else if (userInfo.isAdminUser) {
+    } else if (userInfo && userInfo.isAdminUser) {
       $("#auth-buttons").html(
         `<button id="admin-portal-button" class="ui button" >Admin Portal</button>`
       );

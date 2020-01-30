@@ -130,3 +130,69 @@
     margin: .5rem;
     text-align: center;
 }
+
+#first_name {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#last_name {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#phone {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#email {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#instagram {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#youtube {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#twitter {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#linkedin {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#about {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#facebook {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}
+
+#website {
+    font-size: 20px;
+    font-weight: 100;
+    font-family: 'Roboto' sans-serif;
+}

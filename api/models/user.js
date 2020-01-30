@@ -69,13 +69,40 @@ const User = {
       });
   }, 
   getProfessionalProfile (user, cb) {
-    knex('professional_users')
+    return knex('professional_users')
       .select()
       .where('id', user.id)
-      .then(response => {
-        cb.json(response)
-      })
       .catch(err => console.log(err))
+  }, 
+  getProfessionalInfo(id){
+    return knex('professional_info')
+      .select()
+      .where('professional_id', id)
+      .catch(err => console.log(err)); 
+  }, 
+  updateProfessionalInfo(userInfo) {
+    console.log(userInfo)
+    knex('professional_info')
+      .where('professional_id', userInfo.professional_id)
+      .update(userInfo)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, 
+  changeProfessionalEmail(userInfo) {
+    console.log(userInfo)
+    knex('professional_users')
+      .where('id', userInfo.id)
+      .update('email', userInfo.email)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 };
 

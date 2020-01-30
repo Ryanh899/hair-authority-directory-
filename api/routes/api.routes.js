@@ -4,6 +4,15 @@ const jwt = require('jsonwebtoken');
 const Listings = require('../models/listings'); 
 const User = require('../models/user'); 
 
+const trimForm = function(obj) {
+    // gets rid of empty responses
+    Object.keys(obj).forEach(key => {
+      if (obj[key] && typeof obj[key] === "object") trimForm(obj[key]);
+      // recurse
+      else if (obj[key] == "" || obj[key] == null) delete obj[key]; // delete
+    });
+    return obj;
+  };
 
 router.get('/listings/:token', async (req, res) => {
     console.log(req.params.token)
@@ -11,6 +20,7 @@ router.get('/listings/:token', async (req, res) => {
     const user = jwt.decode(req.params.token)
     const listings = Listings.getListings(user); 
     listings.then(response => {
+        console.log(response)
         res.json(response)
     }).catch(err => console.log(err)); 
 })
@@ -29,9 +39,15 @@ router.post('/newListing', (req, res) => {
    res.json('listing created')
 })
 
-router.get('/profile/:token', (req, res) => {
-    const user = jwt.decode(req.params.token); 
-    User.getProfessionalProfile(user, res)
+router.get('/profile/:token', async (req, res) => {
+    const userToken = jwt.decode(req.params.token); 
+    const user = await User.getProfessionalProfile(userToken)
+    const userInfo = await User.getProfessionalInfo(user[0].id)
+        userInfo[0].email = user[0].email
+        userInfo[0].id = user[0].id 
+        console.log(userInfo)
+        res.json(userInfo); 
+
 })
 
 router.get('/listing/:id', (req, res) =>  {
@@ -46,6 +62,22 @@ router.put('/updateListing/:id', (req, res) => {
     const listing = req.body
     console.log(listing)
     Listings.updateListing(listing, id)
+})
+
+router.put('/updateProfile', (req, res) => {
+    const updateInfo = req.body
+    if (updateInfo.email) {
+        User.changeProfessionalEmail({email: updateInfo.email, id: updateInfo.professional_id})
+        updateInfo.email = null
+        const trimmedForm = trimForm(updateInfo)
+        console.log(trimmedForm)
+        User.updateProfessionalInfo(trimmedForm)
+    } else {
+        User.updateProfessionalInfo(updateInfo)
+    }
+    res.status(200).json('Info Updated')
+
+
 })
 
 module.exports = router; 
