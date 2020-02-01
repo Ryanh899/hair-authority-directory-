@@ -80,29 +80,37 @@ const User = {
       .where('professional_id', id)
       .catch(err => console.log(err)); 
   }, 
-  updateProfessionalInfo(userInfo) {
+  async updateProfessionalInfo(userInfo) {
     console.log(userInfo)
-    knex('professional_info')
+    const update = await knex('professional_info')
       .where('professional_id', userInfo.professional_id)
       .update(userInfo)
       .then(response => {
-        console.log(response)
+        return response
       })
       .catch(err => {
         console.log(err)
       })
+      console.log('upDate', update)
   }, 
   changeProfessionalEmail(userInfo) {
     console.log(userInfo)
-    knex('professional_users')
+    try {
+      return knex('professional_users')
       .where('id', userInfo.id)
       .update('email', userInfo.email)
       .then(response => {
         console.log(response)
+        return response
       })
       .catch(err => {
         console.log(err)
       })
+    } catch (err) {
+      console.log(err)
+      return err
+    }
+      
   }
 };
 

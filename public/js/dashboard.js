@@ -88,20 +88,23 @@ $(document).ready(function () {
         function getProfile() {
             myAxios.get(API_URL + 'profile/' + localStorage.getItem('token'))
                 .then(resp => {
-                    const user = resp.data[0]; 
-                    console.log(user)
-                    $(email).attr('placeholder', user.email)
-                    $(firstName).attr('placeholder', user.first_name)
-                    $(lastName).attr('placeholder', user.last_name)
-                    $(phone).attr('placeholder', user.phone)
-                    $(instagram).attr('placeholder', user.instagram)
-                    $(facebook).attr('placeholder', user.facebook)
-                    $(twitter).attr('placeholder', user.twitter)
-                    $(linkedin).attr('placeholder', user.linkedin)
-                    $(youtube).attr('placeholder', user.youtube)
-                    $(about).attr('placeholder', user.about)
-                    $(website).attr('placeholder', user.website)
-                    profileName.textContent = `${titleCase(user.first_name)} ${titleCase(user.last_name)}`
+                    if (resp.data.length !== 0) {
+                        const user = resp.data[0]; 
+
+                        $(email).attr('placeholder', user.email)
+                        $(firstName).attr('placeholder', user.first_name)
+                        $(lastName).attr('placeholder', user.last_name)
+                        $(phone).attr('placeholder', user.phone)
+                        $(instagram).attr('placeholder', user.instagram)
+                        $(facebook).attr('placeholder', user.facebook)
+                        $(twitter).attr('placeholder', user.twitter)
+                        $(linkedin).attr('placeholder', user.linkedin)
+                        $(youtube).attr('placeholder', user.youtube)
+                        $(about).attr('placeholder', user.about)
+                        $(website).attr('placeholder', user.website)
+                        profileName.textContent = `${titleCase(user.first_name)} ${titleCase(user.last_name)}`
+                    }
+                    
                 })
                 .catch(err => {
                     console.log(err)
@@ -202,6 +205,9 @@ $(document).ready(function () {
             myAxios.put(API_URL + 'updateProfile', trimmedForm)
             .then(response => {
                 console.log(response)
+                if (response.status === 401) {
+                    alert(response.data)
+                }
                 profileForm.reset()
                 getProfile(); 
             })

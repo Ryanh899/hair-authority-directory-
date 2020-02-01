@@ -15,7 +15,7 @@ const trimForm = function(obj) {
   };
 
 router.get('/listings/:token', async (req, res) => {
-    console.log(req.params.token)
+    console.log('params token:', req.params.token)
     // const user = _.pick(req.body, 'id', 'email')
     const user = jwt.decode(req.params.token)
     const listings = Listings.getListings(user); 
@@ -43,8 +43,10 @@ router.get('/profile/:token', async (req, res) => {
     const userToken = jwt.decode(req.params.token); 
     const user = await User.getProfessionalProfile(userToken)
     const userInfo = await User.getProfessionalInfo(user[0].id)
+    if (userInfo[0]) {
         userInfo[0].email = user[0].email
         userInfo[0].id = user[0].id 
+    }
         console.log(userInfo)
         res.json(userInfo); 
 
@@ -64,19 +66,25 @@ router.put('/updateListing/:id', (req, res) => {
     Listings.updateListing(listing, id)
 })
 
-router.put('/updateProfile', (req, res) => {
+router.put('/updateProfile', async (req, res) => {
     const updateInfo = req.body
+    console.log(updateInfo)
+    // const infoTest = User.infoCheck(updateInfo)
     if (updateInfo.email) {
-        User.changeProfessionalEmail({email: updateInfo.email, id: updateInfo.professional_id})
+        const changeEmail = await User.changeProfessionalEmail({email: updateInfo.email, id: updateInfo.professional_id})
+        console.log(changeEmail)
+        console.log('--------------')
+        if (changeEmail === false) {
+            res.status(401).json({message: 'That email is already taken'})
+        }
         updateInfo.email = null
         const trimmedForm = trimForm(updateInfo)
         console.log(trimmedForm)
         User.updateProfessionalInfo(trimmedForm)
     } else {
         User.updateProfessionalInfo(updateInfo)
+        res.status(200).send('fuck it ')
     }
-    res.status(200).json('Info Updated')
-
 
 })
 
