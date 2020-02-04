@@ -64,16 +64,7 @@ $(document).ready(function () {
     const lastName = document.querySelector('input#last-name')
     const email = document.querySelector('input#email-input')
     const phone = document.querySelector('input#phone-input')
-    const instagram = document.querySelector('input#instagram-input')
-    const facebook = document.querySelector('input#facebook-input')
-    const twitter = document.querySelector('input#twitter-input')
-    const linkedin = document.querySelector('input#linkedin-input')
-    const youtube = document.querySelector('input#youtube-input')
-    const about = document.querySelector('textarea#about-input')
     const profileName = document.querySelector('h1#name')
-    const profileCategory = document.querySelector('p#category')
-    const website = document.querySelector('input#website-input')
-
     // append name
     const name = document.createElement('p')
     name.className = 'h2'
@@ -95,13 +86,6 @@ $(document).ready(function () {
                         $(firstName).attr('placeholder', user.first_name)
                         $(lastName).attr('placeholder', user.last_name)
                         $(phone).attr('placeholder', user.phone)
-                        $(instagram).attr('placeholder', user.instagram)
-                        $(facebook).attr('placeholder', user.facebook)
-                        $(twitter).attr('placeholder', user.twitter)
-                        $(linkedin).attr('placeholder', user.linkedin)
-                        $(youtube).attr('placeholder', user.youtube)
-                        $(about).attr('placeholder', user.about)
-                        $(website).attr('placeholder', user.website)
                         profileName.textContent = `${titleCase(user.first_name)} ${titleCase(user.last_name)}`
                     }
                     
@@ -131,7 +115,7 @@ $(document).ready(function () {
                     $('#listings-div').html('')
                     response.forEach(listing => {
                         $('#listings-div').append(`
-                        <div class="listingItem ui grid">
+                        <div style="margin-bottom: 1rem;" class="listingItem ui grid">
                             <div class="row">
                             <div class="six wide middle aligned column">
                             <p class="listingTitle">
@@ -188,18 +172,12 @@ $(document).ready(function () {
         const profileData = {
             first_name: formData.get("first_name"),
             last_name: formData.get("last_name"),
-            website: formData.get("website"),
             phone: formData.get("phone"),
             email: formData.get("email"),
-            instagram: formData.get("instagram"),
-            facebook: formData.get("facebook"),
-            twitter: formData.get("twitter"),
-            linkedin: formData.get("linkedin"),
-            about: formData.get('about'), 
         }
         console.log(profileData)
         const trimmedForm = trimForm(profileData); 
-        trimmedForm.professional_id = user.id
+        trimmedForm.id = user.id
         console.log(trimmedForm)
         if (Object.keys(trimmedForm).length > 0) {
             myAxios.put(API_URL + 'updateProfile', trimmedForm)

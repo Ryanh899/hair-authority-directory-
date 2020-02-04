@@ -12,7 +12,7 @@ $( document ).ready(function() {
             })
             .catch(err => {
                 alert('email or password not found')
-                window.location.assign('register.html')
+                // window.location.assign('register.html')
                 console.log(err); 
             })
     })

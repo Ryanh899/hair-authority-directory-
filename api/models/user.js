@@ -49,7 +49,10 @@ const User = {
         id: user.id,
         email: user.email,
         hash: user.hash,
-        salt: user.salt
+        salt: user.salt, 
+        phone: user.phone, 
+        first_name: user.first_name, 
+        last_name: user.last_name
       })
       .then(resp => {
         console.log(resp);
@@ -80,37 +83,17 @@ const User = {
       .where('professional_id', id)
       .catch(err => console.log(err)); 
   }, 
-  async updateProfessionalInfo(userInfo) {
+  updateProfessionalInfo(userInfo, cb) {
     console.log(userInfo)
-    const update = await knex('professional_info')
-      .where('professional_id', userInfo.professional_id)
+    return knex('professional_users')
+      .where('id', userInfo.id)
       .update(userInfo)
       .then(response => {
-        return response
+        cb.status(200).json(response)
       })
       .catch(err => {
         console.log(err)
       })
-      console.log('upDate', update)
-  }, 
-  changeProfessionalEmail(userInfo) {
-    console.log(userInfo)
-    try {
-      return knex('professional_users')
-      .where('id', userInfo.id)
-      .update('email', userInfo.email)
-      .then(response => {
-        console.log(response)
-        return response
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    } catch (err) {
-      console.log(err)
-      return err
-    }
-      
   }
 };
 

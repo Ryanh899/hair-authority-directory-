@@ -16,7 +16,10 @@ module.exports = {
                     .insert({
                         email: userInfo.email.toLowerCase(),
                         salt: salt,
-                        hash: hash
+                        hash: hash, 
+                        phone: userInfo.phone, 
+                        first_name: userInfo.first_name, 
+                        last_name: userInfo.last_name
                     })
                     .then(response => {
                         console.log('user created', response); 

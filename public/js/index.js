@@ -74,6 +74,10 @@ $(document).ready(function() {
     window.location.assign("dashboard.html");
   });
 
+  $('body').on('click', '#saved-listings', function () {
+    window.location.assign('saved.listings.html')
+})
+
   $('body').on('click', '#logout-button', function() {
     event.preventDefault();
     authHelper.logOut()
