@@ -28,6 +28,10 @@ const trimForm = function(obj) {
 };
 
 $(document).ready(function() {
+
+  $('.ui.dropdown')
+  .dropdown()
+;
   // get listing
   myAxios
     .get(API_URL + "listing/" + localStorage.getItem("listingId"))
@@ -49,6 +53,8 @@ $(document).ready(function() {
       const city = document.querySelector("input#city");
       const state = document.querySelector("input#state");
       const zip = document.querySelector("input#zip");
+      const category = document.querySelector('input#category')
+      const categoryDefault =document.querySelector('#select-default')
       const missionStatement = document.querySelector(
         "textarea#mission_statement"
       );
@@ -62,6 +68,7 @@ $(document).ready(function() {
       $(zip).attr("placeholder", listing.zip);
       $(missionStatement).attr("placeholder", listing.mission_statement);
       $(about).attr("placeholder", listing.about);
+      categoryDefault.textContent = listing.category
 
       if (listing.website) {
         const website = document.querySelector("input#website");

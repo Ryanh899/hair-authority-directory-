@@ -13,7 +13,7 @@ const User = {
         return response; 
       }).catch(err => console.log(err)); 
     console.log(user)
-    if (user.length !== 0) {
+    if (user && user.length !== 0) {
       console.log("client_user");
       user = user[0];
       user.isClientUser = true;
@@ -22,7 +22,7 @@ const User = {
       let professional_user = await knex("professional_users")
         .select()
         .where("email", userInfo);
-      if (professional_user.length !== 0) {
+      if (professional_user && professional_user.length !== 0) {
         console.log("professional_user");
         professional_user = professional_user[0];
         professional_user.isProfessionalUser = true;
@@ -31,7 +31,7 @@ const User = {
         let admin_user = await knex("admin_users")
           .select()
           .where("email", userInfo);
-        if (admin_user.length !== 0) {
+        if (admin_user && admin_user.length !== 0) {
           console.log("admin_user");
           admin_user = admin_user[0];
           admin_user.isAdminUser = true;

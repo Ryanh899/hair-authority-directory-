@@ -22,6 +22,10 @@ $(document).ready(function() {
     }
   );
 
+  $('.ui.dropdown')
+  .dropdown()
+;
+
   $(".ui.checkbox").checkbox({
     onChecked: function() {
       console.log("checked");
@@ -167,6 +171,7 @@ $(document).ready(function() {
   $("body").on("click", "#submit1", function() {
     event.preventDefault();
     const formData = new FormData(form1);
+    console.log(formData.get('category'))
     console.log(...formData);
     if (formData.get("businessTitle") === "" || undefined) {
       $("#businessTitle-div").css("border", "solid");
@@ -174,9 +179,13 @@ $(document).ready(function() {
     } else if (formData.get("businessDescription") === "" || undefined) {
       $("#businessDescription-div").css("border", "solid");
       $("#businessDescription-div").css("border-color", "red");
+    } else if (formData.get('category') === '--' || formData.get('category') === "") {
+      $('#category-div').css('border', 'solid')
+      $('#category-div').css('border-color', 'red')
     } else {
       finalForm.business_title = formData.get("businessTitle");
       finalForm.business_description = formData.get("businessDescription");
+      finalForm.category = formData.get('category'); 
       $(form1).css("display", "none");
       $(form2).css("display", "block");
       $("#businessTitle").css("color", "black");
