@@ -1,5 +1,18 @@
 const knex = require('../config/knex/knex'); 
 
+const NodeGeocoder = require('node-geocoder');
+ 
+const options = {
+  provider: 'google',
+ 
+  // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo', // for Mapquest, OpenCage, Google Premier
+  formatter: null         // 'gpx', 'string', ...
+};
+ 
+const geocoder = NodeGeocoder(options);
+
 const Listings = {
     getListings(userInfo) {
         console.log(userInfo)
@@ -8,9 +21,14 @@ const Listings = {
             .where('professional_id', userInfo.id)
             .catch(err => console.log(err))
     }, 
-    addListing(listing) {
+    async addListing(listing) {
         console.log(listing)
-        return knex('listings')
+        geocoder.geocode(`${listing.street_address}, ${listing.city} ${listing.state}, ${listing.zip}`)
+        .then(response => {
+            console.log(response)
+            listing.lat = response[0].latitude
+            listing.lng = response[0].longitude
+            return knex('listings')
             .insert(listing)
             .then(resp => {
                 console.log(resp)
@@ -18,6 +36,12 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        console.log(coords)
+        
     }, 
     findOne(id, cb) {
         knex('listings')

@@ -40,7 +40,7 @@ zip varchar(64),
 phone varchar(24), 
 email varchar(64), 
 website varchar(128), 
-category varchar (24), 
+category varchar (64), 
 monday varchar (64), 
 tuesday varchar (64),
 wednesday varchar (64),
@@ -60,5 +60,7 @@ answer0 varchar(128),
 faq1 varchar(128),
 answer1 varchar(128), 
 faq2 varchar(128), 
-answer2 varchar(128)
+answer2 varchar(128), 
+lat float, 
+lng float
 ); 

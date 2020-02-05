@@ -162,6 +162,7 @@ $(document).ready(function() {
       //     "closing-hours-sun"
       //   )}`
       // },
+      category: formData.get('category'), 
       website: formData.get("website"),
       phone: formData.get("phone"),
       email: formData.get("email"),
@@ -191,7 +192,7 @@ $(document).ready(function() {
                 console.log(err)
             })
     }
-    window.location.assign('dashboard.html')
+    // window.location.assign('dashboard.html')
 
   });
   $("body").on("click", "#back-button", function(event) {
