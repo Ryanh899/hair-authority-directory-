@@ -68,4 +68,47 @@ router.put("/updateProfile", async (req, res) => {
   User.updateProfessionalInfo(updateInfo, res)
 });
 
+router.get('/search/category/:category', async (req, res) => {
+    const category = req.params.category
+    Listings.getByCategory(category)
+        .then(resp => {
+            res.status(200).json(resp)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).json( err )
+        })
+})
+
+router.get('/search/:query/:location', (req, res) => {
+    const query = req.params.query
+    const location = req.params.location.split('+')
+    console.log(location)
+    const searchResults = []; 
+    Listings.getByTitle(query)
+        .then(response => {
+            response.forEach(listing => {
+                searchResults.push(listing)
+            })
+            if (response.length !== 0) {
+                Listings.getByCategory(response[0].category)
+                .then(resp => {
+                    resp.forEach(listing => {
+                        if (listing.business_title !== response[0].business_title)
+                        searchResults.push(listing)
+                    })
+                    return res.status(200).json(searchResults)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            } else {
+                res.status(200).json(response)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+})
+
 module.exports = router;

@@ -7,7 +7,7 @@ module.exports = {
       host : 'localhost',
       user : 'postgres',
       password : 'root',
-      database : 'hair_authority',
+      database : 'postgres',
       charset: 'utf8', 
     },
     migrations: {

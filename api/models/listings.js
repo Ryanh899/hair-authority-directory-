@@ -28,6 +28,8 @@ const Listings = {
             console.log(response)
             listing.lat = response[0].latitude
             listing.lng = response[0].longitude
+            listing.email = listing.email.toLowerCase()
+            listing.city = listing.city.toLowerCase(); 
             return knex('listings')
             .insert(listing)
             .then(resp => {
@@ -40,7 +42,6 @@ const Listings = {
         .catch(err => {
             console.log(err)
         })
-        console.log(coords)
         
     }, 
     findOne(id, cb) {
@@ -64,6 +65,29 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
+    }, 
+    getByCategory(category){
+        return knex('listings')
+            .select()
+            .where('category', category)
+            .limit(25)
+            .then(response => {
+                return response
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, 
+    getByTitle(title) {
+        return knex('listings')
+        .select()
+        .where('business_title', 'like', `${title}%`)
+        .then(response => {
+            return response
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 }
 

@@ -37,6 +37,8 @@ var authHelper = {
   }
 };
 
+const API_URL = 'http://localhost:3000/api/'
+
 $(document).ready(function() {
   if (authHelper.isLoggedIn()) {
     const token = localStorage.getItem("token");
@@ -87,4 +89,42 @@ $(document).ready(function() {
       );
     $( '#logout-div' ).html('')
   });
+
+  const categories = [
+    {title: "Dermatologist"},
+    {title: "Hair Care Salons"},
+    {title: "Hair Loss / Hair Care Products & Treatments"},
+    {title: "Hair Replacement & Hair Systems"},
+    {title: "Laser Therapy"},
+    {title: "Medial / Hair Transplants"},
+    {title: "Trichologist"},
+    {title: "Wigs, Extensions, Hair Additions"}, 
+    {title: "The Hair Club", abbreviation: ""}, 
+    {title: "ARTAS Robotic Hair Restoration System"}, 
+    {title: "World Trichology Society", abbreviation: 'WTS'}, 
+    {title: "The International Society of Hair Restoration Surgery (ISHRS)", abbreviation: "ISHRS"}
+  ];
+
+  $('.ui.search')
+  .search({
+    source : categories,
+    searchFields   : [
+      'title', 
+      'abbreviation'
+    ],
+    fullTextSearch: false, 
+    showNoResults: false
+  })
+;
+
+  $('body').on('click', '#search-button', function() {
+    const search = document.querySelector('input#search-semantic').value.trim()
+    console.log(search)
+
+    sessionStorage.setItem('searchQuery', search)
+    window.location.assign('search.listings.html')
+    
+
+  })
+
 });
