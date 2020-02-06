@@ -4,6 +4,13 @@ const jwt = require("jsonwebtoken");
 const Listings = require("../models/listings");
 const User = require("../models/user");
 
+const googleMapClient = require('@google/maps').createClient({
+  key: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo'
+});
+
+var distance = require('google-distance');
+distance.apiKey = 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo';
+
 const trimForm = function(obj) {
   // gets rid of empty responses
   Object.keys(obj).forEach(key => {
@@ -82,10 +89,15 @@ router.get('/search/category/:category', async (req, res) => {
 
 router.get('/search/:query/:location', (req, res) => {
     const query = req.params.query
-    const location = req.params.location.split('+')
+    let location = req.params.location.split('+')
+    // location = new googleMapClient.LatLng(location[0], location[1])
+    location = {
+      lat: location[0], 
+      lng: location[1]
+    }
     console.log(location)
     const searchResults = []; 
-    Listings.getByTitle(query)
+    Listings.getBySearch(query, location)
         .then(response => {
             response.forEach(listing => {
                 searchResults.push(listing)
