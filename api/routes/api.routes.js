@@ -3,6 +3,7 @@ const _ = require("lodash");
 const jwt = require("jsonwebtoken");
 const Listings = require("../models/listings");
 const User = require("../models/user");
+const GeoCode = require('../geocoding')
 
 const googleMapClient = require('@google/maps').createClient({
   key: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo'
@@ -11,7 +12,7 @@ const googleMapClient = require('@google/maps').createClient({
 var distance = require('google-distance');
 distance.apiKey = 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo';
 
-const trimForm = function(obj) {
+const trimForm = function (obj) {
   // gets rid of empty responses
   Object.keys(obj).forEach(key => {
     if (obj[key] && typeof obj[key] === "object") trimForm(obj[key]);
@@ -76,51 +77,62 @@ router.put("/updateProfile", async (req, res) => {
 });
 
 router.get('/search/category/:category', async (req, res) => {
-    const category = req.params.category
-    Listings.getByCategory(category)
-        .then(resp => {
-            res.status(200).json(resp)
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(400).json( err )
-        })
+  const category = req.params.category
+  Listings.getByCategory(category)
+    .then(resp => {
+      res.status(200).json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).json(err)
+    })
 })
 
 router.get('/search/:query/:location', (req, res) => {
-    const query = req.params.query
-    let location = req.params.location.split('+')
-    // location = new googleMapClient.LatLng(location[0], location[1])
-    location = {
-      lat: location[0], 
-      lng: location[1]
-    }
-    console.log(location)
-    const searchResults = []; 
-    Listings.getBySearch(query, location, res)
-        .then(response => {
-            response.forEach(listing => {
+  const query = req.params.query
+  let location = req.params.location.split('+')
+  location = {
+    lat: location[0],
+    lng: location[1]
+  }
+  const searchResults = [];
+  Listings.getBySearch(query, location, res)
+    .then(response => {
+      response.forEach(listing => {
+        console.log(listing.distance)
+        if (listing.distance) {
+          searchResults.push(listing)
+        }
+      })
+      if (response.length !== 0) {
+        Listings.getByCategory(response[0].category)
+          .then(async resp => {
+            for (var i = 0; i < resp.length; i++) {
+              let length = await GeoCode.findDistance(resp[i], location)
+              resp.map(item => {
+                if (length < 30) {
+                  item.distance = true
+                } else {
+                  item.distance = false
+                }
+              })
+            }
+            resp.forEach(listing => {
+              if (listing.business_title !== response[0].business_title && listing.distance)
                 searchResults.push(listing)
             })
-            if (response.length !== 0) {
-                Listings.getByCategory(response[0].category)
-                .then(resp => {
-                    resp.forEach(listing => {
-                        if (listing.business_title !== response[0].business_title)
-                        searchResults.push(listing)
-                    })
-                    return res.status(200).json(searchResults)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            } else {
-                res.status(200).json(response)
-            }
-        })
-        .catch(err => {
+            return res.status(200).json(searchResults)
+          })
+          .catch(err => {
             console.log(err)
-        })
+          })
+      } else {
+        res.status(200).json(response)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
 })
 
 module.exports = router;

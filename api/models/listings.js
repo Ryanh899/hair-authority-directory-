@@ -1,24 +1,24 @@
-const knex = require('../config/knex/knex'); 
+const knex = require('../config/knex/knex');
 
 const NodeGeocoder = require('node-geocoder');
-const GeoCode = require('../geocoding'); 
- 
+const GeoCode = require('../geocoding');
+
 const options = {
-  provider: 'google',
- 
-  // Optional depending on the providers
-  httpAdapter: 'https', // Default
-  apiKey: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo', // for Mapquest, OpenCage, Google Premier
-  formatter: null         // 'gpx', 'string', ...
+    provider: 'google',
+
+    // Optional depending on the providers
+    httpAdapter: 'https', // Default
+    apiKey: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo', // for Mapquest, OpenCage, Google Premier
+    formatter: null // 'gpx', 'string', ...
 };
 
 const googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo'
-  });
+});
 
-  var distance = require('google-distance');
+var distance = require('google-distance');
 distance.apiKey = 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo';
- 
+
 const geocoder = NodeGeocoder(options);
 
 const Listings = {
@@ -28,30 +28,30 @@ const Listings = {
             .select()
             .where('professional_id', userInfo.id)
             .catch(err => console.log(err))
-    }, 
+    },
     async addListing(listing) {
         console.log(listing)
         geocoder.geocode(`${listing.street_address}, ${listing.city} ${listing.state}, ${listing.zip}`)
-        .then(response => {
-            console.log(response)
-            listing.lat = response[0].latitude
-            listing.lng = response[0].longitude
-            listing.email = listing.email.toLowerCase()
-            listing.city = listing.city.toLowerCase(); 
-            return knex('listings')
-            .insert(listing)
-            .then(resp => {
-                console.log(resp)
+            .then(response => {
+                console.log(response)
+                listing.lat = response[0].latitude
+                listing.lng = response[0].longitude
+                listing.email = listing.email.toLowerCase()
+                listing.city = listing.city.toLowerCase();
+                return knex('listings')
+                    .insert(listing)
+                    .then(resp => {
+                        console.log(resp)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             })
             .catch(err => {
                 console.log(err)
             })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        
-    }, 
+
+    },
     findOne(id, cb) {
         knex('listings')
             .select()
@@ -62,7 +62,7 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
-    }, 
+    },
     updateListing(listing, id) {
         knex('listings')
             .where('id', id)
@@ -73,8 +73,8 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
-    }, 
-    getByCategory(category){
+    },
+    getByCategory(category) {
         return knex('listings')
             .select()
             .where('category', category)
@@ -85,56 +85,37 @@ const Listings = {
             .catch(err => {
                 console.log(err)
             })
-    }, 
+    },
     getByTitle(title) {
         return knex('listings')
-        .select()
-        .where('business_title', 'like', `${title}%`)
-        .then(response => {
-            return response
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }, 
+            .select()
+            .where('business_title', 'like', `${title}%`)
+            .then(response => {
+                return response
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    },
     async getBySearch(title, currentLocation, cb) {
         const listings = await knex('listings')
-        .select()
-        .where('business_title', 'like', `${title}%`)
-        .then(async response => {
-            return response
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        const newListings = []; 
-        return new Promise((resolve, reject) => {
-            const nearListings = []; 
-            resolve(listings.forEach(async (listing, index, object) => {
-                let howFar; 
-                distance.get(
-                    {
-                      index: 1,
-                      origin: `${currentLocation.lat}, ${currentLocation.lng}`,
-                      destination: `${listing.lat}, ${listing.lng}`
-                    },
-                    function(err, data) {
-                      if (err) return console.log(err);
-                    //   console.log(data);
-                      const km = data.distance.split(' ')[0]
-                      howFar = km
-                    //   if (km < 80.4672) {
-                    //       console.log(true)
-                    //       nearListings.push(listing)
-                    //   } else {
-                    //       console.log('Too Far')
-                    //   }
-                    });
-
-                    console.log(howFar)
-                    resolve(howFar)
-            }))
-        })
+            .select()
+            .where('business_title', 'like', `${title}%`)
+            .then(async response => {
+                return response
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        for (var i = 0; i < listings.length; i++) {
+            let length = await GeoCode.findDistance(listings[i], currentLocation)
+            if (length < 30) {
+                listings[i].distance = true
+            } else {
+                listings[i].distance = false
+            }
+        }
+        return listings
     }
 }
 
