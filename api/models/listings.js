@@ -97,64 +97,45 @@ const Listings = {
             console.log(err)
         })
     }, 
-    getBySearch(title, currentLocation) {
-        return knex('listings')
+    async getBySearch(title, currentLocation, cb) {
+        const listings = await knex('listings')
         .select()
         .where('business_title', 'like', `${title}%`)
-        .then(response => {
-            console.log(response)
-            response.forEach(listing => {
-                haversineDistance([listing.lng, listing.lat], [Number(currentLocation.lng), Number(currentLocation.lat)], true)
-                distance.get(
-                    {
-                      index: 1,
-                    //   origin: `${currentLocation.lat}, ${currentLocation.lng}`,
-                    //   destination: `${listing.lat}, ${listing.lng}`
-                    origin: '33.457458, -117.605306', 
-                    destination: '33.442920, -117.644616', 
-                    },
-                    function(err, data) {
-                      if (err) return console.log(err);
-                      console.log(data);
-                    });
-
-            })
+        .then(async response => {
             return response
-
         })
         .catch(err => {
             console.log(err)
         })
+        const newListings = []; 
+        return new Promise((resolve, reject) => {
+            const nearListings = []; 
+            resolve(listings.forEach(async (listing, index, object) => {
+                let howFar; 
+                distance.get(
+                    {
+                      index: 1,
+                      origin: `${currentLocation.lat}, ${currentLocation.lng}`,
+                      destination: `${listing.lat}, ${listing.lng}`
+                    },
+                    function(err, data) {
+                      if (err) return console.log(err);
+                    //   console.log(data);
+                      const km = data.distance.split(' ')[0]
+                      howFar = km
+                    //   if (km < 80.4672) {
+                    //       console.log(true)
+                    //       nearListings.push(listing)
+                    //   } else {
+                    //       console.log('Too Far')
+                    //   }
+                    });
+
+                    console.log(howFar)
+                    resolve(howFar)
+            }))
+        })
     }
 }
-function haversineDistance(coords1, coords2, isMiles) {
-  function toRad(x) {
-    return x * Math.PI / 180;
-  }
 
-  console.log(...arguments)
-
-  var lon1 = coords1[0];
-  var lat1 = coords1[1];
-
-  var lon2 = coords2[0];
-  var lat2 = coords2[1];
-
-  var R = 6371; // km
-
-  var x1 = lat2 - lat1;
-  var dLat = toRad(x1);
-  var x2 = lon2 - lon1;
-  var dLon = toRad(x2)
-  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c;
-
-  if(isMiles) d /= 1.60934;
-  console.log('-------')
-  console.log(d)
-  return d;
-}
 module.exports = Listings

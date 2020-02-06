@@ -97,7 +97,7 @@ router.get('/search/:query/:location', (req, res) => {
     }
     console.log(location)
     const searchResults = []; 
-    Listings.getBySearch(query, location)
+    Listings.getBySearch(query, location, res)
         .then(response => {
             response.forEach(listing => {
                 searchResults.push(listing)
