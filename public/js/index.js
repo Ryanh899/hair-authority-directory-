@@ -40,6 +40,22 @@ var authHelper = {
 const API_URL = 'http://localhost:3000/api/'
 
 $(document).ready(function() {
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
+  function showPosition(position) {
+    sessionStorage.setItem('lat', position.coords.latitude)
+    sessionStorage.setItem('lng', position.coords.longitude)
+  }
+
+  // gets location and sets in session storage
+  getLocation()
+
   if (authHelper.isLoggedIn()) {
     const token = localStorage.getItem("token");
     const userInfo = authHelper.parseToken(token);
@@ -114,8 +130,10 @@ $(document).ready(function() {
     ],
     fullTextSearch: false, 
     showNoResults: false
-  })
-;
+  });
+
+  
+
 
   $('body').on('click', '#search-button', function() {
     const search = document.querySelector('input#search-semantic').value.trim()
@@ -123,7 +141,6 @@ $(document).ready(function() {
 
     sessionStorage.setItem('searchQuery', search)
     window.location.assign('search.listings.html')
-    
 
   })
 

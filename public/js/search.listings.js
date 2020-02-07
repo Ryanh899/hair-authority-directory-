@@ -50,6 +50,8 @@ myAxios.interceptors.response.use(function (response) {
 }, function (error) {
   if (error.response.status === 401) {
       return authHelper.logOut('./sign-in.html')
+  } else if (error.response.status === 404 ) {
+    console.log('coordinates not found')
   } else {
       return Promise.reject(error)
   }
@@ -79,6 +81,10 @@ const API_URL = "http://localhost:3000/api/";
 
 $(document).ready(function () {
   let markerInfo = [];
+  const page = document.querySelector('div#page-container')
+  const loader = document.querySelector('div#loader-div')
+
+  $(page).css('display', 'none')
 
   function getGeolocation() {
     navigator.geolocation.getCurrentPosition(drawMap);
@@ -107,7 +113,7 @@ $(document).ready(function () {
 
   }
 
-  getLocation();
+  // getLocation();
 
   $("body").on("click", "#home-button", function () {
     window.location.assign("index.html");
@@ -141,11 +147,11 @@ $(document).ready(function () {
     lat: sessionStorage.getItem('lat'),
     lng: sessionStorage.getItem('lng')
   }
-
   if (category === "") {
     myAxios
       .get(API_URL + "search/" + search + "/" + location.lat + '+' + location.lng)
       .then(response => {
+        console.log(response)
         response.data.forEach(listing => {
           $("#listings-column")
             .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
@@ -173,6 +179,8 @@ $(document).ready(function () {
               </div>
             </div>`);
         });
+        $(loader).fadeOut()
+        $(page).fadeIn()
         response.data.forEach(item => {
           markerInfo.push(item)
         })
@@ -212,6 +220,8 @@ $(document).ready(function () {
             </div>
           </div>`);
         });
+        $(loader).fadeOut()
+        $(page).fadeIn()
         response.data.forEach(item => {
           markerInfo.push(item)
         })

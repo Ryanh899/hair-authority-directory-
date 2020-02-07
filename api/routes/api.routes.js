@@ -99,8 +99,10 @@ router.get('/search/category/:category/:location', async (req, res) => {
 router.get('/search/:query/:location', (req, res) => {
   const query = req.params.query
   let location = req.params.location.split('+')
-  if (location[0] === null || location[1] === null) {
-    res.status(401).json({message: 'no location given'})
+  console.log(location)
+  console.log(query)
+  if (location[0] === 'null' || location[1] === 'null') {
+    return res.status(404).json({message: 'location not found'})
   }
   location = {
     lat: location[0],

@@ -21,11 +21,17 @@
 </head>
 
 <body>
-  <div class="nav-bar">
-    <p class="nav-h1" style="font-size: 20px; margin: 0px;">
-      The International Hair Authority Directory
-    </p>
-    <div id="home-button"><i class="left arrow icon"></i>Back</div>
+    <div class="nav-bar">
+        <p class="nav-h1" style="font-size: 20px; margin: 0px;">
+          The International Hair Authority Directory
+        </p>
+        <div id="home-button"><i class="left arrow icon"></i>Back</div>
+      </div>
+  <div id="loader-div">
+          <div class="ui active inverted dimmer">
+            <div class="ui text loader">Loading</div>
+          </div>
+          <p></p>
   </div>
   <div id="page-container">
     <div style="width: 100%; margin: 0px;" class="ui grid">
@@ -52,29 +58,6 @@
       </div>
     </div>
   </div>
-  <!-- <script>
-    function getGeolocation() {
-      navigator.geolocation.getCurrentPosition(drawMap);
-    }
-
-    function drawMap(geoPos) {
-      geolocate = new google.maps.LatLng(geoPos.coords.latitude, geoPos.coords.longitude);
-      let mapProp = {
-        center: geolocate,
-        zoom: 10,
-      };
-      let map = new google.maps.Map(document.getElementById('map'), mapProp);
-      let infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: geolocate,
-        content: `Location from HTML5 Geolocation:
-             <br>Latitude: ${geoPos.coords.latitude}
-             <br>Longitude: ${geoPos.coords.longitude}`
-      });
-    }
-    // getGeolocation();
-  </script> -->
-  <!-- left call back empty in uri  -->
   
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo&callback="
     async defer></script>
