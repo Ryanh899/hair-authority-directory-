@@ -64,9 +64,7 @@ router.get("/listing/:id", (req, res) => {
 
 router.put("/updateListing/:id", (req, res) => {
   const id = req.params.id;
-  console.log(req.body);
   const listing = req.body;
-  console.log(listing);
   Listings.updateListing(listing, id);
 });
 
@@ -76,10 +74,20 @@ router.put("/updateProfile", async (req, res) => {
   User.updateProfessionalInfo(updateInfo, res)
 });
 
-router.get('/search/category/:category', async (req, res) => {
-  const category = req.params.category
-  Listings.getByCategory(category)
+router.get('/search/category/:category/:location', async (req, res) => {
+  const category = req.params.category.split('+').join(' ')
+  let location = req.params.location.split('+')
+  if (location[0] === null || location[1] === null) {
+    res.status(401).json({message: 'no location given'})
+  }
+  location = {
+    lat: location[0],
+    lng: location[1]
+  }
+  Listings.getByCategory(category, location)
     .then(resp => {
+      resp.filter(item => item.distance !== false)
+      console.log(resp)
       res.status(200).json(resp)
     })
     .catch(err => {
@@ -91,6 +99,9 @@ router.get('/search/category/:category', async (req, res) => {
 router.get('/search/:query/:location', (req, res) => {
   const query = req.params.query
   let location = req.params.location.split('+')
+  if (location[0] === null || location[1] === null) {
+    res.status(401).json({message: 'no location given'})
+  }
   location = {
     lat: location[0],
     lng: location[1]
@@ -105,12 +116,12 @@ router.get('/search/:query/:location', (req, res) => {
         }
       })
       if (response.length !== 0) {
-        Listings.getByCategory(response[0].category)
+        Listings.getByCategory(response[0].category, location)
           .then(async resp => {
             for (var i = 0; i < resp.length; i++) {
               let length = await GeoCode.findDistance(resp[i], location)
               resp.map(item => {
-                if (length < 30) {
+                if (length < 50) {
                   item.distance = true
                 } else {
                   item.distance = false

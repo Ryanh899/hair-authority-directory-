@@ -1,28 +1,115 @@
-const categories = [
-  { title: "Dermatologist" },
-  { title: "Hair Care Salons" },
-  { title: "Hair Loss / Hair Care Products & Treatments" },
-  { title: "Hair Replacement & Hair Systems" },
-  { title: "Laser Therapy" },
-  { title: "Medial / Hair Transplants" },
-  { title: "Trichologist" },
-  { title: "Wigs, Extensions, Hair Additions" },
-  { title: "The Hair Club", abbreviation: "" },
-  { title: "ARTAS Robotic Hair Restoration System" },
-  { title: "World Trichology Society", abbreviation: "WTS" },
+const categories = [{
+    title: "Dermatologist"
+  },
+  {
+    title: "Hair Care Salons"
+  },
+  {
+    title: "Hair Loss + Hair Care Products & Treatments"
+  },
+  {
+    title: "Hair Replacement & Hair Systems"
+  },
+  {
+    title: "Laser Therapy"
+  },
+  {
+    title: "Medial + Hair Transplants"
+  },
+  {
+    title: "Trichologist"
+  },
+  {
+    title: "Wigs, Extensions, Hair Additions"
+  },
+  {
+    title: "The Hair Club",
+    abbreviation: ""
+  },
+  {
+    title: "ARTAS Robotic Hair Restoration System"
+  },
+  {
+    title: "World Trichology Society",
+    abbreviation: "WTS"
+  },
   {
     title: "The International Society of Hair Restoration Surgery (ISHRS)",
     abbreviation: "ISHRS"
   }
 ];
 
+
+var myAxios = axios.create({
+  headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+  }
+});
+myAxios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  if (error.response.status === 401) {
+      return authHelper.logOut('./sign-in.html')
+  } else {
+      return Promise.reject(error)
+  }
+})
+var authHelper = {
+  isLoggedIn() {
+      const token = localStorage.getItem('token')
+      if (token) {
+          var userData = this.parseToken(token);
+          var expirationDate = new Date(userData.exp * 1000)
+          if (Date.now() > expirationDate) this.logOut()
+          return true
+      } else {
+          return false
+      }
+  },
+  parseToken(token) {
+      return JSON.parse(window.atob(token.split('.')[1]))
+  },
+  logOut(path = './sign-in.html') {
+      localStorage.removeItem('token')
+      window.location.assign(path)
+  }
+}
+
 const API_URL = "http://localhost:3000/api/";
 
-$(document).ready(function() {
+$(document).ready(function () {
+  let markerInfo = [];
 
-   getLocation();
+  function getGeolocation() {
+    navigator.geolocation.getCurrentPosition(drawMap);
+  }
 
-  $("body").on("click", "#home-button", function() {
+  function drawMap(geoPos) {
+    geolocate = new google.maps.LatLng(geoPos.coords.latitude, geoPos.coords.longitude);
+    let mapProp = {
+      center: geolocate,
+      zoom: 10,
+    };
+    let map = new google.maps.Map(document.getElementById('map'), mapProp);
+    if (markerInfo.length > 0) {
+      markerInfo.forEach(item => {
+        let marker = new google.maps.Marker({
+          position: {
+            lat: Number(item.lat),
+            lng: Number(item.lng)
+          },
+          map: map,
+          title: 'Hello World!'
+        })
+      })
+    }
+
+
+  }
+
+  getLocation();
+
+  $("body").on("click", "#home-button", function () {
     window.location.assign("index.html");
   });
 
@@ -34,7 +121,6 @@ $(document).ready(function() {
   categories.forEach(item => {
     if (item.title === search) {
       category = search;
-      // axios get by category or logo
     }
   });
 
@@ -51,15 +137,15 @@ $(document).ready(function() {
     sessionStorage.setItem('lng', position.coords.longitude)
   }
 
+  let location = {
+    lat: sessionStorage.getItem('lat'),
+    lng: sessionStorage.getItem('lng')
+  }
+
   if (category === "") {
-      let location = {
-          lat: sessionStorage.getItem('lat'), 
-          lng: sessionStorage.getItem('lng')
-      }
-    axios
+    myAxios
       .get(API_URL + "search/" + search + "/" + location.lat + '+' + location.lng)
       .then(response => {
-        console.log(response.data);
         response.data.forEach(listing => {
           $("#listings-column")
             .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
@@ -87,15 +173,18 @@ $(document).ready(function() {
               </div>
             </div>`);
         });
+        response.data.forEach(item => {
+          markerInfo.push(item)
+        })
+        getGeolocation()
       })
       .catch(err => {
         console.log(err);
       });
   } else {
-    axios
-      .get(API_URL + "search/category/" + search)
+    myAxios
+      .get(API_URL + "search/category/" + search.split(' ').join('+') + '/' + location.lat + '+' + location.lng)
       .then(response => {
-        console.log(response);
         response.data.forEach(listing => {
           $("#listings-column")
             .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
@@ -123,6 +212,13 @@ $(document).ready(function() {
             </div>
           </div>`);
         });
+        response.data.forEach(item => {
+          markerInfo.push(item)
+        })
+        getGeolocation()
+      })
+      .catch(err => {
+        console.log(err);
       })
       .catch(err => {
         console.log(err);

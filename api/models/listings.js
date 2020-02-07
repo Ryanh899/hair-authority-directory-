@@ -64,27 +64,58 @@ const Listings = {
             })
     },
     updateListing(listing, id) {
-        knex('listings')
-            .where('id', id)
-            .update(listing)
+        if (listing.street_address || listing.city) {
+            geocoder.geocode(`${listing.street_address}, ${listing.city} ${listing.state || ''}, ${listing.zip || ''}`)
             .then(response => {
-                console.log(response)
+                listing.lat = response[0].latitude
+                listing.lng = response[0].longitude
+                console.log('========update listing =========')
+                console.log(listing)
+                return knex('listings')
+                    .update(listing)
+                    .where('id', id)
+                    .then(resp => {
+                        console.log(resp)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             })
             .catch(err => {
                 console.log(err)
             })
+        } else {
+            knex('listings')
+                .update(listing)
+                .where('id', id)
+                .then(resp => {
+                    console.log(resp)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
     },
-    getByCategory(category) {
-        return knex('listings')
+    async getByCategory(category, currentLocation) {
+        const listings = await knex('listings')
             .select()
             .where('category', category)
-            .limit(25)
+            .limit(50)
             .then(response => {
                 return response
             })
             .catch(err => {
                 console.log(err)
             })
+            for (var i = 0; i < listings.length; i++) {
+                let length = await GeoCode.findDistance(listings[i], currentLocation)
+                if (length < 50) {
+                    listings[i].distance = true
+                } else {
+                    listings[i].distance = false
+                }
+            }
+            return listings
     },
     getByTitle(title) {
         return knex('listings')
@@ -109,7 +140,7 @@ const Listings = {
             })
         for (var i = 0; i < listings.length; i++) {
             let length = await GeoCode.findDistance(listings[i], currentLocation)
-            if (length < 30) {
+            if (length < 50) {
                 listings[i].distance = true
             } else {
                 listings[i].distance = false
