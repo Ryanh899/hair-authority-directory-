@@ -59,7 +59,7 @@ router.get("/profile/:token", async (req, res) => {
 router.get("/listing/:id", (req, res) => {
   const listing = req.params.id;
   console.log(listing);
-  Listings.findOne(listing, res);
+  Listings.getById(listing, res);
 });
 
 router.put("/updateListing/:id", (req, res) => {
@@ -147,5 +147,6 @@ router.get('/search/:query/:location', (req, res) => {
       console.log(err)
     })
 })
+
 
 module.exports = router;

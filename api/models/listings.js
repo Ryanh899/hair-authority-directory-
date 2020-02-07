@@ -52,17 +52,6 @@ const Listings = {
             })
 
     },
-    findOne(id, cb) {
-        knex('listings')
-            .select()
-            .where('id', id)
-            .then(response => {
-                cb.json(response[0])
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    },
     updateListing(listing, id) {
         if (listing.street_address || listing.city) {
             geocoder.geocode(`${listing.street_address}, ${listing.city} ${listing.state || ''}, ${listing.zip || ''}`)
@@ -147,6 +136,18 @@ const Listings = {
             }
         }
         return listings
+    }, 
+    getById(id, cb) {
+        return knex('listings')
+            .select()
+            .where('id', id)
+            .then(resp => {
+                cb.status(200).json(resp)
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(400).json({message: 'listing does not exist'})
+            })
     }
 }
 
