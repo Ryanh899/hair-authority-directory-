@@ -52,12 +52,7 @@ var myAxios = axios.create({
 
       const currentListing = sessionStorage.getItem('currentListing')
 
-      $('.slider').glide({
-        autoplay: false,
-        arrowsWrapperClass: 'slider-arrows',
-        arrowRightText: '',
-        arrowLeftText: ''
-      });
+      
 
       if (currentListing && currentLocation) {
           myAxios.get(API_URL + 'listing/' + currentListing)
