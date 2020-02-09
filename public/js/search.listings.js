@@ -50,6 +50,8 @@ myAxios.interceptors.response.use(function (response) {
 }, function (error) {
   if (error.response.status === 401) {
       return authHelper.logOut('./sign-in.html')
+  } else if (error.response.status === 404 ) {
+    console.log('coordinates not found')
   } else {
       return Promise.reject(error)
   }
@@ -79,6 +81,10 @@ const API_URL = "http://localhost:3000/api/";
 
 $(document).ready(function () {
   let markerInfo = [];
+  const page = document.querySelector('div#page-container')
+  const loader = document.querySelector('div#loader-div')
+
+  $(page).css('display', 'none')
 
   function getGeolocation() {
     navigator.geolocation.getCurrentPosition(drawMap);
@@ -107,7 +113,39 @@ $(document).ready(function () {
 
   }
 
-  getLocation();
+  const categories = [
+    {title: "Dermatologist"},
+    {title: "Hair Care Salons"},
+    {title: "Hair Loss / Hair Care Products & Treatments"},
+    {title: "Hair Replacement & Hair Systems"},
+    {title: "Laser Therapy"},
+    {title: "Medial / Hair Transplants"},
+    {title: "Trichologist"},
+    {title: "Wigs, Extensions, Hair Additions"}, 
+    {title: "The Hair Club", abbreviation: ""}, 
+    {title: "ARTAS Robotic Hair Restoration System"}, 
+    {title: "World Trichology Society", abbreviation: 'WTS'}, 
+    {title: "The International Society of Hair Restoration Surgery (ISHRS)", abbreviation: "ISHRS"}
+  ];
+
+  $('.ui.search')
+  .search({
+    source : categories,
+    searchFields   : [
+      'title', 
+      'abbreviation'
+    ],
+    fullTextSearch: false, 
+    showNoResults: false
+  });
+
+  $('body').on('click', '#search-button', function() {
+    const search = document.querySelector('input#search-semantic').value.trim()
+    console.log(search)
+
+    sessionStorage.setItem('searchQuery', search)
+    window.location.assign('search.listings.html')
+  })
 
   $("body").on("click", "#home-button", function () {
     window.location.assign("index.html");
@@ -141,11 +179,11 @@ $(document).ready(function () {
     lat: sessionStorage.getItem('lat'),
     lng: sessionStorage.getItem('lng')
   }
-
   if (category === "") {
     myAxios
       .get(API_URL + "search/" + search + "/" + location.lat + '+' + location.lng)
       .then(response => {
+        console.log(response)
         response.data.forEach(listing => {
           $("#listings-column")
             .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
@@ -158,12 +196,12 @@ $(document).ready(function () {
                 </div>
                 <div class="six wide column"></div>
                 <div class="four wide column">
-                  <a id="${listing.id}" class="editButton">
+                  <a id="${listing.id}-view" class="editButton">
                     <div style="color: white;" class="listing-buttons " id="${listing.id}">
                       <i style="pointer-events:none" class="eye icon"></i> View
                     </div>
                   </a>
-                  <a id="${listing.id}" class="editButton">
+                  <a id="${listing.id}-save" class="editButton">
                     <div style="color: white;" class="listing-buttons ">
                       <i style="pointer-events:none" style="color: red;" class="save icon"></i>
                       Save
@@ -173,6 +211,8 @@ $(document).ready(function () {
               </div>
             </div>`);
         });
+        $(loader).fadeOut()
+        $(page).fadeIn()
         response.data.forEach(item => {
           markerInfo.push(item)
         })
@@ -202,7 +242,7 @@ $(document).ready(function () {
                     <i style="pointer-events:none" class="eye icon"></i> View
                   </div>
                 </a>
-                <a id="${listing.id}" class="editButton">
+                <a id="${listing.id}" class="editButton saveButton">
                   <div style="color: white;" class="listing-buttons ">
                     <i style="pointer-events:none" style="color: red;" class="save icon"></i>
                     Save
@@ -212,6 +252,8 @@ $(document).ready(function () {
             </div>
           </div>`);
         });
+        $(loader).fadeOut()
+        $(page).fadeIn()
         response.data.forEach(item => {
           markerInfo.push(item)
         })
@@ -224,4 +266,13 @@ $(document).ready(function () {
         console.log(err);
       });
   }
+
+  $('body').on('click', '.editButton', function(e) {
+      const listingId = e.target.id
+      console.log(listingId)
+      sessionStorage.setItem('currentListing', listingId)
+
+      window.location.assign('listing.html'); 
+  })
+
 });

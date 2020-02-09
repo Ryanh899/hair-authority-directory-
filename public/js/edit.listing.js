@@ -192,7 +192,7 @@ $(document).ready(function() {
                 console.log(err)
             })
     }
-    // window.location.assign('dashboard.html')
+    window.location.assign('dashboard.html')
 
   });
   $("body").on("click", "#back-button", function(event) {

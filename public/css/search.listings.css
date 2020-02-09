@@ -31,12 +31,14 @@
     padding: 2rem;
     margin-top: 1rem;
     margin-left: .5rem;
+    min-height: 85vh
 }
 
 #preview-container {
     border: solid;
     border-width: 5px;
     border-color: rgba(39, 76, 119, 1); 
+    padding: 2.5rem;
 }
 
 #map-container {
@@ -46,6 +48,7 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    max-height: 61vh;
 }
 
 #map {
@@ -54,3 +57,7 @@
     height: 100%;
     width: 100%;
   }
+
+#search {
+    width: 100%;
+}

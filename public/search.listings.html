@@ -21,11 +21,17 @@
 </head>
 
 <body>
-  <div class="nav-bar">
-    <p class="nav-h1" style="font-size: 20px; margin: 0px;">
-      The International Hair Authority Directory
-    </p>
-    <div id="home-button"><i class="left arrow icon"></i>Back</div>
+    <div class="nav-bar">
+        <p class="nav-h1" style="font-size: 20px; margin: 0px;">
+          The International Hair Authority Directory
+        </p>
+        <div id="home-button"><i class="left arrow icon"></i>Back</div>
+      </div>
+  <div id="loader-div">
+          <div class="ui active inverted dimmer">
+            <div class="ui text loader">Loading</div>
+          </div>
+          <p></p>
   </div>
   <div id="page-container">
     <div style="width: 100%; margin: 0px;" class="ui grid">
@@ -33,16 +39,15 @@
         <div id="listings-column" class="eight wide column"></div>
         <div style="margin-top: 1rem;" class="seven wide column">
           <div id="preview-container">
-            <div style="margin: 0px;" class="ui grid container">
-              <div class="five wide column">
-                <img src="https://via.placeholder.com/100" alt="placeholder" />
-              </div>
-              <div class="ten wide column">
-                <h1>Name</h1>
-                <h3>Subtitle</h3>
-                <!-- <button class="ui button"  >View</button> -->
-              </div>
-            </div>
+              <div  class="ui search"  >
+                <h1>Search Listings</h1>
+                  <div id="search" class="ui icon input search">
+                    <input style="width: 100%;" id="search-semantic" class="prompt" type="text" placeholder="Ex. Hair Restoration, Hair Transplant, Laser Therapy">
+                    <i id="search-icon" class="search icon"></i>
+                    <div style="margin-left: 8rem;" class="results"></div>
+                  </div>
+                  <button style="margin-top: 1rem;" class="ui button" id="search-button" >Search</button>
+                </div>
           </div>
           <div style="margin-top: .5rem; position: relative;" id="map-container">
             <div id="map"></div>
@@ -52,29 +57,6 @@
       </div>
     </div>
   </div>
-  <!-- <script>
-    function getGeolocation() {
-      navigator.geolocation.getCurrentPosition(drawMap);
-    }
-
-    function drawMap(geoPos) {
-      geolocate = new google.maps.LatLng(geoPos.coords.latitude, geoPos.coords.longitude);
-      let mapProp = {
-        center: geolocate,
-        zoom: 10,
-      };
-      let map = new google.maps.Map(document.getElementById('map'), mapProp);
-      let infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: geolocate,
-        content: `Location from HTML5 Geolocation:
-             <br>Latitude: ${geoPos.coords.latitude}
-             <br>Longitude: ${geoPos.coords.longitude}`
-      });
-    }
-    // getGeolocation();
-  </script> -->
-  <!-- left call back empty in uri  -->
   
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo&callback="
     async defer></script>
