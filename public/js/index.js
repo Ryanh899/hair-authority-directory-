@@ -95,7 +95,7 @@ $(document).ready(function() {
   });
 
   $('body').on('click', '#saved-listings', function () {
-    window.location.assign('search.listings.html')
+    window.location.assign('saved.listings.html')
 })
 
   $('body').on('click', '#logout-button', function() {

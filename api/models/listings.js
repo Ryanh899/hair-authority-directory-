@@ -148,6 +148,31 @@ const Listings = {
                 console.log(err)
                 res.status(400).json({message: 'listing does not exist'})
             })
+    }, 
+    saveListing(listingId, userId, cb) {
+        return knex('saved_listings')
+            .insert({
+                listing_id: listingId, 
+                user_id: userId
+            })
+            .then(response => {
+                cb.status(200).json(response)
+            })
+            .catch(err => {
+               cb.status(401).json({err})
+            })
+    }, 
+    getSavedListings(userId, listingId, cb) {
+        return knex('saved_listings')
+            .select()
+            .where('user_id', userId)
+            .then(response => {
+                cb.status(200).json(response)
+            })
+            .catch(err => {
+                console.log(err)
+                cb.status(401).json({err})
+            })
     }
 }
 

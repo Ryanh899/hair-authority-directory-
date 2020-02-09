@@ -201,7 +201,7 @@ $(document).ready(function () {
                       <i style="pointer-events:none" class="eye icon"></i> View
                     </div>
                   </a>
-                  <a id="${listing.id}-save" class="editButton">
+                  <a id="${listing.id}" class="saveButton">
                     <div style="color: white;" class="listing-buttons ">
                       <i style="pointer-events:none" style="color: red;" class="save icon"></i>
                       Save
@@ -242,7 +242,7 @@ $(document).ready(function () {
                     <i style="pointer-events:none" class="eye icon"></i> View
                   </div>
                 </a>
-                <a id="${listing.id}" class="editButton saveButton">
+                <a id="${listing.id}" class="saveButton">
                   <div style="color: white;" class="listing-buttons ">
                     <i style="pointer-events:none" style="color: red;" class="save icon"></i>
                     Save
@@ -267,12 +267,17 @@ $(document).ready(function () {
       });
   }
 
-  $('body').on('click', '.editButton', function(e) {
-      const listingId = e.target.id
-      console.log(listingId)
-      sessionStorage.setItem('currentListing', listingId)
+  $('body').on('click', '.saveButton', function(e) {
+    const id = e.target.id; 
+    console.log(id)
+})
 
-      window.location.assign('listing.html'); 
-  })
+  // $('body').on('click', '.editButton', function(e) {
+  //     const listingId = e.target.id
+  //     console.log(listingId)
+  //     sessionStorage.setItem('currentListing', listingId)
+
+  //     window.location.assign('listing.html'); 
+  // })
 
 });

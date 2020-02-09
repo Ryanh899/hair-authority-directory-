@@ -149,5 +149,20 @@ router.get('/search/:query/:location', (req, res) => {
     })
 })
 
+router.post('saveListing/:id', (req, res) => {
+    const userId = req.params.id; 
+    const listingId = req.body.listingId; 
+
+  Listings.saveListing(userId, listingId, res); 
+})
+
+router.get('/savedListings/:id', (req, res) => {
+  const listingId = req.params.id; 
+  const user = jwt.decode(req.body.token)
+
+  Listings.getSavedListings(user.id, listingId, res)
+})
+  
+
 
 module.exports = router;
