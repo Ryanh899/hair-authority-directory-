@@ -54,7 +54,9 @@ $(document).ready(function() {
   }
 
   // gets location and sets in session storage
-  getLocation()
+  if (!sessionStorage.getItem('lat') || !sessionStorage.getItem('lat')) {
+    getLocation()
+  }
 
   if (authHelper.isLoggedIn()) {
     const token = localStorage.getItem("token");
