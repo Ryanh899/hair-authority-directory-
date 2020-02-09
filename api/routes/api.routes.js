@@ -86,9 +86,10 @@ router.get('/search/category/:category/:location', async (req, res) => {
   }
   Listings.getByCategory(category, location)
     .then(resp => {
-      resp.filter(item => item.distance !== false)
-      console.log(resp)
-      res.status(200).json(resp)
+      let filteredResults = resp.filter(item => {
+        return item.distance === true
+      })
+      res.status(200).json(filteredResults)
     })
     .catch(err => {
       console.log(err)
