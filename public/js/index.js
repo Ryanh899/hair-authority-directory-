@@ -68,11 +68,13 @@ $(document).ready(function() {
       );
     } else if (userInfo && userInfo.isProfessionalUser) {
       $("#auth-buttons").html(
-        `<button id="dashboard-button" class="ui button" >My Dashboard</button>`
+        `<button id="dashboard-button" class="ui button" >My Dashboard</button>
+        <button id="saved-listings" class="ui button" >My Listings</button>`
       );
     } else if (userInfo && userInfo.isAdminUser) {
       $("#auth-buttons").html(
-        `<button id="admin-portal-button" class="ui button" >Admin Portal</button>`
+        `<button id="admin-portal-button" class="ui button" >Admin Portal</button>
+        <button id="saved-listings" class="ui button" >My Listings</button>`
       );
     }
   } else {
@@ -96,6 +98,10 @@ $(document).ready(function() {
 
   $('body').on('click', '#saved-listings', function () {
     window.location.assign('saved.listings.html')
+})
+
+$('body').on('click', '#admin-portal-button', function () {
+  window.location.assign('admin.portal.html')
 })
 
   $('body').on('click', '#logout-button', function() {
@@ -134,15 +140,24 @@ $(document).ready(function() {
     showNoResults: false
   });
 
-  
-
-
   $('body').on('click', '#search-button', function() {
     const search = document.querySelector('input#search-semantic').value.trim()
     console.log(search)
 
     sessionStorage.setItem('searchQuery', search)
     window.location.assign('search.listings.html')
+
+  })
+
+  $('body').on('click', '#list-business-button', function() {
+    const user = localStorage.getItem('token')
+
+    if (user) {
+      window.location.assign('listing.form.html')
+    } else {
+      alert('please log in to make a listing')
+      window.location.assign('sign-in.html')
+    }
 
   })
 

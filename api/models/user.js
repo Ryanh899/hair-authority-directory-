@@ -2,6 +2,7 @@ const knex = require("../config/knex/knex");
 const _ = require("lodash");
 const Auth = require("../../auth_resources");
 const jwt = require("jsonwebtoken");
+const Listings = require("./listings");
 
 const User = {
   async findEmail(userInfo) {
@@ -10,9 +11,10 @@ const User = {
       .select()
       .where("email", userInfo)
       .then(response => {
-        return response; 
-      }).catch(err => console.log(err)); 
-    console.log(user)
+        return response;
+      })
+      .catch(err => console.log(err));
+    console.log(user);
     if (user && user.length !== 0) {
       console.log("client_user");
       user = user[0];
@@ -37,63 +39,161 @@ const User = {
           admin_user.isAdminUser = true;
           return admin_user;
         } else {
-          return []; 
+          return [];
         }
       }
     }
   },
   async userToProfessional(user, cb) {
-
-    knex("professional_users")
-      .insert({
-        id: user.id,
-        email: user.email,
-        hash: user.hash,
-        salt: user.salt, 
-        phone: user.phone, 
-        first_name: user.first_name, 
-        last_name: user.last_name
-      })
-      .then(resp => {
-        console.log(resp);
+    let insert = new Promise((resolve, reject) => {
+      knex("professional_users")
+        .insert({
+          id: user.id,
+          email: user.email,
+          hash: user.hash,
+          salt: user.salt,
+          phone: user.phone,
+          first_name: user.first_name,
+          last_name: user.last_name
+        })
+        .then(resp => {
+          console.log(resp);
+          resolve(
+            knex("saved_listings")
+              .select()
+              .where("user_id", user.id)
+              .then(response => {
+                response.forEach(listing => {
+                  Listings.deleteSavedListing(listing.listing_id, user.id)
+                    .then(resp => {
+                      console.log(
+                        "delete listing: ",
+                        listing.listing_id,
+                        user.id
+                      );
+                      Listings.saveListing_professional(
+                        listing.listing_id,
+                        user.id
+                      )
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                });
+              })
+              .catch(err => console.log(err))
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+    insert
+      .then(response => {
+        knex("users")
+          .delete()
+          .where("id", user.id)
+          .then(resp => {
+            console.log(user.id);
+            console.log("----_DELETE_______");
+            console.log(resp);
+            cb.status(200).send("user moved from client to professional");
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
       .catch(err => {
         console.log(err);
+        cb.status(401).json(err);
       });
-    knex("users")
-      .delete()
-      .where("email", user.email)
-      .then(resp => {
-        console.log(resp);
-        cb.status(200).send('user moved from client to professional')
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, 
-  getProfessionalProfile (user, cb) {
-    return knex('professional_users')
+  },
+  getProfessionalProfile(user, cb) {
+    return knex("professional_users")
       .select()
-      .where('id', user.id)
-      .catch(err => console.log(err))
-  }, 
-  getProfessionalInfo(id){
-    return knex('professional_info')
+      .where("id", user.id)
+      .catch(err => console.log(err));
+  },
+  getProfessionalInfo(id) {
+    return knex("professional_info")
       .select()
-      .where('professional_id', id)
-      .catch(err => console.log(err)); 
-  }, 
+      .where("professional_id", id)
+      .catch(err => console.log(err));
+  },
   updateProfessionalInfo(userInfo, cb) {
-    console.log(userInfo)
-    return knex('professional_users')
-      .where('id', userInfo.id)
+    console.log(userInfo);
+    return knex("professional_users")
+      .where("id", userInfo.id)
       .update(userInfo)
       .then(response => {
-        cb.status(200).json(response)
+        cb.status(200).json(response);
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
+      });
+  },
+  async professionalToAdmin(user, cb) {
+    let insert = new Promise((resolve, reject) => {
+      knex("admin_users")
+        .insert({
+          id: user.id,
+          email: user.email,
+          hash: user.hash,
+          salt: user.salt,
+          phone: user.phone,
+          first_name: user.first_name,
+          last_name: user.last_name
+        })
+        .then(resp => {
+          console.log(resp);
+          resolve(
+            knex("saved_professional_listings")
+              .select()
+              .where("professional_user_id", user.id)
+              .then(response => {
+                response.forEach(listing => {
+                  Listings.deleteSavedListing_professional(
+                    listing.listing_id,
+                    user.id
+                  )
+                    .then(resp => {
+                      console.log(listing);
+                      Listings.saveListing_admin(
+                        listing.listing_id,
+                        user.id
+                      );
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                });
+              })
+              .catch(err => console.log(err))
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+    insert
+      .then(response => {
+        knex("professional_users")
+          .delete()
+          .where("id", user.id)
+          .then(resp => {
+            console.log(user.id);
+            console.log("----_DELETE_______");
+            console.log(resp);
+            cb.status(200).send("user moved from professional to admin");
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
+      .catch(err => {
+        console.log(err);
+        cb.status(401).json(err);
+      });
   }
 };
 

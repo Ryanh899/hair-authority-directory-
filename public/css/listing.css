@@ -2,3 +2,40 @@
     margin: 0px;
     width: 100%;
 }
+
+#listing-image {
+    height: auto;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.listing_h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 45px;
+    color: rgba(39, 76, 119, 1);
+}
+
+.listing_h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: rgba(39, 76, 119, 1);
+}
+
+.listing_p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    color: grey;
+    font-size: 18px;
+}
+
+#back-button {
+    padding: .75rem;
+    float: right;
+    background: white;
+    color: black;
+    position: relative;
+    width: 15%;
+    text-align: center;
+}

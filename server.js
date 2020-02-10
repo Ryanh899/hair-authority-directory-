@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/auth.routes");
 const jwt = require("express-jwt");
 const apiRoutes = require('./api/routes/api.routes'); 
+const adminRoutes = require('./api/routes/admin.routes'); 
 const morgan = require('morgan')
 
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use(morgan('dev'))
 app.use(express.static("public"));
 
 app.use("/auth", authRoutes);
+app.use('/admin', adminRoutes)
 // app.use(auth);
 app.use("/api", apiRoutes);
 

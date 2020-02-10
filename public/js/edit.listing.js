@@ -36,7 +36,7 @@ $(document).ready(function() {
   myAxios
     .get(API_URL + "listing/" + localStorage.getItem("listingId"))
     .then(response => {
-      const listing = response.data;
+      const listing = response.data[0];
       const formContainer = document.querySelector("#form-container");
       console.log(listing);
 

@@ -42,7 +42,7 @@ router.post("/newListing", (req, res) => {
     let listing = req.body.data;
     listing.professional_id = decodedInfo.id;
     if (decodedInfo.isProfessionalUser) {
-      Listings.addListing(listing);
+      Listings.addToPending(listing);
     }
   }
 
@@ -149,18 +149,50 @@ router.get('/search/:query/:location', (req, res) => {
     })
 })
 
-router.post('saveListing/:id', (req, res) => {
-    const userId = req.params.id; 
-    const listingId = req.body.listingId; 
+router.post('/saveListing/:id', async (req, res) => {
+  console.log(req.body)
+    const listingId = req.params.id; 
+    const user = await jwt.decode(req.body.token);
+    console.log(user)
+    const userId = user.id
 
-  Listings.saveListing(userId, listingId, res); 
+    if (user.isClientUser) {
+      Listings.saveListing(listingId, userId, res); 
+    } else if (user.isProfessionalUser) {
+      Listings.saveListing_professional(listingId, userId, res);
+    } else if (user.isAdminUser) {
+      Listings.saveListing_admin(listingId, userId, res);
+    } else {
+      res.status(401).json({message: 'user type not specified'})
+    }
 })
 
-router.get('/savedListings/:id', (req, res) => {
-  const listingId = req.params.id; 
-  const user = jwt.decode(req.body.token)
+router.get('/savedListings/:token', (req, res) => {
+  const user = jwt.decode(req.params.token)
+  console.log(user)
+  if (user.isClientUser) {
+    Listings.getSavedListings(user.id, res)
+  } else if (user.isProfessionalUser) {
+    Listings.getSavedListings_professional(user.id, res)
+  } else if (user.isAdminUser) {
+    Listings.getSavedListings_admin(user.id, res)
+  } else {
+    res.status(401).json( {err: 'User status not provided'} )
+  }
+})
 
-  Listings.getSavedListings(user.id, listingId, res)
+router.delete('/savedListings/delete/:listingId/:token', (req, res) => {
+  const listingId = req.params.listingId
+  const user = jwt.decode(req.params.token)
+  if (user.isClientUser) {
+    Listings.deleteSavedListing(listingId, user.id, res)
+  } else if (user.isProfessionalUser) {
+    Listings.deleteSavedListing_professional(listingId, user.id, res)
+  } else if (user.isAdminUser) {
+    Listings.deleteSavedListing_admin(listingId, user.id, res)
+  } else {
+    res.status(401).json( {err: 'User status not provided'} )
+  }
 })
   
 

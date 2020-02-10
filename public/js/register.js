@@ -98,6 +98,7 @@ $(document).ready(function() {
         .post("http://localhost:3000/auth/register", userInfo)
         .then(response => {
           console.log(response);
+          sessionStorage.setItem('justRegistered', true)
           window.location.assign("sign-in.html");
         })
         .catch(err => {

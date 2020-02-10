@@ -1,5 +1,5 @@
 create table users (
-id int primary key not null, 
+id serial primary key not null, 
 email varchar(128) unique not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 

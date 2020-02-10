@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>International Hair Authority</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
+      integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:100&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="./css/admin.portal.css" />
+  </head>
+  <body>
+        <header>
+                <div id="navbar" class="ui top attached menu">
+                  <div class="four wide center aligned column ">
+                      <i id="home-icon-button" class="big home icon"></i>
+                  </div>
+                  <div class="right menu">
+                    <div id="newListing" style="margin-right: 1rem;" class="submit-button">New Listing</i></div>
+                    <div id="logout-button" class="submit-button">Logout</i></div>
+                  </div>
+                </div>
+              </header>
+              <main>
+                    <div id="loader-div">
+                            <div class="ui active inverted dimmer">
+                              <div class="ui text loader">Loading</div>
+                            </div>
+                            <p></p>
+                    </div>
+                <div id="dashboard-container" class="ui grid container">
+                  <div class="three wide column">
+                    <div id="side-menu" class="ui vertical pointing tabular menu">
+                      <a id="pending-tab" class="item sideTab" data-tab="pending"> <i class="list icon"></i>Pending </a>
+                      <a id="inactive-tab" class="item sideTab" data-tab="inactive"> <i class="stop icon"></i></i> Inactive </a>
+                      <a id="billing-tab" class="item sideTab" data-tab="billing"> <i class="paypal icon"></i></i> Billing </a>
+                    </div>
+                  </div>
+                  <div class="thirteen wide column">
+                    <div data-tab="pending" id="pending-div" class="ui right attached active tab item tab-div">
+                        
+                    </div>
+                    <div data-tab="inactive" id="listings-div" class="ui right attached tab item tab-div"></div>
+                    <div data-tab="billing" class="ui right attached tab item tab-div">
+                      <p>billing</p>
+                    </div>
+                  </div>
+                </div>
+              </main>
+
+    <script src="./js/css.js"></script>
+    <script src="./js/admin.portal.js"></script>
+  </body>
+</html>

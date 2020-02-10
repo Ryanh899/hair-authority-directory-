@@ -42,6 +42,7 @@ var myAxios = axios.create({
   $(document).ready(function() {
       const page = document.querySelector('div#page-container')
       const loader = document.querySelector('div#loader-div')
+      const listingColumn = document.querySelector('div#listing-column')
 
       $(page).css('dislplay', 'none')
 
@@ -60,10 +61,22 @@ var myAxios = axios.create({
                 $(loader).css('display', 'none')
                 $(page).css('display', '')
                 console.log(response)
+                const listing = response.data[0]
+
+                $(listingColumn).append('<h1 class="listing_h1" >' + listing.business_title + '</h1>')
+                $(listingColumn).append(`<h3 class="listing_h3" >${listing.business_description}</h3>`)
+                $(listingColumn).append(`<p class="listing_p" >${listing.about}</p>`)
+                $(listingColumn).append(`<img src="https://i.ebayimg.com/00/s/MTAwMFgxMDAw/z/AnQAAOSw8-lcwVQS/$_3.JPG" class="ui image" id="listing-image" >`)
+
             })
             .catch(err => {
                 console.log(err)
             })
       }
+
+      $('body').on('click', '#back-button', function () {
+        window.history.back(); 
+      })
+
 
   })

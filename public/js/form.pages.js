@@ -439,4 +439,8 @@ $(document).ready(function() {
   $("body").on("click", "#home-button", function(e) {
     window.location.assign('dashboard.html')
 });
+
+$('body').on('click', '#back-button', function () {
+  window.history.back()
+})
 });

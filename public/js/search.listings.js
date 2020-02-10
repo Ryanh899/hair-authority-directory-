@@ -49,7 +49,7 @@ myAxios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   if (error.response.status === 401) {
-      return authHelper.logOut('./sign-in.html')
+      // return authHelper.logOut('./sign-in.html')
   } else if (error.response.status === 404 ) {
     console.log('coordinates not found')
   } else {
@@ -196,7 +196,7 @@ $(document).ready(function () {
                 </div>
                 <div class="six wide column"></div>
                 <div class="four wide column">
-                  <a id="${listing.id}-view" class="editButton">
+                  <a id="${listing.id}" class="viewButton">
                     <div style="color: white;" class="listing-buttons " id="${listing.id}">
                       <i style="pointer-events:none" class="eye icon"></i> View
                     </div>
@@ -237,14 +237,14 @@ $(document).ready(function () {
               </div>
               <div class="six wide column"></div>
               <div class="four wide column">
-                <a id="${listing.id}" class="editButton">
+                <a id="${listing.id}" class="viewButton">
                   <div style="color: white;" class="listing-buttons " id="${listing.id}">
                     <i style="pointer-events:none" class="eye icon"></i> View
                   </div>
                 </a>
                 <a id="${listing.id}" class="saveButton">
-                  <div style="color: white;" class="listing-buttons ">
-                    <i style="pointer-events:none" style="color: red;" class="save icon"></i>
+                  <div  style="color: white;" class="listing-buttons ">
+                    <i id="${listing.id}" style="pointer-events:none" style="color: red;" class="save icon"></i>
                     Save
                   </div>
                 </a>
@@ -268,16 +268,28 @@ $(document).ready(function () {
   }
 
   $('body').on('click', '.saveButton', function(e) {
-    const id = e.target.id; 
-    console.log(id)
+    const id = $(this).attr('id')
+    const token = localStorage.getItem('token')
+    console.log($(this))
+  if (token) {
+    myAxios.post(API_URL + 'saveListing/' + id, {token: token})
+    .then(response => {
+      console.log(response); 
+      $(this).css('background', 'green')
+      $(this).textContent = 'Saved'
+    })
+  } else {
+    alert('please sign in to save listings')
+    window.location.assign('sign-in.html')
+  }
+    
 })
 
-  // $('body').on('click', '.editButton', function(e) {
-  //     const listingId = e.target.id
-  //     console.log(listingId)
-  //     sessionStorage.setItem('currentListing', listingId)
+$('body').on('click', '.viewButton', function(e) {
+  const id = $(this).attr('id')
 
-  //     window.location.assign('listing.html'); 
-  // })
+  sessionStorage.setItem('currentListing', id)
+  window.location.assign('listing.html')
+})
 
 });

@@ -1,0 +1,44 @@
+.nav-bar {
+    width: 100%;
+    margin: 0px;
+    padding: 1.5rem;
+    background: rgba(39, 76, 119, 1);
+    color: white;
+    position: relative;
+}
+
+.nav-h1 {
+    font-size: 40px;
+    font-weight: 700;
+    font-family: 'Montserrat' ;
+    display: inline;
+}
+
+#home-button {
+    padding: .75rem;
+    float: right;
+    background: white;
+    color: black;
+    position: relative;
+    width: 15%;
+    text-align: center;
+}
+
+#page-container {
+    width: 100%;
+    margin: 0px;
+}
+
+#pending-tab {
+    font-family: 'Montserrat' sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(39, 76, 119, 1);
+}
+
+#inactive-tab {
+    font-family: 'Montserrat' sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(39, 76, 119, 1);
+}

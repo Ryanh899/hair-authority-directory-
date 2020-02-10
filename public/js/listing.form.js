@@ -224,6 +224,9 @@ $(document).ready(function() {
     
   }
 
+  $('body').on('click', '#back-button', function () {
+    window.history.back()
+  })
 
 
   $("body").on("click", "#listing-submit", function(e) {
