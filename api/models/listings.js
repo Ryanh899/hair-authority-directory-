@@ -505,6 +505,29 @@ const Listings = {
         console.log(err)
         cb.status(400).json(err)
       })
+  }, 
+  async getAllListings__admin(res) {
+    return camelizeKeys(
+      await knex
+      .select(
+          'u.id',
+          'u.first_name',
+          'u.last_name',
+          'u.username',
+          'u.image_url',
+          'u.is_admin',
+          'u.phone',
+          'u.info',
+          'la.email',
+          'cu.customer_id',
+          'cu.department_id'
+      )
+      .from('user AS u')
+      .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+      .leftJoin('customer_user AS cu', 'cu.user_id', 'u.id')
+      .where('u.id', '=', id)
+      .first()
+  );
   }
 };
 

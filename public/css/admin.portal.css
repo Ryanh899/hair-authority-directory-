@@ -42,3 +42,18 @@
     font-size: 18px;
     color: rgba(39, 76, 119, 1);
 }
+
+#all-tab {
+    font-family: 'Montserrat' sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(39, 76, 119, 1);
+}
+
+#all-listings-container {
+    border: solid;
+    border-width: 2.5px;
+    border-color: rgba(39, 76, 119, 1);
+    padding: 2rem;
+    margin-top: 1rem;
+}

@@ -58,14 +58,40 @@
                 <div id="dashboard-container" class="ui grid container">
                   <div class="three wide column">
                     <div id="side-menu" class="ui vertical pointing tabular menu">
+                        <a id="all-tab" class="item sideTab" data-tab="all"> <i class="list outlined icon"></i>All Listings </a>
                       <a id="pending-tab" class="item sideTab" data-tab="pending"> <i class="list icon"></i>Pending </a>
                       <a id="inactive-tab" class="item sideTab" data-tab="inactive"> <i class="stop icon"></i></i> Inactive </a>
                       <a id="billing-tab" class="item sideTab" data-tab="billing"> <i class="paypal icon"></i></i> Billing </a>
                     </div>
                   </div>
                   <div class="thirteen wide column">
-                    <div data-tab="pending" id="pending-div" class="ui right attached active tab item tab-div">
-                        
+                      <div data-tab="all" id="all-div" class="ui right attached tab item tab-div">
+                        <div>
+                        <h1>Search by listing title</h1>
+                        <div style="width: 75%;" id="search" class="ui icon input search">
+                            <input style="width: 100%;" id="search-semantic" class="prompt" type="text" placeholder="Ex. Hair Restoration, Hair Transplant, Laser Therapy">
+                            <i id="search-icon" class="search icon"></i>
+                            <div style="margin-left: 8rem;" class="results"></div>
+                          </div>
+                          <button style="margin-top: 1rem;" class="ui button" id="search-button" >Search</button>
+                        </div>
+                        <div id="all-listings-container">
+                            <div style="display: none;" id="all-loader">
+                                <div class="ui active inverted dimmer">
+                                  <div class="ui text loader">Loading</div>
+                                </div>
+                                <p></p>
+                        </div> 
+                        </div>
+                        </div>
+                    <div data-tab="pending" id="pending-div" class="ui right attached tab item tab-div">
+                        <div id="pending-loader">
+                            <div class="ui active inverted dimmer">
+                              <div class="ui text loader">Loading</div>
+                            </div>
+                            <p></p>
+                    </div>  
+                    <div style="display: none;" id="no-pending">No Pending Listings</div>
                     </div>
                     <div data-tab="inactive" id="listings-div" class="ui right attached tab item tab-div"></div>
                     <div data-tab="billing" class="ui right attached tab item tab-div">

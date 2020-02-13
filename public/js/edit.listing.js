@@ -48,7 +48,7 @@ $(document).ready(function() {
       formContainer.prepend(header);
 
       const title = document.querySelector("input#business_title");
-      const description = document.querySelector("input#business_description");
+      const description = document.querySelector("textarea#business_description");
       const address = document.querySelector("input#street_address");
       const city = document.querySelector("input#city");
       const state = document.querySelector("input#state");

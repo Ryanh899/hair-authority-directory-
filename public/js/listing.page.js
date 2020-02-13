@@ -63,7 +63,8 @@ var myAxios = axios.create({
                 console.log(response)
                 const listing = response.data[0]
 
-                $(listingColumn).append('<h1 class="listing_h1" >' + listing.business_title + '</h1>')
+                $(listingColumn).append('<h1 style="margin-top: 1rem" class="listing_h1" >' + listing.business_title + '</h1>')
+                $(listingColumn).append(`<p class="listing_category" >${listing.category}</p>`)
                 $(listingColumn).append(`<h3 class="listing_h3" >${listing.business_description}</h3>`)
                 $(listingColumn).append(`<p class="listing_p" >${listing.about}</p>`)
                 $(listingColumn).append(`<img src="https://i.ebayimg.com/00/s/MTAwMFgxMDAw/z/AnQAAOSw8-lcwVQS/$_3.JPG" class="ui image" id="listing-image" >`)

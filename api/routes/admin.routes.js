@@ -23,5 +23,8 @@ router.get('/pendingListing/:id', (req, res) => {
     Listings.getPendingListing(listingId, res)
 })
 
+router.get('/allListings', (req, res) => {
+    Listings.getAllListings__admin(res)
+})
 
 module.exports = router; 

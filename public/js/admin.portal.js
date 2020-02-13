@@ -40,18 +40,19 @@ var authHelper = {
 const API_URL = "http://localhost:3000/api/";
 const ADMIN_URL = "http://localhost:3000/admin/";
 
-function getPendingListings(loader, page) {
+function getPendingListings(loader, page, text) {
+ 
   myAxios
     .get(ADMIN_URL + "pendingListings")
     .then(response => {
       const listings = response.data;
       console.log(response);
-      $(loader).css("display", "none");
-      $(page).fadeIn();
-      if (listings.length > 0) {
+      // $(loader).css("display", "none");
+      // $(page).fadeIn();
+      if (listings.length !== 0) {
         listings.forEach(listing => {
-            $("#pending-div")
-              .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
+          $(page)
+            .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
                 <div class="row">
                   <div class="six wide middle aligned column">
                     <p class="listingTitle">
@@ -75,11 +76,62 @@ function getPendingListings(loader, page) {
                   </div>
                 </div>
               </div>`);
-          });
+        });
+        $(pendingLoader).css('display', 'none')
       } else {
-          $('#pending-div').append('No Pending Listings')
+        console.log('nothin')
+        $(loader).css('display', 'none')
+        $(text).css("display", '');
       }
-      
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+function getAllListings(loader, page, text) {
+ 
+  myAxios
+    .get(ADMIN_URL + "allListings")
+    .then(response => {
+      const listings = response.data;
+      console.log(response);
+      // $(loader).css("display", "none");
+      // $(page).fadeIn();
+      if (listings.length !== 0) {
+        listings.forEach(listing => {
+          $(page)
+            .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
+                <div class="row">
+                  <div class="six wide middle aligned column">
+                    <p class="listingTitle">
+                      ${listing.business_title}
+                    </p>
+                    <p class="listingSubtitle">${listing.business_description}</p>
+                  </div>
+                  <div class="six wide column"></div>
+                  <div class="four wide column">
+                    <a id="${listing.id}" class="viewButton">
+                      <div style="color: white;" class="listing-buttons " id="${listing.id}">
+                        <i style="pointer-events:none" class="eye icon"></i> View
+                      </div>
+                    </a>
+                    <a id="${listing.id}" class="verifyButton">
+                      <div  style="color: white;" class="listing-buttons ">
+                        <i id="${listing.id}" style="pointer-events:none" style="color: red;" class="check icon"></i>
+                        Verify
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>`);
+        });
+        $(pendingLoader).css('display', 'none')
+      } else {
+        console.log('nothin')
+        $(loader).css('display', 'none')
+        $(text).css("display", '');
+      }
     })
     .catch(err => {
       console.log(err);
@@ -90,9 +142,30 @@ $(document).ready(function() {
   const loader = document.querySelector("div#loader-div");
   const page = document.querySelector("div#dashboard-container");
   const homeButton = document.querySelector("div#home-button");
+  const pendingLoader = document.querySelector("div#pending-loader");
+  const pendingDiv = document.querySelector("div#pending-div");
+  const pendingText = document.querySelector('div#no-pending')
 
-  $(page).css("display", "none");
-  getPendingListings(loader, page);
+  const allLoader = document.querySelector('div#all-loader')
+  const allDiv = document.querySelector('div#all-div'); 
+
+
+  $(loader).css("display", "none");
+  $(pendingLoader).css("display", "none");
+  $(".vertical.menu .item").tab();
+
+  // $(page).css("display", "none");
+  // getPendingListings(loader, page);
+
+  $("body").on("click", "#all-tab", function(event) {
+    $(allLoader).css('display', '')
+    getAllListings(allDiv, allLoader)
+  });
+
+  $("body").on("click", "#pending-tab", function(event) {
+    $(pendingLoader).css("display", "");
+    getPendingListings(pendingLoader, pendingDiv, pendingText);
+  });
 
   $("body").on("click", "#home-button", function() {
     window.location.assign("index.html");
@@ -106,30 +179,31 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#newListing", function() {
-    window.location.assign('listing.form.html')
+    window.location.assign("listing.form.html");
   });
 
   $("body").on("click", "#home-icon-button", function() {
-    window.location.assign('index.html')
+    window.location.assign("index.html");
   });
 
   $("body").on("click", "#logout-button", function() {
-    localStorage.removeItem('token')
-    window.location.assign('index.html')
+    localStorage.removeItem("token");
+    window.location.assign("index.html");
   });
 
   $("body").on("click", ".verifyButton", function() {
     const id = $(this).attr("id");
-    console.log(id)
+    console.log(id);
 
-    myAxios.post(ADMIN_URL + 'verifyListing', {id: id})
-        .then(response => {
-            console.log(response)
-            alert('user verified')
-            $(this).fadeOut()
-        })
-        .catch(err => {
-            console.log(err)
-        })
+    myAxios
+      .post(ADMIN_URL + "verifyListing", { id: id })
+      .then(response => {
+        console.log(response);
+        alert("user verified");
+        $(this).fadeOut();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 });
