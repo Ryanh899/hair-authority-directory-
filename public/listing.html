@@ -34,7 +34,18 @@
     />
     <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
     <!-- for nav bar  -->
-    <link rel="stylesheet" type="text/css" href="./css/search.listings.css" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/flickity@2/dist/flickity.min.css"
+    />
+    <!-- <link rel="stylesheet" type="text/css" href="./css/search.listings.css" /> -->
+    <link rel="stylesheet" type="text/css" href="./css/listing.carousel.css" />
     <link rel="stylesheet" type="text/css" href="./css/listing.css" />
   </head>
 
@@ -44,7 +55,7 @@
         The International Hair Authority Directory
       </p>
       <div id="back-button"><i class="left arrow icon"></i>Back</div>
-      <div style="margin-top: 1rem;" class="ui search">
+      <!-- <div style="margin-top: 1rem;" class="ui search">
         <div style="width: 35%;" class="ui icon input search">
           <input
             id="search-semantic"
@@ -58,7 +69,7 @@
         <button style="margin-top: 1rem;" class="ui button" id="search-button">
           Search
         </button>
-      </div>
+      </div> -->
     </div>
     <div id="loader-div">
       <div class="ui active inverted dimmer">
@@ -67,12 +78,196 @@
       <p></p>
     </div>
     <div class="ui grid" id="page-container">
+      <div class="row" id="image-row">
+        <div id="wrapper">
+          <span
+            id="controlL"
+            class="left-controls"
+            role="button"
+            aria-label="See Previous Modules"
+          >
+            <b
+              class="fa fa-chevron-left fa-chevron-left-extra"
+              aria-hidden="true"
+            ></b>
+          </span>
+          <div class="module-section clearfix">
+            <ul id="content">
+              <li class="card effect1">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/DesktopImages/2018_Everything-Bagel-Butter_20390-600.jpg?ext=.jpg"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+              <li class="card">
+                <div class="inside-top">
+                  <img
+                    class="ui image carousel-image"
+                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
+          <span
+            id="controlR"
+            class="right-controls"
+            role="button"
+            aria-label="See Previous Modules"
+          >
+            <b
+              class="fa fa-chevron-right fa-chevron-right-extra"
+              aria-hidden="true"
+            ></b>
+          </span>
+        </div>
+      </div>
+      <!-- listing content section  -->
       <div id="first-row" class="row">
-       <div class="three wide column"></div>
-       <div id="listing-column" class="ten wide column">
-
-       </div>
-       <div class="three wide column"></div>
+        <div class="one wide column"></div>
+        <div id="listing-column" class="ten wide column">
+          <div id="title-section">
+            <button id="listing-header-buttons" class="ui button ">
+              <i class="save icon"></i>Save
+            </button>
+            <button
+              id="listing-header-buttons"
+              class="ui button listing-header-buttons"
+            >
+              <i class="share icon"></i>Share
+            </button>
+            <hr />
+          </div>
+          <div id="about-section">
+            <hr />
+          </div>
+          <div id="location-section">
+            <div
+              style="margin-top: .5rem; position: relative;"
+              id="map-container"
+            >
+              <div id="map"></div>
+              <div id="demo"></div>
+            </div>
+            <hr />
+          </div>
+          <div id="youtube"></div>
+        </div>
+        <div class="four wide column">
+          <div id="store-info-div">
+            <p id="contact-text">Contact</p>
+            <hr id="contact-hr" />
+            <div id="contact-list" class="ui middle aligned divided list">
+              <div style="padding: 1rem;" class="item contact-item">
+                <i class="phone icon"></i>
+                <div id="phone-content" class="content"></div>
+              </div>
+              <div style="padding: 1rem;" class="item contact-item">
+                <i class="mail icon"></i>
+                <div id="email-content" class="content"></div>
+              </div>
+              <div
+                id="linkedin-div"
+                style="padding: 1rem;"
+                class="item contact-item"
+              >
+                <i class="linkedin icon"></i>
+                <div id="linkedin-content" class="content"></div>
+              </div>
+              <div
+                id="instagram-div"
+                style="padding: 1rem;"
+                class="item contact-item"
+              >
+                <i class="instagram icon"></i>
+                <div id="instagram-content" class="content"></div>
+              </div>
+              <div
+                id="facebook-div"
+                style="padding: 1rem;"
+                class="item contact-item"
+              >
+                <i class="facebook icon"></i>
+                <div id="facebook-content" class="content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="one wide column"></div>
       </div>
     </div>
 
