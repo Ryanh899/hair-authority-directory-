@@ -46,15 +46,58 @@ html {
 }
 
 /* landing */
-#landing-row {
+#top-menu-row {
     /* background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf); */
-    background: #4CA1AF;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #C4E0E5, #4CA1AF);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #C4E0E5, #4CA1AF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
-    height: 100vh;
-    padding-bottom: 0px;
-    padding-top: 0px;
+    /* background: #4CA1AF; 
+    background: -webkit-linear-gradient(to right, #C4E0E5, #4CA1AF);  
+    background: linear-gradient(to right, #C4E0E5, #4CA1AF);  */
+    padding: 0px;
+    background: #2ca6a4;
+}
+
+#sign-in-column {
+    padding: 0px;
+}
+
+#sign-in-button {
+    /* background: #83b3bf; */
+    background: #9dd9d2;
+    font-family: 'lato', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    height: 100%;
+    display: table;
+    width: 100%;
+
+}
+
+#sign-in {
+    text-align:center; 
+  vertical-align: middle;
+  display: table-cell;   
+  color: #3aa7a3;
+}
+
+#register-column {
+    padding: 0px;
+}
+
+#register-button {
+    background: #3aa7a3;
+    font-family: 'lato', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    height: 100%;
+    display: table;
+    width: 100%;
+
+}
+
+#register {
+    text-align:center; 
+  vertical-align: middle;
+  display: table-cell;   
+  color: white;
 }
 
 #landing-grid {
@@ -64,13 +107,16 @@ html {
 }
 
 #ha-title {
-    font-size: 48px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+    font-size: 30px;
+    /* font-family: 'Montserrat', sans-serif; */
+    /* font-weight: 700; */
+    font-family: 'Raleway';
+    font-weight: 500;
     /* color: #112941; */
     line-height: 1em;
-    margin-left: 5rem;
+    /* margin-left: 5rem; */
     color: white;
+    display: inline;
 }
 
 #ha-contact {
@@ -102,52 +148,80 @@ html {
     margin-top: 4rem;
 }
 
-#landing-search-row {
-    height: 50vh;
-
+.page-links {
+    font-family: 'lato', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: white;
+    padding: 1rem;
+    display: inline;
 }
 
-#landing-search {
-    margin-left: 8rem;
+.link-columns {
+    padding: 0px;
+}
+
+#landing-search-row {
+    /* background-image: url(../images/tricho-overlay.png);
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;   */
+    background: #79bcb8;
+    padding: 2rem;
     padding-top: 0px;
+    padding-bottom: 0px;
+    height: 75vh;
+}
+
+#page-menu {
+    padding: 1rem;
     width: 100%;
 }
 
+#contact {
+    position: absolute;
+    left: 85%;
+}
+
+#about {
+    position: absolute;
+    left: 78%;
+}
+
+
 #landing-inner-row {
-    height: 25vh;
-    padding-top: 2rem;
+    padding: .5rem;
 }
 
 #search-title {
     font-size: 45px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
     color: white;
-    margin-left: 8rem;
     line-height: 1.2em;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
+    margin-top: 5rem;
 }
 
-#landing-bottom-row {
-    background: #F7F5EA; 
+#how-column {
+    background: #f9f9f9;
+    padding-bottom: 2.5rem;
 }
 
 #search-subtitle {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 100;
+    font-family: 'lato', sans-serif;
+    font-weight: 500;
     font-size: 20px;
-    margin-left: 8rem;
     color: white;
 }
+
 
 #landing-card {
     background: white;
     height: 100%;
     width: 75%;
-    margin-left: 5rem;
     padding: 2rem;
-    margin-bottom: 2rem;
-}
+}  
 
 #landing-card-header {
     font-size: 25px;
@@ -178,6 +252,14 @@ html {
     font-family: 'Monteserrat', sans-serif;
     font-weight: 300;
     font-size: 16px;
+}
+
+#ha-logo-image {
+    height: 50px;
+}
+
+#landing-bottom-row {
+    padding-top: 0px;
 }
 
 .logo-images {
@@ -404,11 +486,27 @@ html {
 
 #search-semantic {
     width: 33.3vw;
-    margin-left: 8rem;
 }
 
 .center-description {
     text-align: center;
+}
+
+#landing-list-p {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #001021;
+    margin-top: .5rem;
+    margin-left: 6.5rem;
+}
+
+#landing-list-col {
+    text-align: center;
+}
+
+#magazine {
+    margin-right: 5rem;
 }
 
 #testimonial-row {

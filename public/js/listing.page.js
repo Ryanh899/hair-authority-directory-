@@ -46,10 +46,12 @@ $(document).ready(function() {
   const listingColumn = document.querySelector("div#listing-column");
   const titleSection = document.querySelector('div#title-section')
   const contactLine = document.querySelector('hr#contact-hr')
+  const locationAddr = document.querySelector('a#location-address')
 
   $(page).css("dislplay", "none");
 
   function getGeolocation() {
+    console.log('map')
     navigator.geolocation.getCurrentPosition(drawMap);
   }
   
@@ -60,20 +62,6 @@ $(document).ready(function() {
       zoom: 10,
     };
     let map = new google.maps.Map(document.getElementById('map'), mapProp);
-    // if (markerInfo.length > 0) {
-    //   markerInfo.forEach(item => {
-    //     let marker = new google.maps.Marker({
-    //       position: {
-    //         lat: Number(item.lat),
-    //         lng: Number(item.lng)
-    //       },
-    //       map: map,
-    //       title: 'Hello World!'
-    //     })
-    //   })
-    // }
-  
-  
   }
   
   function showPosition(position) {
@@ -85,6 +73,24 @@ $(document).ready(function() {
     lat: sessionStorage.getItem("lat"),
     lng: sessionStorage.getItem("lng")
   };
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
+  function showPosition(position) {
+    sessionStorage.setItem('lat', position.coords.latitude)
+    sessionStorage.setItem('lng', position.coords.longitude)
+  }
+
+  let location = {
+    lat: sessionStorage.getItem('lat'),
+    lng: sessionStorage.getItem('lng')
+  }
 
   getGeolocation()
 
@@ -159,6 +165,8 @@ $(document).ready(function() {
         $('#about-section').prepend(
           `<p id="listing_description" >${listing.business_description}</p>`
         );
+
+        $(locationAddr).append(`<i class="directions icon" ></i>  ${listing.street_address}, ${listing.city} ${listing.state}, ${listing.zip}  `)
         
       })
       .catch(err => {

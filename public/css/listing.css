@@ -54,9 +54,9 @@
     border: solid;
     border-width: 5px;
     border-color: rgba(39, 76, 119, 1);
-    /* height: 50%; */
     padding: 1rem;
     padding-bottom: 0rem;
+    overflow: hidden;
 }
 
 .header-images {
@@ -87,8 +87,8 @@
 }
 
 #contact-text {
-    font-family: 'Roboto', sans-serif; 
-    font-weight: 300;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 700;
     font-size: 25px;
     margin: 0 auto;
 }
@@ -158,10 +158,11 @@
     border: solid;
     border-width: 5px;
     border-color: rgba(39, 76, 119, 1); 
-    height: 100%;
+    height: 50vh;
     position: relative;
     overflow: hidden;
     max-height: 61vh;
+    border-radius: 25px 25px 0px 0px;
 }
 
 #map {
@@ -171,5 +172,29 @@
     width: 100%;
   }
 
+.section-header {
+    font-weight: 700;
+    font-size: 35px;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0px;
+}
 
-  
+#location-address {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline;
+}
+
+#get-direct {
+    margin: 0px;
+    width: 100%;
+    background: white;
+    border: solid;
+    border-width: 5px;
+    border-radius: 0px 0px 25px 25px;
+    border-top: 0px;
+    padding: 1rem;
+    border-color: rgba(39, 76, 119, 1); 
+    margin-bottom: 2rem;
+}
