@@ -35,18 +35,22 @@ router.get("/listings/:token", async (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post("/newListing", (req, res) => {
+router.post("/newListing", async (req, res) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedInfo = jwt.decode(token);
+    console.log(decodedInfo)
     let listing = req.body.data;
+    console.log(listing)
     listing.professional_id = decodedInfo.id;
     if (decodedInfo.isProfessionalUser) {
       Listings.addToPending(listing);
+      res.status(200).send('Listing added to pending')
+    } else if (decodedInfo.isClientUser) {
+      Listings.addToPending(listing)
+      res.status(200).send('Listing added to pending')
     }
   }
-
-  res.json("listing created");
 });
 
 router.get("/profile/:token", async (req, res) => {
@@ -78,7 +82,9 @@ router.get('/search/category/:category/:location', async (req, res) => {
   const category = req.params.category.split('+').join(' ')
   let location = req.params.location.split('+')
   if (location[0] === null || location[1] === null) {
-    res.status(401).json({message: 'no location given'})
+    res.status(401).json({
+      message: 'no location given'
+    })
   }
   location = {
     lat: location[0],
@@ -103,7 +109,9 @@ router.get('/search/:query/:location', (req, res) => {
   console.log(location)
   console.log(query)
   if (location[0] === 'null' || location[1] === 'null') {
-    return res.status(404).json({message: 'location not found'})
+    return res.status(404).json({
+      message: 'location not found'
+    })
   }
   location = {
     lat: location[0],
@@ -151,20 +159,22 @@ router.get('/search/:query/:location', (req, res) => {
 
 router.post('/saveListing/:id', async (req, res) => {
   console.log(req.body)
-    const listingId = req.params.id; 
-    const user = await jwt.decode(req.body.token);
-    console.log(user)
-    const userId = user.id
+  const listingId = req.params.id;
+  const user = await jwt.decode(req.body.token);
+  console.log(user)
+  const userId = user.id
 
-    if (user.isClientUser) {
-      Listings.saveListing(listingId, userId, res); 
-    } else if (user.isProfessionalUser) {
-      Listings.saveListing_professional(listingId, userId, res);
-    } else if (user.isAdminUser) {
-      Listings.saveListing_admin(listingId, userId, res);
-    } else {
-      res.status(401).json({message: 'user type not specified'})
-    }
+  if (user.isClientUser) {
+    Listings.saveListing(listingId, userId, res);
+  } else if (user.isProfessionalUser) {
+    Listings.saveListing_professional(listingId, userId, res);
+  } else if (user.isAdminUser) {
+    Listings.saveListing_admin(listingId, userId, res);
+  } else {
+    res.status(401).json({
+      message: 'user type not specified'
+    })
+  }
 })
 
 router.get('/savedListings/:token', (req, res) => {
@@ -177,7 +187,9 @@ router.get('/savedListings/:token', (req, res) => {
   } else if (user.isAdminUser) {
     Listings.getSavedListings_admin(user.id, res)
   } else {
-    res.status(401).json( {err: 'User status not provided'} )
+    res.status(401).json({
+      err: 'User status not provided'
+    })
   }
 })
 
@@ -191,10 +203,12 @@ router.delete('/savedListings/delete/:listingId/:token', (req, res) => {
   } else if (user.isAdminUser) {
     Listings.deleteSavedListing_admin(listingId, user.id, res)
   } else {
-    res.status(401).json( {err: 'User status not provided'} )
+    res.status(401).json({
+      err: 'User status not provided'
+    })
   }
 })
-  
+
 
 
 module.exports = router;

@@ -97,7 +97,11 @@ const User = {
             console.log(user.id);
             console.log("----_DELETE_______");
             console.log(resp);
-            cb.status(200).send("user moved from client to professional");
+            if (cb) {
+              cb.status(200).send("user moved from client to professional");
+            } else {
+              return resp
+            }
           })
           .catch(err => {
             console.log(err);
@@ -105,7 +109,11 @@ const User = {
       })
       .catch(err => {
         console.log(err);
+        if (cb) {
         cb.status(401).json(err);
+        } else {
+          return
+        }
       });
   },
   getProfessionalProfile(user, cb) {
@@ -194,6 +202,18 @@ const User = {
         console.log(err);
         cb.status(401).json(err);
       });
+  },
+  getUserInfo__client (id) {
+    knex('users')
+      .select()
+      .where('id', id)
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.log(err); 
+      })
+      
   }
 };
 

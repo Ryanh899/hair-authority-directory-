@@ -93,6 +93,28 @@ html {
 
 }
 
+#logout-button {
+    background: #3aa7a3;
+    font-family: 'lato', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    height: 100%;
+    display: table;
+    width: 100%;
+
+}
+
+#saved-listings {
+    background: #9dd9d2;
+    font-family: 'lato', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    height: 100%;
+    display: table;
+    width: 100%;
+
+}
+
 #register {
     text-align:center; 
   vertical-align: middle;
@@ -498,7 +520,7 @@ html {
     font-size: 14px;
     color: #001021;
     margin-top: .5rem;
-    margin-left: 6.5rem;
+    /* margin-left: 6.5rem; */
 }
 
 #landing-list-col {

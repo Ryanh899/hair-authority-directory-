@@ -1,5 +1,7 @@
+CREATE EXTENSION "uuid-ossp";
+
 create table users (
-id serial primary key not null, 
+id uuid DEFAULT uuid_generate_v4 () primary key not null, 
 email varchar(128) unique not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 
@@ -9,7 +11,7 @@ last_name varchar(64) not null
 );
 
 create table professional_users (
-id int primary key not null, 
+id uuid primary key not null, 
 email varchar(128) unique not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 
@@ -19,7 +21,7 @@ last_name varchar(64) not null
 );
 
 create table admin_users (
-id int primary key not null, 
+id uuid primary key not null, 
 email varchar(128) unique not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 
@@ -28,24 +30,9 @@ first_name varchar(64) not null,
 last_name varchar(64) not null
 );
 
-create table saved_listings (
-listing_id int references listings(id), 
-user_id int references users(id)
-); 
-
-create table saved_professional_Listings(
-listing_id int references listings(id), 
-professional_user_id int references professional_users(id)
-);
-
-create table saved_admin_Listings(
-listing_id int references listings(id), 
-admin_user_id int references admin_users(id)
-);
-
 create table listings(
-id int primary key not null,
-professional_id int references professional_users(id), 
+id uuid primary key not null,
+professional_id uuid references professional_users(id), 
 business_title varchar(64) not null, 
 business_description varchar(128) not null, 
 street_address varchar(64), 
@@ -81,8 +68,8 @@ lng float
 ); 
 
 create table pending_listings (
-id serial primary key not null, 
-professional_id int references professional_users(id), 
+id uuid DEFAULT uuid_generate_v4 () primary key not null, 
+professional_id uuid, 
 business_title varchar(64) not null, 
 business_description varchar(128) not null, 
 street_address varchar(64), 
@@ -118,8 +105,8 @@ lng float
 );
 
 create table inactive_listings (
-id int primary key not null, 
-professional_id int references professional_users(id), 
+id uuid primary key not null, 
+professional_id uuid references professional_users(id), 
 business_title varchar(64) not null, 
 business_description varchar(128) not null, 
 street_address varchar(64), 
@@ -153,4 +140,20 @@ answer2 varchar(128),
 lat float, 
 lng float, 
 reason varchar(24)
+);
+
+
+create table saved_listings (
+listing_id uuid references listings(id), 
+user_id uuid references users(id)
+); 
+
+create table saved_professional_Listings(
+listing_id uuid references listings(id), 
+professional_user_id uuid references professional_users(id)
+);
+
+create table saved_admin_Listings(
+listing_id uuid references listings(id), 
+admin_user_id uuid references admin_users(id)
 );

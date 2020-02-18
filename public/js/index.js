@@ -63,8 +63,11 @@ $(document).ready(function() {
     const userInfo = authHelper.parseToken(token);
     console.log(userInfo)
     if (userInfo && userInfo.isClientUser) {
-      $("#auth-buttons").html(
-        `<button id="saved-listings" class="ui button" >My Listings</button>`
+      $("#register-column").html(
+        `<div id="logout-button"><p id="register">Logout</p></div>`
+      );
+      $("#sign-in-column").html(
+        `<div id="saved-listings"><p id="sign-in">My Listings</p></div>`
       );
     } else if (userInfo && userInfo.isProfessionalUser) {
       $("#auth-buttons").html(
@@ -107,10 +110,8 @@ $('body').on('click', '#admin-portal-button', function () {
   $('body').on('click', '#logout-button', function() {
     event.preventDefault();
     authHelper.logOut()
-    $("#auth-buttons").html(
-        `<button id="sign-in-button" class="ui button" >Sign In</button>
-        <button id="register-button" class="ui button">Register</button>`
-      );
+    $('#register-column').html(`<div id="register-button"><p id="register">Register</p></div>`)
+    $('#sign-in-column').html(`<div id="sign-in-button"><p id="sign-in">Sign In</p></div>`)
     $( '#logout-div' ).html('')
   });
 
@@ -159,6 +160,10 @@ $('body').on('click', '#admin-portal-button', function () {
       window.location.assign('sign-in.html')
     }
 
+  })
+
+  $('body').on('click', '#landing-list-a', function() {
+      window.location.assign('listing.form.html')    
   })
 
 });
