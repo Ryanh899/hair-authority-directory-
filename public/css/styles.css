@@ -728,9 +728,29 @@ html {
     background: white;
 }
 
+#list-demo-p {
+    font-family: 'Lato';
+    font-weight: 300;
+    color: grey;
+    font-size: 18px;
+}
+
+#list-demo-header {
+    font-family: 'Raleway';
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: .5rem;
+}
+
 #step-2-demo-list {
     height: 100%;
     background: white;
+}
+
+#list-demo-item {
+    padding: 2rem;
+    text-align: left;
+    align-items: center;
 }
 
 
