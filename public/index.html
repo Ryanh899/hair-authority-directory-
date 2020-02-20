@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>International Hair Authority</title>
-    <!-- You MUST include jQuery before Fomantic -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script> -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
       integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
@@ -31,12 +29,14 @@
       href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap"
       rel="stylesheet"
     />
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
     />
-
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="stylesheet" href="./css/search.css" />
   </head>
@@ -44,101 +44,76 @@
   <body>
     <!-- page container  -->
     <div class="ui grid container" id="page-container">
-      <!-- header  -->
-      <!-- <div class="fitted row" id="header-row">
-        <div
-          class="three wide computer eight wide mobile right aligned left floated column"
-        >
-          <button class="ui button" id="list-business-button">
-            <i class="building icon"></i>List your business
-          </button>
-        </div>
-        <div
-          class="ten wide center aligned middle aligned computer only column"
-        >
-          <p class="header-text">
-            Claim your
-            <a class="header-text">50% off</a> products
-          </p>
-        </div>
-        <div
-          class="three wide computer eight wide mobile middle aligned right floated column"
-        >
-          <div class="ui grid" id="menu-icons">
-            <div class="one wide middle aligned centered column">
-              <i class="large google icon header-icon-color"></i>
-            </div>
-            <div class="one wide middle aligned centered column">
-              <i class="large facebook icon header-icon-color"></i>
-            </div>
-            <div class="one wide middle aligned centered column">
-              <i class="large twitter square icon header-icon-color"></i>
-            </div>
-            <div class="one wide middle aligned centered column">
-              <i class="large instagram icon header-icon-color"></i>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- landing page  -->
+      <!-- top menu  -->
       <div class="row" id="top-menu-row">
         <div class="ui grid" id="landing-grid">
-          <div class="one wide column">
-            <img style="margin-left: 1rem;" id="ha-logo-image" src="./images/logo-symbol-w.png" />
+          <div style="padding: .5rem;" class="one wide column">
+            <img
+              style="margin-left: 1rem; padding: 0px;"
+              id="ha-logo-image"
+              src="./images/logo-symbol-w.png"
+            />
           </div>
           <div style="padding: 1rem;" class="nine wide middle aligned column">
             <p id="ha-title">Hair Authority Directory</p>
           </div>
-          <div class="two wide column"></div>
+          <div id="dashboard-column" class="two wide column"></div>
           <div id="sign-in-column" class="two wide column">
-            <div id="sign-in-button"><p id="sign-in">Sign In</p></div>
+            <!-- sign in button  -->
+            <div id="sign-in-button">
+              <p class="top-button" id="sign-in">Sign In</p>
+            </div>
           </div>
+          <!-- register button  -->
           <div id="register-column" class="two wide column">
-            <div id="register-button"><p id="register">Register</p></div>
+            <div id="register-button">
+              <p class="top-button" id="register">Register</p>
+            </div>
           </div>
-          <!-- <div
-              class="seven wide computer sixteen wide mobile column"
-              id="ha-title-column"
-            >
-              <p id="ha-title">International Hair Authority Directory</p>
-            </div>
-            <div
-              class="four wide computer sixteen wide mobile column"
-              id="menu-links-column"
-            >
-              <a class="menu-links">Store</a>
-              <a class="menu-links">News</a>
-              <a class="menu-links">About</a>
-            </div>
-            <div class="four wide computer only column">
-              <p id="ha-contact">999-999-9999</p>
-              <div id="auth-buttons" >
-                <button id="sign-in-button" class="ui button" >Sign In</button>
-                <button id="register-button" class="ui button">Register</button>
-              </div>
-              <div id="logout-div" >
-                <button id="logout-button" class="ui button" >Logout</button>
-              </div>
-            </div> -->
         </div>
       </div>
+      <!-- search image and menu (for now) row  -->
       <div class="row" id="landing-search-row">
-        <div id="page-menu" >
-            <a  class="page-links" href="" id="contact"> <i class="mail icon"></i> Contact</a>
-            <a  class="page-links" href="" id="about"> <i class="info icon"></i> About</a>
-            <a style="float: left;" class="page-links" href="" id="store"> <i class="store icon"></i> Store</a>
-            <a style="float: left;" class="page-links" href="" id="news"> <i class="newspaper icon"></i> News</a>
+        <!-- menu tags  -->
+        <div id="page-menu">
+          <a class="page-links" href="" id="contact">
+            <i class="mail icon"></i> Contact</a
+          >
+          <a class="page-links" href="" id="about">
+            <i class="info icon"></i> About</a
+          >
+          <a style="float: left;" class="page-links" href="" id="store">
+            <i class="store icon"></i> Store</a
+          >
+          <a style="float: left;" class="page-links" href="" id="news">
+            <i class="newspaper icon"></i> News</a
+          >
         </div>
+
+        <!-- magazine image  -->
         <div class="seven wide column">
-            <img id="magazine" class="ui massive image" src="https://www.frameweb.com/img/covers/frame/frame132.png" >
-          </div>
+          <img
+            id="magazine"
+            class="ui massive image"
+            src="https://www.frameweb.com/img/covers/frame/frame132.png"
+          />
+        </div>
+
+        <!-- search title, subtext, bar, and cta for professionals  -->
         <div
           id="search-column"
           class="nine wide computer sixteen wide mobile column"
         >
-          <p style="margin-left: 3rem;" id="search-title">Find Top Hair Loss Professionals</p>
-          <p style="margin-left: 3rem;" id="search-subtitle">From the web's most trusted directory</p>
-          <div style="margin-left: 3rem;" class="ui search">
+        <!-- title  -->
+          <p style="margin-left: 3rem;" id="search-title">
+            Find Top Hair Loss Professionals
+          </p>
+          <!-- subtitle  -->
+          <p style="margin-left: 3rem;" id="search-subtitle">
+            From the web's most trusted directory
+          </p>
+          <!-- search div -->
+          <div style="margin-left: 3rem;" class="ui big search">
             <div class="ui left icon action input search">
               <i id="search-icon" class="search icon"></i>
               <input
@@ -147,9 +122,16 @@
                 type="text"
                 placeholder="Ex. Hair Restoration, Hair Transplant, Laser Therapy"
               />
-              <button id="search-button" style="background: #1F7A8C; color: #ffffff;" class="ui rounded button">Search</button>
+              <button
+                id="search-button"
+                style="background: #1F7A8C; color: #ffffff;"
+                class="ui rounded button"
+              >
+                Search
+              </button>
               <div style="margin-left: 8rem;" class="results"></div>
             </div>
+            <!-- CTA  -->
             <p id="landing-list-p">
               Are you a business owner?
               <a
@@ -158,10 +140,9 @@
                 >List your business</a
               >
             </p>
-            <!-- <button class="ui button" id="search-button" >Search</button> -->
           </div>
         </div>
-        
+        <!-- landing card  -->
         <!-- <div class="six wide computer only center aligned column">
               <div class="ui grid container" id="landing-card">
                 <p id="landing-card-header">
@@ -178,321 +159,83 @@
                 </button>
               </div>
             </div> -->
-       <div class="sixteen wide column"></div>
+        <div class="sixteen wide column"></div>
       </div>
-      <div class="centered row" id="landing-bottom-row">
-        <div id="how-column" class="sixteen wide center aligned column">
-          <p id="works-header" class="notWhite-header-text">How it Works</p>
-          <p class="text" id="works-text">
-            Hair Authority Directory™ was created to give men and women
-            suffering from hair loss an information tool they can use with
-            confidence to find the best qualified professionals and products. It
-            is the most comprehensive, unbiased and user-friendly directory on
-            the internet. It is managed by a team of hair loss professionals
-            with over forty years of experience.
-          </p>
-        </div>
-        <div
-          class="sixteen wide computer only center aligned column"
-          id="logo-column"
-        >
-          <p class="notWhite-header-text">Who we Work With</p>
-          <div class="ui stackable grid" id="logo-grid">
-            <div
-              class="eight wide computer sixteen wide mobile center aligned column"
-            >
-              <img
-                class="logo-images"
-                src="./images/Hair Club.webp"
-                data-position="left center"
-                data-title="The Hair Club"
-                data-content="With 120 locations across the U.S., Canada and Puerto Rico and over 1,100 licensed cosmetologists, Hair Club is the largest network of hair addition and hair management salons. Hair Club states, “We’re a family of hair loss experts whose mission is to help people suffering from hair loss live their lives to the fullest.”"
-              />
-              <p class="logo-header">
-                The Hair Club
-              </p>
-              <p class="logo-text">
-                Hair Club is the largest network of hair addition and hair
-                management salons.
-              </p>
-            </div>
-            <div
-              class="eight wide computer sixteen wide mobile center aligned column"
-            >
-              <img
-                class="logo-images"
-                src="./images/Artas.png"
-                data-position="right center"
-                data-title="ARTAS Robotic Hair Restoration System"
-                data-content="Leading hair restoration physicians and researchers developed the ARTAS Robotic Hair Restoration System to eliminate the fatigue, linear scarring and human error sometimes associated with other procedures. This symbol identifies doctors and clinics that offer ARTAD robot-assisted hair transplant surgery (FUE). For your security, only company trained and approved facilities are listed."
-              />
-              <p class="logo-header">
-                ARTAS
-              </p>
-              <p class="logo-text">
-                This symbol identifies doctors and clinics that offer ARTAD
-                robot-assisted hair transplant surgery (FUE).
-              </p>
-            </div>
-            <div
-              class="eight wide computer sixteen wide mobile center aligned column"
-            >
-              <img
-                class="logo-images"
-                src="./images/WTS.png"
-                data-position="left center"
-                data-title="World Trichology Society"
-                data-content="WTS is an organization that promotes the science of trichology. Trichology is the para-medical science of the hair , hair loss and associated scalp problems. It is the “bridge between cosmetology and dermatology.” Certified WTS Trichologists have successfully completed a rigorous course covering medical and cosmetic hair loss solutions."
-              />
-              <p class="logo-header">
-                World Trichology Society
-              </p>
-              <p class="logo-text">
-                WTS is an organization that promotes the science of trichology.
-              </p>
-            </div>
-            <div
-              class="eight wide computer sixteen wide mobile center aligned column"
-            >
-              <img
-                class="logo-images"
-                src="./images/ISHRS.png"
-                data-position="right center"
-                data-title="The International Society of Hair Restoration Surgery (ISHRS)"
-                data-content="Look for this symbol if you are considering hair transplant surgery. ISHRS is a global non-profit medical association and a leading authority on hair loss treatment and restoration. With more than 1,100 members throughout 70 countries, ISHRS is dedicated to achieving excellence in patient outcomes by promoting the highest standards of medical practice, medical ethics, and research in the medical hair restoration industry."
-              />
-              <p class="logo-header">
-                ISHRS
-              </p>
-              <p class="logo-text">
-                Look for this symbol if you are considering hair transplant
-                surgery.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class=" row" id="landing-bottom-row">
+        <div id="how-it-next" class="six wide column"></div>
 
-      <div class="row" id="about-row">
-        <div
-          class="five wide computer sixteen wide mobile middle aligned column"
-        >
-          <p class="why-subtitles">INFORMATION YOU CAN TRUST</p>
-          <p class="why-subtext">
-            This one-of-a-kind directory is 100% objective. It is not affiliated
-            with any commercial or special interest group. It does not accept
-            advertising and it does not promote or endorse any product or
-            service. It allows you to compare alternate suppliers and make a
-            rational decision about what is best for you. This is the only
-            directory you will ever need.
-          </p>
-        </div>
-        <div
-          class="five wide computer sixteen wide mobile middle aligned column"
-        >
-          <p class="why-subtitles">HOW ARE WE DIFFERENT?</p>
-          <p class="why-subtext">
-            Unlike other special-interest groups and deep-pocket advertisers,
-            the Hair Authority Directory is not beholden to any interest or
-            commercial group. It lists every professional, flags special skills,
-            professional affiliations, specialized training, and awards so you
-            can find the best of the best.
-          </p>
-        </div>
-        <div
-          class="five wide computer sixteen wide mobile middle aligned column"
-        >
-          <p class="why-subtitles">WHY OUR DIRECTORY?</p>
-          <p class="why-subtext">
-            In this directory, we have pooled together the best qualified
-            professionals from multiple specialties who are located in your
-            area. You are just a click away from finding a permanent solution to
-            your hair-loss problem.
-          </p>
+        <div id="how-it-col" class="ten wide left aligned column">
+          <p id="how-it-works">Three Easy Steps <i class="level down alternate icon"></i> </p>
         </div>
       </div>
-      <div class="row" id="testimonial-row">
-        <div class="four wide column"></div>
-        <div class="four wide right aligned middle aligned column">
-          <p class="testimonial-text">
-            "The Hair Authority Directory didn't just help me get my hair back,
-            they helped me get my life back!"
-          </p>
-          <p class="quote-text">- John Smith</p>
-        </div>
-      </div>
-      <div class="row" id="list-business">
-        <div class="two wide column"></div>
-        <div class="six wide computer sixteen wide mobile column">
-          <div id="form-container">
-            <div class="ui equal width form">
-              <!-- header  -->
-              <div class="fields">
-                <div class="field">
-                  <h1 id="first-quote-form-header">List your Business!</h1>
-                  <p id="quote-form-text">
-                    Fill out the form below and a member of the Hair Authority
-                    team will reach out to you shortly.
-                  </p>
-                </div>
-              </div>
-              <!-- first row  -->
-              <div class="fields">
-                <div class="field">
-                  <label id="list-form-text">Full Name</label>
-                  <input type="text" placeholder="Full Name" />
-                </div>
-                <div class="field">
-                  <label id="list-form-text">Email</label>
-                  <input type="email" placeholder="Email" />
-                </div>
-              </div>
-              <!-- second row  -->
-              <div class="fields">
-                <div class="field">
-                  <label id="list-form-text">Phone</label>
-                  <input type="text" placeholder="Phone" />
-                </div>
-                <div class="field">
-                  <label id="list-form-text">Zip</label>
-                  <input type="text" placeholder="Zip" />
-                </div>
-              </div>
-              <!-- security type  -->
-              <div class="fields">
-                <div class="field">
-                  <label id="list-form-text">Verification Information</label>
-                  <input type="text" placeholder="" />
+      <div id="step-1" class="row">
+        <div id="step-1-col-l" class="six wide column">
+          <p id="step-1-num" class="title_l_blue" >1.</p>
+          <p id="step-1-title" >Arrival</p>
+          <div id="step-1-list" class="ui list step-list">
+              <div style="margin-bottom: 2.5rem;" class="item">
+                <i style="color: #8b786d;" class="large map pin icon"></i>
+                <div class="content step-list-content">
+                  <p id="step-1-content">Just type in the <strong style="font-size: 35px;font-weight: 700; color: #1F7A8C;" >Title</strong>, <strong style="font-size: 35px; font-weight: 700; color: #1F7A8C;" >Category</strong>, or <strong style="font-size: 35px; font-weight: 700; color: #1F7A8C;" >Club</strong> and instantly search our directory of thousands of qualified specialist and products.</p>
+                  <p style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;" >Step 1 <i style="color: #3aa7a3;" class="check icon"></i></p>
                 </div>
               </div>
             </div>
-            <!-- submit button  -->
-            <button class="ui full width button" id="list-submit-button">
-              Join the Webs Most Trusted Directory!
-            </button>
+        </div>
+        <div id="step-1-col-b" class="ten wide middle aligned centered column">
+            <a href="https://gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41"><img id="step-1-gif-img" src="https://i.gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41.gif" class="ui huge image" alt="Image from Gyazo"  /></a>
+          </div>
+      </div>
+      <div id="step-2" class="row">
+          <div id="step-2-col-b" class="six wide left aligned column">
+                  <div id="step-2-demo-list" class="ui celled full width list">
+                      <div class="item">
+                        <img class="ui tiny avatar image" src="./images/ISHRS.png">
+                        <div class="content">
+                          <div id="list-demo-header" class="header">Snickerdoodle</div>
+                          <p id="list-demo-p"></p>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <img class="ui avatar image" src="/images/avatar/small/daniel.jpg">
+                        <div class="content">
+                          <div class="header">Poodle</div>
+                          A poodle, its pretty basic
+                        </div>
+                      </div>
+                      <div class="item">
+                        <img class="ui avatar image" src="/images/avatar/small/daniel.jpg">
+                        <div class="content">
+                          <div class="header">Paulo</div>
+                          He's also a dog
+                        </div>
+                      </div>
+                    </div>
+          </div>
+          <div id="step-2-col-l" class="ten wide column">
+            <p id="step-2-num" class="title_l_blue" >2.</p>
+            <p id="step-2-title" >Quickly Find Results</p>
+            <div id="step-2-list" class="ui list step-list">
+                <div style="margin-bottom: 2.5rem;" class="item">
+                  <i style="color: #8b786d;" class="big search icon"></i>
+                  <div class="content step-list-content">
+                    <p id="step-2-content">
+                      Immediately find thousands of the <strong style="font-size: 35px;font-weight: 700; color: #1F7A8C;"  > Most Trusted Specialists and Brands</strong> from the most objective, comprehensive, and trusted directory.
+                    </p>
+                  </div>
+                </div>
+                <div style="margin-bottom: 2.5rem;" class="item">
+                    <i style="color: #8b786d;" class="big bookmark icon"></i>
+                    <div class="content step-list-content">
+                      <p id="step-2-content">
+                        Even save your <strong style="font-size: 35px;font-weight: 700; color: #1F7A8C;" >Top Specialists</strong> for later.
+                      </p>
+                      <p style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;" >Step 2 <i style="color: #3aa7a3;" class="check icon"></i></p>
+                    </div>
+                  </div>
+              </div>
           </div>
         </div>
-        <div class="eight wide column">
-          <div class="ui grid" id="list-text-grid">
-            <div
-              class="four wide computer six wide mobile middle aligned column"
-              id="claim-image-column"
-            >
-              <img
-                class="ui small image"
-                id="claim-image"
-                src="./images/628436.png"
-              />
-            </div>
-            <div
-              class="nine wide computer ten wide mobile left aligned middle aligned column list-text-column"
-            >
-              <ul>
-                <li class="list-text">
-                  We list many of the top products and services
-                </li>
-                <li class="list-text">
-                  If you see yours already listed, click
-                  <button class="ui primary button">
-                    Claim this Business
-                  </button>
-                  to take control of your page
-                </li>
-              </ul>
-            </div>
-            <div
-              class="four wide computer six wide mobile middle aligned column"
-              id="network-image-column"
-            >
-              <img
-                class="ui small image"
-                id="network-image"
-                src="./images/why.png"
-              />
-            </div>
-            <div
-              class="nine wide left aligned middle aligned column list-text-column"
-            >
-              <ul>
-                <li class="list-text">
-                  Joining the Hair Authority Directory means networking!
-                </li>
-                <li class="list-text">
-                  Show your solution to the thousands of people in our community
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row" id="footer-row">
-        <div
-          class="eight wide computer sixteen wide mobile right aligned middle aligned column"
-          id="footer-header-column"
-        >
-          <p class="big-header-text">Start Searching Today!</p>
-        </div>
-        <div class="eight wide left aligned column">
-          <form class="footer-search-form">
-            <input
-              type="search"
-              value=""
-              placeholder="Search"
-              class="search-input"
-            />
-            <button type="submit" class="search-button">
-              <svg class="submit-button">
-                <use
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  xlink:href="#search"
-                ></use>
-              </svg>
-            </button>
-            <div class="search-option">
-              <div>
-                <input
-                  name="type"
-                  type="radio"
-                  value="type-users"
-                  id="type-users"
-                />
-                <label for="type-users">
-                  <svg class="edit-pen-title">
-                    <use
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      xlink:href="#user"
-                    ></use>
-                  </svg>
-                  <span>Users</span>
-                </label>
-              </div>
-            </div>
-          </form>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="0"
-            height="0"
-            display="none"
-          >
-            <symbol id="search" viewBox="0 0 32 32">
-              <path
-                d="M 19.5 3 C 14.26514 3 10 7.2651394 10 12.5 C 10 14.749977 10.810825 16.807458 12.125 18.4375 L 3.28125 27.28125 L 4.71875 28.71875 L 13.5625 19.875 C 15.192542 21.189175 17.250023 22 19.5 22 C 24.73486 22 29 17.73486 29 12.5 C 29 7.2651394 24.73486 3 19.5 3 z M 19.5 5 C 23.65398 5 27 8.3460198 27 12.5 C 27 16.65398 23.65398 20 19.5 20 C 15.34602 20 12 16.65398 12 12.5 C 12 8.3460198 15.34602 5 19.5 5 z"
-              />
-            </symbol>
-          </svg>
-        </div>
-        <div class="sixteen wide center aligned column" id="copyright-column">
-          <p id="copyright">
-            Copyright © 2019 International Hair Directory
-          </p>
-        </div>
-        <div class="sixteen wide center aligned column" id="icons">
-          <i class="large google icon header-icon-color"></i>
-          <i class="large facebook icon header-icon-color"></i>
-          <i class="large twitter square icon header-icon-color"></i>
-          <i class="large instagram icon header-icon-color"></i>
-        </div>
-      </div>
     </div>
 
     <script src="./js/css.js"></script>

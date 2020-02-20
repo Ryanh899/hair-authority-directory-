@@ -64,21 +64,31 @@ $(document).ready(function() {
     console.log(userInfo)
     if (userInfo && userInfo.isClientUser) {
       $("#register-column").html(
-        `<div id="logout-button"><p id="register">Logout</p></div>`
+        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
       );
       $("#sign-in-column").html(
-        `<div id="saved-listings"><p id="sign-in">My Listings</p></div>`
+        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
       );
     } else if (userInfo && userInfo.isProfessionalUser) {
-      $("#auth-buttons").html(
-        `<button id="dashboard-button" class="ui button" >My Dashboard</button>
-        <button id="saved-listings" class="ui button" >My Listings</button>`
+      $("#register-column").html(
+        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
       );
+      $("#sign-in-column").html(
+        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
+      );
+      $('#dashboard-column').html(`
+      <div id="dashboard-button"  ><p class="top-button" id="dashboard" >Dashboard</p></div>
+      `)
     } else if (userInfo && userInfo.isAdminUser) {
-      $("#auth-buttons").html(
-        `<button id="admin-portal-button" class="ui button" >Admin Portal</button>
-        <button id="saved-listings" class="ui button" >My Listings</button>`
+      $("#register-column").html(
+        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
       );
+      $("#sign-in-column").html(
+        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
+      );
+      $('#dashboard-column').html(`
+      <div id="dashboard-button"  ><p class="top-button" id="dashboard" >Dashboard</p></div>
+      `)
     }
   } else {
     console.log("not logged in");
@@ -112,6 +122,7 @@ $('body').on('click', '#admin-portal-button', function () {
     authHelper.logOut()
     $('#register-column').html(`<div id="register-button"><p id="register">Register</p></div>`)
     $('#sign-in-column').html(`<div id="sign-in-button"><p id="sign-in">Sign In</p></div>`)
+    $('#dashboard-column').html('')
     $( '#logout-div' ).html('')
   });
 
