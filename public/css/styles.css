@@ -1,805 +1,808 @@
 html {
-    scroll-behavior: smooth;
-  }; 
+  scroll-behavior: smooth;
+}
 
-  body {
-      margin: 0px;
-  }
+body {
+  margin: 0px;
+}
 
 /* main container */
 #page-container {
-    /* height: 80vh;  */
-    width: 100vw; 
-    /* background-image: url('../images/test.jpg');
+  /* height: 80vh;  */
+  width: 100vw;
+  /* background-image: url('../images/test.jpg');
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover;  */
-    margin: 0px;
+  margin: 0px;
 }
 
 /* top header  */
 #header-row {
-    background: #446a7f;;
-    padding: .5rem;
+  background: #446a7f;
+  padding: 0.5rem;
 }
 
 .header-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    color: white;
-    text-decoration: underline;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  color: white;
+  text-decoration: underline;
 }
 
 #list-business-button {
-    /* background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf); */
-    color: white;
-    background: rgba(39, 76, 119, 1);
-    /* color: #112941; */
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    width: 100%;
-    margin-bottom: .5rem;
+  /* background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf); */
+  color: white;
+  background: rgba(39, 76, 119, 1);
+  /* color: #112941; */
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .header-icon-color {
-    color: white;
+  color: white;
 }
 
 /* landing */
 #top-menu-row {
-    /* background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf); */
-    /* background: #4CA1AF; 
+  /* background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf); */
+  /* background: #4CA1AF; 
     background: -webkit-linear-gradient(to right, #C4E0E5, #4CA1AF);  
     background: linear-gradient(to right, #C4E0E5, #4CA1AF);  */
-    padding: 0px;
-    background: #2ca6a4;
+  padding: 0px;
+  background: #2ca6a4;
 }
 
 #sign-in-column {
-    padding: 0px;
+  padding: 0px;
 }
 
 #sign-in-button {
-    background: #9dd9d2;
-    font-family: 'lato', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    height: 101%;
-    display: table;
-    width: 100%;
-
+  background: #9dd9d2;
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
 }
 
 .top-button {
-    padding: 0px;
-    line-height: 1em;
+  padding: 0px;
+  line-height: 1em;
 }
 
 #sign-in {
-    text-align:center; 
+  text-align: center;
   vertical-align: middle;
-  display: table-cell;   
+  display: table-cell;
   color: #3aa7a3;
-  padding: .5rem;
+  padding: 0.5rem;
 }
 
 #register-column {
-    padding: 0px;
+  padding: 0px;
 }
 
 #register-button {
-    background: #3aa7a3;
-    font-family: 'lato', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    height: 101%;
-    display: table;
-    width: 100%;
-
+  background: #3aa7a3;
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
 }
 
 #logout-button {
-    background: #3aa7a3;
-    font-family: 'lato', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    height: 101%;
-    display: table;
-    width: 100%;
-
+  background: #3aa7a3;
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
 }
 
 #saved-listings {
-    background: #9dd9d2;
-    font-family: 'lato', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    height: 101%;
-    display: table;
-    width: 100%;
-
+  background: #9dd9d2;
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
 }
 
 #register {
-    text-align:center; 
+  text-align: center;
   vertical-align: middle;
-  display: table-cell;   
+  display: table-cell;
   color: white;
-  padding: .5rem;
+  padding: 0.5rem;
 }
 
 #landing-grid {
-    height: 100%; 
-    width: 100%; 
-    margin: 0px;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
 }
 
 #ha-title {
-    font-size: 30px;
-    /* font-family: 'Montserrat', sans-serif; */
-    /* font-weight: 700; */
-    font-family: 'Raleway';
-    font-weight: 500;
-    /* color: #112941; */
-    line-height: 1em;
-    /* margin-left: 5rem; */
-    color: white;
-    display: inline;
+  font-size: 30px;
+  /* font-family: 'Montserrat', sans-serif; */
+  /* font-weight: 700; */
+  font-family: "Raleway";
+  font-weight: 500;
+  /* color: #112941; */
+  line-height: 1em;
+  /* margin-left: 5rem; */
+  color: white;
+  display: inline;
 }
 
 #ha-contact {
-    float: right;
-    margin-right: 5rem;
-    font-size: 24px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    /* color: #112941; */
-    color: white;
+  float: right;
+  margin-right: 5rem;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  /* color: #112941; */
+  color: white;
 }
 
 #ha-title-column {
-    padding-right: 0px;
+  padding-right: 0px;
 }
 
 #menu-links-column {
-    padding-left: 0px;
+  padding-left: 0px;
 }
 
 .menu-links {
-    float: left; 
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    font-size: 20px;
-    padding: 1rem;
-    /* color: #112941; */
-    color: white;
-    margin-top: 4rem;
+  float: left;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  padding: 1rem;
+  /* color: #112941; */
+  color: white;
+  margin-top: 4rem;
 }
 
 .page-links {
-    font-family: 'lato', sans-serif;
-    font-weight: 500;
-    font-size: 18px;
-    color: white;
-    padding: 1rem;
-    display: inline;
+  font-family: "lato", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+  padding: 1rem;
+  display: inline;
 }
 
 .link-columns {
-    padding: 0px;
+  padding: 0px;
 }
 
 #landing-search-row {
-    /* background-image: url(../images/tricho-overlay.png);
+  /* background-image: url(../images/tricho-overlay.png);
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover;   */
-    background: #79bcb8;
-    padding: 2rem;
-    padding-top: 0px;
-    padding-bottom: 0px;
+  background: #79bcb8;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #page-menu {
-    padding: 1rem;
-    width: 100%;
+  padding: 1rem;
+  width: 100%;
 }
 
 #contact {
-    position: absolute;
-    left: 85%;
+  position: absolute;
+  left: 85%;
 }
 
 #about {
-    position: absolute;
-    left: 78%;
+  position: absolute;
+  left: 78%;
 }
 
-
 #landing-inner-row {
-    padding: .5rem;
+  padding: 0.5rem;
 }
 
 #search-title {
-    font-size: 50px;
-    font-family: 'Raleway', sans-serif;
-    font-weight: 700;
-    color: white;
-    line-height: 1.2em;
-    margin-bottom: .5rem;
-    margin-top: 5rem;
+  font-size: 50px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2em;
+  margin-bottom: 0.5rem;
+  margin-top: 5rem;
 }
 
 #how-column {
-    background: #f9f9f9;
-    padding-bottom: 2.5rem;
+  background: #f9f9f9;
+  padding-bottom: 2.5rem;
 }
 
 #search-subtitle {
-    font-family: 'lato', sans-serif;
-    font-weight: 500;
-    font-size: 25px;
-    color: white;
-    margin-bottom: 1rem;
+  font-family: "lato", sans-serif;
+  font-weight: 500;
+  font-size: 25px;
+  color: white;
+  margin-bottom: 1rem;
 }
 
-
 #landing-card {
-    background: white;
-    height: 100%;
-    width: 75%;
-    padding: 2rem;
-}  
+  background: white;
+  height: 100%;
+  width: 75%;
+  padding: 2rem;
+}
 
 #landing-card-header {
-    font-size: 25px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    padding-bottom: 0px;
-    margin-bottom: 1rem;
+  font-size: 25px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  padding-bottom: 0px;
+  margin-bottom: 1rem;
 }
 
 #landing-card-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 .notWhite-header-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 40px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
 }
 
 #works-header {
-    margin-top: 3.5rem;
-    margin-bottom: 2rem;
+  margin-top: 3.5rem;
+  margin-bottom: 2rem;
 }
 
 .text {
-    font-family: 'Monteserrat', sans-serif;
-    font-weight: 300;
-    font-size: 16px;
+  font-family: "Monteserrat", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
 }
 
 #ha-logo-image {
-    height: 50px;
+  height: 50px;
 }
 
 #landing-bottom-row {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    /* background: #f9f9f9; */
+  padding-top: 0px;
+  padding-bottom: 0px;
+  /* background: #f9f9f9; */
 }
 
 .logo-images {
-    height: 175px;
-    width: 175px;
-    margin: 3rem;
-    margin-top: 0rem;
-    margin-bottom: 1rem;
+  height: 175px;
+  width: 175px;
+  margin: 3rem;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
 }
 
 #works-text {
-    margin-right: 12.5%;
-    margin-left: 12.5%;
-    color: #444444;
+  margin-right: 12.5%;
+  margin-left: 12.5%;
+  color: #444444;
 }
 
 .logo-text {
-    font-family: 'Monteserrat', sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    color: #444444;
+  font-family: "Monteserrat", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: #444444;
 }
 
 .logo-header {
-    font-family: 'Monteserrat', sans-serif;
-    font-weight: 700;
-    font-size: 22px;
-    margin-bottom: 1rem;
-    opacity: 90%;
+  font-family: "Monteserrat", sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 1rem;
+  opacity: 90%;
 }
 
 #logo-column {
-    padding: 1.5rem;
+  padding: 1.5rem;
 }
 
 #why-row {
-    background: white;
+  background: white;
 }
 
 #dermatologist {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #tricho {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #laser {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #extensions {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #salon {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #transplant {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #systems {
-    height: 75%;
-    width: 100%;
+  height: 75%;
+  width: 100%;
 }
 
 #products {
-    height: 75%;
-    widows: 100%;
+  height: 75%;
+  widows: 100%;
 }
 
 #category-container {
-    width: 100%;
+  width: 100%;
 }
 
 .categories-labels {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    font-size: 16px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
 }
 
 #about-row {
-    /* background: rgba(96, 150, 186, 1); */
-    background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf);
+  /* background: rgba(96, 150, 186, 1); */
+  background-image: linear-gradient(
+    to right top,
+    #112941,
+    #294860,
+    #446a7f,
+    #628e9f,
+    #83b3bf
+  );
 
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-    padding-left: 7rem;
-    padding-right: 0rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  padding-left: 7rem;
+  padding-right: 0rem;
 
-    /* padding-left: 10rem; */
+  /* padding-left: 10rem; */
 }
 
 .why-subtitles {
-    font-family: 'Monteserrat', sans-serif;
-    font-weight: 700;
-    font-size: 22px;
-    margin-bottom: 1rem;
-    color: white;
+  font-family: "Monteserrat", sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 1rem;
+  color: white;
 }
 
 .why-subtext {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    color: white;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: white;
 }
 
 #category-container {
-    background: rgba(231, 236, 239, 1);
-    padding: 1rem;
-    margin-bottom: 1rem;
+  background: rgba(231, 236, 239, 1);
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 #list-business {
-    background: #F7F5EA;
-
+  background: #f7f5ea;
 }
 
 #category-row {
-    padding-bottom: 0px;
+  padding-bottom: 0px;
 }
 
 #category-row-2 {
-    padding-bottom: 0px;
+  padding-bottom: 0px;
 }
 
 #logo-grid {
-    padding-left: 11rem;
-    padding-right: 11rem;
+  padding-left: 11rem;
+  padding-right: 11rem;
 }
 
 #list-form-segment {
-    margin-left: 3rem;
-    background: #B9B497;
+  margin-left: 3rem;
+  background: #b9b497;
 }
 
 #list-submit-button {
-    width: 100%;
-    background: rgba(39, 76, 119, 1);
-    color: white;
+  width: 100%;
+  background: rgba(39, 76, 119, 1);
+  color: white;
 }
 
 #form-container {
-    background: #446a7f;
-    /* background: #B9B497; */
-    color: white;
-    padding: 3.5rem;
+  background: #446a7f;
+  /* background: #B9B497; */
+  color: white;
+  padding: 3.5rem;
 }
 
 #list-form-text {
-    color: white;
+  color: white;
 }
 
 #list-text-grid {
-    margin-top: 4rem;
+  margin-top: 4rem;
 }
 
 .list-text-column {
-    padding-left: 0px;
-    margin-right: 5rem;
+  padding-left: 0px;
+  margin-right: 5rem;
 }
 
 .list-text {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    font-size: 16px;
-    color: #404B4F;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #404b4f;
 }
 
 #claim-image-column {
-    padding-right: 0px;
+  padding-right: 0px;
 }
 
 .big-header-text {
-    font-size: 35px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    /* color: #112941; */
-    line-height: 1em;
-    margin-left: 5rem;
-    color: white;
+  font-size: 35px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  /* color: #112941; */
+  line-height: 1em;
+  margin-left: 5rem;
+  color: white;
 }
 
 #footer-row {
-    background-image: linear-gradient(to right top, #112941, #294860, #446a7f, #628e9f, #83b3bf);
+  background-image: linear-gradient(
+    to right top,
+    #112941,
+    #294860,
+    #446a7f,
+    #628e9f,
+    #83b3bf
+  );
 }
 
 .footer-search-form {
-    width: 350px;
-    height: 40px;
-    margin-left: 12.5rem;
-    margin-top: 3rem;
-    border-radius: 40px;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-    -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-    background: #fff;
-    transition: all 0.3s ease;
+  width: 350px;
+  height: 40px;
+  margin-left: 12.5rem;
+  margin-top: 3rem;
+  border-radius: 40px;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background: #fff;
+  transition: all 0.3s ease;
 }
 
 #copyright-column {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 #copyright {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 100;
-    color: white;
-    margin-top: 1rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  color: white;
+  margin-top: 1rem;
 }
 
 #icons {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 #search-semantic {
-    width: 33.3vw;
-    border: solid;
-    border-color: #1F7A8C;
-    border-width: 1.5px;
+  width: 33.3vw;
+  border: solid;
+  border-color: #1f7a8c;
+  border-width: 1.5px;
 }
 
 #dashboard-column {
-    padding: 0px;
+  padding: 0px;
 }
 
 #dashboard {
-    text-align:center; 
-    vertical-align: middle;
-    display: table-cell;   
-    color: white;
-    padding: .5rem;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  color: white;
+  padding: 0.5rem;
 }
 
 #dashboard-button {
-    background: #8b786d;
-    font-family: 'lato', sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    height: 101%;
-    display: table;
-    width: 100%;
-
+  background: #8b786d;
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  height: 101%;
+  display: table;
+  width: 100%;
 }
 
 .center-description {
-    text-align: center;
-} 
+  text-align: center;
+}
 
 #landing-list-p {
-    font-family: 'Raleway', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    color: #001021;
-    margin-top: .5rem;
-    margin-left: .5rem;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #001021;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 #landing-list-col {
-    text-align: center;
+  text-align: center;
 }
 
 #magazine {
-    margin-right: 5rem;
+  /* margin-right: 5rem; */
+
 }
 
 #testimonial-row {
-    background-image: url(../images/landing-4-overlay2.jpg);
-    height: 75vh;
-    background-position: center; 
-    background-repeat: no-repeat; 
-    background-size: cover;  
+  background-image: url(../images/landing-4-overlay2.jpg);
+  height: 75vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .testimonial-text {
-    font-family: 'Roboto', sans-serif;
-    font-size: 25px;
-    font-weight: 100;
-    color: white;
-    margin-bottom: .5rem;
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+  font-weight: 100;
+  color: white;
+  margin-bottom: 0.5rem;
 }
 
 .quote-text {
-    font-family: 'Montesserat', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    color: white;
+  font-family: "Montesserat", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: white;
 }
 
 .title_l_blue {
-    font-family: 'Raleway', sans-serif;
-    font-weight: 700;
-    font-size: 55px;
-    color: #628e9f;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 55px;
+  color: #628e9f;
 }
 
 #how-it-works {
-    font-family: 'Raleway', sans-serif;
-    font-weight: 700;
-    font-size: 55px;
-    color: #628e9f;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 55px;
+  color: #628e9f;
 }
 
 #how-it-col {
-    padding: 2rem;
-    background: #f9f9f9;
+  padding: 2rem;
+  background: #f9f9f9;
 }
 
 #how-it-next {
-    background: #79bcb8;
+  background: #79bcb8;
 }
 
 #step-1 {
-    padding: 0px;
-    background: #79bcb8;
+  padding: 0px;
+  background: #79bcb8;
 }
 
 #step-1-col-l {
-    background: #f9f9f9;
+  background: #f9f9f9;
 }
 
 #step-1-col-b {
-    background: #79bcb8;
-    padding: 5rem;
-    text-align: center;
+  background: #79bcb8;
+  padding: 5rem;
+  text-align: center;
 }
 
 #step-1-gif-img {
-    display: inline-block;
-    border: solid;
-    border-width: 45px;
-    border-color: #8b786d;
+  display: inline-block;
+  border: solid;
+  border-width: 45px;
+  border-color: #8b786d;
 }
 
 #step-1-num {
-    position: relative;
-    font-size: 80px; 
-    margin-bottom: 0px;
-    text-align: right;
+  position: relative;
+  font-size: 80px;
+  margin-bottom: 0px;
+  text-align: right;
 }
 
 .step-list {
-    width: 100%;
-    
+  width: 100%;
 }
 
 .step-list-content {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    font-size: 30px;
-    color: #446a7f;
-    line-height: 2rem;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 30px;
+  color: #446a7f;
+  line-height: 2rem;
 }
 
 #step-1-title {
-    position: relative;
-    font-size: 65px; 
-    font-weight: 700;
-    font-family: 'Raleway';
-    margin-bottom: 1.5rem;
-    margin-left: 2.5rem;
-    text-align: left;
-    color: #8b786d;
+  position: relative;
+  font-size: 65px;
+  font-weight: 700;
+  font-family: "Raleway";
+  margin-bottom: 1.5rem;
+  margin-left: 2.5rem;
+  text-align: left;
+  color: #8b786d;
 }
 
 #step-1-content {
-    line-height: 1.85em
+  line-height: 1.85em;
 }
 
 #step-1-list {
-    padding-right: 5rem;
-    padding-left: 5rem;
+  padding-right: 5rem;
+  padding-left: 5rem;
 }
 
 #step-2 {
-    padding: 0px;
+  padding: 0px;
 }
 
 #step-2-col-l {
-    background: #f9f9f9;
+  background: #f9f9f9;
 }
 
 #step-2-col-b {
-    background: #79bcb8;
-    text-align: center;
-    height: 100%;
-    padding: 3rem;
+  background: #79bcb8;
+  text-align: center;
+  height: 100%;
+  padding: 3rem;
 }
 
 #step-2-gif-img {
-    display: inline-block;
-    border: solid;
-    border-width: 45px;
-    border-color: #8b786d;
+  display: inline-block;
+  border: solid;
+  border-width: 45px;
+  border-color: #8b786d;
 }
 
 #step-2-num {
-    position: relative;
-    font-size: 80px; 
-    margin-bottom: 0px;
-    text-align: left;
+  position: relative;
+  font-size: 80px;
+  margin-bottom: 0px;
+  text-align: left;
 }
 
 #step-2-title {
-    position: relative;
-    font-size: 65px; 
-    font-weight: 700;
-    font-family: 'Raleway';
-    margin-bottom: 1.5rem;
-    margin-left: 3.5rem;
-    text-align: left;
-    color: #8b786d;
+  position: relative;
+  font-size: 65px;
+  font-weight: 700;
+  font-family: "Raleway";
+  margin-bottom: 1.5rem;
+  margin-left: 3.5rem;
+  text-align: left;
+  color: #8b786d;
 }
 
 #step-2-content {
-    line-height: 1.85em; 
+  line-height: 1.85em;
 }
 
 #step-2-list {
-    padding-right: 5rem;
-    padding-left: 5rem;
-    margin-left: 2rem;
+  padding-right: 5rem;
+  padding-left: 5rem;
+  margin-left: 2rem;
 }
 
 #listing-demo {
-    height: 100%;
-    background: white;
+  height: 100%;
+  background: white;
 }
 
 #list-demo-p {
-    font-family: 'Lato';
-    font-weight: 300;
-    color: grey;
-    font-size: 18px;
+  font-family: "Lato";
+  font-weight: 300;
+  color: grey;
+  font-size: 18px;
 }
 
 #list-demo-header {
-    font-family: 'Raleway';
-    font-weight: 700;
-    font-size: 20px;
-    margin-bottom: .5rem;
+  font-family: "Raleway";
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 0.5rem;
 }
 
 #step-2-demo-list {
-    height: 100%;
-    background: white;
+  height: 100%;
+  background: white;
 }
 
 #list-demo-item {
-    padding: 2rem;
-    text-align: left;
-    align-items: center;
+  padding: 2rem;
+  text-align: left;
+  align-items: center;
 }
 
-
 @media only screen and (max-width: 600px) {
-    #ha-title {
-        margin-left: 0px;
-    }
-    .menu-links {
-        margin-top: 0px;
-    }
-    #landing-search-row {
-        height: 70vh;
-        text-align: center;
-    }
-    #search-title {
-        margin-left: 0px;
-        font-family: 'Monteserrat', sans-serif;
-        font-weight: 700;
-        font-size: 40px;
-        margin-top: 5rem;
-    }
-    #search-subtitle {
-        margin-left: 0px;
-    }
-    #landing-card {
-        margin-left: 3.5rem;
-    }
-    #landing-bottom-row {
-        height: 50%;
-    }
-
-    #about-row {
-        padding: 2rem;
-    }
-
-    .list-text-column {
-        margin: 0px;
-    }
-
-    #list-text-grid {
-        width: 95vw;
-    }
-
-    #footer-header-column {
-        text-align: center;
-    }
-
-    .big-header-text {
-        margin-left: 0px;
-    }
-   
+  #ha-title {
+    margin-left: 0px;
   }
+  .menu-links {
+    margin-top: 0px;
+  }
+  #landing-search-row {
+    height: 70vh;
+    text-align: center;
+  }
+  #search-title {
+    margin-left: 0px;
+    font-family: "Monteserrat", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    margin-top: 5rem;
+  }
+  #search-subtitle {
+    margin-left: 0px;
+  }
+  #landing-card {
+    margin-left: 3.5rem;
+  }
+  #landing-bottom-row {
+    height: 50%;
+  }
+
+  #about-row {
+    padding: 2rem;
+  }
+
+  .list-text-column {
+    margin: 0px;
+  }
+
+  #list-text-grid {
+    width: 95vw;
+  }
+
+  #footer-header-column {
+    text-align: center;
+  }
+
+  .big-header-text {
+    margin-left: 0px;
+  }
+}
