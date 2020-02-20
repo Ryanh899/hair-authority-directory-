@@ -477,18 +477,19 @@ body {
   /* color: #112941; */
   line-height: 1em;
   margin-left: 5rem;
-  color: white;
+  color: #1f7a8c;
 }
 
 #footer-row {
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     to right top,
     #112941,
     #294860,
     #446a7f,
     #628e9f,
     #83b3bf
-  );
+  ); */
+  background: #79bcb8;
 }
 
 .footer-search-form {
@@ -512,6 +513,7 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 100;
   color: white;
+  
   margin-top: 1rem;
 }
 
@@ -680,6 +682,7 @@ body {
 
 #step-2 {
   padding: 0px;
+  background: #79bcb8;
 }
 
 #step-2-col-l {
@@ -728,6 +731,65 @@ body {
   margin-left: 2rem;
 }
 
+#step-3 {
+  padding: 0px;
+  background: #79bcb8;
+  border-bottom: solid #8b786d 2.5px;
+
+}
+
+#step-3-col-l {
+  background: #f9f9f9;
+}
+
+#step-3-col-b {
+  background: #79bcb8;
+  text-align: center;
+  padding: 3rem;
+}
+
+#step-3-gif-img {
+  display: inline-block;
+  border: solid;
+  border-width: 45px;
+  border-color: #8b786d;
+}
+
+#step-3-num {
+  position: relative;
+  font-size: 70px;
+  margin-bottom: 0px;
+  text-align: right;
+}
+
+#step-3-title {
+  position: relative;
+  font-size: 55px;
+  font-weight: 700;
+  font-family: "Raleway";
+  margin-bottom: 1.5rem;
+  margin-left: 3.5rem;
+  text-align: left;
+  color: #8b786d;
+}
+
+#step-3-demo {
+  border: solid;
+  border-color: #8b786d;
+  border-width: 20px;
+  padding: 5rem;
+}
+
+#step-3-content {
+  line-height: 1.85em;
+}
+
+#step-3-list {
+  padding-right: 5rem;
+  padding-left: 5rem;
+  margin-left: 2rem;
+}
+
 #listing-demo {
   height: 100%;
   background: white;
@@ -750,12 +812,15 @@ body {
 #step-2-demo-list {
   height: 100%;
   background: white;
+  padding: 1rem;
 }
 
 #list-demo-item {
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: left;
   align-items: center;
+  border: solid;
+  border-color: #8b786d;
 }
 
 @media only screen and (max-width: 600px) {
