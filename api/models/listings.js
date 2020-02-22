@@ -171,6 +171,7 @@ const Listings = {
       .select()
       .where("business_title", "like", `${title}%`)
       .then(async response => {
+        console.log(response)
         return response;
       })
       .catch(err => {
@@ -178,7 +179,7 @@ const Listings = {
       });
     for (var i = 0; i < listings.length; i++) {
       let length = await GeoCode.findDistance(listings[i], currentLocation);
-      if (length < 50) {
+      if (length < 160) {
         listings[i].distance = true;
       } else {
         listings[i].distance = false;
@@ -528,7 +529,8 @@ const Listings = {
       .where('u.id', '=', id)
       .first()
   );
-  }
+  }, 
+
 };
 
 module.exports = Listings;

@@ -2,3 +2,68 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
 }
+
+body {
+    background: #79bcb8;
+}
+
+#page-container {
+    background: #79bcb8;
+    height: 85vh;
+}
+
+#form-container {
+    background: white ;
+    color: black;
+    padding: 5rem;
+    border: solid;
+    border-color: #3aa7a3;
+    border-width: 7.5px;
+}
+
+#signIn-text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    color: #8b786d;
+    line-height: 1.5em;
+}
+
+#form {
+    padding: 1.5rem;
+}
+
+#back {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    color: #3aa7a3;
+    padding: 0.5rem;
+  }
+
+#signIn-form-header {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    color: #8b786d;
+}
+
+#password {
+    padding: 1rem;
+}
+
+#email {
+    padding: 1rem;
+}
+
+.ha_button {
+    text-align: center;
+    background: #79bcb8;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    padding: 1.2rem;
+    font-size: 22px;
+    width: 35%;
+    
+}

@@ -1,11 +1,11 @@
 const categories = [{
-    title: "Dermatologist"
+    title: "Dermatologists"
   },
   {
     title: "Hair Care Salons"
   },
   {
-    title: "Hair Loss + Hair Care Products & Treatments"
+    title: "Hair Loss / Hair Care Products & Treatments"
   },
   {
     title: "Hair Replacement & Hair Systems"
@@ -39,6 +39,20 @@ const categories = [{
   }
 ];
 
+const newCategories = [
+  { title: 'Hair Loss / Hair Care Products &amp' }, 
+  { title: 'Treatments|Hair Replacement &amp' }, 
+  { title: 'Hair systems|Laser Therapy' }, 
+  { title: 'Hair systems|Medical / Hair Transplants|Wigs, Extensions, Hair Additions' }, 
+  { title: 'Hair Care Salons|Hair Replacement &amp' }, 
+  { title: 'Medical / Hair Transplants' }, 
+  { title: 'Wigs, Extensions, Hair Additions' },
+  { title: 'Trichologists' },
+  { title: 'Trichologists' },
+  { title: 'Trichologists' },
+  { title: 'Trichologists' }
+]
+
 
 var myAxios = axios.create({
   headers: {
@@ -48,6 +62,7 @@ var myAxios = axios.create({
 myAxios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
+  console.log(error)
   if (error.response.status === 401) {
       // return authHelper.logOut('./sign-in.html')
   } else if (error.response.status === 404 ) {

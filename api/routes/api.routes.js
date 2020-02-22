@@ -132,7 +132,7 @@ router.get('/search/:query/:location', (req, res) => {
             for (var i = 0; i < resp.length; i++) {
               let length = await GeoCode.findDistance(resp[i], location)
               resp.map(item => {
-                if (length < 50) {
+                if (length < 160) {
                   item.distance = true
                 } else {
                   item.distance = false

@@ -86,7 +86,7 @@ body {
   padding: 0px;
 }
 
-#register-button {
+#listBusiness-button {
   background: #3aa7a3;
   font-family: "lato", sans-serif;
   font-weight: 400;
@@ -477,7 +477,7 @@ body {
   /* color: #112941; */
   line-height: 1em;
   margin-left: 5rem;
-  color: #1f7a8c;
+  color: white;
 }
 
 #footer-row {
@@ -773,12 +773,12 @@ body {
   color: #8b786d;
 }
 
-#step-3-demo {
+/* #step-3-demo {
   border: solid;
   border-color: #8b786d;
   border-width: 20px;
   padding: 5rem;
-}
+} */
 
 #step-3-content {
   line-height: 1.85em;

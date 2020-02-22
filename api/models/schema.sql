@@ -1,8 +1,7 @@
-CREATE EXTENSION "uuid-ossp";
 
 create table users (
-id uuid DEFAULT uuid_generate_v4 () primary key not null, 
-email varchar(128) unique not null, 
+id uuid DEFAULT uuid_generate_v4() primary key, 
+email varchar(128) not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 
 phone varchar(256) not null, 
@@ -12,7 +11,7 @@ last_name varchar(64) not null
 
 create table professional_users (
 id uuid primary key not null, 
-email varchar(128) unique not null, 
+email varchar(128)  not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 
 phone varchar(256) not null, 
@@ -22,7 +21,7 @@ last_name varchar(64) not null
 
 create table admin_users (
 id uuid primary key not null, 
-email varchar(128) unique not null, 
+email varchar(128)  not null, 
 hash varchar(256) not null, 
 salt varchar(256) not null, 
 phone varchar(256) not null, 
@@ -30,118 +29,107 @@ first_name varchar(64) not null,
 last_name varchar(64) not null
 );
 
-create table listings(
-id uuid primary key not null,
-professional_id uuid references professional_users(id), 
-business_title varchar(64) not null, 
-business_description varchar(128) not null, 
-street_address varchar(64), 
-city varchar(64), 
-state varchar(32), 
-zip varchar(64),
-phone varchar(24), 
-email varchar(64), 
-website varchar(128), 
-category varchar (64), 
-monday varchar (64), 
-tuesday varchar (64),
-wednesday varchar (64),
-thursday varchar (64),
-friday varchar (64),
-saturday varchar (64),
-sunday varchar (64),
-instagram varchar(128),
-twitter varchar(128),
-linkedin varchar(128),
-facebook varchar(128),
-youtube varchar(128), 
-mission_statement varchar(256), 
-about varchar(256), 
-faq0 varchar(128),
-answer0 varchar(128), 
-faq1 varchar(128),
-answer1 varchar(128), 
-faq2 varchar(128), 
-answer2 varchar(128), 
-lat float, 
-lng float
+
+
+CREATE TABLE listings (
+	id uuid primary key NOT NULL,
+	professional_id uuid NULL,
+	business_title varchar(64) NOT NULL,
+	business_description text NOT NULL,
+	street_address varchar(64) NULL,
+	city varchar(64) NULL,
+	state varchar(32) NULL,
+	zip varchar(64) NULL,
+	phone varchar(24) NULL,
+	email varchar(64) NULL,
+	category varchar(64) NULL,
+	mission_statement varchar(256) NULL,
+	about varchar(256) NULL,
+	lat float8 NULL,
+	lng float8 NULL,
+	feature_image varchar(256) NULL,
+	image_ids varchar(256) NULL,
+	date_published timestamptz NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created timestamp NULL,
+	claimed bool NOT NULL DEFAULT false
+);
+
+CREATE TABLE pending_listings (
+	id uuid primary key NOT NULL,
+	professional_id uuid NULL,
+	business_title varchar(64) NOT NULL,
+	business_description text NOT NULL,
+	street_address varchar(64) NULL,
+	city varchar(64) NULL,
+	state varchar(32) NULL,
+	zip varchar(64) NULL,
+	phone varchar(24) NULL,
+	email varchar(64) NULL,
+	category varchar(64) NULL,
+	mission_statement varchar(256) NULL,
+	about varchar(256) NULL,
+	lat float8 NULL,
+	lng float8 NULL,
+	feature_image varchar(256) NULL,
+	image_ids varchar(256) NULL,
+	date_published timestamptz NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created timestamp NULL,
+	claimed bool NOT NULL DEFAULT false
+);
+
+CREATE TABLE inactive_listings (
+	id uuid primary key NOT NULL,
+	professional_id uuid NULL,
+	business_title varchar(64) NOT NULL,
+	business_description text NOT NULL,
+	street_address varchar(64) NULL,
+	city varchar(64) NULL,
+	state varchar(32) NULL,
+	zip varchar(64) NULL,
+	phone varchar(24) NULL,
+	email varchar(64) NULL,
+	category varchar(64) NULL,
+	mission_statement varchar(256) NULL,
+	about varchar(256) NULL,
+	lat float8 NULL,
+	lng float8 NULL,
+	feature_image varchar(256) NULL,
+	image_ids varchar(256) NULL,
+	date_published timestamptz NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created timestamp NULL,
+	claimed bool NOT NULL DEFAULT false
+);
+
+create table hours (
+listing_id uuid not null, 
+day varchar(32) not null, 
+opening_hours varchar (64), 
+closing_hours varchar (64)
 ); 
 
-create table pending_listings (
-id uuid DEFAULT uuid_generate_v4 () primary key not null, 
-professional_id uuid, 
-business_title varchar(64) not null, 
-business_description varchar(128) not null, 
-street_address varchar(64), 
-city varchar(64), 
-state varchar(32), 
-zip varchar(64),
-phone varchar(24), 
-email varchar(64), 
-website varchar(128), 
-category varchar (64), 
-monday varchar (64), 
-tuesday varchar (64),
-wednesday varchar (64),
-thursday varchar (64),
-friday varchar (64),
-saturday varchar (64),
-sunday varchar (64),
-instagram varchar(128),
-twitter varchar(128),
-linkedin varchar(128),
-facebook varchar(128),
-youtube varchar(128), 
-mission_statement varchar(256), 
-about varchar(256), 
-faq0 varchar(128),
-answer0 varchar(128), 
-faq1 varchar(128),
-answer1 varchar(128), 
-faq2 varchar(128), 
-answer2 varchar(128), 
-lat float, 
-lng float
+create table faq (
+listing_id uuid not null, 
+faq text not null, 
+faq_answer text not null
+); 
+
+create table social_media (
+listing_id uuid not null, 
+platform text not null,
+url varchar(256) not null
 );
 
-create table inactive_listings (
-id uuid primary key not null, 
-professional_id uuid references professional_users(id), 
-business_title varchar(64) not null, 
-business_description varchar(128) not null, 
-street_address varchar(64), 
-city varchar(64), 
-state varchar(32), 
-zip varchar(64),
-phone varchar(24), 
-email varchar(64), 
-website varchar(128), 
-category varchar (64), 
-monday varchar (64), 
-tuesday varchar (64),
-wednesday varchar (64),
-thursday varchar (64),
-friday varchar (64),
-saturday varchar (64),
-sunday varchar (64),
-instagram varchar(128),
-twitter varchar(128),
-linkedin varchar(128),
-facebook varchar(128),
-youtube varchar(128), 
-mission_statement varchar(256), 
-about varchar(256), 
-faq0 varchar(128),
-answer0 varchar(128), 
-faq1 varchar(128),
-answer1 varchar(128), 
-faq2 varchar(128), 
-answer2 varchar(128), 
-lat float, 
-lng float, 
-reason varchar(24)
+create table images (
+image_id uuid not null, 
+lising_id uuid not null, 
+featured_image boolean default false, 
+path text not null 
 );
 
+create table pending_claims (
+user_id uuid not null, 
+listing_id uuid not null
+); 
 
 create table saved_listings (
 listing_id uuid references listings(id), 
@@ -156,4 +144,4 @@ professional_user_id uuid references professional_users(id)
 create table saved_admin_Listings(
 listing_id uuid references listings(id), 
 admin_user_id uuid references admin_users(id)
-);
+)

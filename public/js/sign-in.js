@@ -2,9 +2,9 @@ $( document ).ready(function() {
     const formContainer = document.querySelector('div#form-container')
 
     if (sessionStorage.getItem('justRegistered')) {
-        $(formContainer).append(`<button class="ui button" id="submit-register" >Submit</button>`)
+        $(formContainer).append(`<div id="submit-register" style="position: absolute; right: 6rem; bottom: 2rem" class="ha_button">Submit</div>`)
     } else {
-        $(formContainer).append(`<button class="ui button" id="submit-other" >Submit</button>`)
+        $(formContainer).append(`<div id="submit-other" class="ha_button">Submit</div>`)
     }
     $( '#submit-register' ).on('click', function () {
         const userInfo = {
@@ -42,4 +42,8 @@ $( document ).ready(function() {
                 console.log(err); 
             })
     })
+    $( '#back' ).on('click', function () {
+        window.location.assign('index.html')
+    })
+
 });
