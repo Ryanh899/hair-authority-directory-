@@ -171,19 +171,27 @@ const Listings = {
       .select()
       .where("business_title", "like", `${title}%`)
       .then(async response => {
-        console.log(response)
         return response;
       })
       .catch(err => {
         console.log(err);
       });
+      console.log(listings.length)
     for (var i = 0; i < listings.length; i++) {
-      let length = await GeoCode.findDistance(listings[i], currentLocation);
-      if (length < 160) {
-        listings[i].distance = true;
-      } else {
-        listings[i].distance = false;
-      }
+      console.log(listings[i], currentLocation)
+      let length = await GeoCode.findDistance(listings[i], currentLocation)
+      length.then(response => {
+        if (response < 160) {
+          listings[i].distance = true;
+        } else {
+          listings[i].distance = false;
+        }
+      }).catch(err => {
+        console.log(err)
+      }).then(() => {
+        console.log('YUPPPP')
+      })
+      
     }
     return listings;
   },

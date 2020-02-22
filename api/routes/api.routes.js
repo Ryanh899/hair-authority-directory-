@@ -120,6 +120,7 @@ router.get('/search/:query/:location', (req, res) => {
   const searchResults = [];
   Listings.getBySearch(query, location, res)
     .then(response => {
+      console.log(response)
       response.forEach(listing => {
         console.log(listing.distance)
         if (listing.distance) {

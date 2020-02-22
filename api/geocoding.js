@@ -41,8 +41,8 @@ const GeoCoding = {
   },
   findDistance(p1, p2) {
     return new Promise((resolve, reject) => {
-      if (p1 === null || p2 === null) {
-        reject('no location given')
+      if (p1.lat === null || p2.lat === null) {
+        reject(new Error('coordinates not given'))
       } else {
         distance.get({
           index: 1,
@@ -50,13 +50,12 @@ const GeoCoding = {
           destination: `${p2.lat}, ${p2.lng}`
         },
         function (err, data) {
-          if (err) return console.log(err);
+          if (err) throw err;
           const km = data.distance.split(' ')[0]
           resolve(km)
         });
       }
     })
-
   }
 }
 
