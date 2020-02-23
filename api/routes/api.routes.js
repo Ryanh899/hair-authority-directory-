@@ -3,16 +3,29 @@ const _ = require("lodash");
 const jwt = require("jsonwebtoken");
 const Listings = require("../models/listings");
 const User = require("../models/user");
-const GeoCode = require('../geocoding')
+const GeoCode = require("../geocoding");
+const NodeGeocoder = require("node-geocoder");
 
-const googleMapClient = require('@google/maps').createClient({
-  key: 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo'
+const googleMapClient = require("@google/maps").createClient({
+  key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"
 });
 
-var distance = require('google-distance');
-distance.apiKey = 'AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo';
+var distance = require("google-distance");
+distance.apiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
 
-const trimForm = function (obj) {
+const options = {
+  provider: "google",
+
+  // Optional depending on the providers
+  httpAdapter: "https", // Default
+  apiKey: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo", // for Mapquest, OpenCage, Google Premier
+  formatter: null // 'gpx', 'string', ...
+};
+
+
+const geocoder = NodeGeocoder(options);
+
+const trimForm = function(obj) {
   // gets rid of empty responses
   Object.keys(obj).forEach(key => {
     if (obj[key] && typeof obj[key] === "object") trimForm(obj[key]);
@@ -39,16 +52,16 @@ router.post("/newListing", async (req, res) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedInfo = jwt.decode(token);
-    console.log(decodedInfo)
+    console.log(decodedInfo);
     let listing = req.body.data;
-    console.log(listing)
+    console.log(listing);
     listing.professional_id = decodedInfo.id;
     if (decodedInfo.isProfessionalUser) {
       Listings.addToPending(listing);
-      res.status(200).send('Listing added to pending')
+      res.status(200).send("Listing added to pending");
     } else if (decodedInfo.isClientUser) {
-      Listings.addToPending(listing)
-      res.status(200).send('Listing added to pending')
+      Listings.addToPending(listing);
+      res.status(200).send("Listing added to pending");
     }
   }
 });
@@ -75,95 +88,73 @@ router.put("/updateListing/:id", (req, res) => {
 router.put("/updateProfile", async (req, res) => {
   const updateInfo = req.body;
   console.log(updateInfo);
-  User.updateProfessionalInfo(updateInfo, res)
+  User.updateProfessionalInfo(updateInfo, res);
 });
 
-router.get('/search/category/:category/:location', async (req, res) => {
-  const category = req.params.category.split('+').join(' ')
-  let location = req.params.location.split('+')
+router.get("/search/category/:category/:location", async (req, res) => {
+  const category = req.params.category
+  console.log(category)
+  let location = req.params.location.split("+");
   if (location[0] === null || location[1] === null) {
     res.status(401).json({
-      message: 'no location given'
-    })
+      message: "no location given"
+    });
   }
   location = {
     lat: location[0],
     lng: location[1]
-  }
-  Listings.getByCategory(category, location)
+  };
+  Listings.getByCategory__single(category, location)
     .then(resp => {
-      let filteredResults = resp.filter(item => {
-        return item.distance === true
-      })
-      res.status(200).json(filteredResults)
+      console.log(resp)
+      
+      res.status(200).json(resp);
     })
     .catch(err => {
-      console.log(err)
-      res.status(400).json(err)
-    })
-})
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
 
-router.get('/search/:query/:location', (req, res) => {
-  const query = req.params.query
-  let location = req.params.location.split('+')
-  console.log(location)
-  console.log(query)
-  if (location[0] === 'null' || location[1] === 'null') {
+uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s))
+
+router.get("/search/:query/:location", async (req, res) => {
+  const query = req.params.query.toLowerCase();
+  
+  let location = req.params.location.split("+");
+  if (location[0] === "null" || location[1] === "null") {
     return res.status(404).json({
-      message: 'location not found'
-    })
+      message: "location not found"
+    });
   }
+  let city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
   location = {
     lat: location[0],
-    lng: location[1]
-  }
-  const searchResults = [];
-  Listings.getBySearch(query, location, res)
-    .then(response => {
-      console.log(response)
-      response.forEach(listing => {
-        console.log(listing.distance)
-        if (listing.distance) {
-          searchResults.push(listing)
-        }
-      })
-      if (response.length !== 0) {
-        Listings.getByCategory(response[0].category, location)
-          .then(async resp => {
-            for (var i = 0; i < resp.length; i++) {
-              let length = await GeoCode.findDistance(resp[i], location)
-              resp.map(item => {
-                if (length < 160) {
-                  item.distance = true
-                } else {
-                  item.distance = false
-                }
-              })
-            }
-            resp.forEach(listing => {
-              if (listing.business_title !== response[0].business_title && listing.distance)
-                searchResults.push(listing)
-            })
-            return res.status(200).json(searchResults)
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else {
-        res.status(200).json(response)
-      }
-    })
-    .catch(err => {
+    lng: location[1], 
+    city: city[0].city.toLowerCase()
+  };
+  const searchPromises = await Listings.getBySearch(query, location, city); 
+  // const catPromises = await Listings.getByCategory__search(query, location); 
+    searchPromises.then(resp => {
+      console.log('hello')
+      res.status(200).json('hello')
+    }).catch(err => {
       console.log(err)
     })
-})
 
-router.post('/saveListing/:id', async (req, res) => {
-  console.log(req.body)
+    // catPromises.then(resp => {
+    //   res.status(200).json('hello')
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+});
+
+router.post("/saveListing/:id", async (req, res) => {
+  console.log(req.body);
   const listingId = req.params.id;
   const user = await jwt.decode(req.body.token);
-  console.log(user)
-  const userId = user.id
+  console.log(user);
+  const userId = user.id;
 
   if (user.isClientUser) {
     Listings.saveListing(listingId, userId, res);
@@ -173,43 +164,46 @@ router.post('/saveListing/:id', async (req, res) => {
     Listings.saveListing_admin(listingId, userId, res);
   } else {
     res.status(401).json({
-      message: 'user type not specified'
-    })
+      message: "user type not specified"
+    });
   }
-})
+});
 
-router.get('/savedListings/:token', (req, res) => {
-  const user = jwt.decode(req.params.token)
-  console.log(user)
+router.get("/savedListings/:token", (req, res) => {
+  const user = jwt.decode(req.params.token);
+  console.log(user);
   if (user.isClientUser) {
-    Listings.getSavedListings(user.id, res)
+    Listings.getSavedListings(user.id, res);
   } else if (user.isProfessionalUser) {
-    Listings.getSavedListings_professional(user.id, res)
+    Listings.getSavedListings_professional(user.id, res);
   } else if (user.isAdminUser) {
-    Listings.getSavedListings_admin(user.id, res)
+    Listings.getSavedListings_admin(user.id, res);
   } else {
     res.status(401).json({
-      err: 'User status not provided'
-    })
+      err: "User status not provided"
+    });
   }
-})
+});
 
-router.delete('/savedListings/delete/:listingId/:token', (req, res) => {
-  const listingId = req.params.listingId
-  const user = jwt.decode(req.params.token)
+router.delete("/savedListings/delete/:listingId/:token", (req, res) => {
+  const listingId = req.params.listingId;
+  const user = jwt.decode(req.params.token);
   if (user.isClientUser) {
-    Listings.deleteSavedListing(listingId, user.id, res)
+    Listings.deleteSavedListing(listingId, user.id, res);
   } else if (user.isProfessionalUser) {
-    Listings.deleteSavedListing_professional(listingId, user.id, res)
+    Listings.deleteSavedListing_professional(listingId, user.id, res);
   } else if (user.isAdminUser) {
-    Listings.deleteSavedListing_admin(listingId, user.id, res)
+    Listings.deleteSavedListing_admin(listingId, user.id, res);
   } else {
     res.status(401).json({
-      err: 'User status not provided'
-    })
+      err: "User status not provided"
+    });
   }
+});
+
+router.get('/updateCity', async (req, res) => {
+  let resp = await Listings.addCityState(); 
+  res.status(200).json(resp)
 })
-
-
 
 module.exports = router;
