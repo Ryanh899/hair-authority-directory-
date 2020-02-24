@@ -1,9 +1,6 @@
-const googleMapsClient = require("@google/maps").createClient({
-  key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"
-});
-
-var distance = require("google-distance");
-distance.apiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
+const keys = require("./config/env-config");
+const distance = require("google-distance-matrix");
+distance.key(keys.googleDevKey);
 
 const GeoCoding = {
   rad(x) {
@@ -54,18 +51,18 @@ const GeoCoding = {
   findDistance(p1, p2) {
     return new Promise((resolve, reject) => {
       if (p1.lat === null || p2.lat === null) {
-        console.log('no location')
+        console.log("no location");
       } else if (p1.lng && p2.lng) {
         distance.get(
           {
             index: 1,
             origin: `${p1.lat}, ${p1.lng}`,
-            travelMode: 'DRIVING',
+            travelMode: "DRIVING",
             destination: `${p2.lat}, ${p2.lng}`
           },
           function(err, data) {
             if (err) {
-              return err
+              return err;
             } else {
               const km = data.distance.split(" ")[0];
               resolve(km);
@@ -73,11 +70,30 @@ const GeoCoding = {
           }
         );
       } else {
-        console.log('nada')
+        console.log("nada");
       }
     }).catch(err => {
-      console.log(err)
-    })
+      console.log(err);
+    });
+  },
+  async findDistance2(p1, p2) {
+  return new Promise((resolve, reject) => {
+    let destinations = [`${p1.city}`, `${p1.lat},${p1.lng}`];
+    let origins = [`${p2.city}`, `${p2.lat},${p2.lng}`];
+    distance.matrix(origins, destinations, function(err, distances) {
+      if (err) {
+        return console.log(err);
+      }
+      if (!distances) {
+        return console.log("no distances");
+      }
+      if (distances.status == "OK") {
+        resolve(Promise.resolve(distances.rows[0].elements[0].distance))
+      } else {
+        return
+      }
+    });
+  })
   }
 };
 

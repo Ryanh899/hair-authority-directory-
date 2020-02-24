@@ -6,12 +6,12 @@ const User = require("../models/user");
 const GeoCode = require("../geocoding");
 const NodeGeocoder = require("node-geocoder");
 
-const googleMapClient = require("@google/maps").createClient({
-  key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"
-});
+// const googleMapClient = require("@google/maps").createClient({
+//   key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"
+// });
 
-var distance = require("google-distance");
-distance.apiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
+// var distance = require("google-distance");
+// distance.apiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
 
 const options = {
   provider: "google",
@@ -100,20 +100,25 @@ router.get("/search/category/:category/:location", async (req, res) => {
       message: "no location given"
     });
   }
+  const city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
   location = {
     lat: location[0],
-    lng: location[1]
+    lng: location[1], 
+    city: city[0].city.toLowerCase()
   };
-  Listings.getByCategory__single(category, location)
-    .then(resp => {
-      console.log(resp)
-      
-      res.status(200).json(resp);
+  const searchPromises = await Listings.getByCategory__single(category, location); 
+    Promise.all(searchPromises).then(results => {
+      console.log('SEARCH PROMISES .THEN=>')
+      console.log(results)
+      return results
+    }).catch(err => {
+      console.error(err)
+      return results
     })
-    .catch(err => {
-      console.log(err);
-      res.status(400).json(err);
-    });
+    .then((results) => {
+      const filtered = results.filter(x => x !== 0)
+      res.status(200).json(filtered)
+    })
 });
 
 uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s))
@@ -127,26 +132,25 @@ router.get("/search/:query/:location", async (req, res) => {
       message: "location not found"
     });
   }
-  let city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
+  const city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
   location = {
     lat: location[0],
     lng: location[1], 
     city: city[0].city.toLowerCase()
   };
-  const searchPromises = await Listings.getBySearch(query, location, city); 
-  // const catPromises = await Listings.getByCategory__search(query, location); 
-    searchPromises.then(resp => {
-      console.log('hello')
-      res.status(200).json('hello')
+  const searchPromises = await Listings.getBySearch(query, location); 
+    Promise.all(searchPromises).then(results => {
+      console.log('SEARCH PROMISES .THEN=>')
+      console.log(results)
+      return results
     }).catch(err => {
-      console.log(err)
+      console.error(err)
+      return results
     })
-
-    // catPromises.then(resp => {
-    //   res.status(200).json('hello')
-    // }).catch(err => {
-    //   console.log(err)
-    // })
+    .then((results) => {
+      const filtered = results.filter(x => x !== 0)
+      res.status(200).json(filtered)
+    })
 });
 
 router.post("/saveListing/:id", async (req, res) => {
@@ -202,7 +206,7 @@ router.delete("/savedListings/delete/:listingId/:token", (req, res) => {
 });
 
 router.get('/updateCity', async (req, res) => {
-  let resp = await Listings.addCityState(); 
+  let resp = await Listings.addState(); 
   res.status(200).json(resp)
 })
 
