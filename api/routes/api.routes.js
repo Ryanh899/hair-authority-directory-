@@ -101,10 +101,12 @@ router.get("/search/category/:category/:location", async (req, res) => {
     });
   }
   const city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
+  console.log(city)
   location = {
     lat: location[0],
     lng: location[1], 
-    city: city[0].city.toLowerCase()
+    city: city[0].city.toLowerCase(), 
+    state: city[0].administrativeLevels.level1short
   };
   const searchPromises = await Listings.getByCategory__single(category, location); 
     Promise.all(searchPromises).then(results => {
@@ -136,8 +138,11 @@ router.get("/search/:query/:location", async (req, res) => {
   location = {
     lat: location[0],
     lng: location[1], 
-    city: city[0].city.toLowerCase()
+    city: city[0].city.toLowerCase(),
+    state: city[0].administrativeLevels.level1short
   };
+  console.log(query)
+  console.log(location)
   const searchPromises = await Listings.getBySearch(query, location); 
     Promise.all(searchPromises).then(results => {
       console.log('SEARCH PROMISES .THEN=>')

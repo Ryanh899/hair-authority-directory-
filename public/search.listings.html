@@ -15,28 +15,61 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+  <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
+      rel="stylesheet"
+    />
   <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   <link rel="stylesheet" type="text/css" href="./css/search.listings.css" />
 
 </head>
 
 <body>
-    <div class="nav-bar">
-        <p class="nav-h1" style="font-size: 20px; margin: 0px;">
-          The International Hair Authority Directory
-        </p>
-        <div id="home-button"><i class="left arrow icon"></i>Back</div>
-      </div>
   <div id="loader-div">
           <div class="ui active inverted dimmer">
             <div class="ui text loader">Loading</div>
           </div>
           <p></p>
   </div>
+  <div class="row" id="top-menu-row">
+      <div class="ui grid" id="landing-grid">
+        <div style="padding: .5rem;" class="one wide column">
+          <img
+            style="margin-left: 1rem; padding: 0px;"
+            id="ha-logo-image"
+            src="./images/logo-symbol-w.png"
+          />
+        </div>
+        <div style="padding: 1rem;" class="nine wide middle aligned column">
+          <p id="ha-title">Hair Authority Directory</p>
+        </div>
+        <div id="dashboard-column" class="two wide column"></div>
+        <div id="sign-in-column" class="two wide column">
+          <!-- sign in button  -->
+          <div id="sign-in-button">
+            <p class="top-button" id="sign-in">Sign In</p>
+          </div>
+        </div>
+        <!-- register button  -->
+        <div id="register-column" class="two wide column">
+          <div style="border-bottom: solid; border-color: #8b786d; border-width: 5px;" id="listBusiness-button">
+            <p style="color: white;" class="top-button" id="register"><i class="store icon" ></i>List Your Business</p>
+          </div>
+        </div>
+      </div>
+    </div>
   <div id="page-container">
     <div style="width: 100%; margin: 0px;" class="ui grid">
       <div class="row">
-        <div id="listings-column" class="eight wide column"></div>
+        <div class="one wide column"></div>
+        <div class="fourteen wide column">
+          <p id="listing-column-titlte" >Search Results for: </p>
+          <hr style="padding: 0px;" >
+        </div>
+        <div class="one wide column"></div>
+        <div class="one wide column"></div>
+        <div id="listings-column" class="seven wide column"></div>
         <div style="margin-top: 1rem;" class="seven wide column">
           <div id="preview-container">
               <div  class="ui search"  >
