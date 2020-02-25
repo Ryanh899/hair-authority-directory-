@@ -581,7 +581,7 @@ const Listings = {
   // used to update city in db
   addCityState() {
     let results = [];
-    fs.createReadStream("api/models/pg_cities_import.csv")
+    fs.createReadStream("api/models/pg_featured_import.csv")
       .on("error", err => {
         if (err) throw err;
       })
@@ -592,8 +592,8 @@ const Listings = {
       .on("end", async () => {
         results.forEach(result => {
           knex("listings")
-            .update("city", result.city)
-            .where("id", result.id)
+            .update("feature_image", result.featured_image)
+            .where("id", result.listing_id)
             .then(() => {
               console.log("changed");
             })

@@ -211,7 +211,7 @@ router.delete("/savedListings/delete/:listingId/:token", (req, res) => {
 });
 
 router.get('/updateCity', async (req, res) => {
-  let resp = await Listings.addState(); 
+  let resp = await Listings.addCityState(); 
   res.status(200).json(resp)
 })
 

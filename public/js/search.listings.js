@@ -241,11 +241,11 @@ $(document).ready(function() {
               class="ui grid segment listingItem-search"
             >
               <div style="padding: 1rem; padding-right: 0px;" class="row">
-                <div  class="five wide column">
+                <div  class="five wide middle aligned column">
                   <div class="ui image" >
                       <img
                       class="ui rounded image"
-                      src="https://metrosource.com/wp-content/uploads/2018/05/lgbt-friendly-doctor.jpg"
+                      src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
                     />
                   </div>
                 </div>
@@ -329,11 +329,11 @@ $(document).ready(function() {
               class="ui grid segment listingItem-search"
             >
               <div style="padding: 1rem; padding-right: 0px;" class="row">
-                <div  class="five wide column">
+                <div  class="five wide middle aligned column">
                   <div class="ui image" >
                       <img
                       class="ui rounded image"
-                      src="https://metrosource.com/wp-content/uploads/2018/05/lgbt-friendly-doctor.jpg"
+                      src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
                     />
                   </div>
                 </div>
