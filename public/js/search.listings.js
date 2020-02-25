@@ -1,44 +1,44 @@
-const categories = [
-  {
-    title: "Dermatologists"
-  },
-  {
-    title: "Hair Care Salons"
-  },
-  {
-    title: "Hair Loss / Hair Care Products & Treatments"
-  },
-  {
-    title: "Hair Replacement & Hair Systems"
-  },
-  {
-    title: "Laser Therapy"
-  },
-  {
-    title: "Medial + Hair Transplants"
-  },
-  {
-    title: "Trichologist"
-  },
-  {
-    title: "Wigs, Extensions, Hair Additions"
-  },
-  {
-    title: "The Hair Club",
-    abbreviation: ""
-  },
-  {
-    title: "ARTAS Robotic Hair Restoration System"
-  },
-  {
-    title: "World Trichology Society",
-    abbreviation: "WTS"
-  },
-  {
-    title: "The International Society of Hair Restoration Surgery (ISHRS)",
-    abbreviation: "ISHRS"
-  }
-];
+// const categories = [
+//   {
+//     title: "Dermatologists"
+//   },
+//   {
+//     title: "Hair Care Salons"
+//   },
+//   {
+//     title: "Hair Loss / Hair Care Products & Treatments"
+//   },
+//   {
+//     title: "Hair Replacement & Hair Systems"
+//   },
+//   {
+//     title: "Laser Therapy"
+//   },
+//   {
+//     title: "Medical + Hair Transplants"
+//   },
+//   {
+//     title: "Trichologist"
+//   },
+//   {
+//     title: "Wigs, Extensions, Hair Additions"
+//   },
+//   {
+//     title: "The Hair Club",
+//     abbreviation: ""
+//   },
+//   {
+//     title: "ARTAS Robotic Hair Restoration System"
+//   },
+//   {
+//     title: "World Trichology Society",
+//     abbreviation: "WTS"
+//   },
+//   {
+//     title: "The International Society of Hair Restoration Surgery (ISHRS)",
+//     abbreviation: "ISHRS"
+//   }
+// ];
 
 const newCategories = [
   { title: "Hair Loss / Hair Care Products &amp" },
@@ -66,7 +66,7 @@ myAxios.interceptors.response.use(
   function(error) {
     console.log(error);
     if (error.response.status === 401) {
-      // return authHelper.logOut('./sign-in.html')
+      console.log(error.response)
     } else if (error.response.status === 404) {
       console.log("coordinates not found");
     } else {
@@ -151,7 +151,7 @@ $(document).ready(function() {
     { title: "Hair Loss / Hair Care Products & Treatments" },
     { title: "Hair Replacement & Hair Systems" },
     { title: "Laser Therapy" },
-    { title: "Medial / Hair Transplants" },
+    { title: "Medical / Hair Transplants" },
     { title: "Trichologist" },
     { title: "Medical Hair Restoration" },
     { title: "Wigs / Extensions & Hair Additions" },
@@ -164,7 +164,7 @@ $(document).ready(function() {
     }
   ];
 
-  $(".ui.search").search({
+  $(".ui #seach-search").search({
     source: categories,
     searchFields: ["title", "abbreviation"],
     fullTextSearch: false,
@@ -256,7 +256,7 @@ $(document).ready(function() {
                       class="ten wide column"
                     >
                       <p class="listingTitle-search">
-                        ${listing.business_title}
+                        ${listing.business_title} <i class="tiny check circle icon" style="color: #79bcb8" ></i>
                       </p>
                       <p class="listingSubtitle-search">
                         ${listing.category || "" }
@@ -297,11 +297,12 @@ $(document).ready(function() {
         console.log(err);
       });
   } else {
+    let newSearch = category.replace(/\//g, '+');
     myAxios
       .get(
         API_URL +
           "search/category/" +
-          search +
+          newSearch +
           "/" +
           location.lat +
           "+" +
@@ -317,7 +318,6 @@ $(document).ready(function() {
           );
           $(loader).fadeOut();
           $(page).fadeIn();
-          $('#listing-column-title').append(`"${search}"`)
           getGeolocation();
         } else {
           $("#listings-column")
@@ -325,7 +325,7 @@ $(document).ready(function() {
           response.data.forEach(listing => {
             $("#listings-column")
               .append(`<div
-              style="margin-bottom: 1rem; "
+              style="margin-bottom: 1rem; background: #f8f8f8"
               class="ui grid segment listingItem-search"
             >
               <div style="padding: 1rem; padding-right: 0px;" class="row">
@@ -344,7 +344,7 @@ $(document).ready(function() {
                       class="ten wide column"
                     >
                       <p class="listingTitle-search">
-                        ${listing.business_title}
+                        ${listing.business_title} <i class="small check circle icon" style="color: #79bcb8" ></i>
                       </p>
                       <p class="listingSubtitle-search">
                         ${listing.category || "" }

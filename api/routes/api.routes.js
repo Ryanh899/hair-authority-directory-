@@ -92,7 +92,7 @@ router.put("/updateProfile", async (req, res) => {
 });
 
 router.get("/search/category/:category/:location", async (req, res) => {
-  const category = req.params.category
+  const category = req.params.category.replace(/\+/g, "/");
   console.log(category)
   let location = req.params.location.split("+");
   if (location[0] === null || location[1] === null) {
