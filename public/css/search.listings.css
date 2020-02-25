@@ -1,3 +1,4 @@
+  
 .nav-bar {
   width: 100%;
   margin: 0px;
@@ -7,10 +8,14 @@
   position: relative;
 }
 
+
+
 #page-container {
   width: 100vw;
-
   margin: 0px;
+  max-height: 100vh;
+  position: relative;
+  overflow: hidden;
 }
 
 .nav-h1 {
@@ -30,6 +35,11 @@
   text-align: center;
 }
 
+#search-semantic {
+    width: 33.3vw;
+    border: none;
+  }
+
 #listings-column {
   /* border: solid;
     border-width: 0px 2.5px 2.5px 2.5px;
@@ -41,13 +51,16 @@
   height: 90vh;
   display: block;
   overflow: scroll;
+  overflow-x: hidden;
 }
+#listings-column::-webkit-scrollbar { width: 0 !important }
+#listings-column { overflow: -moz-scrollbars-none; }
+#listings-column { -ms-overflow-style: none; }
+
 
 #preview-container {
-  /* border: solid;
-    border-width: 5px;
-    border-color: rgba(39, 76, 119, 1);  */
-  padding: 2.5rem;
+  padding: 1.5rem;
+  padding-top: 2.5rem;
 }
 
 #map-container {
@@ -55,9 +68,10 @@
   border-width: 10px;
   border-color: #8b786d;
   height: 100%;
+  width: 100%;
   position: relative;
   overflow: hidden;
-  max-height: 61vh;
+  max-height: 65vh;
 }
 
 #map {
@@ -109,6 +123,10 @@
   font-weight: 500;
   font-size: 16px;
   color: grey;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 #listing-tagline-search {
@@ -129,7 +147,7 @@
 }
 
 .listing-image {
-  position: absolute;
+  position: relative;
   /* max-height: 100%; */
   height: 100%;
   max-width: 100%;
@@ -141,9 +159,33 @@
   font-size: 16px;
   color: grey;
   margin: 0px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .tag, .listing-tagline-search {
     display: table-cell;
     vertical-align: top;
+  }
+
+  #back-column {
+    padding: 0px;
+  }
+  
+  #back-button {
+    background: #9dd9d2;
+    font-family: "lato", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    height: 101%;
+    display: table;
+    width: 100%;
+  }
+
+  .marker-text {
+      font-family: 'Raleway';
+      font-weight: 700;
+      font-size: 14px;
   }

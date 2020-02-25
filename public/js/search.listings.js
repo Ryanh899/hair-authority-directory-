@@ -115,7 +115,9 @@ $(document).ready(function() {
     );
     let mapProp = {
       center: geolocate,
-      zoom: 10
+      zoom: 9, 
+      disableDefaultUI: true,
+      zoomControl: true
     };
     let map = new google.maps.Map(document.getElementById("map"), mapProp);
     if (markerInfo.length > 0) {
@@ -126,10 +128,21 @@ $(document).ready(function() {
             lng: Number(item.lng)
           },
           map: map,
-          title: "Hello World!"
+          title: item.business_title, 
+          animation:google.maps.Animation.DROP, 
+          
+        });
+        let infowindow = new google.maps.InfoWindow({
+          content: `<p class="markerText" >${item.business_title}</p> <p class="markerText" >${item.full_address}</p>`
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
         });
       });
     }
+    
+    $(loader).fadeOut();
+          $(page).fadeIn();
   }
 
   const categories = [
@@ -158,8 +171,12 @@ $(document).ready(function() {
     showNoResults: false
   });
 
+  $("body").on("click", "#back-button", function() {
+    window.history.back()
+  });
+
   $("body").on("click", "#search-button", function() {
-    const search = document.querySelector("input#search-semantic").value.trim();
+    const search = document.querySelector("input#search-search").value.trim();
     console.log(search);
 
     sessionStorage.setItem("searchQuery", search);
@@ -206,6 +223,95 @@ $(document).ready(function() {
       .then(response => {
         console.log(response);
         if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(loader).fadeOut();
+          $(page).fadeIn();
+          getGeolocation();
+        } else {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          response.data.forEach(listing => {
+            $("#listings-column")
+              .append(`<div
+              style="margin-bottom: 1rem; background: #f8f8f8"
+              class="ui grid segment listingItem-search"
+            >
+              <div style="padding: 1rem; padding-right: 0px;" class="row">
+                <div  class="five wide column">
+                  <div class="ui image" >
+                      <img
+                      class="ui rounded image"
+                      src="https://metrosource.com/wp-content/uploads/2018/05/lgbt-friendly-doctor.jpg"
+                    />
+                  </div>
+                </div>
+                <div class="eleven wide column">
+                  <div class="ui grid">
+                      <div
+                      style="padding: 1rem 0rem 0rem .5rem;"
+                      class="ten wide column"
+                    >
+                      <p class="listingTitle-search">
+                        ${listing.business_title}
+                      </p>
+                      <p class="listingSubtitle-search">
+                        ${listing.category || "" }
+                      </p>
+                      
+                    </div>
+                    <div
+                    class="six wide computer only column"
+                  >
+                    <p class="listing-info-text">
+                      <i style="color: #79bcb8;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                    </p>
+                    <p class="listing-info-text">
+                      <i style="color: #79bcb8;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                    </p>
+                    <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                  </div>
+                  
+                  <div class="fourteen wide column">
+                    <p style="margin-top: 1rem;" id="listing-tagline-search">
+                      ${listing.business_description} 
+                    </p>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+            </div>`);
+          });
+          
+          response.data.forEach(item => {
+            markerInfo.push(item);
+          });
+
+          getGeolocation();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    myAxios
+      .get(
+        API_URL +
+          "search/category/" +
+          search +
+          "/" +
+          location.lat +
+          "+" +
+          location.lng
+      )
+      .then(response => {
+        console.log(response)
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
           $("#listings-column").append(
             `<p id="no-results-text" >There are no results for "${search}" in your area.`
           );
@@ -214,6 +320,8 @@ $(document).ready(function() {
           $('#listing-column-title').append(`"${search}"`)
           getGeolocation();
         } else {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
           response.data.forEach(listing => {
             $("#listings-column")
               .append(`<div
@@ -250,7 +358,7 @@ $(document).ready(function() {
                       <i style="color: #79bcb8;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
                     </p>
                     <p class="listing-info-text">
-                      <i style="color: #79bcb8;" class="location small arrow icon" ></i>${listing.city || listing.state}
+                      <i style="color: #79bcb8;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
                     </p>
                     <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
                   </div>
@@ -265,76 +373,10 @@ $(document).ready(function() {
                 </div>
             </div>`);
           });
-          $(loader).fadeOut();
-          $(page).fadeIn();
-          $('#listing-column-title').append(`"${search}"`)
+          
           response.data.forEach(item => {
             markerInfo.push(item);
           });
-
-          getGeolocation();
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  } else {
-    myAxios
-      .get(
-        API_URL +
-          "search/category/" +
-          search +
-          "/" +
-          location.lat +
-          "+" +
-          location.lng
-      )
-      .then(response => {
-        console.log(response)
-        if (response.data.length === 0 || response.status === 304) {
-          $("#listings-column").append(
-            `<p id="no-results-text" >There are no results for "${search}" in your area.`
-          );
-          $(loader).fadeOut();
-          $(page).fadeIn();
-          $('#listing-column-title').append(`"${search}"`)
-          getGeolocation();
-        } else {
-          response.data.forEach(listing => {
-            $("#listings-column")
-              .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
-              <div class="row">
-                <div class="six wide middle aligned column">
-                  <p class="listingTitle">
-                    ${listing.business_title}
-                  </p>
-                  <p class="">
-                      ${listing.category}
-                    </p>
-                </div>
-                <div class="six wide column"></div>
-                <div class="four wide column">
-                  <a id="${listing.id}" class="viewButton">
-                    <div style="color: white;" class="listing-buttons " id="${listing.id}">
-                      <i style="pointer-events:none" class="eye icon"></i> View
-                    </div>
-                  </a>
-                  <a id="${listing.id}" class="saveButton">
-                    <div  style="color: white;" class="listing-buttons ">
-                      <i id="${listing.id}" style="pointer-events:none" style="color: red;" class="save icon"></i>
-                      Save
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>`);
-          });
-          $(loader).fadeOut();
-          $(page).fadeIn();
-          response.data.forEach(item => {
-            markerInfo.push(item);
-          });
-          $('#listing-column-title').append(`"${search}"`)
           getGeolocation();
         }
       })
