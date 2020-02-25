@@ -211,42 +211,67 @@ $(document).ready(function() {
           );
           $(loader).fadeOut();
           $(page).fadeIn();
+          $('#listing-column-title').append(`"${search}"`)
           getGeolocation();
         } else {
           response.data.forEach(listing => {
             $("#listings-column")
-              .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
-                <div class="row">
-                  <div class="six wide middle aligned column">
-                    <p class="listingTitle">
-                      ${listing.business_title}
-                    </p>
-                    <p class="">
-                      ${listing.category}
-                    </p>
-                  </div>
-                  <div class="six wide column"></div>
-                  <div class="four wide column">
-                    <a id="${listing.id}" class="viewButton">
-                      <div style="color: white;" class="listing-buttons " id="${listing.id}">
-                        <i style="pointer-events:none" class="eye icon"></i> View
-                      </div>
-                    </a>
-                    <a id="${listing.id}" class="saveButton">
-                      <div style="color: white;" class="listing-buttons ">
-                        <i style="pointer-events:none" style="color: red;" class="save icon"></i>
-                        Save
-                      </div>
-                    </a>
+              .append(`<div
+              style="margin-bottom: 1rem; "
+              class="ui grid segment listingItem-search"
+            >
+              <div style="padding: 1rem; padding-right: 0px;" class="row">
+                <div  class="five wide column">
+                  <div class="ui image" >
+                      <img
+                      class="ui rounded image"
+                      src="https://metrosource.com/wp-content/uploads/2018/05/lgbt-friendly-doctor.jpg"
+                    />
                   </div>
                 </div>
-              </div>`);
+                <div class="eleven wide column">
+                  <div class="ui grid">
+                      <div
+                      style="padding: 1rem 0rem 0rem .5rem;"
+                      class="ten wide column"
+                    >
+                      <p class="listingTitle-search">
+                        ${listing.business_title}
+                      </p>
+                      <p class="listingSubtitle-search">
+                        ${listing.category || "" }
+                      </p>
+                      
+                    </div>
+                    <div
+                    class="six wide computer only column"
+                  >
+                    <p class="listing-info-text">
+                      <i style="color: #79bcb8;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                    </p>
+                    <p class="listing-info-text">
+                      <i style="color: #79bcb8;" class="location small arrow icon" ></i>${listing.city || listing.state}
+                    </p>
+                    <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                  </div>
+                  
+                  <div class="fourteen wide column">
+                    <p style="margin-top: 1rem;" id="listing-tagline-search">
+                      ${listing.business_description} 
+                    </p>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+            </div>`);
           });
           $(loader).fadeOut();
           $(page).fadeIn();
+          $('#listing-column-title').append(`"${search}"`)
           response.data.forEach(item => {
             markerInfo.push(item);
           });
+
           getGeolocation();
         }
       })
@@ -272,6 +297,7 @@ $(document).ready(function() {
           );
           $(loader).fadeOut();
           $(page).fadeIn();
+          $('#listing-column-title').append(`"${search}"`)
           getGeolocation();
         } else {
           response.data.forEach(listing => {
@@ -308,6 +334,7 @@ $(document).ready(function() {
           response.data.forEach(item => {
             markerInfo.push(item);
           });
+          $('#listing-column-title').append(`"${search}"`)
           getGeolocation();
         }
       })

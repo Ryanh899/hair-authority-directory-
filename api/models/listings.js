@@ -208,6 +208,7 @@ const Listings = {
   async getBySearch(title, currentLocation) {
     const listings = await knex("listings")
       .select()
+      .limit(50)
       .whereRaw(`LOWER(business_title) LIKE ? and LOWER(state) = ?`, [`%${title.toLowerCase()}%`, currentLocation.state.toLowerCase()])
       .then(async response => {
         return uniqueArray(response);
@@ -215,21 +216,22 @@ const Listings = {
       .catch(err => {
         console.log(err);
       });
-    return listings.map((listing, index) => {
-      return new Promise(async (resolve, reject) => {
-        let distance = await GeoCode.findDistance2(
-          { lat: listing.lat, lng: listing.lng, city: listing.city },
-          currentLocation
-        );
-        if (distance && distance.value < 16093400) {
-          console.log("LESS");
-          resolve(listing);
-        } else {
-          console.log("GREATER");
-          resolve(0);
-        }
-      });
-    });
+      return listings
+    // return listings.map((listing, index) => {
+    //   return new Promise(async (resolve, reject) => {
+    //     let distance = await GeoCode.findDistance2(
+    //       { lat: listing.lat, lng: listing.lng, city: listing.city },
+    //       currentLocation
+    //     );
+    //     if (distance && distance.value < 16093400) {
+    //       console.log("LESS");
+    //       resolve(listing);
+    //     } else {
+    //       console.log("GREATER");
+    //       resolve(0);
+    //     }
+    //   });
+    // });
   },
   getById(id, cb) {
     return knex("listings")
