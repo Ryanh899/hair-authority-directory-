@@ -32,6 +32,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
     <!-- for nav bar  -->
     <link
@@ -40,171 +44,106 @@
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/flickity@2/dist/flickity.min.css"
-    />
     <!-- <link rel="stylesheet" type="text/css" href="./css/search.listings.css" /> -->
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="stylesheet" type="text/css" href="./css/listing.carousel.css" />
     <link rel="stylesheet" type="text/css" href="./css/listing.css" />
   </head>
 
   <body>
-    <div class="nav-bar">
-      <p class="nav-h1" style="font-size: 20px; margin: 0px;">
-        The International Hair Authority Directory
-      </p>
-      <div id="back-button"><i class="left arrow icon"></i>Back</div>
-      <!-- <div style="margin-top: 1rem;" class="ui search">
-        <div style="width: 35%;" class="ui icon input search">
-          <input
-            id="search-semantic"
-            class="prompt"
-            type="text"
-            placeholder="Ex. Hair Restoration, Hair Transplant, Laser Therapy"
-          />
-          <i id="search-icon" class="search icon"></i>
-          <div style="margin-left: 8rem;" class="results"></div>
-        </div>
-        <button style="margin-top: 1rem;" class="ui button" id="search-button">
-          Search
-        </button>
-      </div> -->
-    </div>
-    <div id="loader-div">
-      <div class="ui active inverted dimmer">
-        <div class="ui text loader">Loading</div>
-      </div>
-      <p></p>
-    </div>
-    <div class="ui grid" id="page-container">
-      <div class="row" id="image-row">
-        <div id="wrapper">
-          <span
-            id="controlL"
-            class="left-controls"
-            role="button"
-            aria-label="See Previous Modules"
-          >
-            <b
-              class="fa fa-chevron-left fa-chevron-left-extra"
-              aria-hidden="true"
-            ></b>
-          </span>
-          <div class="module-section clearfix">
-            <ul id="content">
-              <li class="card effect1">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/DesktopImages/2018_Everything-Bagel-Butter_20390-600.jpg?ext=.jpg"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-              <li class="card">
-                <div class="inside-top">
-                  <img
-                    class="ui image carousel-image"
-                    src="https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/24017_sfs-bagel-v2-14"
-                  />
-                </div>
-              </li>
-            </ul>
+    <div class="ui grid" id="listing-page-container">
+      <div class="row" id="top-menu-row">
+        <div class="ui grid" id="landing-grid">
+          <div id="back-column" class="one wide column">
+            <div id="back-button">
+              <p class="top-button" id="sign-in">
+                <i class="left arrow icon"></i>
+              </p>
+            </div>
           </div>
-          <span
-            id="controlR"
-            class="right-controls"
-            role="button"
-            aria-label="See Previous Modules"
-          >
-            <b
-              class="fa fa-chevron-right fa-chevron-right-extra"
-              aria-hidden="true"
-            ></b>
-          </span>
+          <div style="padding: .5rem;" class="one wide column">
+            <img
+              style="margin-left: 1rem; padding: 0px;"
+              id="ha-logo-image"
+              src="./images/logo-symbol-w.png"
+            />
+          </div>
+          <div style="padding: 1rem;" class="nine wide middle aligned column">
+            <p id="ha-title">Hair Authority Directory</p>
+          </div>
+          <div id="dashboard-column" class="one wide column"></div>
+          <div id="sign-in-column" class="two wide column">
+            <!-- sign in button  -->
+            <div id="sign-in-button">
+              <p class="top-button" id="sign-in">Sign In</p>
+            </div>
+          </div>
+          <!-- register button  -->
+          <div id="register-column" class="two wide column">
+            <div
+              style="border-bottom: solid; border-color: #8b786d; border-width: 5px;"
+              id="listBusiness-button"
+            >
+              <p style="color: white;" class="top-button" id="register">
+                <i class="store icon"></i>List Your Business
+              </p>
+            </div>
+          </div>
         </div>
+      </div>
+      <div id="loader-div">
+        <div class="ui active inverted dimmer">
+          <div class="ui text loader">Loading</div>
+        </div>
+        <p></p>
+      </div>
+      <div style="padding-bottom: 0px; " class="row">
+        <div class="two wide column"></div>
+        <div
+          style="background: #f5f5f5; padding-bottom: 0px;padding-top: 1rem;"
+          class="ten wide column"
+        >
+          <div id="header-image" class="ui image"></div>
+          <div id="title-section"></div>
+          <hr />
+        </div>
+        <div class="four wide column"></div>
       </div>
       <!-- listing content section  -->
-      <div id="first-row" class="row">
-        <div class="one wide column"></div>
-        <div id="listing-column" class="ten wide column">
-          <div id="title-section">
-            
-            <hr />
+      <div style="padding-top: 0px;" id="first-row" class="row">
+        <div class="two wide column"></div>
+        <div id="listing-column" class="ten wide segment column">
+          <div class="ui right very close rail">
+            <div class="ui raised segment">
+              <p id="contact-text">Contact</p>
+              <hr id="contact-hr" />
+              <div id="contact-list" class="ui middle aligned divided list">
+                <div
+                  id="phone-div"
+                  style="padding: 1rem;"
+                  class="item contact-item"
+                >
+                  <i class="phone icon"></i>
+                  <div id="phone-content" class="content"></div>
+                </div>
+                <div
+                  id="email-div"
+                  style="padding: 1rem;"
+                  class="item contact-item"
+                >
+                  <i class="mail icon"></i>
+                  <div id="email-content" class="content"></div>
+                </div>
+              </div>
+              <div class="social_media_div"></div>
+            </div>
+            <div id="social-media" class="ui bottom attached raised center aligned segment">
+                
+            </div>
           </div>
+          <div id="title-section"></div>
           <div id="about-section">
+            <p id="section-header">Description</p>
             <hr />
           </div>
           <div id="location-section">
@@ -216,63 +155,52 @@
               <div id="map"></div>
               <div id="demo"></div>
             </div>
-            <div id="get-direct" >
+            <div id="get-direct">
               <a id="location-address"></a>
             </div>
-            <hr>
+            <hr />
           </div>
           <div id="youtube">
             <p class="section-header">Hours</p>
           </div>
         </div>
-        <div class="four wide column">
-          <div id="store-info-div">
+        <div class="four wide  column ">
+          <!-- <div class="ui segment" id="store-info-div">
             <p id="contact-text">Contact</p>
             <hr id="contact-hr" />
             <div id="contact-list" class="ui middle aligned divided list">
-              <div style="padding: 1rem;" class="item contact-item">
+              <div
+                id="phone-div"
+                style="padding: 1rem;"
+                class="item contact-item"
+              >
                 <i class="phone icon"></i>
                 <div id="phone-content" class="content"></div>
               </div>
-              <div style="padding: 1rem;" class="item contact-item">
+              <div
+                id="email-div"
+                style="padding: 1rem;"
+                class="item contact-item"
+              >
                 <i class="mail icon"></i>
                 <div id="email-content" class="content"></div>
               </div>
-              <div
-                id="linkedin-div"
-                style="padding: 1rem;"
-                class="item contact-item"
-              >
-                <i class="linkedin icon"></i>
-                <div id="linkedin-content" class="content"></div>
-              </div>
-              <div
-                id="instagram-div"
-                style="padding: 1rem;"
-                class="item contact-item"
-              >
-                <i class="instagram icon"></i>
-                <div id="instagram-content" class="content"></div>
-              </div>
-              <div
-                id="facebook-div"
-                style="padding: 1rem;"
-                class="item contact-item"
-              >
-                <i class="facebook icon"></i>
-                <div id="facebook-content" class="content"></div>
-              </div>
+              
+            </div>
+            <div class="social_media_div">
+
             </div>
           </div>
-          <button  id="listing-header-buttons" class="ui button ">
-              <i class="save icon"></i>Save
-            </button>
-            <button
-              id="listing-header-buttons"
-              class="ui button listing-header-buttons"
-            >
-              <i class="share icon"></i>Share
-            </button>
+          
+          <button id="listing-header-buttons" class="ui button ">
+            <i class="save icon"></i>Save
+          </button>
+          <button
+            id="listing-header-buttons"
+            class="ui button listing-header-buttons"
+          >
+            <i class="share icon"></i>Share
+          </button> -->
         </div>
         <div class="one wide column"></div>
       </div>

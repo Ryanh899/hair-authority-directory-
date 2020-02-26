@@ -39,36 +39,39 @@ var authHelper = {
 
 const API_URL = "http://localhost:3000/api/";
 
-
 $(document).ready(function() {
   const page = document.querySelector("div#page-container");
   const loader = document.querySelector("div#loader-div");
   const listingColumn = document.querySelector("div#listing-column");
-  const titleSection = document.querySelector('div#title-section')
-  const contactLine = document.querySelector('hr#contact-hr')
-  const locationAddr = document.querySelector('a#location-address')
+  const titleSection = document.querySelector("div#title-section");
+  const contactLine = document.querySelector("hr#contact-hr");
+  const locationAddr = document.querySelector("a#location-address");
+  const carousel = document.querySelector("ul#content");
 
   $(page).css("dislplay", "none");
 
   function getGeolocation() {
-    console.log('map')
+    console.log("map");
     navigator.geolocation.getCurrentPosition(drawMap);
   }
-  
+
   function drawMap(geoPos) {
-    geolocate = new google.maps.LatLng(geoPos.coords.latitude, geoPos.coords.longitude);
+    geolocate = new google.maps.LatLng(
+      geoPos.coords.latitude,
+      geoPos.coords.longitude
+    );
     let mapProp = {
       center: geolocate,
-      zoom: 10,
+      zoom: 10
     };
-    let map = new google.maps.Map(document.getElementById('map'), mapProp);
+    let map = new google.maps.Map(document.getElementById("map"), mapProp);
   }
-  
+
   function showPosition(position) {
-    sessionStorage.setItem('lat', position.coords.latitude)
-    sessionStorage.setItem('lng', position.coords.longitude)
+    sessionStorage.setItem("lat", position.coords.latitude);
+    sessionStorage.setItem("lng", position.coords.longitude);
   }
-  
+
   const currentLocation = {
     lat: sessionStorage.getItem("lat"),
     lng: sessionStorage.getItem("lng")
@@ -83,16 +86,16 @@ $(document).ready(function() {
   }
 
   function showPosition(position) {
-    sessionStorage.setItem('lat', position.coords.latitude)
-    sessionStorage.setItem('lng', position.coords.longitude)
+    sessionStorage.setItem("lat", position.coords.latitude);
+    sessionStorage.setItem("lng", position.coords.longitude);
   }
 
   let location = {
-    lat: sessionStorage.getItem('lat'),
-    lng: sessionStorage.getItem('lng')
-  }
+    lat: sessionStorage.getItem("lat"),
+    lng: sessionStorage.getItem("lng")
+  };
 
-  getGeolocation()
+  getGeolocation();
 
   const currentListing = sessionStorage.getItem("currentListing");
 
@@ -116,11 +119,18 @@ $(document).ready(function() {
     );
   });
 
-  function splitPhone (number) {
-      let newNumber = number.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3');
-      console.log(newNumber)
-      return newNumber
+  function splitPhone(number) {
+    if (number) {
+      let newNumber = number.replace(/(\d{3})(\d{4})(\d{4})/, "$1 $2 $3");
+      console.log(newNumber);
+      return newNumber;
+    } else {
+      return;
+    }
   }
+
+  console.log(currentListing);
+  console.log(currentLocation);
   if (currentListing && currentLocation) {
     myAxios
       .get(API_URL + "listing/" + currentListing)
@@ -129,11 +139,30 @@ $(document).ready(function() {
         $(page).css("display", "");
         console.log(response);
 
-        const listing = response.data[0];
-        splitPhone(listing.phone)
+        const listing = response.data;
+        splitPhone(listing.phone);
+        // let filteredImg = listing.images.filter(x => x.image_path !== "true");
+        // filteredImg.forEach(image => {
+        //   if (image.image_path !== "false" ) {
+        //     $(carousel).append(`<li class="ui card">
+        //     <div class="ui image">
+        //       <img
+        //         class="ui fluid image"
+        //         src="https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path || "placeholder.png"}"
+        //       />
+        //     </div>
+        //   </li>`);
+        //   } else {
+        //     console.log('no path')
+        //   }
+        // });
+
+        $("#header-image").append(
+          ` <img class="ui rounded image" src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}" />`
+        );
 
         $(titleSection).prepend(
-          `<p  class="listing_category" >${listing.category}</p>  <p style="color: #446a7f;" id="claimed" >Claimed <i style="color: #446a7f;" class="check icon" ></i></p>`
+          `<p  class="listing_category" >${listing.category}</p>  <p style="color: #3aa7a3;;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`
         );
 
         $(titleSection).prepend(
@@ -141,33 +170,71 @@ $(document).ready(function() {
             listing.business_title +
             "</h1>"
         );
-        $('#phone-content').append(`<a class="contact-info" >${listing.phone}</a>`)
-        $('#email-content').append(`<a class="contact-info" >${listing.email}</a>`)
 
-        if (listing.instagram) {
-          $('#instagram-content').append(`<a class="contact-info" >${listing.instagram}</a>`)
+        if (listing.phone) {
+          $("#phone-content").append(
+            `<a class="contact-info" >${listing.phone}</a>`
+          );
         } else {
-          $('#instagram-div').css('display', 'none')
-        }
-        
-        if (listing.linkedin) {
-          $('#linkedin-content').append(`<a class="contact-info" >${listing.linkedin}</a>`)
-        } else {
-          $('#linkedin-div').css('display', 'none')
+          $("#phone-div").css("display", "none");
         }
 
-        if (listing.facebook) {
-          $('#facebook-content').append(`<a class="contact-info" >${listing.facebook}</a>`)
+        if (listing.email) {
+          $("#email-content").append(
+            `<a class="contact-info" >${listing.email}</a>`
+          );
         } else {
-          $('#facebook-div').css('display', 'none')
+          $("#email-div").css("display", "none");
         }
 
-        $('#about-section').prepend(
+        if (listing.socialMedia) {
+          if (listing.socialMedia.some(x => x.platform === "instagram")) {
+            const ig = listing.socialMedia.filter(
+              x => x.platform === "instagram"
+            );
+            $("#social-media").append(
+              `<a  class="contact-info" href="${ig[0].url}" ><button style="background: #3f729b;"  class="ui circular facebook icon button">
+                <i style="background: #3f729b;" class="instagram icon"></i>
+              </button></a>`
+            );
+          } else {
+            $("#instagram-div").css("display", "none");
+          }
+
+          if (listing.socialMedia.some(x => x.platform === "linkedin")) {
+            const linkedin = listing.socialMedia.filter(
+              x => x.platform === "linkedin"
+            );
+            $("#social-media").append(
+              `<a class="contact-info" href="${linkedin[0].url}" ><button class="ui circular facebook icon button">
+                <i class="linkedin icon"></i>
+              </button></a>`
+            );
+          } else {
+            $("#linkedin-div").css("display", "none");
+          }
+
+          if (listing.socialMedia.some(x => x.platform === "facebook")) {
+            const facebook = listing.socialMedia.filter(
+              x => x.platform === "facebook"
+            );
+            $("#social-media").append(
+              `<a class="contact-info" href="${facebook[0].url}" ><button class="ui circular facebook icon button">
+                <i class="facebook icon"></i>
+              </button></a>`
+            );
+          } else {
+            $("#facebook-div").css("display", "none");
+          }
+        }
+
+        $("#section-header").append(
           `<p id="listing_description" >${listing.business_description}</p>`
         );
 
-        $(locationAddr).append(`<i class="directions icon" ></i>  ${listing.street_address}, ${listing.city} ${listing.state}, ${listing.zip}  `)
-        
+        $(locationAddr).append(
+          `<i class="directions icon" ></i>  ${listing.full_address}  `
+        );
       })
       .catch(err => {
         console.log(err);

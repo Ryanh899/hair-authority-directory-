@@ -239,12 +239,14 @@ $(document).ready(function() {
               .append(`<div
               style="margin-bottom: 1rem; background: #f8f8f8"
               class="ui grid segment listingItem-search"
+              id="list-item"
             >
               <div style="padding: 1rem; padding-right: 0px;" class="row">
                 <div  class="five wide middle aligned column">
                   <div class="ui image" >
-                      <img
-                      class="ui rounded image"
+                      <img 
+                      style="max-height: 200px;"
+                      class="ui rounded fluid image"
                       src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
                     />
                   </div>
@@ -255,9 +257,9 @@ $(document).ready(function() {
                       style="padding: 1rem 0rem 0rem .5rem;"
                       class="ten wide column"
                     >
-                      <p class="listingTitle-search">
+                      <a href="#" onclick="return viewListing()" id="${listing.id}" class="listingTitle-search">
                         ${listing.business_title} <i class="tiny check circle icon" style="color: #79bcb8" ></i>
-                      </p>
+                      </a>
                       <p class="listingSubtitle-search">
                         ${listing.category || "" }
                       </p>
@@ -327,6 +329,7 @@ $(document).ready(function() {
               .append(`<div
               style="margin-bottom: 1rem; background: #f8f8f8"
               class="ui grid segment listingItem-search"
+              id="list-item"
             >
               <div style="padding: 1rem; padding-right: 0px;" class="row">
                 <div  class="five wide middle aligned column">
@@ -343,9 +346,9 @@ $(document).ready(function() {
                       style="padding: 1rem 0rem 0rem .5rem;"
                       class="ten wide column"
                     >
-                      <p class="listingTitle-search">
+                      <a href="#"  id="${listing.id}" class="listingTitle-search">
                         ${listing.business_title} <i class="small check circle icon" style="color: #79bcb8" ></i>
-                      </p>
+                      </a>
                       <p class="listingSubtitle-search">
                         ${listing.category || "" }
                       </p>
@@ -406,10 +409,25 @@ $(document).ready(function() {
     }
   });
 
-  $("body").on("click", ".viewButton", function(e) {
+  function viewListing() {
+    const id = $(this).attr("id");
+
+    sessionStorage.setItem("currentListing", id);
+    window.location.assign("listing.html");
+  }
+
+  // $("body").on("click", ".listingTitle--search", function(e) {
+  //   const id = $(this).attr("id");
+
+  //   sessionStorage.setItem("currentListing", id);
+  //   window.location.assign("listing.html");
+  // });
+
+  $("body").on("click", "a", function(e) {
     const id = $(this).attr("id");
 
     sessionStorage.setItem("currentListing", id);
     window.location.assign("listing.html");
   });
+
 });

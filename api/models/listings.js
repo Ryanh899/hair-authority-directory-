@@ -234,16 +234,42 @@ const Listings = {
     // });
   },
   getById(id, cb) {
-    return knex("listings")
+    let getListing = new Promise((resolve, reject) => {
+      return knex("listings")
       .select()
       .where("id", id)
       .then(resp => {
-        cb.status(200).json(resp);
+        resolve(resp)
       })
       .catch(err => {
         console.log(err);
         cb.status(400).json({ message: "listing does not exist" });
       });
+    })
+    getListing.then(listing => {
+      listing = listing[0]
+      return knex('images')
+        .select()
+        .where('listing_id', listing.id)
+        .then(response => {
+          listing.images = response; 
+          knex('social_media')
+          .select()
+          .where('listing_id', listing.id)
+          .then(socialMedia => {
+            listing.socialMedia = socialMedia
+            console.log(listing)
+            cb.status(200).json(listing)
+          }).catch(err => {
+            console.error(err)
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+    }).catch(err => {
+      console.error(err)
+    })
+
   },
   saveListing(listingId, userId, cb) {
     return knex("saved_listings")
@@ -581,7 +607,7 @@ const Listings = {
   // used to update city in db
   addCityState() {
     let results = [];
-    fs.createReadStream("api/models/pg_featured_import.csv")
+    fs.createReadStream("api/models/pg_phone_email_import.csv")
       .on("error", err => {
         if (err) throw err;
       })
@@ -592,8 +618,8 @@ const Listings = {
       .on("end", async () => {
         results.forEach(result => {
           knex("listings")
-            .update("feature_image", result.featured_image)
-            .where("id", result.listing_id)
+            .update({ phone: result.phone, email: result.email })
+            .where("id", result.id)
             .then(() => {
               console.log("changed");
             })
