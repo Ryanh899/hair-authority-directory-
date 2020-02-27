@@ -14,7 +14,6 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
       integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g="
@@ -44,13 +43,19 @@
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
       crossorigin="anonymous"
     />
-    <!-- <link rel="stylesheet" type="text/css" href="./css/search.listings.css" /> -->
+    <link rel="stylesheet" type="text/css" href="./css/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="./css/slick/slick-theme.css" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link rel="stylesheet" type="text/css" href="./css/listing.carousel.css" />
     <link rel="stylesheet" type="text/css" href="./css/listing.css" />
   </head>
 
   <body>
+    <div id="loader-div">
+      <div class="ui active inverted dimmer">
+        <div class="ui text loader">Loading</div>
+      </div>
+      <p></p>
+    </div>
     <div class="ui grid" id="listing-page-container">
       <div class="row" id="top-menu-row">
         <div class="ui grid" id="landing-grid">
@@ -91,32 +96,37 @@
           </div>
         </div>
       </div>
-      <div id="loader-div">
-        <div class="ui active inverted dimmer">
-          <div class="ui text loader">Loading</div>
+      <div class="sixteen wide column">
+        <div
+          style="width: 100%; padding-right: 1rem; padding-left: 1rem;"
+          class="ui grid container"
+        >
+          <div class="row">
+            <div id="images" class="sixteen wide column">
+              <div class="overlay"></div>
+              <!-- Slider -->
+            </div>
+          </div>
         </div>
-        <p></p>
       </div>
       <div style="padding-bottom: 0px; " class="row">
         <div class="two wide column"></div>
         <div
+          id="header-image"
           style="background: #f5f5f5; padding-bottom: 0px;padding-top: 1rem;"
-          class="ten wide column"
+          class="ten wide segemnt column"
         >
-          <div id="header-image" class="ui image"></div>
           <div id="title-section"></div>
-          <hr />
         </div>
         <div class="four wide column"></div>
       </div>
       <!-- listing content section  -->
       <div style="padding-top: 0px;" id="first-row" class="row">
+        <!-- RAIL  -->
         <div class="two wide column"></div>
         <div id="listing-column" class="ten wide segment column">
           <div class="ui right very close rail">
             <div class="ui raised segment">
-              <p id="contact-text">Contact</p>
-              <hr id="contact-hr" />
               <div id="contact-list" class="ui middle aligned divided list">
                 <div
                   id="phone-div"
@@ -134,75 +144,84 @@
                   <i class="mail icon"></i>
                   <div id="email-content" class="content"></div>
                 </div>
+                <div
+                  id="website-div"
+                  style="padding: 1rem;"
+                  class="item contact-item"
+                >
+                  <i class="computer icon"></i>
+                  <div id="website-content" class="content"></div>
+                </div>
+                <div
+                  id="directions-div"
+                  style="padding: 1rem;padding-bottom: 0px;"
+                  class="item contact-item"
+                >
+                  <i class="directions icon"></i>
+                  <div id="directions-content" class="content"></div>
+                </div>
               </div>
               <div class="social_media_div"></div>
             </div>
-            <div id="social-media" class="ui bottom attached raised center aligned segment">
-                
-            </div>
-          </div>
-          <div id="title-section"></div>
-          <div id="about-section">
-            <p id="section-header">Description</p>
-            <hr />
-          </div>
-          <div id="location-section">
-            <p class="section-header">Location</p>
             <div
-              style="margin-top: .5rem; position: relative;"
-              id="map-container"
-            >
-              <div id="map"></div>
-              <div id="demo"></div>
-            </div>
-            <div id="get-direct">
-              <a id="location-address"></a>
-            </div>
-            <hr />
+              id="social-media"
+              class="ui bottom attached raised center aligned segment"
+            ></div>
           </div>
-          <div id="youtube">
-            <p class="section-header">Hours</p>
+          <div id="services-section"></div>
+          <div id="about-section">
+            <hr
+              id="about-hr"
+              style="height: .25rem; background: #8b786d; color: #8b786d;"
+            />
+            <p id="section-header">Description</p>
           </div>
-        </div>
-        <div class="four wide  column ">
-          <!-- <div class="ui segment" id="store-info-div">
-            <p id="contact-text">Contact</p>
-            <hr id="contact-hr" />
-            <div id="contact-list" class="ui middle aligned divided list">
-              <div
-                id="phone-div"
-                style="padding: 1rem;"
-                class="item contact-item"
-              >
-                <i class="phone icon"></i>
-                <div id="phone-content" class="content"></div>
-              </div>
-              <div
-                id="email-div"
-                style="padding: 1rem;"
-                class="item contact-item"
-              >
-                <i class="mail icon"></i>
-                <div id="email-content" class="content"></div>
-              </div>
-              
-            </div>
-            <div class="social_media_div">
-
-            </div>
-          </div>
-          
-          <button id="listing-header-buttons" class="ui button ">
-            <i class="save icon"></i>Save
-          </button>
-          <button
-            id="listing-header-buttons"
-            class="ui button listing-header-buttons"
+          <div
+            style="margin: 0px; padding: 0px;"
+            class="ui grid"
+            id="location-section"
           >
-            <i class="share icon"></i>Share
-          </button> -->
+            <div
+              id="location-hr"
+              style="padding: 0px;"
+              class="sixteen wide column"
+            >
+              <hr
+                style="height: .25rem; background: #8b786d; color: #8b786d;"
+              />
+            </div>
+            <div class="ten wide column">
+              <p class="section-header">Location & Hours</p>
+
+              <div
+                class="ui segment"
+                style="margin-top: .5rem; position: relative; padding: 0px;margin-bottom: 0px;"
+                id="map-container"
+              >
+                <div id="map"></div>
+                <div id="demo"></div>
+              </div>
+              <div class="ui bottom attached segment" id="get-direct"></div>
+            </div>
+            <div id="hours-column" class="six wide middle aligned column"></div>
+          </div>
+          <div
+            id="youtube-section"
+            style="margin: 0px; padding: 0px;"
+            class="ui grid"
+          >
+            <div
+              id="youtube-hr"
+              style="padding: 0px;"
+              class="sixteen wide column"
+            >
+              <hr
+                style="height: .25rem; background: #8b786d; color: #8b786d;"
+              />
+            </div>
+            <div id="youtube-col" class="sixteen wide column"></div>
+          </div>
         </div>
-        <div class="one wide column"></div>
       </div>
     </div>
 
@@ -211,6 +230,9 @@
       async
       defer
     ></script>
+    <script type="text/javascript" src="./css/slick/slick.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
     <script src="./js/listing.page.js" type="text/javascript"></script>
+    <script src="./js/image.slider.js" type="text/javascript"></script>
   </body>
 </html>

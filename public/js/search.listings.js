@@ -172,7 +172,7 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#back-button", function() {
-    window.history.back()
+    window.location.assign("index.html");
   });
 
   $("body").on("click", "#search-button", function() {
@@ -215,12 +215,15 @@ $(document).ready(function() {
     lat: sessionStorage.getItem("lat"),
     lng: sessionStorage.getItem("lng")
   };
+
+  let allListings = []; 
   if (category === "") {
     myAxios
       .get(
         API_URL + "search/" + search + "/" + location.lat + "+" + location.lng
       )
       .then(response => {
+        allListings = response.data
         console.log(response);
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -257,7 +260,7 @@ $(document).ready(function() {
                       style="padding: 1rem 0rem 0rem .5rem;"
                       class="ten wide column"
                     >
-                      <a href="#" onclick="return viewListing()" id="${listing.id}" class="listingTitle-search">
+                      <a href="#" id="${listing.id}" class="listingTitle-search">
                         ${listing.business_title} <i class="tiny check circle icon" style="color: #79bcb8" ></i>
                       </a>
                       <p class="listingSubtitle-search">
@@ -311,6 +314,7 @@ $(document).ready(function() {
           location.lng
       )
       .then(response => {
+        allListings = response.data
         console.log(response)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -413,7 +417,7 @@ $(document).ready(function() {
     const id = $(this).attr("id");
 
     sessionStorage.setItem("currentListing", id);
-    window.location.assign("listing.html");
+    // window.location.assign("listing.html");
   }
 
   // $("body").on("click", ".listingTitle--search", function(e) {
@@ -425,7 +429,12 @@ $(document).ready(function() {
 
   $("body").on("click", "a", function(e) {
     const id = $(this).attr("id");
-
+    console.log(allListings)
+    let getCoords = allListings.filter(x => x.id === id); 
+    console.log(getCoords)
+    sessionStorage.setItem('listing-lat', getCoords[0].lat)
+    sessionStorage.setItem('listing-lng', getCoords[0].lng)
+    sessionStorage.setItem('listing-address', getCoords[0].full_address)
     sessionStorage.setItem("currentListing", id);
     window.location.assign("listing.html");
   });
