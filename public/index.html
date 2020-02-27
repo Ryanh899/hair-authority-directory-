@@ -37,6 +37,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
     />
+    <link rel="stylesheet" type="text/css" href="./css/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="./css/slick/slick-theme.css" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="stylesheet" href="./css/search.css" />
   </head>
@@ -93,13 +95,24 @@
         <!-- magazine image  -->
         <!-- stock magazine image  -->
         <div class="seven wide middle aligned column">
+          <div class="landing-images">
+            <div>
               <img
               id="magazine"
+              style="margin: 2rem;margin-bottom: 3.5rem;"
               class="ui huge centered image"
-              src="https://www.frameweb.com/img/covers/frame/frame132.png"
-
+              src="./images/doctor.image2.jpg"
             >
-
+          </div>
+            <div>
+              <img
+              id="magazine"
+              style="margin: 2rem;margin-bottom: 3.5rem;"
+              class="ui huge centered image"
+              src="./images/doctor.girl.image.2.jpg"
+            >
+            </div>
+          </div>
         </div>
 
         <!-- search title, subtext, bar, and cta for professionals  -->
@@ -164,161 +177,165 @@
             </div> -->
         <div class="sixteen wide column"></div>
       </div>
-      <div class=" row" id="landing-bottom-row">
-        <div id="how-it-next" class="six wide column"></div>
+      <div style="margin-left: 0px; padding-left: 0px;padding-right: 0px; width:100%;" class="ui grid container">
+        <div class=" row" id="landing-bottom-row">
+          <div id="how-it-next" class="six wide column"></div>
+  
+          <div id="how-it-col" class="ten wide left aligned column">
+            <p id="how-it-works">
+              Three Easy Steps <i class="level down alternate icon"></i>
+            </p>
+          </div>
+        </div>
+        <div id="step-1" class="row">
+          <div id="step-1-col-l" class="six wide column">
+            <p id="step-1-num" class="title_l_blue">1.</p>
+            <p id="step-1-title">Arrival</p>
+            <div id="step-1-list" class="ui list step-list">
+              <div style="margin-bottom: 2.5rem;" class="item">
+                <i style="color: #8b786d;" class="large map pin icon"></i>
+                <div class="content step-list-content">
+                  <p id="step-1-content">
+                    Just type in the
+                    <strong
+                      style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
+                      >Title</strong
+                    >,
+                    <strong
+                      style="font-size: 35px; font-weight: 700; color: #1F7A8C;"
+                      >Category</strong
+                    >, or
+                    <strong
+                      style="font-size: 35px; font-weight: 700; color: #1F7A8C;"
+                      >Club</strong
+                    >
+                    and instantly search our directory of thousands of qualified
+                    specialist and products.
+                  </p>
+                  <p
+                    style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
+                  >
+                    Step 1 <i style="color: #3aa7a3;" class="check icon"></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="step-1-col-b" class="ten wide middle aligned centered column">
+            <a href="https://gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41"
+              ><img
+                id="step-1-gif-img"
+                src="https://i.gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41.gif"
+                class="ui huge image"
+                alt="Image from Gyazo"
+            /></a>
+          </div>
+        </div>
+        <div id="step-2" class="row">
+          <div id="step-2-col-b" class="six wide left aligned column">
+            <div id="step-2-demo-list" class="ui celled full width list">
+              <div id="list-demo-item" class="ui raised segment ">
+                <div class="left floated content">
+                  <img class="ui tiny avatar image" src="./images/ISHRS.png" />
+                </div>
+                <div class="content">
+                  <div id="list-demo-header" class="header">ISHRS</div>
+                  <p id="list-demo-p">
+                    The leading association of hair therapy specialists
+                  </p>
+                </div>
+              </div>
+              <div id="list-demo-item" class="ui raised segment ">
+                <div class="left floated content">
+                  <img class="ui tiny avatar image" src="./images/Hair Club.webp" />
+                </div>
+                <div class="content">
+                  <div id="list-demo-header" class="header">The Hair Club</div>
+                  <p id="list-demo-p">
+                    The leading association of Laser Therapy specialists
+                  </p>
+                </div>
+              </div>
+              <div id="list-demo-item" class="ui raised segment ">
+                <div class="left floated content">
+                  <img class="ui tiny avatar image" src="./images/WTS.png" />
+                </div>
+                <div class="content">
+                  <div id="list-demo-header" class="header">WTS</div>
+                  <p id="list-demo-p">
+                    The leading association of hair therapy specialists
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="step-2-col-l" class="ten wide column">
+            <p id="step-2-num" class="title_l_blue">2.</p>
+            <p id="step-2-title">Quickly Find Results</p>
+            <div id="step-2-list" class="ui list step-list">
+              <div style="margin-bottom: 2.5rem;" class="item">
+                <i style="color: #8b786d;" class="big search icon"></i>
+                <div class="content step-list-content">
+                  <p id="step-2-content">
+                    Immediately find thousands of the
+                    <strong
+                      style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
+                    >
+                      Most Trusted Specialists and Brands</strong
+                    >
+                    from the most objective, comprehensive, and trusted directory.
+                  </p>
+                </div>
+              </div>
+              <div style="margin-bottom: 2.5rem;" class="item">
+                <i style="color: #8b786d;" class="big bookmark icon"></i>
+                <div class="content step-list-content">
+                  <p id="step-2-content">
+                    Even save your
+                    <strong
+                      style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
+                      >Top Specialists</strong
+                    >
+                    for later.
+                  </p>
+                  <p
+                    style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
+                  >
+                    Step 2 <i style="color: #3aa7a3;" class="check icon"></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="step-3" class="row">
+          
+          <div id="step-3-col-l" class="six wide column">
+            <p id="step-3-num" class="title_l_blue">3.</p>
+            <p id="step-3-title">Feel Like You.</p>
+            <div id="step-3-list" class="ui list step-list">
+              <div style="margin-bottom: 2.5rem;" class="item">
+                <i style="color: #8b786d;" class="big search icon"></i>
+                <div class="content step-list-content">
+                  <p id="step-3-content">
+                    Let any of our  <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Verified</strong > professionals give you back your <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Hair</strong > and your <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Confidence.</strong>
+                  </p>
+                  <p
+                  style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
+                >
+                  Step 3 <i style="color: #3aa7a3;" class="check icon"></i>
+                </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="step-3-col-b" class="ten wide middle aligned column">
+            <img class="ui huge centered image" id="step-3-demo" src="https://www.yext.com/wp-content/uploads/2016/08/products-listings-Yelp-hero.png" >
+          </div>
+        </div>
+      </div>
+     
 
-        <div id="how-it-col" class="ten wide left aligned column">
-          <p id="how-it-works">
-            Three Easy Steps <i class="level down alternate icon"></i>
-          </p>
-        </div>
-      </div>
-      <div id="step-1" class="row">
-        <div id="step-1-col-l" class="six wide column">
-          <p id="step-1-num" class="title_l_blue">1.</p>
-          <p id="step-1-title">Arrival</p>
-          <div id="step-1-list" class="ui list step-list">
-            <div style="margin-bottom: 2.5rem;" class="item">
-              <i style="color: #8b786d;" class="large map pin icon"></i>
-              <div class="content step-list-content">
-                <p id="step-1-content">
-                  Just type in the
-                  <strong
-                    style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
-                    >Title</strong
-                  >,
-                  <strong
-                    style="font-size: 35px; font-weight: 700; color: #1F7A8C;"
-                    >Category</strong
-                  >, or
-                  <strong
-                    style="font-size: 35px; font-weight: 700; color: #1F7A8C;"
-                    >Club</strong
-                  >
-                  and instantly search our directory of thousands of qualified
-                  specialist and products.
-                </p>
-                <p
-                  style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
-                >
-                  Step 1 <i style="color: #3aa7a3;" class="check icon"></i>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="step-1-col-b" class="ten wide middle aligned centered column">
-          <a href="https://gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41"
-            ><img
-              id="step-1-gif-img"
-              src="https://i.gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41.gif"
-              class="ui huge image"
-              alt="Image from Gyazo"
-          /></a>
-        </div>
-      </div>
-      <div id="step-2" class="row">
-        <div id="step-2-col-b" class="six wide left aligned column">
-          <div id="step-2-demo-list" class="ui celled full width list">
-            <div id="list-demo-item" class="ui raised segment ">
-              <div class="left floated content">
-                <img class="ui tiny avatar image" src="./images/ISHRS.png" />
-              </div>
-              <div class="content">
-                <div id="list-demo-header" class="header">ISHRS</div>
-                <p id="list-demo-p">
-                  The leading association of hair therapy specialists
-                </p>
-              </div>
-            </div>
-            <div id="list-demo-item" class="ui raised segment ">
-              <div class="left floated content">
-                <img class="ui tiny avatar image" src="./images/Hair Club.webp" />
-              </div>
-              <div class="content">
-                <div id="list-demo-header" class="header">The Hair Club</div>
-                <p id="list-demo-p">
-                  The leading association of Laser Therapy specialists
-                </p>
-              </div>
-            </div>
-            <div id="list-demo-item" class="ui raised segment ">
-              <div class="left floated content">
-                <img class="ui tiny avatar image" src="./images/WTS.png" />
-              </div>
-              <div class="content">
-                <div id="list-demo-header" class="header">WTS</div>
-                <p id="list-demo-p">
-                  The leading association of hair therapy specialists
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="step-2-col-l" class="ten wide column">
-          <p id="step-2-num" class="title_l_blue">2.</p>
-          <p id="step-2-title">Quickly Find Results</p>
-          <div id="step-2-list" class="ui list step-list">
-            <div style="margin-bottom: 2.5rem;" class="item">
-              <i style="color: #8b786d;" class="big search icon"></i>
-              <div class="content step-list-content">
-                <p id="step-2-content">
-                  Immediately find thousands of the
-                  <strong
-                    style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
-                  >
-                    Most Trusted Specialists and Brands</strong
-                  >
-                  from the most objective, comprehensive, and trusted directory.
-                </p>
-              </div>
-            </div>
-            <div style="margin-bottom: 2.5rem;" class="item">
-              <i style="color: #8b786d;" class="big bookmark icon"></i>
-              <div class="content step-list-content">
-                <p id="step-2-content">
-                  Even save your
-                  <strong
-                    style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
-                    >Top Specialists</strong
-                  >
-                  for later.
-                </p>
-                <p
-                  style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
-                >
-                  Step 2 <i style="color: #3aa7a3;" class="check icon"></i>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="step-3" class="row">
-        
-        <div id="step-3-col-l" class="six wide column">
-          <p id="step-3-num" class="title_l_blue">3.</p>
-          <p id="step-3-title">Feel Like You.</p>
-          <div id="step-3-list" class="ui list step-list">
-            <div style="margin-bottom: 2.5rem;" class="item">
-              <i style="color: #8b786d;" class="big search icon"></i>
-              <div class="content step-list-content">
-                <p id="step-3-content">
-                  Let any of our  <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Verified</strong > professionals give you back your <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Hair</strong > and your <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Confidence.</strong>
-                </p>
-                <p
-                style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
-              >
-                Step 3 <i style="color: #3aa7a3;" class="check icon"></i>
-              </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="step-3-col-b" class="ten wide middle aligned column">
-          <img class="ui huge centered image" id="step-3-demo" src="https://www.yext.com/wp-content/uploads/2016/08/products-listings-Yelp-hero.png" >
-        </div>
-      </div>
       <div class="row" id="footer-row">
         <!-- <div class="sixteen wide column"><hr style="border: solid 1px #1F7A8C" ></div> -->
         <div class="eight wide computer sixteen wide mobile right aligned middle aligned column" id="footer-header-column" >
@@ -389,7 +406,7 @@
         </div>
       </div>
     </div>
-
+    <script type="text/javascript" src="./css/slick/slick.js"></script>
     <script src="./js/css.js"></script>
     <script src="./js/index.js"></script>
   </body>
