@@ -17,6 +17,14 @@ body {
   margin: 0px;
 }
 
+#sm-icon {
+  padding: 0px;
+}
+
+.sm-links {
+  color: #8b786d;
+}
+
 /* top header  */
 #header-row {
   background: #446a7f;

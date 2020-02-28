@@ -176,8 +176,8 @@ $(document).ready(function() {
   let or = document.createElement("p");
   or.id = "or-text";
   or.style.marginTop = "1rem";
-  or.style.color = "#8b786d";
-  or.innerHTML = 'Or search by category <i class="down arrow icon"></i>';
+  or.style.color = "white";
+  or.innerHTML = '- Or Search By Category -';
   catButtonDiv.appendChild(or);
   $("#search-appendButtons").append(catButtonDiv);
   categories.forEach(category => {
