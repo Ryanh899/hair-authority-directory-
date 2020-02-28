@@ -1071,6 +1071,17 @@ body {
   text-align: center;
 }
 
+.bus-box-button {
+  color: white;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  width: 35%;
+  padding: 1.5rem;
+  background: #8b786d;
+  text-align: center;
+}
+
 #menu-col {
   margin-bottom: 1rem;
 }

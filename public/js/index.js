@@ -71,7 +71,7 @@ $(document).ready(function() {
       );
       $("#dashboard-column").html(`
       <div style="background: #8b786d; border-bottom: solid; border-color: #8b786d; border-width: 5px;" id="listBusiness-button">
-      <p style="color: white;" class="top-button" id="register"><i class="store icon" ></i>List Your Business</p>
+      <p style="color: white;" class="top-button listBusClick" id="register"><i class="store icon" ></i>List Your Business</p>
     </div>
       `);
     } else if (userInfo && userInfo.isProfessionalUser) {
@@ -107,10 +107,16 @@ $(document).ready(function() {
   $("body").on("click", "#listBusiness-button", function() {
     event.preventDefault();
     if (authHelper.isLoggedIn()) {
-      window.location.assign("listing.form.html");
+      window.location.assign('billing.html')
     } else {
       window.location.assign("sign-in.html");
     }
+  });
+
+  $("body").on("click", ".listBusClick", function() {
+
+    console.log('list business')
+    window.location.assign('billing.html')
   });
 
   $("body").on("click", "#dashboard-button", function() {
