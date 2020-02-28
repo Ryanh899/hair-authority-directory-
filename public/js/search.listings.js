@@ -142,7 +142,7 @@ $(document).ready(function() {
     }
     
     $(loader).fadeOut();
-          $(page).fadeIn();
+    $(page).fadeIn();
   }
 
   const categories = [
@@ -303,6 +303,7 @@ $(document).ready(function() {
       });
   } else {
     let newSearch = category.replace(/\//g, '+');
+    console.log(newSearch)
     myAxios
       .get(
         API_URL +

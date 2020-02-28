@@ -169,6 +169,7 @@ const Listings = {
     console.log(category.toLowerCase());
     const listings = await knex("listings")
       .select()
+      .limit(50)
       .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [`%${category.toLowerCase()}%`, currentLocation.state.toLowerCase(), null])
       .then(response => {
         console.log(response.length);

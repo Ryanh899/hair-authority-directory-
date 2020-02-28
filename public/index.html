@@ -37,6 +37,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700|Source+Sans+Pro:300,400&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" type="text/css" href="./css/slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="./css/slick/slick-theme.css" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
@@ -68,8 +72,13 @@
           </div>
           <!-- register button  -->
           <div id="register-column" class="two wide column">
-            <div style="border-bottom: solid; border-color: #8b786d; border-width: 5px;" id="listBusiness-button">
-              <p style="color: white;" class="top-button" id="register"><i class="store icon" ></i>List Your Business</p>
+            <div
+              style="border-bottom: solid; border-color: #8b786d; border-width: 5px;"
+              id="listBusiness-button"
+            >
+              <p style="color: white;" class="top-button" id="register">
+                <i class="store icon"></i>List Your Business
+              </p>
             </div>
           </div>
         </div>
@@ -77,40 +86,64 @@
       <!-- search image and menu (for now) row  -->
       <div class="row" id="landing-search-row">
         <!-- menu tags  -->
-        <div id="page-menu">
-          <a class="page-links" href="" id="contact">
-            <i class="mail icon"></i> Contact</a
-          >
-          <a class="page-links" href="" id="about">
-            <i class="info icon"></i> About</a
-          >
-          <a style="float: left;" class="page-links" href="" id="store">
-            <i class="store icon"></i> Store</a
-          >
-          <a style="float: left;" class="page-links" href="" id="news">
-            <i class="newspaper icon"></i> News</a
-          >
-        </div>
-
-        <!-- magazine image  -->
-        <!-- stock magazine image  -->
-        <div class="seven wide middle aligned column">
-          <div class="landing-images">
-            <div>
-              <img
-              id="magazine"
-              style="margin: 2rem;margin-bottom: 3.5rem;"
-              class="ui huge centered image"
-              src="./images/doctor.image2.jpg"
-            >
+        <div id="menu-col" class="sixteen wide column">
+          <div style="margin-top: 1rem;" class="ui grid">
+            <div class="one wide column"></div>
+            <div class="two wide right aligned column">
+              <a
+                style="display: inline;"
+                class="page-links"
+                href=""
+                id="contact"
+              >
+                <i style="display: inline;" class="mail icon"></i> Contact</a
+              >
+            </div>
+            <div class="two wide left aligned column">
+              <a class="page-links" href="" id="about">
+                <i class="info icon"></i> About</a
+              >
+            </div>
+            <div class="six wide column"></div>
+            <div class="two wide right aligned column">
+              <a class="page-links" href="" id="news">
+                <i class="newspaper icon"></i> News</a
+              >
+            </div>
+            <div class="two wide left aligned column">
+              <a class="page-links" href="" id="store">
+                <i class="store icon"></i> Store</a
+              >
+            </div>
+            <div class="one wide column"></div>
           </div>
-            <div>
+        </div>
+        <!-- stock magazine image  -->
+        <div class="eight wide middle aligned column">
+          <div style="margin-bottom: 5rem;" class="landing-images ui centered grid">
+            <div class="sixteen wide column" >
               <img
-              id="magazine"
-              style="margin: 2rem;margin-bottom: 3.5rem;"
-              class="ui huge centered image"
-              src="./images/doctor.girl.image.2.jpg"
-            >
+                id="magazine"
+                style="margin: 2rem;margin-bottom: 3.5rem; height: 50vh; width: auto;"
+                class="ui large centered image"
+                src="./images/doctor.image2.jpg"
+              />
+            </div>
+            <div class="sixteen wide column" >
+              <img
+                id="magazine"
+                style="margin: 2rem;margin-bottom: 3.5rem; height: 50vh;width: auto;"
+                class="ui centered image"
+                src="./images/doctor.girl.image.2.jpg"
+              />
+            </div>
+            <div class="sixteen wide column" >
+              <img
+                id="magazine"
+                style="margin: 2rem;margin-bottom: 3.5rem; height: 50vh;width: auto;"
+                class="ui centered image"
+                src="./images/happy.patient.3.webp"
+              />
             </div>
           </div>
         </div>
@@ -118,7 +151,7 @@
         <!-- search title, subtext, bar, and cta for professionals  -->
         <div
           id="search-column"
-          class="nine wide computer sixteen wide mobile column"
+          class="eight wide computer sixteen wide mobile left aligned column"
         >
           <!-- title  -->
           <p style="margin-left: 3rem;" id="search-title">
@@ -129,7 +162,11 @@
             From the web's most trusted directory
           </p>
           <!-- search div -->
-          <div style="margin-left: 3rem;" class="ui big search">
+          <div
+            id="search-appendButtons"
+            style="margin-left: 3rem;"
+            class="ui big search"
+          >
             <div class="ui left icon action input search">
               <i id="search-icon" class="search icon"></i>
               <input
@@ -148,7 +185,7 @@
               <div style="margin-left: 8rem;" class="results"></div>
             </div>
             <!-- CTA  -->
-            <p id="landing-list-p">
+            <p style="display: block;" id="landing-list-p">
               Are you a business owner?
               <a
                 style="text-decoration: underline; color: #001021;"
@@ -175,22 +212,41 @@
                 </button>
               </div>
             </div> -->
-        <div class="sixteen wide column"></div>
       </div>
-      <div style="margin-left: 0px; padding-left: 0px;padding-right: 0px; width:100%;" class="ui grid container">
-        <div class=" row" id="landing-bottom-row">
-          <div id="how-it-next" class="six wide column"></div>
-  
-          <div id="how-it-col" class="ten wide left aligned column">
-            <p id="how-it-works">
-              Three Easy Steps <i class="level down alternate icon"></i>
-            </p>
-          </div>
+      <div id="problems-section" class="row">
+        <div class="sixteen wide center aligned column">
+          <p id="problems-title">There Are So Many Solutions</p>
+          <p id="problems-text">
+            Hair Authority Directory is the internet's most trusted source of
+            <strong class="serif-strong" style="color: #79bcb8;"
+              >Specialists,</strong
+            >
+            <strong class="serif-strong" style="color: #79bcb8;"
+              >Medical Treatments,</strong
+            >
+            <strong class="serif-strong" style="color: #79bcb8;"
+              >Products,</strong
+            >
+            and
+            <strong class="serif-strong" style="color: #79bcb8;"
+              >Associations.</strong
+            >
+            Let us help to find the
+            <strong class="serif-strong" style="color: #79bcb8;">Best</strong>
+            solution for
+            <strong class="serif-strong" style="color: #79bcb8;">You.</strong>
+          </p>
+          <p id="steps-arrow-text">Here's How It Works</p>
+          <i style="color: #696969;" class="down arrow icon"></i>
         </div>
+      </div>
+      <div
+        style="margin-left: 0px; padding-left: 0px;padding-right: 0px; width:100%;"
+        class="ui grid container"
+      >
         <div id="step-1" class="row">
-          <div id="step-1-col-l" class="six wide column">
-            <p id="step-1-num" class="title_l_blue">1.</p>
-            <p id="step-1-title">Arrival</p>
+          <div id="step-1-col-l" class="six wide middle aligned column">
+            <p id="step-1-title">Browse.</p>
             <div id="step-1-list" class="ui list step-list">
               <div style="margin-bottom: 2.5rem;" class="item">
                 <i style="color: #8b786d;" class="large map pin icon"></i>
@@ -203,75 +259,48 @@
                     >,
                     <strong
                       style="font-size: 35px; font-weight: 700; color: #1F7A8C;"
-                      >Category</strong
+                      >Name</strong
                     >, or
                     <strong
                       style="font-size: 35px; font-weight: 700; color: #1F7A8C;"
-                      >Club</strong
+                      >Category</strong
                     >
-                    and instantly search our directory of thousands of qualified
-                    specialist and products.
+                    and instantly search our directory of thousands of verified
+                    solutions.
                   </p>
-                  <p
-                    style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
+                  <div
+                    id="step1-search"
+                    style="padding: 1rem; "
+                    class="box-button"
                   >
-                    Step 1 <i style="color: #3aa7a3;" class="check icon"></i>
-                  </p>
+                    <span>Start Seaching <i class="sistrix icon"></i></span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div id="step-1-col-b" class="ten wide middle aligned centered column">
-            <a href="https://gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41"
-              ><img
-                id="step-1-gif-img"
-                src="https://i.gyazo.com/a836edcfa84d6aefd40e1f6a525c4b41.gif"
-                class="ui huge image"
-                alt="Image from Gyazo"
-            /></a>
+          <div
+            id="step-1-col-b"
+            class="ten wide middle aligned centered column"
+          >
+            <img
+              id="step-1-gif-img"
+              src="./images/tricho.png"
+              class="ui huge image"
+              alt="Image"
+            />
           </div>
         </div>
         <div id="step-2" class="row">
-          <div id="step-2-col-b" class="six wide left aligned column">
-            <div id="step-2-demo-list" class="ui celled full width list">
-              <div id="list-demo-item" class="ui raised segment ">
-                <div class="left floated content">
-                  <img class="ui tiny avatar image" src="./images/ISHRS.png" />
-                </div>
-                <div class="content">
-                  <div id="list-demo-header" class="header">ISHRS</div>
-                  <p id="list-demo-p">
-                    The leading association of hair therapy specialists
-                  </p>
-                </div>
-              </div>
-              <div id="list-demo-item" class="ui raised segment ">
-                <div class="left floated content">
-                  <img class="ui tiny avatar image" src="./images/Hair Club.webp" />
-                </div>
-                <div class="content">
-                  <div id="list-demo-header" class="header">The Hair Club</div>
-                  <p id="list-demo-p">
-                    The leading association of Laser Therapy specialists
-                  </p>
-                </div>
-              </div>
-              <div id="list-demo-item" class="ui raised segment ">
-                <div class="left floated content">
-                  <img class="ui tiny avatar image" src="./images/WTS.png" />
-                </div>
-                <div class="content">
-                  <div id="list-demo-header" class="header">WTS</div>
-                  <p id="list-demo-p">
-                    The leading association of hair therapy specialists
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div id="step-2-col-b" class="seven wide middle aligned column">
+            <img id="step-2-img" src="./images/find.results.webp" />
           </div>
-          <div id="step-2-col-l" class="ten wide column">
-            <p id="step-2-num" class="title_l_blue">2.</p>
-            <p id="step-2-title">Quickly Find Results</p>
+          <div
+            id="step-2-col-l"
+            class="nine wide middle aligned centered column"
+          >
+            <!-- <p id="step-2-num" class="title_l_blue">2.</p> -->
+            <p id="step-2-title">Find Results.</p>
             <div id="step-2-list" class="ui list step-list">
               <div style="margin-bottom: 2.5rem;" class="item">
                 <i style="color: #8b786d;" class="big search icon"></i>
@@ -283,7 +312,8 @@
                     >
                       Most Trusted Specialists and Brands</strong
                     >
-                    from the most objective, comprehensive, and trusted directory.
+                    from the most objective, comprehensive, and trusted
+                    directory.
                   </p>
                 </div>
               </div>
@@ -298,47 +328,120 @@
                     >
                     for later.
                   </p>
-                  <p
-                    style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
-                  >
-                    Step 2 <i style="color: #3aa7a3;" class="check icon"></i>
-                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div id="step-3" class="row">
-          
-          <div id="step-3-col-l" class="six wide column">
-            <p id="step-3-num" class="title_l_blue">3.</p>
-            <p id="step-3-title">Feel Like You.</p>
-            <div id="step-3-list" class="ui list step-list">
-              <div style="margin-bottom: 2.5rem;" class="item">
-                <i style="color: #8b786d;" class="big search icon"></i>
-                <div class="content step-list-content">
-                  <p id="step-3-content">
-                    Let any of our  <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Verified</strong > professionals give you back your <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Hair</strong > and your <strong  style="font-size: 35px;font-weight: 700; color: #1F7A8C;">Confidence.</strong>
-                  </p>
-                  <p
-                  style="font-family: 'Raleway'; font-size: 45px;font-weight: 700; color: #8b786d;"
-                >
-                  Step 3 <i style="color: #3aa7a3;" class="check icon"></i>
-                </p>
+          <div id="step-3-col-l" class="nine wide middle aligned column">
+            <div id="shadow-3">
+              <p id="step-3-title">Feel Like You.</p>
+              <div id="step-3-list" class="ui list step-list">
+                <div style="margin-bottom: 2.5rem;" class="item">
+                  <i style="color: #8b786d;" class="big child icon"></i>
+                  <div class="content step-list-content">
+                    <p id="step-3-content">
+                      Let any of our
+                      <strong
+                        style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
+                        >Verified</strong
+                      >
+                      professionals give you back your
+                      <strong
+                        style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
+                        >Hair</strong
+                      >
+                      and your
+                      <strong
+                        style="font-size: 35px;font-weight: 700; color: #1F7A8C;"
+                        >Confidence.</strong
+                      >
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div id="step-3-col-b" class="ten wide middle aligned column">
-            <img class="ui huge centered image" id="step-3-demo" src="https://www.yext.com/wp-content/uploads/2016/08/products-listings-Yelp-hero.png" >
+          <div id="step-3-col-b" class="seven wide right aligned column">
+            <img
+              class="ui huge centered image"
+              id="step-3-img"
+              src="https://i.ya-webdesign.com/images/happy-couple-png-4.png"
+            />
           </div>
         </div>
       </div>
-     
-
+      <div id="why-section" class="row">
+        <div
+          id="title-col"
+          class="sixteen wide center aligned middle aligned column"
+        >
+          <p id="why-title">Why Hair Authority</p>
+        </div>
+        <div class="one wide column"></div>
+        <div
+          id="business-image-col"
+          class="eight wide right aligned middle aligned column"
+        >
+          <img
+            id="business-mag-img"
+            class="ui big image"
+            src="./images/ha_cutout-1.png"
+          />
+        </div>
+        <div style="padding-top: 5rem;" class="five wide left aligned column">
+          <p class="why-header" >
+            Medically Backed.
+          </p>
+            <p class="why-text">
+              Bringing you the same insights we've provided to cosmetologists, hair transplant surgeons, pharmaceutical companies, and more for Years.
+            </p>
+            <p style="margin-top: 7.5rem;" class="why-header" >
+              Trusted Sources.
+            </p>
+            <p class="why-text">
+                The Hair Authority has acquired the rights to publish selected content
+                from <strong style="font-size: 25px;letter-spacing: -.75px;" class="serif-strong">The National Hair Journal,</strong> the nation's top hair-management
+                information tool.
+            </p>
+          </ul>
+        </div>
+        <div class="two wide column"></div>
+      </div>
+      <!-- business cta section  -->
+      <div id="business-cta-section" class="row">
+        <!-- first row  -->
+        <div id="cta-title-col" class="eight wide column">
+          <p class="cta-title" >Hair Authority For Professionals</p>
+        </div>
+        <div class="eight wide column"></div>
+        <!-- end of first row  -->
+        <div class="one wide column"></div>
+        <div class="seven wide column">
+            <p class="cta-header" >
+                No Ads. Just you
+              </p>
+              <p class="cta-text">
+                  Because it is the most trusted information source. There are no ads, no distractions; just <strong class="rale-strong" >You</strong> and the people who want to get to know you.
+              </p>
+              <p class="cta-header" >
+                  Be Seen By Thousands.
+                </p>
+                <p class="cta-text">
+                    The Hair Authority Directory is the best place to be seen by <strong class="rale-strong">Thousands</strong> of people looking for the solution you have!
+                </p>
+        </div>
+        <div class="eight wide column">
+          <img class="ui big centered image" src="https://pluspng.com/img-png/mac-computer-screen-png-apple-mac-computer-screen-png-1122.png" >
+        </div>
+      </div>
       <div class="row" id="footer-row">
         <!-- <div class="sixteen wide column"><hr style="border: solid 1px #1F7A8C" ></div> -->
-        <div class="eight wide computer sixteen wide mobile right aligned middle aligned column" id="footer-header-column" >
+        <div
+          class="eight wide computer sixteen wide mobile right aligned middle aligned column"
+          id="footer-header-column"
+        >
           <p class="big-header-text">Start Searching Today!</p>
         </div>
         <div class="eight wide left aligned column">
@@ -390,10 +493,7 @@
             </symbol>
           </svg>
         </div>
-        <div
-          class="sixteen wide center aligned column"
-          id="copyright-column"
-        >
+        <div class="sixteen wide center aligned column" id="copyright-column">
           <p id="copyright">
             Copyright © 2019 International Hair Directory
           </p>

@@ -141,23 +141,56 @@ $(document).ready(function() {
     $("#logout-div").html("");
   });
 
+  // const categories = [
+  //   { title: "Dermatologist" },
+  //   { title: "Hair Care Salons" },
+  //   { title: "Hair Loss / Hair Care Products & Treatments" },
+  //   { title: "Hair Replacement & Hair Systems" },
+  //   { title: "Laser Therapy" },
+  //   { title: "Medial / Hair Transplants" },
+  //   { title: "Trichologist" },
+  //   { title: "Wigs, Extensions, Hair Additions" },
+  //   { title: "The Hair Club", abbreviation: "" },
+  //   { title: "ARTAS Robotic Hair Restoration System" },
+  //   { title: "World Trichology Society", abbreviation: "WTS" },
+  //   {
+  //     title: "The International Society of Hair Restoration Surgery (ISHRS)",
+  //     abbreviation: "ISHRS"
+  //   }
+  // ];
+
   const categories = [
     { title: "Dermatologist" },
     { title: "Hair Care Salons" },
     { title: "Hair Loss / Hair Care Products & Treatments" },
     { title: "Hair Replacement & Hair Systems" },
     { title: "Laser Therapy" },
-    { title: "Medial / Hair Transplants" },
+    { title: "Medical / Hair Transplants" },
     { title: "Trichologist" },
-    { title: "Wigs, Extensions, Hair Additions" },
-    { title: "The Hair Club", abbreviation: "" },
-    { title: "ARTAS Robotic Hair Restoration System" },
-    { title: "World Trichology Society", abbreviation: "WTS" },
-    {
-      title: "The International Society of Hair Restoration Surgery (ISHRS)",
-      abbreviation: "ISHRS"
-    }
+    { title: "Medical Hair Restoration" },
+    { title: "Wigs / Extensions & Hair Additions" }
   ];
+  let catButtonDiv = document.createElement("div");
+  catButtonDiv.className = "computer only";
+  catButtonDiv.id = "append-cat-buttons";
+  let or = document.createElement("p");
+  or.id = "or-text";
+  or.style.marginTop = "1rem";
+  or.style.color = "#8b786d";
+  or.innerHTML = 'Or search by category <i class="down arrow icon"></i>';
+  catButtonDiv.appendChild(or);
+  $("#search-appendButtons").append(catButtonDiv);
+  categories.forEach(category => {
+    let button = document.createElement("button");
+    button.className = "ui button catButtons";
+    button.textContent = category.title;
+    button.style.margin = ".5rem";
+    button.style.color = "#2ca6a4";
+    button.style.background = "white";
+    button.style.fontFamily = "Lato";
+    button.style.fontWeight = 500;
+    $("#append-cat-buttons").append(button);
+  });
 
   $(".ui.search").search({
     source: categories,
@@ -189,42 +222,74 @@ $(document).ready(function() {
     window.location.assign("listing.form.html");
   });
 
-  setTimeout($('.landing-images').slick({
-    // dots: true,
-    autoplay: true, 
-    infinite: false,
-    speed: 1000,
-    arrows: false,
-    fade: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
+  $("body").on("click", "#step1-search", function() {
+    $(window).scrollTop(0);
+    $("#search-semantic").focus();
+  });
+
+  $("body").on("click", ".catButtons", function(e) {
+    const search = $(e.target).text(); 
+    console.log(search);
+
+    sessionStorage.setItem("searchQuery", search);
+    window.location.assign("search.listings.html");
+  });
+
+    // Execute a function when the user releases a key on the keyboard
+    $("body").keyup(function(event) {
+      console.log('pressed')
+      // Number 13 is the "Enter" key on the keyboard
+      if (event.keyCode === 13) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        if ($("#search-semantic").val()) {
+          $("#search-button").click();
+        } else {
+          return
         }
       }
-      // You can unslick at a given breakpoint now by adding:
-      // settings: "unslick"
-      // instead of a settings object
-    ]
-  }), 100);
+    });
+
+  function slick() {
+    $(".landing-images").slick({
+      // dots: true,
+      autoplay: true,
+      infinite: false,
+      speed: 1000,
+      arrows: false,
+      fade: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+        // You can unslick at a given breakpoint now by adding:
+        // settings: "unslick"
+        // instead of a settings object
+      ]
+    });
+  }
+
+  setTimeout(slick(), 100);
 });
