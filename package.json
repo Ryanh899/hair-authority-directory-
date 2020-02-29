@@ -4,6 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "restart": "pm2 startOrRestart ecosystem.config.js",
+    "deploy": "pm2 deploy ecosystem.config.js production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,5 +37,8 @@
     "node-geocoder": "^3.25.0",
     "pg": "^7.17.1",
     "superagent": "^5.2.2"
+  },
+  "devDependencies": {
+    "pm2": "^4.2.3"
   }
 }
