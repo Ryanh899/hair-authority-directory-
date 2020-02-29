@@ -40,6 +40,5 @@ $(document).ready(setTimeout(function () {
           // instead of a settings object
         ]
       });
-
-}, 250))
+}, 500))
 
