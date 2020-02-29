@@ -95,12 +95,18 @@ var authHelper = {
   }
 };
 
-const API_URL = "http://localhost:3000/api/";
-
 $(document).ready(function() {
   let markerInfo = [];
   const page = document.querySelector("div#page-container");
   const loader = document.querySelector("div#loader-div");
+let API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/"
+  // if (process.env.NODE_ENV = 'production') {
+  //   console.log(env)
+  //   API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/";
+  // } else {
+  //   API_URL = "http://localhost:3000/api/";
+  // }
+
 
   $(page).css("display", "none");
 

@@ -36,7 +36,7 @@ var authHelper = {
     localStorage.removeItem("token");
   }
 };
-
+const PROD_API_URL = 'ec2-54-90-69-186.compute-1.amazonaws.com/api/'
 const API_URL = "http://localhost:3000/api/";
 const ADMIN_URL = "http://localhost:3000/admin/";
 
