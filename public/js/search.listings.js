@@ -107,12 +107,16 @@ $(document).ready(function() {
   //   API_URL = "http://localhost:3000/api/";
   // }
 
+  let location = {
+    coords: {
+      latitude: 28.438080,
+      longitude: -81.472870
+    }
+  };
 
   $(page).css("display", "none");
 
-  function getGeolocation() {
-    navigator.geolocation.getCurrentPosition(drawMap);
-  }
+
 
   function drawMap(geoPos) {
     geolocate = new google.maps.LatLng(
@@ -217,16 +221,13 @@ $(document).ready(function() {
     sessionStorage.setItem("lng", position.coords.longitude);
   }
 
-  let location = {
-    lat: 28.438080,
-    lng: -81.472870
-  };
+
 
   let allListings = []; 
   if (category === "") {
     myAxios
       .get(
-        API_URL + "search/" + search + "/" + location.lat + "+" + location.lng
+        API_URL + "search/" + search + "/" + location.coords.latitude + "+" + location.coords.longitude
       )
       .then(response => {
         allListings = response.data
@@ -316,9 +317,7 @@ $(document).ready(function() {
           "search/category/" +
           newSearch +
           "/" +
-          location.lat +
-          "+" +
-          location.lng
+          location.coords.latitude + "+" + location.coords.longitude
       )
       .then(response => {
         allListings = response.data
