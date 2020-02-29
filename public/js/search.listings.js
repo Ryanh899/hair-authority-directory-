@@ -218,8 +218,8 @@ let API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/"
   }
 
   let location = {
-    lat: sessionStorage.getItem("lat"),
-    lng: sessionStorage.getItem("lng")
+    lat: '34.0544',
+    lng: '-118.2440'
   };
 
   let allListings = []; 
