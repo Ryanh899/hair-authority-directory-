@@ -53,10 +53,7 @@ $(document).ready(function() {
     sessionStorage.setItem("lng", position.coords.longitude);
   }
 
-  // gets location and sets in session storage
-  if (!sessionStorage.getItem("lat") || !sessionStorage.getItem("lat")) {
-    getLocation();
-  }
+  getLocation(); 
 
   if (authHelper.isLoggedIn()) {
     const token = localStorage.getItem("token");
@@ -301,5 +298,5 @@ $(document).ready(function() {
       ]
     });
   }
-  setTimeout(slick(), 100);
+  setTimeout(slick(), 200);
 });
