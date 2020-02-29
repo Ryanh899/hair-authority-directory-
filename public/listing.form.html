@@ -295,11 +295,19 @@
             <h1 class="form-h1">Images & Media</h1>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Feature Image</label>
-                <button id="feature-upload-btn" style="margin-top: 1rem;" class="ui button">Upload</button>
+                <p id="feature-append" class="form-info" >The first image that will be seen with your listing.</p>
+                <div class="text-center">
+                        <i id="add-pet-upload-feature" class="large camera icon" for="add-pet-upload-photo-feature"></i>
+                        <input style="display: none;" type="file" id="add-pet-upload-image-feature" />
+                    </div>
             </div>
             <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Other Images</label>
-                    <button id="upload-btn" style="margin-top: 1rem;" class="ui button">Upload</button>
+                    <p id="other-append" class="form-info" >All other images </p>
+                    <div class="text-center">
+                            <i id="add-pet-upload" class="large camera icon" for="add-pet-upload-photo"></i>
+                            <input style="display: none;" type="file" id="add-pet-upload-image" />
+                        </div>
                 </div>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Youtube</label>
@@ -394,6 +402,7 @@
             <div id="faq" class="section bread">FAQs</div>
         </div> -->
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.630.0.min.js"></script>
+    <script src="./js/upload.images.js" ></script>
     <script src="./resources/browser.s3.js" ></script>
     <script src="./js/form.pages.js"></script>
 </body>

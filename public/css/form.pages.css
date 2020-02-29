@@ -108,6 +108,13 @@
     font-family: 'Lato';  
 }
 
+.form-info {
+    font-family: 'Lato';
+    font-weight: 500;
+    font-size: 18px;
+    color: #696969;
+}
+
 #back-button {
     padding: .75rem;
     float: right;
