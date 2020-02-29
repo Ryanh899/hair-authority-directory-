@@ -35,6 +35,7 @@ var authHelper = {
     window.location.assign(path);
   }
 };
+let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/"
 
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -95,7 +96,7 @@ $(document).ready(function() {
         password: formData.get("password")
       };
       axios
-        .post("http://localhost:3000/auth/register", userInfo)
+        .post(`${API_URL} + auth/register`, userInfo)
         .then(response => {
           console.log(response);
           sessionStorage.setItem('justRegistered', true)

@@ -1,6 +1,8 @@
 $( document ).ready(function() {
     const formContainer = document.querySelector('div#form-container')
 
+    let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
+
     if (sessionStorage.getItem('justRegistered')) {
         $(formContainer).append(`<div id="submit-register" style="position: absolute; right: 6rem; bottom: 2rem" class="ha_button">Submit</div>`)
     } else {
@@ -11,7 +13,7 @@ $( document ).ready(function() {
             email: $('#email').val().trim(), 
             password: $('#password').val().trim()
         }
-        axios.post('http://localhost:3000/auth/login', userInfo)
+        axios.post(`${API_URL} + auth/login`, userInfo)
             .then(response => {
                 console.log(response)
                 localStorage.setItem('token', response.data); 
@@ -24,12 +26,13 @@ $( document ).ready(function() {
                 console.log(err); 
             })
     })
+    
     $( '#submit-other' ).on('click', function () {
         const userInfo = {
             email: $('#email').val().trim(), 
             password: $('#password').val().trim()
         }
-        axios.post('http://localhost:3000/auth/login', userInfo)
+        axios.post(`${API_URL} + auth/login`, userInfo)
             .then(response => {
                 console.log(response)
                 localStorage.setItem('token', response.data); 

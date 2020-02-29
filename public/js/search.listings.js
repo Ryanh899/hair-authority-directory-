@@ -99,7 +99,7 @@ $(document).ready(function() {
   let markerInfo = [];
   const page = document.querySelector("div#page-container");
   const loader = document.querySelector("div#loader-div");
-let API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/"
+  let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
   // if (process.env.NODE_ENV = 'production') {
   //   console.log(env)
   //   API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/";
@@ -218,8 +218,8 @@ let API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/"
   }
 
   let location = {
-    lat: '34.0544',
-    lng: '-118.2440'
+    lat: 28.438080,
+    lng: -81.472870
   };
 
   let allListings = []; 

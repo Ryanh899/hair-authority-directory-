@@ -64,7 +64,7 @@ $(document).ready(function() {
 //   } else {
 //     API_URL = "http://localhost:3000/api/";
 //   }
-let API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/"
+let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
 
   // style js
   $(".vertical.menu .item").tab();
