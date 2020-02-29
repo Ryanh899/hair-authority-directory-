@@ -38,18 +38,18 @@ module.exports = {
   production:{
     client: 'pg',
     connection: {
-      host : keys.dbHost,
-      user : keys.dbUser,
-      password : keys.dbPassword,
-      database : keys.db,
+      host : keys.prodDbHost,
+      user : keys.prodDbUser,
+      password : keys.prodDbPswd,
+      database : keys.prodDb,
       charset: 'utf8', 
       ssl: true
     },
-    migrations: {
-      directory: __dirname + '/knex/migrations',
-    },
-    seeds: {
-      directory: __dirname + '/knex/seeds'
-    }
+    // migrations: {
+    //   directory: __dirname + '/knex/migrations',
+    // },
+    // seeds: {
+    //   directory: __dirname + '/knex/seeds'
+    // }
   },
 };
