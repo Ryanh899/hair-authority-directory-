@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $('body').on('click', '.continue-button', function (e) {
-        let plan = $(e.target).id; 
+        let plan = this.id; 
 
         sessionStorage.setItem('plan', plan)
         window.location.assign('listing.form.html')

@@ -104,19 +104,23 @@ $(document).ready(function() {
     window.location.assign("sign-in.html");
   });
 
-  $("body").on("click", "#listBusiness-button", function() {
-    event.preventDefault();
-    if (authHelper.isLoggedIn()) {
-      window.location.assign('billing.html')
-    } else {
-      window.location.assign("sign-in.html");
-    }
-  });
+  // $("body").on("click", "#listBusiness-button", function() {
+  //   event.preventDefault();
+  //   if (authHelper.isLoggedIn()) {
+  //     window.location.assign('billing.html')
+  //   } else {
+  //     window.location.assign("sign-in.html");
+  //   }
+  // });
 
   $("body").on("click", ".listBusClick", function() {
-
     console.log('list business')
-    window.location.assign('billing.html')
+    if (authHelper.isLoggedIn()) {
+          window.location.assign('billing__new.html')
+        } else {
+          sessionStorage.setItem('addListing', true)
+          window.location.assign("sign-in.html");
+        }
   });
 
   $("body").on("click", "#dashboard-button", function() {
@@ -220,6 +224,7 @@ $(document).ready(function() {
       window.location.assign("listing.form.html");
     } else {
       alert("please log in to make a listing");
+      sessionStorage.setItem('addListing', true); 
       window.location.assign("sign-in.html");
     }
   });
@@ -296,6 +301,5 @@ $(document).ready(function() {
       ]
     });
   }
-
   setTimeout(slick(), 100);
 });

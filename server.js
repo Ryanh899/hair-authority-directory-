@@ -6,6 +6,7 @@ const jwt = require("express-jwt");
 const apiRoutes = require('./api/routes/api.routes'); 
 const adminRoutes = require('./api/routes/admin.routes'); 
 const morgan = require('morgan')
+const zohoRoutes = require('./api/routes/zoho.routes'); 
 
 const PORT = process.env.PORT || 3000;
 
@@ -27,6 +28,7 @@ app.use(express.static("public"));
 
 app.use("/auth", authRoutes);
 app.use('/admin', adminRoutes)
+app.use('/zoho', zohoRoutes)
 // app.use(auth);
 app.use("/api", apiRoutes);
 

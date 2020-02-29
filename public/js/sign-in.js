@@ -33,8 +33,8 @@ $( document ).ready(function() {
             .then(response => {
                 console.log(response)
                 localStorage.setItem('token', response.data); 
-                console.log(window.history)
-                window.history.back()
+                if (sessionStorage.getItem('addListing')) window.location.assign('billing__new.html')
+                else window.history.back()
             })
             .catch(err => {
                 alert('email or password not found')

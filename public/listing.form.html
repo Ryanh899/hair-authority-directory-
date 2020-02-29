@@ -19,20 +19,43 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
-
-    <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
+    <link
+    href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700|Source+Sans+Pro:300,400&display=swap"
+    rel="stylesheet"
+  />
+  <link
+  href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
+  rel="stylesheet"
+/>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="stylesheet" href="./css/form.pages.css" />
 </head>
 
 <body>
-    <div class="nav-bar">
-        <p class="nav-h1" style="font-size: 20px; margin: 0px;">The International Hair Authority Directory</p>
-        <div id="back-button"><i class="left arrow icon"></i>Back</div>
-    </div>
     <div id="form-page-container">
+            <div class="row" id="top-menu-row">
+                    <div class="ui grid" id="landing-grid">
+                      <div id="back-column" class="one wide column">
+                        <div id="back-button">
+                          <p class="top-button" id="sign-in">
+                            <i class="left arrow icon"></i>
+                          </p>
+                        </div>
+                      </div>
+                      <div style="padding: .5rem;" class="one wide column">
+                        <img
+                          style="margin-left: 1rem; padding: 0px;"
+                          id="ha-logo-image"
+                          src="./images/logo-symbol-w.png"
+                        />
+                      </div>
+                      <div style="padding: 1rem;" class="twelve wide middle aligned column">
+                        <p id="ha-title">Hair Authority Directory</p>
+                      </div>
+                    </div>
+                  </div>
         <form id="form-1" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">Let's get started... </h3>
+            <p style="margin-top: 1rem;" class="form-h1">Business Title, Tagline & Category</p>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">What's the name of your business?</label>
                 <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
@@ -88,8 +111,7 @@
         </div>
         </form>
         <form id="form-2" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">Do You Have an Address? </h3>
+            <p style="margin-top: 1rem; margin-bottom: 1.5rem;" class="form-h1">Address & Hours</p>
             <div class="fields">
                 <div class="field">
                     <label id="labels-1">Street Address</label>
@@ -189,13 +211,11 @@
             <a id="submit2">
                 <div class="submit-button">Next <i class="right arrow icon"></i></div>
             </a>
-            <p style="float: right;">Don't have an address? <a>Skip </a></p>
         </form>
 
         <!-- form 3 -->
         <form id="form-3" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">This is your online presence</h3>
+            <h1 class="form-h1">Social Media & Website</h1>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Website</label>
                 <div style="margin-top: 1rem;" class="ui transparent left icon input">
@@ -233,8 +253,7 @@
 
         <!-- form 4 -->
         <form id="form-4" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">Lets Get Your Contact Info</h3>
+            <h1 class="form-h1">Contact Information</h1>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Email</label>
                 <div id="email-div" style="margin-top: 1rem;" class="ui transparent left icon input">
@@ -254,8 +273,7 @@
 
         <!-- form 5 -->
         <form id="form-5" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">Tell us about your business</h3>
+            <h1 class="form-h1">Description & Mission Statement</h1>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Mission Statement</label>
                 <div id="ms-div" style="margin-top: 1rem;" class="ui left icon input">
@@ -264,7 +282,7 @@
                 </div>
             </div>
             <div class="field">
-                <label style="margin-top: 2rem;" id="labels-1">About</label>
+                <label style="margin-top: 2rem;" id="labels-1">Description of your Business</label>
                 <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
                     <textarea name="about" type="text" placeholder="Ex. The history, the story"></textarea>
                 </div>
@@ -274,12 +292,15 @@
 
         <!-- form 6 -->
         <form id="form-6" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
-            <h3 class="form-h3">Images & Media</h3>
+            <h1 class="form-h1">Images & Media</h1>
             <div class="field">
-                <label style="margin-top: 2rem;" id="labels-1">Images</label>
-                <button style="margin-top: 1rem;" class="ui button">Upload an image</button>
+                <label style="margin-top: 2rem;" id="labels-1">Feature Image</label>
+                <button id="feature-upload-btn" style="margin-top: 1rem;" class="ui button">Upload</button>
             </div>
+            <div class="field">
+                    <label style="margin-top: 2rem;" id="labels-1">Other Images</label>
+                    <button id="upload-btn" style="margin-top: 1rem;" class="ui button">Upload</button>
+                </div>
             <div class="field">
                 <label style="margin-top: 2rem;" id="labels-1">Youtube</label>
                 <div id="youtube-div" style="margin-top: 1rem;" class="ui transparent left icon input">
@@ -292,7 +313,7 @@
 
         <!-- form 7 -->
         <form id="form-7" class="ui equal width form">
-            <h1 class="form-h1">International Authority Directory</h1>
+            <h1 class="form-h1">Hair Authority Directory</h1>
             <h3 class="form-h3">Frequently Asked Questions</h3>
             <div id="faq-section">
                 <i id="add-faq" class="large plus circle icon"></i>
@@ -303,9 +324,61 @@
             </div>
             <div id="submit7" class="submit-button">Next <i class="right arrow icon"></i></div>
         </form>
-
+    </div>
+        <div id="progress-bar" style="width: 100%;" class="ui evenly divided small steps">
+                <div id="businessTitle" class="active step">
+                  <i class="store icon"></i>
+                  <div class="content">
+                    <div class="title">Business Title</div>
+                    <div class="description">Title, Tagline, Category</div>
+                  </div>
+                </div>
+                <div id="storefrontInfo" class="step">
+                  <i class="info icon"></i>
+                  <div class="content">
+                    <div class="title">Storefront Info</div>
+                    <div class="description">Address + Hours</div>
+                  </div>
+                </div>
+                <div id="website" class="step">
+                  <i class="internet explorer icon"></i>
+                  <div class="content">
+                    <div class="title">Website + Social Media</div>
+                    <div class="description">Your Online Presence</div>
+                  </div>
+                </div>
+                <div id="contact" class="step">
+                    <i class="address book icon"></i>
+                    <div class="content">
+                        <div class="title">Contact</div>
+                        <div class="description">How to contact you</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <i class="building icon"></i>
+                    <div class="content">
+                        <div class="title">Description</div>
+                        <div class="description">Business Description & Mission Statement</div>
+                    </div>
+                </div>
+                <div id="images" class="step">
+                    <i class="image icon"></i>
+                    <div class="content">
+                        <div class="title">Images</div>
+                        <div class="description">Images & Media</div>
+                    </div>
+                </div>
+                <div id="faq" class="step">
+                    <i class="question icon"></i>
+                    <div class="content">
+                        <div class="title">FAQ's</div>
+                        <div class="description">Frequently asked questions</div>
+                    </div>
+                </div>
+              </div>
+        
         <!-- footer  -->
-        <div id="footer" class="ui large breadcrumb">
+        <!-- <div id="footer" class="ui large breadcrumb">
             <div id="businessTitle" class="section bread">Business Title</div>
             <i class="right chevron icon divider"></i>
             <div id="storefrontInfo" class="section bread">Storefront Info</div>
@@ -319,8 +392,9 @@
             <div id="images" class="section bread">Images & Media</div>
             <i class="right chevron icon divider"></i>
             <div id="faq" class="section bread">FAQs</div>
-        </div>
-    </div>
+        </div> -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.630.0.min.js"></script>
+    <script src="./resources/browser.s3.js" ></script>
     <script src="./js/form.pages.js"></script>
 </body>
 

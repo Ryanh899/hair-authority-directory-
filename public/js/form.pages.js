@@ -2,6 +2,7 @@ $(document).ready(function() {
   sessionStorage.setItem("faq", 1);
   sessionStorage.removeItem("24Hour");
 
+
   const API_URL = "http://localhost:3000/api/";
 
   var myAxios = axios.create({
@@ -25,6 +26,14 @@ $(document).ready(function() {
   $('.ui.dropdown')
   .dropdown()
 ;
+
+var today = new Date();
+var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+
+function setCookie(name, value)
+  {
+    document.cookie=name + "=" + escape(value) + "; path=/; expires=" + expiry.toGMTString();
+  }
 
   $(".ui.checkbox").checkbox({
     onChecked: function() {
@@ -186,10 +195,12 @@ $(document).ready(function() {
       finalForm.business_title = formData.get("businessTitle");
       finalForm.business_description = formData.get("businessDescription");
       finalForm.category = formData.get('category'); 
+      sessionStorage.setItem('formsCompleted', 1);
       $(form1).css("display", "none");
       $(form2).css("display", "block");
-      $("#businessTitle").css("color", "black");
-      $("#businessTitle").css("font-weight", "100");
+      $("#businessTitle").toggleClass("active");
+      $("#businessTitle").addClass('completed')
+      $("#storefrontInfo").toggleClass("active");
       console.log(finalForm);
     }
   });
@@ -253,8 +264,10 @@ $(document).ready(function() {
 
     $(form2).css("display", "none");
     $(form3).css("display", "block");
-    $("#storefrontInfo").css("color", "black");
-    $("#storefrontInfo").css("font-weight", 100);
+    sessionStorage.setItem('formsCompleted', 2); 
+    $("#storefrontInfo").toggleClass("active");
+    $("#storefrontInfo").addClass('completed')
+    $("#website").toggleClass("active");
     console.log(finalForm);
   });
 
@@ -279,8 +292,10 @@ $(document).ready(function() {
 
     $(form3).css("display", "none");
     $(form4).css("display", "block");
-    $("#website").css("color", "black");
-    $("#website").css("font-weight", 100);
+    sessionStorage.setItem('formsCompleted', 3); 
+    $("#website").toggleClass("active");
+    $("#website").addClass('completed')
+    $("#contact").toggleClass("active");
     console.log(finalForm);
   });
 
@@ -301,8 +316,10 @@ $(document).ready(function() {
       $("#phone-div").css("border", "none");
       $(form4).css("display", "none");
       $(form5).css("display", "block");
-      $("#contact").css("color", "black");
-      $("#contact").css("font-weight", 100);
+      sessionStorage.setItem('formsCompleted', 4); 
+      $("#contact").toggleClass("active");
+      $("#contact").addClass('completed')
+      $("#about").toggleClass("active");
       console.log(finalForm);
     } else {
       $("#phone-div").css("border", "solid");
@@ -322,8 +339,10 @@ $(document).ready(function() {
 
     $(form5).css("display", "none");
     $(form6).css("display", "block");
-    $("#about").css("color", "black");
-    $("#about").css("font-weight", 100);
+    sessionStorage.setItem('formsCompleted', 5); 
+    $("#about").toggleClass("active");
+    $("#about").addClass('completed')
+    $("#images").toggleClass("active");
     console.log(finalForm);
   });
 
@@ -338,8 +357,10 @@ $(document).ready(function() {
 
     $(form6).css("display", "none");
     $(form7).css("display", "block");
-    $("#images").css("color", "black");
-    $("#images").css("font-weight", 100);
+    sessionStorage.setItem('formsCompleted', 6); 
+    $("#images").toggleClass("active");
+    $("#images").addClass('completed')
+    $("#faq").toggleClass("active");
     console.log(finalForm);
   });
 
