@@ -113,7 +113,8 @@ $(document).ready(function() {
   // function to initiate map
   function getGeolocation() {
     console.log("map");
-    navigator.geolocation.getCurrentPosition(drawMap);
+    // navigator.geolocation.getCurrentPosition(drawMap);
+    drawMap()
   }
 
   // function called by getGeolocation
@@ -195,29 +196,29 @@ $(document).ready(function() {
       });
       // if no location get current location
     } else {
-      console.log("OTHER");
-      geolocate = new google.maps.LatLng(
-        geoPos.coords.latitude,
-        geoPos.coords.longitude
-      );
-       // create map props for map generator
-       let mapProp = {
-        center: geolocate,
-        zoom: 10,
-        disableDefaultUI: true,
-        zoomControl: false
-      };
-      // call google maps api to append the map to the #map div
-      let map = new google.maps.Map(
-        document.getElementById("map"),
-        mapProp
-      );
-      // create a marker for the business
-      let marker = new google.maps.Marker({
-        position: geolocate,
-        map: map,
-        animation: google.maps.Animation.DROP
-      });
+      // console.log("OTHER");
+      // geolocate = new google.maps.LatLng(
+      //   geoPos.coords.latitude,
+      //   geoPos.coords.longitude
+      // );
+      //  // create map props for map generator
+      //  let mapProp = {
+      //   center: geolocate,
+      //   zoom: 10,
+      //   disableDefaultUI: true,
+      //   zoomControl: false
+      // };
+      // // call google maps api to append the map to the #map div
+      // let map = new google.maps.Map(
+      //   document.getElementById("map"),
+      //   mapProp
+      // );
+      // // create a marker for the business
+      // let marker = new google.maps.Marker({
+      //   position: geolocate,
+      //   map: map,
+      //   animation: google.maps.Animation.DROP
+      // });
       // reveal page and hide loader
       $("#images").css("dislplay", "");
       $(loader).css("display", "none");
