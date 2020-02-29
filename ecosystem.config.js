@@ -6,7 +6,7 @@ module.exports = {
     deploy: {
       production: {
         user: 'ubuntu',
-        host: 'ec2-54-90-69-186.compute-1.amazonaws.com',
+        host: 'ec2-34-201-189-88.compute-1.amazonaws.com',
         key: '~/Desktop/ha_ec2_cred.pem',
         ref: 'origin/master',
         repo: 'git@github.com:Ryanh899/hair-authority-directory-.git',
