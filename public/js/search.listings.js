@@ -302,7 +302,7 @@ $(document).ready(function() {
             markerInfo.push(item);
           });
 
-          getGeolocation();
+          drawMap(location)
         }
       })
       .catch(err => {
@@ -390,7 +390,7 @@ $(document).ready(function() {
           response.data.forEach(item => {
             markerInfo.push(item);
           });
-          getGeolocation();
+          drawMap(location)
         }
       })
       .catch(err => {
