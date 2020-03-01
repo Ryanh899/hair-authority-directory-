@@ -22,7 +22,7 @@ body {
 }
 
 .sm-links {
-  color: #8b786d;
+  color: white;
 }
 
 /* top header  */
@@ -93,7 +93,10 @@ body {
     background: -webkit-linear-gradient(to right, #C4E0E5, #4CA1AF);  
     background: linear-gradient(to right, #C4E0E5, #4CA1AF);  */
   padding: 0px;
-  background: #1F7A8C;
+  background: #f9f9f9;
+  /* border: solid;
+  border-width: 0px 0px 2.5px 0px;
+  border-color: black; */
 }
 
 #sign-in-column {
@@ -101,7 +104,7 @@ body {
 }
 
 #sign-in-button {
-  background: #9dd9d2;
+  background: #696969;
   font-family: "lato", sans-serif;
   font-weight: 400;
   font-size: 20px;
@@ -119,7 +122,7 @@ body {
   text-align: center;
   vertical-align: middle;
   display: table-cell;
-  color: #3aa7a3;
+  color: white;
   padding: 0.5rem;
 }
 
@@ -128,7 +131,7 @@ body {
 }
 
 #listBusiness-button {
-  background: #3aa7a3;
+  background: white;
   font-family: "lato", sans-serif;
   font-weight: 400;
   font-size: 20px;
@@ -161,7 +164,7 @@ body {
   text-align: center;
   vertical-align: middle;
   display: table-cell;
-  color: white;
+  color: black;
   padding: 0.5rem;
 }
 
@@ -172,7 +175,7 @@ body {
 }
 
 #ha-title {
-  font-size: 30px;
+  font-size: 35px;
   /* font-family: 'Montserrat', sans-serif; */
   /* font-weight: 700; */
   font-family: "Raleway";
@@ -180,7 +183,7 @@ body {
   /* color: #112941; */
   line-height: 1em;
   /* margin-left: 5rem; */
-  color: white;
+  color: #696969;
   display: inline;
 }
 
@@ -231,7 +234,7 @@ body {
     background-position: center; 
     background-repeat: no-repeat; 
     background-size: cover;   */
-  background: #79bcb8;
+  background: #1F7A8C;
   padding-top: 0px;
   padding-bottom: 0px;
 }
@@ -263,6 +266,7 @@ body {
   line-height: 1.2em;
   margin-bottom: 0.5rem;
   margin-top: 2.2rem;
+  margin-left: 3rem;
 }
 
 #how-column {
@@ -276,6 +280,7 @@ body {
   font-size: 25px;
   color: white;
   margin-bottom: 1rem;
+  margin-left: 3rem;
 }
 
 #landing-card {
@@ -343,16 +348,17 @@ body {
 .logo-text {
   font-family: "Monteserrat", sans-serif;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 18px;
   color: #444444;
+  margin-top: .5rem;
 }
 
 .logo-header {
-  font-family: "Monteserrat", sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 700;
-  font-size: 22px;
-  margin-bottom: 1rem;
-  opacity: 90%;
+  font-size: 30px;
+  margin-bottom: .5rem;
+  color: black;
 }
 
 #logo-column {
@@ -530,7 +536,7 @@ body {
     #628e9f,
     #83b3bf
   ); */
-  background: #79bcb8;
+  background: #1F7A8C;
 }
 
 .footer-search-form {
@@ -657,7 +663,7 @@ body {
 
 #step-1 {
   padding: 0px;
-  background: #79bcb8;
+  background: #1F7A8C;
 }
 
 #step-1-col-l {
@@ -666,7 +672,7 @@ body {
 }
 
 #step-1-col-b {
-  background: #79bcb8;
+  background: #1F7A8C;
   padding: 5rem;
   text-align: center;
 }
@@ -717,7 +723,7 @@ body {
   margin-bottom: 1.5rem;
   margin-left: 2.5rem;
   text-align: left;
-  color: #8b786d;
+  color: #696969;
 }
 
 #step-1-content {
@@ -731,7 +737,7 @@ body {
 
 #step-2 {
   padding: 0px;
-  background: #79bcb8;
+  background: #1F7A8C;
 }
 
 #step-2-col-l {
@@ -740,7 +746,7 @@ body {
 }
 
 #step-2-col-b {
-  background: #79bcb8;
+  background: #1F7A8C;
   text-align: center;
   height: 100%;
   /* padding: 3rem; */
@@ -780,7 +786,7 @@ body {
   margin-bottom: 1.5rem;
   margin-left: 3.5rem;
   text-align: left;
-  color: #8b786d;
+  color: #696969;
 }
 
 #step-2-content {
@@ -795,13 +801,13 @@ body {
 
 #step-3 {
   padding: 0px;
-  background: #79bcb8;
-  border-bottom: solid #8b786d 2.5px;
+  background: #1F7A8C;
+  border-bottom: solid #696969 2.5px;
   height: 90vh;
 }
 
 #step-3-col-l {
-  background: #79bcb8;
+  background: #1F7A8C;
   padding: 3.5rem;
 }
 
@@ -832,7 +838,7 @@ body {
 
 #step-3-col-b {
   position: relative;
-  background: #79bcb8;
+  background: #1F7A8C;
   text-align: center;
   padding: 3rem;
   padding-right: 0px;
@@ -854,7 +860,7 @@ body {
   margin-bottom: 1.5rem;
   margin-left: 3.5rem;
   text-align: left;
-  color: #8b786d;
+  color: #696969;
 }
 
 #step-3-content {
@@ -897,7 +903,7 @@ body {
   text-align: left;
   align-items: center;
   border: solid;
-  border-color: #8b786d;
+  border-color: #696969;
 }
 
 #magazine {
@@ -927,7 +933,7 @@ body {
   background: #f9f9f9;
   margin-right: 0px;
   margin-left: 0px;
-  height: 90vh;
+  /* height: 90vh; */
 }
 
 #problems-title {
@@ -935,7 +941,7 @@ body {
   font-weight: 700;
   font-size: 50px;
   letter-spacing: -1.5px;
-  color: #8b786d;
+  color: black;
   margin-bottom: 1rem;
 }
 
@@ -953,14 +959,14 @@ body {
   font-size: 35px;
   color: #696969;
 }
-
-#steps-arrow-text {
+/* 
+/* #steps-arrow-text {
   font-family: 'Raleway';
   font-size: 20px;
   color: #696969;
   font-weight: 500;
   margin-top: 12.5rem;
-}
+} */ */
 
 #or-text {
   font-family: 'Raleway';
@@ -974,7 +980,7 @@ body {
   background: #f9f9f9;
   border: solid;
   border-width: 0px 0px 5px 0px;
-  border-color: #8b786d;
+  border-color: black;
 }
 
 #business-img-col {
@@ -1029,7 +1035,7 @@ body {
   padding: 2rem;
   border: solid;
   border-width: 0px 0px 5px 0px;
-  border-color: #8b786d;
+  border-color: black;
 }
 
 .cta-title {
@@ -1078,39 +1084,123 @@ body {
   font-size: 20px;
   width: 35%;
   padding: 1.5rem;
-  background: #8b786d;
+  background: black;
   text-align: center;
 }
 
 #menu-col {
   margin-bottom: 1rem;
 }
+
+.truncate {
+  position: relative;
+  width: 100%;
+  /* need automatic multi-line height */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* border:1px solid #999999; */
+  float: left;
+  word-wrap: break-word;
+  padding-right: 20px;
+}
+.truncate.truncated {
+    white-space: inherit;
+    text-align: left;
+    width: 450px;
+}
+.truncate.truncated .helpicon{
+  display: none;
+}
+
+.helpicon {
+  color: #696969;
+}
+
+.hide {
+  font-family: 'Raleway';
+  font-weight: 500;
+  color: black;
+}
+
+#search-appendButtons {
+  margin-left: 3rem;
+}
+
 @media only screen and (max-width: 600px) {
+
+  #problems-section {
+    padding: 2.5rem;
+  }
+  #search-semantic {
+    width: 100%;
+  }
   #ha-title {
     margin-left: 0px;
   }
   .menu-links {
     margin-top: 0px;
   }
-  #landing-search-row {
+  /* #landing-search-row {
     height: 70vh;
     text-align: center;
-  }
+  } */
   #search-title {
     margin-left: 0px;
-    font-family: "Monteserrat", sans-serif;
-    font-weight: 700;
-    font-size: 40px;
-    margin-top: 5rem;
   }
   #search-subtitle {
     margin-left: 0px;
+  }
+  #search-appendButtons {
+    margin-left: 0rem;
   }
   #landing-card {
     margin-left: 3.5rem;
   }
   #landing-bottom-row {
     height: 50%;
+  }
+
+  #step-1-title {
+    margin-left: 0px;
+  }
+
+  #step-1-list {
+    padding: 0rem;
+  }
+
+  #step-2-col-b {
+    height: auto;
+  }
+
+  #step-2-title {
+    margin: 0px;
+  }
+
+  #step-2-list {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  #step-3 {
+    height: auto;
+  }
+
+  #step-3-title {
+    margin: 0px;
+  }
+
+  #step-3-list {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  #shadow-3 {
+    padding: 1rem;
+  }
+
+  .bus-box-button {
+    width: 100%;
   }
 
   #about-row {

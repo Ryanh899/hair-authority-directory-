@@ -45,30 +45,29 @@
       <!-- top menu  -->
       <div class="row" id="top-menu-row">
         <div class="ui grid" id="landing-grid">
-          <div style="padding: .5rem;" class="one wide column">
+          <div style="padding: .5rem;" class="one wide computer only column">
             <img
               style="margin-left: 1rem; padding: 0px;"
               id="ha-logo-image"
-              src="./images/logo-symbol-w.png"
+              src="./images/logo-symbol-01.png"
             />
           </div>
-          <div style="padding: 1rem;" class="nine wide middle aligned column">
+          <div style="padding: 1rem;" class="six wide computer six wide mobile middle aligned column">
             <p id="ha-title">Hair Authority Directory</p>
           </div>
-          <div id="dashboard-column" class="two wide column"></div>
-          <div id="sign-in-column" class="two wide column">
+          <div id="dashboard-column" class="three wide column"></div>
+          <div id="sign-in-column" class="three wide column">
             <!-- sign in button  -->
             <div id="sign-in-button">
               <p class="top-button" id="sign-in">Sign In</p>
             </div>
           </div>
           <!-- register button  -->
-          <div id="register-column" class="two wide column">
+          <div id="register-column" class="three wide column">
             <div
-              style="border-bottom: solid; border-color: #8b786d; border-width: 5px;"
               id="listBusiness-button"
             >
-              <p style="color: white;" class="top-button listBusClick" id="register">
+              <p style="color: #696969;" class="top-button listBusClick" id="register">
                 <i class="store icon"></i>List Your Business
               </p>
             </div>
@@ -80,7 +79,7 @@
         <!-- menu tags  -->
         <div id="menu-col" class="sixteen wide column">
           <div style="margin-top: 1rem;" class="ui grid">
-            <div class="two wide center aligned column">
+            <div class="two wide computer three wide mobile center aligned column">
               <a
                 style="display: inline;"
                 class="page-links"
@@ -90,22 +89,22 @@
                 <i style="display: inline;" class="mail icon"></i> Contact</a
               >
             </div>
-            <div class="two wide left aligned column">
+            <div class="two wide computer three wide mobile left aligned column">
               <a class="page-links" href="" id="about">
                 <i class="info icon"></i> About</a
               >
             </div>
-            <div class="two wide left aligned column">
+            <div class="two wide computer three wide mobile left aligned column">
               <a class="page-links" href="" id="news">
                 <i class="newspaper icon"></i> News</a
               >
             </div>
-            <div class="two wide left aligned column">
+            <div class="two wide computer three wide mobile left aligned column">
               <a class="page-links" href="" id="store">
                 <i class="store icon"></i> Store</a
               >
             </div>
-            <div class="four wide column"></div>
+            <!-- <div class="four wide computer one wide mobile column"></div> -->
             <div class="four wide right aligned column">
               <a href="" class="sm-links"> <i class="large instagram icon"></i> </a>
               <a href="" class="sm-links"> <i class="large facebook icon"></i> </a>
@@ -115,7 +114,7 @@
           </div>
         </div>
         <!-- stock magazine image  -->
-        <div class="eight wide middle aligned column">
+        <div class="eight wide middle aligned computer only column">
           <div style="margin-bottom: 5rem;" class="landing-images ui centered grid">
             <div class="sixteen wide column" >
               <img
@@ -150,20 +149,19 @@
           class="eight wide computer sixteen wide mobile left aligned column"
         >
           <!-- title  -->
-          <p style="margin-left: 3rem;" id="search-title">
+          <p id="search-title">
             Find Top Hair Loss Professionals
           </p>
           <!-- subtitle  -->
-          <p style="margin-left: 3rem;" id="search-subtitle">
+          <p id="search-subtitle">
             From the web's most trusted directory
           </p>
           <!-- search div -->
           <div
             id="search-appendButtons"
-            style="margin-left: 3rem;"
             class="ui big search"
           >
-            <div class="ui left icon action input search">
+            <div class="ui  left icon input search">
               <i id="search-icon" class="search icon"></i>
               <input
                 id="search-semantic"
@@ -171,15 +169,17 @@
                 type="text"
                 placeholder="Ex. Hair Restoration, Hair Transplant, Laser Therapy"
               />
-              <button
-                id="search-button"
-                style="background: #1F7A8C; color: #ffffff;"
-                class="ui rounded button"
-              >
-                Search
-              </button>
+        
               <div style="margin-left: 8rem;" class="results"></div>
+              
             </div>
+            <button
+            id="search-button"
+            style="background: white; color: #696969;"
+            class="ui rounded button"
+          >
+            Search
+          </button>
             <!-- CTA  -->
             <p style="display: block;" id="landing-list-p">
               Are you a business owner?
@@ -210,42 +210,134 @@
             </div> -->
       </div>
       <div id="problems-section" class="row">
-        <div class="sixteen wide center aligned column">
+        <div style="margin-bottom: 5rem;" class="sixteen wide center aligned column">
           <p id="problems-title">There Are So Many Solutions</p>
           <p id="problems-text">
             Hair Authority Directory is the internet's most trusted source of
-            <strong class="serif-strong" style="color: #79bcb8;"
+            <strong class="serif-strong" style="color: #1F7A8C;"
               >Specialists,</strong
             >
-            <strong class="serif-strong" style="color: #79bcb8;"
+            <strong class="serif-strong" style="color: #1F7A8C;"
               >Medical Treatments,</strong
             >
-            <strong class="serif-strong" style="color: #79bcb8;"
+            <strong class="serif-strong" style="color: #1F7A8C;"
               >Products,</strong
             >
             and
-            <strong class="serif-strong" style="color: #79bcb8;"
+            <strong class="serif-strong" style="color: #1F7A8C;"
               >Associations.</strong
             >
             Let us help to find the
-            <strong class="serif-strong" style="color: #79bcb8;">Best</strong>
+            <strong class="serif-strong" style="color: #1F7A8C;">Best</strong>
             solution for
-            <strong class="serif-strong" style="color: #79bcb8;">You.</strong>
+            <strong class="serif-strong" style="color: #1F7A8C;">You.</strong>
           </p>
-          <p id="steps-arrow-text">Here's How It Works</p>
-          <i style="color: #696969;" class="down arrow icon"></i>
+          <!-- <p id="steps-arrow-text">Here's How It Works</p>
+          <i style="color: #696969;" class="down arrow icon"></i> -->
         </div>
+          <div class="four wide computer eight wide mobile middle aligned column">
+            <div class="ui grid">
+              <div class="sixteen wide middle aligned column">
+                  <img src="./images/ISHRS.png" id="ishrs" class="ui centered image" >
+              </div>
+            </div>
+          </div>
+          <div class="four wide computer eight wide mobile middle aligned column">
+            <div class="ui grid">
+                <div class="sixteen wide middle aligned column">
+                    <img src="./images/Artas.png" id="artas" class="ui centered image" >
+                </div>
+              </div>
+            </div>
+          <div class="four wide computer eight wide mobile middle aligned column">
+            <div class="ui grid">
+                <div class="sixteen wide middle aligned column">
+                    <img src="./images/WTS.png" id="wts" class="ui centered image" >
+                </div>
+              </div>
+            </div>
+          <div class="four wide computer eight wide mobile middle aligned column">
+            <div class="ui grid">
+                <div class="sixteen wide middle aligned column">
+                    <img src="./images/Hair Club.webp" id="hair-club" class="ui centered image" >
+                </div>
+              </div>
+            </div>
+            <div class="four wide computer only middle aligned column">
+                <div id="ishrs-grid" class="ui grid">
+                  <div class="sixteen wide column">
+                      <p style="text-align: center; margin-top: 1rem; margin-bottom: .5rem;" class="logo-header">
+                          ISHRS
+                      </p>
+                  </div>
+                  <div class="sixteen wide middle aligned column">
+                      <p id="ishrs-truncate" class="logo-text truncate">
+                          The International Society of Hair Restoration Surgery (ISHRS) – Look for this symbol if you are considering hair transplant surgery. ISHRS is a global non-profit medical association and a leading authority on hair loss treatment and restoration. With more than 1,100 members throughout 70 countries, ISHRS is dedicated to achieving excellence in patient outcomes by promoting the highest standards of medical practice, medical ethics, and research in the medical hair restoration industry.
+                      </p>
+                      <i id="ishrs-expand" style="position: absolute; right: .5rem;" class="expand arrows alternate icon helpicon" ></i>
+                      <span id="ishrs-hide" style="display: none;" class="hide" >HIDE</span>
+                  </div>
+                </div>
+              </div>
+              <div class="four wide computer only middle aligned column">
+                <div id="artas-grid" class="ui grid">
+                    <div class="sixteen wide column">
+                        <p style="text-align: center; margin-top: 1rem; margin-bottom: .5rem;" class="logo-header">
+                            Artas
+                          </p>
+                    </div>
+                    <div class="sixteen wide column">
+                        <p id="artas-truncate" class="logo-text truncate">
+                            ARTAS Robotic Hair Restoration System – Leading hair restoration physicians and researchers developed the ARTAS Robotic Hair Restoration System to eliminate the fatigue, linear scarring and human error sometimes associated with other procedures. This symbol identifies doctors and clinics that offer ARTAD robot-assisted hair transplant surgery (FUE). For your security, only company trained and approved facilities are listed.
+                        </p>
+                        <i id="artas-expand" style="position: absolute; right: .5rem;" class="expand arrows alternate icon helpicon" ></i>
+                        <span id="artas-hide" style="display: none;" class="hide" >HIDE</span>
+                    </div>
+                  </div>
+                </div>
+              <div class="four wide computer only middle aligned column">
+                <div id="wts-grid" class="ui grid">
+                    <div class="sixteen wide column">
+                        <p style="text-align: center; margin-top: 1rem; margin-bottom: .5rem;" class="logo-header">
+                            WTS
+                          </p>
+                    </div>
+                    <div class="sixteen wide column">
+                        <p id="wts-truncate" class="logo-text truncate">
+                            The World Trichology Society – WTS is an organization that promotes the science of trichology. Trichology is the para-medical science of the hair , hair loss and associated scalp problems. It is the “bridge between cosmetology and dermatology.” Certified WTS Trichologists have successfully completed a rigorous course covering medical and cosmetic hair loss solutions.
+                        </p>
+                        <i id="wts-expand" style="position: absolute; right: .5rem;" class="expand arrows alternate icon helpicon" ></i>
+                        <span id="wts-hide" style="display: none;" class="hide" >HIDE</span>
+                    </div>
+                  </div>
+                </div>
+              <div class="four wide computer only middle aligned column">
+                <div id="club-grid" class="ui grid">
+                    <div class="sixteen wide column">
+                        <p style="text-align: center; margin-top: 1rem; margin-bottom: .5rem;" class="logo-header">
+                            Hair Club
+                          </p>
+                    </div>
+                    <div class="sixteen wide column">
+                        <p id="club-truncate" class="logo-text truncate">
+                            Hair Club – With 120 locations across the U.S., Canada and Puerto Rico and over 1,100 licensed cosmetologists, Hair Club is the largest network of hair addition and hair management salons. Hair Club states, “We’re a family of hair loss experts whose mission is to help people suffering from hair loss live their lives to the fullest.”
+                        </p>
+                        <i id="club-expand" style="position: absolute; right: .5rem;" class="expand arrows alternate icon helpicon" ></i>
+                        <span id="club-hide" style="display: none;" class="hide" >HIDE</span>
+                    </div>
+                  </div>
+                </div>
       </div>
       <div
-        style="margin-left: 0px; padding-left: 0px;padding-right: 0px; width:100%;"
+        style="margin-left: 0px; padding-left: 0px;padding-right: 0px; width:100%; margin-right: 0px;"
         class="ui grid container"
       >
         <div id="step-1" class="row">
-          <div id="step-1-col-l" class="six wide middle aligned column">
+          <div id="step-1-col-l" class="six wide computer sixteen wide mobile middle aligned column">
             <p id="step-1-title">Browse.</p>
             <div id="step-1-list" class="ui list step-list">
               <div style="margin-bottom: 2.5rem;" class="item">
-                <i style="color: #8b786d;" class="large map pin icon"></i>
+                <i style="color: #696969;" class="large map pin icon"></i>
                 <div class="content step-list-content">
                   <p id="step-1-content">
                     Just type in the
@@ -277,7 +369,7 @@
           </div>
           <div
             id="step-1-col-b"
-            class="ten wide middle aligned centered column"
+            class="ten wide computer sixteen wide mobile  middle aligned centered column"
           >
             <img
               id="step-1-gif-img"
@@ -288,18 +380,18 @@
           </div>
         </div>
         <div id="step-2" class="row">
-          <div id="step-2-col-b" class="seven wide middle aligned column">
+          <div id="step-2-col-b" class="seven wide computer sixteen wide mobile middle aligned column">
             <img id="step-2-img" src="./images/find.results.webp" />
           </div>
           <div
             id="step-2-col-l"
-            class="nine wide middle aligned centered column"
+            class="nine wide computer sixteen wide mobile middle aligned centered column"
           >
             <!-- <p id="step-2-num" class="title_l_blue">2.</p> -->
             <p id="step-2-title">Find Results.</p>
             <div id="step-2-list" class="ui list step-list">
               <div style="margin-bottom: 2.5rem;" class="item">
-                <i style="color: #8b786d;" class="big search icon"></i>
+                <i style="color: #696969;" class="big search icon"></i>
                 <div class="content step-list-content">
                   <p id="step-2-content">
                     Immediately find thousands of the
@@ -314,7 +406,7 @@
                 </div>
               </div>
               <div style="margin-bottom: 2.5rem;" class="item">
-                <i style="color: #8b786d;" class="big bookmark icon"></i>
+                <i style="color: #696969;" class="big bookmark icon"></i>
                 <div class="content step-list-content">
                   <p id="step-2-content">
                     Even save your
@@ -330,12 +422,12 @@
           </div>
         </div>
         <div id="step-3" class="row">
-          <div id="step-3-col-l" class="nine wide middle aligned column">
+          <div id="step-3-col-l" class="nine wide computer sixteen wide mobile middle aligned column">
             <div id="shadow-3">
               <p id="step-3-title">Feel Like You.</p>
               <div id="step-3-list" class="ui list step-list">
                 <div style="margin-bottom: 2.5rem;" class="item">
-                  <i style="color: #8b786d;" class="big child icon"></i>
+                  <i style="color: #696969;" class="big child icon"></i>
                   <div class="content step-list-content">
                     <p id="step-3-content">
                       Let any of our
@@ -359,7 +451,7 @@
               </div>
             </div>
           </div>
-          <div id="step-3-col-b" class="seven wide right aligned column">
+          <div id="step-3-col-b" class="seven wide computer only right aligned column">
             <img
               class="ui huge centered image"
               id="step-3-img"
@@ -375,10 +467,10 @@
         >
           <p id="why-title">Why Hair Authority</p>
         </div>
-        <div class="one wide column"></div>
+        <div class="one wide computer only column"></div>
         <div
           id="business-image-col"
-          class="eight wide right aligned middle aligned column"
+          class="eight wide computer sixteen wide mobile right aligned middle aligned column"
         >
           <img
             id="business-mag-img"
@@ -386,7 +478,7 @@
             src="https://ha-images-02.s3-us-west-1.amazonaws.com/ha_cutout-1.png"
           />
         </div>
-        <div style="padding-top: 5rem;" class="five wide left aligned column">
+        <div style="padding-top: 5rem;" class="five wide computer sixteen wide mobile left aligned column">
           <p class="why-header" >
             Medically Backed.
           </p>
@@ -408,13 +500,13 @@
       <!-- business cta section  -->
       <div id="business-cta-section" class="row">
         <!-- first row  -->
-        <div id="cta-title-col" class="eight wide column">
+        <div id="cta-title-col" class="eight wide computer sixteen wide mobile column">
           <p class="cta-title" >Hair Authority For Professionals</p>
         </div>
-        <div class="eight wide column"></div>
+        <div class="eight wide computer only column"></div>
         <!-- end of first row  -->
-        <div class="one wide column"></div>
-        <div class="seven wide column">
+        <div class="one wide computer only column"></div>
+        <div class="seven wide computer sixteen wide mobile column">
             <p class="cta-header" >
                 No Ads. Just you
               </p>
@@ -431,7 +523,7 @@
                   List Your Business
                 </div>
         </div>
-        <div class="eight wide column">
+        <div class="eight wide computer only column">
           <img class="ui big centered image" src="https://pluspng.com/img-png/mac-computer-screen-png-apple-mac-computer-screen-png-1122.png" >
         </div>
       </div>

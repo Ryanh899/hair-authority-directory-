@@ -192,7 +192,7 @@ $(document).ready(function() {
     button.className = "ui button catButtons";
     button.textContent = category.title;
     button.style.margin = ".5rem";
-    button.style.color = "#2ca6a4";
+    button.style.color = "#1F7A8C";
     button.style.background = "white";
     button.style.fontFamily = "Lato";
     button.style.fontWeight = 500;
@@ -257,6 +257,90 @@ $(document).ready(function() {
         }
       }
     });
+
+    $("body").on("click", "#ishrs-expand", function() {
+      $('#artas-grid').fadeOut(); 
+      $('#wts-grid').fadeOut();
+      $('#club-grid').fadeOut();
+      $('#ishrs-hide').css('display', ''); 
+      $(this).css('display', 'none'); 
+      $('#ishrs-truncate').addClass('truncated');
+    });
+
+    $("body").on("click", "#ishrs-hide", function() {
+      $('#artas-grid').fadeIn(); 
+      $('#wts-grid').fadeIn();
+      $('#club-grid').fadeIn();
+        $('#ishrs-expand').css('display', '')
+        $('#ishrs-hide').css('display', 'none')
+        $('#ishrs-truncate').removeClass('truncated');
+    });
+
+    $("body").on("click", "#artas-expand", function() {
+      $('#ishrs-grid').fadeOut(); 
+      $('#wts-grid').fadeOut();
+      $('#club-grid').fadeOut();
+      $('#artas-hide').css('display', '')
+      $(this).css('display', 'none')
+      $('#artas-truncate').addClass('truncated');
+    });
+
+    $("body").on("click", "#artas-hide", function() {
+      $('#ishrs-grid').fadeIn(); 
+      $('#wts-grid').fadeIn();
+      $('#club-grid').fadeIn();
+        $('#artas-expand').css('display', '')
+        $('#artas-hide').css('display', 'none')
+        $('#artas-truncate').removeClass('truncated');
+    });
+
+    $("body").on("click", "#wts-expand", function() {
+      $('#ishrs-grid').fadeOut(); 
+      $('#artas-grid').fadeOut();
+      $('#club-grid').fadeOut();
+      $('#wts-hide').css('display', '')
+      $(this).css('display', 'none')
+      $('#wts-truncate').addClass('truncated');
+    });
+
+    $("body").on("click", "#wts-hide", function() {
+      $('#artas-grid').fadeIn(); 
+      $('#ishrs-grid').fadeIn();
+      $('#club-grid').fadeIn();
+        $('#wts-expand').css('display', '')
+        $('#wts-hide').css('display', 'none')
+        $('#wts-truncate').removeClass('truncated');
+    });
+
+    $("body").on("click", "#club-expand", function() {
+      $('#ishrs-grid').fadeOut(); 
+      $('#wts-grid').fadeOut();
+      $('#artas-grid').fadeOut();
+      $('#club-hide').css('display', '')
+      $(this).css('display', 'none')
+      $('#club-truncate').addClass('truncated');
+    });
+
+    $("body").on("click", "#club-hide", function() {
+      $('#artas-grid').fadeIn(); 
+      $('#wts-grid').fadeIn();
+      $('#ishrs-grid').fadeIn();
+        $('#club-expand').css('display', '')
+        $('#club-hide').css('display', 'none')
+        $('#club-truncate').removeClass('truncated');
+    });
+
+    
+    // $('.helpicon').on('click', function () {
+      
+    // });
+    
+    // $('.hide').on('click', function () {
+    //   $('.helpicon').css('display', '')
+    //   $('.hide').css('display', 'none')
+    //   $('.truncated').removeClass('truncated');
+    // });
+  
 
   function slick() {
     $(".landing-images").slick({
