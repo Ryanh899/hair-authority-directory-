@@ -410,7 +410,8 @@ function setCookie(name, value)
       })
       .then(response => {
         console.log(response);
-        window.location.assign("dashboard.html");
+        alert('You will receive an email when your listing has been verified.'); 
+        window.location.assign("index.html");
       })
       .catch(err => {
         console.log(err);
