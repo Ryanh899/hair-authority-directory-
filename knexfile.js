@@ -4,12 +4,11 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      host : keys.prodDbHost,
-      user : keys.prodDbUser,
-      password : keys.prodDbPswd,
-      database : keys.prodDb,
+      host : 'localhost',
+      user : 'postgres',
+      password : 'root',
+      database : 'postgres',
       charset: 'utf8', 
-      ssl: true
     },
     migrations: {
       directory: __dirname + '/knex/migrations',

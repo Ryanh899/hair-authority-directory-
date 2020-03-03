@@ -17,7 +17,7 @@ a:hover {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 45px;
-  color: #1f7a8c;
+  color: #3aa7a3;
   margin: 0px;
 }
 
@@ -47,7 +47,7 @@ a:hover {
 #back-button {
   padding: 0.75rem;
   float: right;
-  background: #f9f9f9;
+  background: white;
   color: black;
   position: relative;
   width: 15%;
@@ -269,7 +269,7 @@ a:hover {
 }
 
 #back-button {
-  background: #f9f9f9;
+  background: #9dd9d2;
   font-family: "lato", sans-serif;
   font-weight: 400;
   font-size: 20px;
@@ -326,18 +326,6 @@ a:hover {
     font-family: 'Lato';
     font-weight: 300;
     font-size: 16px;
-}
-
-#listBusiness-button {
-  background: #1f7a8c;
-}
-
-#back-p {
-  text-align: center;
-  vertical-align: middle;
-  display: table-cell;
-  color: #1f7a8c;
-  padding: 0.5rem;
 }
 
 

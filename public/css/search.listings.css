@@ -65,7 +65,7 @@
 #map-container {
   border: solid;
   border-width: 10px;
-  border-color: #8b786d;
+  border-color: #1f7a8c;
   height: 100%;
   width: 100%;
   position: relative;
@@ -112,7 +112,7 @@
 .listingTitle-search {
   font-family: "Raleway";
   font-weight: 700;
-  color: #8b786d;
+  color: black;
   display: inline;
   font-size: 25px;
 }
@@ -174,7 +174,7 @@
   } 
   
   #back-button {
-    background: #9dd9d2;
+    background: #1f7a8c;
     font-family: "lato", sans-serif;
     font-weight: 400;
     font-size: 20px;

@@ -309,7 +309,7 @@ $(document).ready(function() {
         // if category prepend to title section
         if (listing.category !== null) {
           $(titleSection).prepend(
-            `<p  class="listing_category" >${listing.category}</p>  <p style="color: #1f7a8c;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`
+            `<p  class="listing_category" >${listing.category}</p>  <p style="color: #3aa7a3;;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`
           );
         }
 

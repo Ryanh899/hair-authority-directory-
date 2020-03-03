@@ -99,7 +99,8 @@ $(document).ready(function() {
   let markerInfo = [];
   const page = document.querySelector("div#page-container");
   const loader = document.querySelector("div#loader-div");
-  let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
+  // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
+  let API_URL = "http://localhost:3000/api/";
   // if (process.env.NODE_ENV = 'production') {
   //   console.log(env)
   //   API_URL = "ec2-54-90-69-186.compute-1.amazonaws.com/api/";
@@ -268,7 +269,7 @@ $(document).ready(function() {
                       class="ten wide column"
                     >
                       <a href="#" id="${listing.id}" class="listingTitle-search">
-                        ${listing.business_title} <i class="tiny check circle icon" style="color: #79bcb8" ></i>
+                        ${listing.business_title} <i class="tiny check circle icon" style="color: #1f7a8c;" ></i>
                       </a>
                       <p class="listingSubtitle-search">
                         ${listing.category || "" }
@@ -279,10 +280,10 @@ $(document).ready(function() {
                     class="six wide computer only column"
                   >
                     <p class="listing-info-text">
-                      <i style="color: #79bcb8;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                      <i style="color: #1f7a8c;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
                     </p>
                     <p class="listing-info-text">
-                      <i style="color: #79bcb8;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                      <i style="color: #1f7a8c;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
                     </p>
                     <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
                   </div>
@@ -357,7 +358,7 @@ $(document).ready(function() {
                       class="ten wide column"
                     >
                       <a href="#"  id="${listing.id}" class="listingTitle-search">
-                        ${listing.business_title} <i class="small check circle icon" style="color: #79bcb8" ></i>
+                        ${listing.business_title} <i class="small check circle icon" style="color: #1f7a8c;" ></i>
                       </a>
                       <p class="listingSubtitle-search">
                         ${listing.category || "" }
@@ -368,12 +369,12 @@ $(document).ready(function() {
                     class="six wide computer only column"
                   >
                     <p class="listing-info-text">
-                      <i style="color: #79bcb8;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                      <i style="color: #1f7a8c;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
                     </p>
                     <p class="listing-info-text">
-                      <i style="color: #79bcb8;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                      <i style="color: #1f7a8c;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
                     </p>
-                    <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                    <!-- <button style="margin-top: 1rem; background: #1f7a8c; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
                   </div>
                   
                   <div class="fourteen wide column">

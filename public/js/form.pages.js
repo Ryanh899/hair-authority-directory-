@@ -3,7 +3,8 @@ $(document).ready(function() {
   sessionStorage.removeItem("24Hour");
 
 
-  let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
+  // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
+  let API_URL = "http://localhost:3000/api/";
 
   var myAxios = axios.create({
     headers: {
