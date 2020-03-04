@@ -57,44 +57,48 @@ const weekDays = [
 ];
 
 // parse youtube
-function YouTubeGetID(url){
-  var ID = '';
-  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  if(url[2] !== undefined) {
+function YouTubeGetID(url) {
+  var ID = "";
+  url = url
+    .replace(/(>|<)/gi, "")
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if (url[2] !== undefined) {
     ID = url[2].split(/[^0-9a-z_\-]/i);
     ID = ID[0];
-  }
-  else {
+  } else {
     ID = url;
   }
-    return ID;
+  return ID;
 }
 
-// get channel from user url 
+// get channel from user url
 function getChannelFromUrl(url) {
-  var pattern = new RegExp('^(https?:\/\/)?(www\.)?youtube\.com/(user/)?([a-z\-_0-9]+)/?([\?#]?.*)', 'i');
+  var pattern = new RegExp(
+    "^(https?://)?(www.)?youtube.com/(user/)?([a-z-_0-9]+)/?([?#]?.*)",
+    "i"
+  );
   var matches = url.match(pattern);
-  if(matches) {
+  if (matches) {
     return matches[4];
   }
 
   return url;
 }
 
-function getChannelIdFromUrl (url) {
+function getChannelIdFromUrl(url) {
   var pattern = /^(?:(http|https):\/\/[a-zA-Z-]*\.{0,1}[a-zA-Z-]{3,}\.[a-z]{2,})\/channel\/([a-zA-Z0-9_]{3,})$/;
   var matchs = url.match(pattern);
   if (!matchs === null) {
-    return matchs[2]
+    return matchs[2];
   } else {
-    return
+    return;
   }
 }
 
-function youtube_parser(url){
+function youtube_parser(url) {
   var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
   var match = url.match(regExp);
-  return (match&&match[7].length==11)? match[7] : false;
+  return match && match[7].length == 11 ? match[7] : false;
 }
 
 // on ready
@@ -115,7 +119,7 @@ $(document).ready(function() {
   function getGeolocation() {
     console.log("map");
     // navigator.geolocation.getCurrentPosition(drawMap);
-    drawMap()
+    drawMap();
   }
 
   // function called by getGeolocation
@@ -129,7 +133,10 @@ $(document).ready(function() {
       sessionStorage.getItem("listing-lng") !== "null"
     ) {
       console.log("COORDINATES");
-      geolocate = new google.maps.LatLng(parseFloat(sessionStorage.getItem("listing-lat")), parseFloat(sessionStorage.getItem("listing-lng")))
+      geolocate = new google.maps.LatLng(
+        parseFloat(sessionStorage.getItem("listing-lat")),
+        parseFloat(sessionStorage.getItem("listing-lng"))
+      );
 
       // create map props for map generator
       let mapProp = {
@@ -139,10 +146,7 @@ $(document).ready(function() {
         zoomControl: false
       };
       // call google maps api to append the map to the #map div
-      let map = new google.maps.Map(
-        document.getElementById("map"),
-        mapProp
-      );
+      let map = new google.maps.Map(document.getElementById("map"), mapProp);
       // create a marker for the business
       let marker = new google.maps.Marker({
         position: geolocate,
@@ -309,8 +313,14 @@ $(document).ready(function() {
         // if category prepend to title section
         if (listing.category !== null) {
           $(titleSection).prepend(
-            `<p  class="listing_category" >${listing.category}</p>  <p style="color: #1f7a8c;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`
+            `<p  class="listing_category" >${listing.category}</p>  `
           );
+        }
+
+        if (listing.claimed) {
+          $(titleSection).prepend(`<p style="color: #1f7a8c;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`)
+        } else {
+          $(titleSection).append(`<button style="background: #1f7a8c; color: white;" class="ui button" >Claim This Business</button>`)
         }
 
         // prepend title to title section
@@ -438,42 +448,82 @@ $(document).ready(function() {
 
         // if youtube append embed
         if (listing.youtube) {
-          let ytUrl = listing.youtube.split('/')
-          if (ytUrl.some(x => x === 'user')) {
-            console.log('USER')
-            let username = getChannelFromUrl(listing.youtube)
+          $("#youtube-section").append(`<div
+          id="youtube-hr"
+          style="padding: 0px;"
+          class="sixteen wide column"
+        > <hr class="style14"/></div>`);
+          let ytUrl = listing.youtube.split("/");
+
+          if (ytUrl.some(x => x === "user")) {
+            console.log("USER");
+            let username = getChannelFromUrl(listing.youtube);
             $("#youtube-col").append(
-              `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed?listType=user_uploads&list=${username}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" data-icon="right circle arrow" ></div>`
+              `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed?listType=user_uploads&list=${username}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" ></div>`
             );
-            $('#youtube-embed').embed();
-          } else if (ytUrl.some(x => x === 'channel')){
-            console.log('CHANNEL')
-            let channelId = await youtube_parser(listing.youtube); 
+            $("#youtube-embed").embed();
+          } else if (ytUrl.some(x => x === "channel")) {
+            console.log("CHANNEL");
+            let channelId = await getChannelIdFromUrl(listing.youtube);
+            console.log(channelId);
             if (channelId) {
+              console.log("CHANNEL ID ");
               $("#youtube-col").append(
-                `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed/videoseries?list=${channelId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" data-icon="right circle arrow" ></div>`
+                `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed/videoseries?list=${channelId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" ></div>`
               );
-              $('#youtube-embed').embed();
+              $("#youtube-embed").embed();
             } else {
-              let split = listing.youtube.split('/'); 
-              if (split[split.length-1].length > 10) {
-                let channelId = split[split.length-1]
+              console.log("CHANNEL ID ELSE");
+              let split = listing.youtube.split("/");
+              if (split[split.length - 1].length > 10) {
+                let channelId = split[split.length - 1];
+                let changeChannelId = channelId.split("");
+                if (changeChannelId[1] === "C") {
+                  changeChannelId[1] = "U";
+                }
+                console.log(changeChannelId.join(""));
+                let newChannelId = changeChannelId.join("");
                 $("#youtube-col").append(
-                  `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed/videoseries?list=${channelId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" data-icon="right circle arrow" ></div>`
+                  `<div id="youtube-embed" class="ui embed youtube" data-url="http://www.youtube.com/embed/videoseries?list=${newChannelId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" ></div>`
                 );
-                $('#youtube-embed').embed();
+                $("#youtube-embed").embed();
               } else {
-                let channelId = split[split.length-2]
+                let channelId = split[split.length - 2];
+                let changeChannelId = channelId.split("");
+                if (changeChannelId[1] === "C") {
+                  changeChannelId[1] = "U";
+                }
+                console.log(changeChannelId.join(""));
+                let newChannelId = changeChannelId.join("");
                 $("#youtube-col").append(
-                  `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed/videoseries?list=${channelId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" data-icon="right circle arrow" ></div>`
+                  `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed/videoseries?list=${channelId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" ></div>`
                 );
-                $('#youtube-embed').embed();
+                $("#youtube-embed").embed();
               }
             }
           } else {
-            let vidId = getChannelIdFromUrl(listing.youtube)
-            console.log(vidId)
+            let vidId = getChannelIdFromUrl(listing.youtube);
+            console.log(vidId);
           }
+        }
+
+        if (listing.faqs) {
+          $('#faq-section').append(`
+          <div id="faq" class="sixteen wide column">
+            <hr
+            class="style14"
+            />
+            <p id="section-header">FAQ's</p>
+          </div>`)
+          listing.faqs.forEach((faq, index) => {
+            $("#faq").append(
+              `<p class="faq-header" >Question #${index + 1}</p>`
+            );
+            $("#faq").append(`<p class="hours-text" >${faq.faq}</p>`);
+            $("#faq").append(`<p class="faq-header" >Answer</p>`);
+            $("#faq").append(`<p class="hours-text" >${faq.faq_answer}</p>`);
+          });
+          $("#faq").append(`<hr class="style14" />`);
         }
 
         // END OF .THEN FROM AXIOS

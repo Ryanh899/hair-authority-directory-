@@ -217,22 +217,21 @@ const Listings = {
       .catch(err => {
         console.log(err);
       });
-      return listings
-    // return listings.map((listing, index) => {
-    //   return new Promise(async (resolve, reject) => {
-    //     let distance = await GeoCode.findDistance2(
-    //       { lat: listing.lat, lng: listing.lng, city: listing.city },
-    //       currentLocation
-    //     );
-    //     if (distance && distance.value < 16093400) {
-    //       console.log("LESS");
-    //       resolve(listing);
-    //     } else {
-    //       console.log("GREATER");
-    //       resolve(0);
-    //     }
-    //   });
-    // });
+    return listings.map((listing, index) => {
+      return new Promise(async (resolve, reject) => {
+        let distance = await GeoCode.findDistance2(
+          { lat: listing.lat, lng: listing.lng, city: listing.city },
+          currentLocation
+        );
+        if (distance && distance.value < 16093400) {
+          console.log("LESS");
+          resolve(listing);
+        } else {
+          console.log("GREATER");
+          resolve(0);
+        }
+      });
+    });
   },
   getById(id, cb) {
     let getListing = new Promise((resolve, reject) => {
@@ -262,7 +261,6 @@ const Listings = {
           sm.forEach(platform => {
             listing[platform.platform] = platform.url
           })
-          listing.social_media = sm
           return knex('hours').select().where('listing_id', listing.id)
         })
         .then(hours => {
@@ -270,7 +268,14 @@ const Listings = {
           hours.forEach(day => {
             listing[day.day] = { opening_hours: day.opening_hours, closing_hours: day.closing_hours }
           })
-          return cb.status(200).json(listing)
+          return knex('faq').select().where('listing_id', listing.id); 
+        })
+        .then(faqs => {
+          console.log(faqs); 
+          if (faqs.length > 0) {
+            listing.faqs = faqs
+          }
+          return cb.status(200).json(listing); 
         })
         .catch(err => {
           console.log(err)
