@@ -320,7 +320,7 @@ $(document).ready(function() {
         if (listing.claimed) {
           $(titleSection).prepend(`<p style="color: #1f7a8c;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`)
         } else {
-          $(titleSection).append(`<button style="background: #1f7a8c; color: white;" class="ui button" >Claim This Business</button>`)
+          $(titleSection).append(`<button id="claim-button" style="background: #1f7a8c; color: white;" class="ui button" >Claim This Business</button>`)
         }
 
         // prepend title to title section
@@ -434,16 +434,15 @@ $(document).ready(function() {
         });
 
         // if hours arr has content append them
-        if (mapHours.length !== 0) {
+        if (mapHours.length > 25) {
           console.log(mapHours);
           mapHours.forEach(day => {
             $("#hours-column").append(day);
           });
           // else say no hours available
         } else {
-          $("#hours-column").append(
-            `<p class="hours-text" >No Hours Available</p>`
-          );
+          console.log('else')
+          $("#hours-column").css('display', 'none')
         }
 
         // if youtube append embed
@@ -536,5 +535,13 @@ $(document).ready(function() {
   $("body").on("click", "#back-button", function() {
     sessionStorage.removeItem("listing-address");
     window.history.back();
+  });
+
+  $("body").on("click", "#claim-button", function() {
+    if (sessionStorage.getItem('token')) {
+      window.location.assign('billing__new.html'); 
+    } else {
+      window.location.assign('sign-in.html')
+    }
   });
 });

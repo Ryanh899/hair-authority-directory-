@@ -1,6 +1,6 @@
 var myAxios = axios.create({
   headers: {
-    Authorization: "Bearer " + localStorage.getItem("token")
+    Authorization: "Bearer " + sessionStorage.getItem("token")
   }
 });
 myAxios.interceptors.response.use(
@@ -17,7 +17,7 @@ myAxios.interceptors.response.use(
 );
 var authHelper = {
   isLoggedIn() {
-    var token = localStorage.getItem("token");
+    var token = sessionStorage.getItem("token");
     if (token) {
       var userData = this.parseToken(token);
       var expirationDate = new Date(userData.exp * 1000);
@@ -31,12 +31,13 @@ var authHelper = {
     return JSON.parse(window.atob(token.split(".")[1]));
   },
   logOut(path = "./sign-in.html") {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     window.location.assign(path);
   }
 };
-let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/"
+// let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/"
 
+let API_URL = "http://localhost:3000/";
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
@@ -96,7 +97,7 @@ $(document).ready(function() {
         password: formData.get("password")
       };
       axios
-        .post(`${API_URL} + auth/register`, userInfo)
+        .post(`${API_URL}auth/register`, userInfo)
         .then(response => {
           console.log(response);
           sessionStorage.setItem('justRegistered', true)

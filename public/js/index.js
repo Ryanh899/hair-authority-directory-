@@ -1,6 +1,6 @@
 var myAxios = axios.create({
   headers: {
-    Authorization: "Bearer " + localStorage.getItem("token")
+    Authorization: "Bearer " + sessionStorage.getItem("token")
   }
 });
 myAxios.interceptors.response.use(
@@ -17,7 +17,7 @@ myAxios.interceptors.response.use(
 );
 var authHelper = {
   isLoggedIn() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       var userData = this.parseToken(token);
       var expirationDate = new Date(userData.exp * 1000);
@@ -33,7 +33,7 @@ var authHelper = {
     }
   },
   logOut() {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
   }
 };
 
@@ -57,7 +57,7 @@ $(document).ready(function() {
   getLocation(); 
 
   if (authHelper.isLoggedIn()) {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const userInfo = authHelper.parseToken(token);
     console.log(userInfo);
     if (userInfo && userInfo.isClientUser) {
@@ -216,7 +216,7 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#list-business-button", function() {
-    const user = localStorage.getItem("token");
+    const user = sessionStorage.getItem("token");
 
     if (user) {
       window.location.assign("listing.form.html");

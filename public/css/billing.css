@@ -3,7 +3,7 @@ body {
 }
 
 #back-button {
-    background: #9dd9d2;
+    background: #1f7a8c;
     font-family: "lato", sans-serif;
     font-weight: 400;
     font-size: 20px;
@@ -24,7 +24,7 @@ body {
       border: solid;
       border-width: 5px;
       border-radius: 20px;
-      border-color: #9dd9d2;
+      border-color: #1f7a8c;
       padding: 1rem;
       margin: 1rem;
   }
@@ -33,7 +33,7 @@ body {
     border: solid;
     border-width: 5px;
     border-radius: 20px;
-    border-color: #9dd9d2;
+    border-color: #1f7a8c;
     padding: 1rem;
     margin: 1rem;
 }
@@ -42,7 +42,7 @@ body {
     border: solid;
     border-width: 5px;
     border-radius: 20px;
-    border-color: #9dd9d2;
+    border-color: #1f7a8c;
     padding: 1rem;
     margin: 1rem;
 }
@@ -51,13 +51,13 @@ body {
     border: solid;
     border-width: 5px;
     border-radius: 20px;
-    border-color: #9dd9d2;
+    border-color: #1f7a8c;
     padding: 1rem;
     margin: 1rem;
 }
 
   #free-header-col {
-      background: #9dd9d2;
+      background: #1f7a8c;
   }
 
   .plan-header {
