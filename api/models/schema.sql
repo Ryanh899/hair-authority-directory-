@@ -159,3 +159,11 @@ create table extra_refresh (
 id serial not null, 
 refresh_token varchar(100)
 ); 
+
+create table zoho_status (
+user_id uuid not null, 
+customer_id text not null, 
+balace int, 
+payment_id text, 
+plan_code uuid 
+); 

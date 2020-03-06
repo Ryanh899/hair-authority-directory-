@@ -414,6 +414,8 @@ function setCookie(name, value)
       .then(response => {
         console.log(response);
         alert('You will receive an email when your listing has been verified.'); 
+
+        sessionStorage.setItem('lastLocation', 'listing.form')
         window.location.assign("index.html");
       })
       .catch(err => {
