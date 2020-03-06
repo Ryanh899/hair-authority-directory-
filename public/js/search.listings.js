@@ -56,7 +56,7 @@ const newCategories = [
 
 var myAxios = axios.create({
   headers: {
-    Authorization: "Bearer " + localStorage.getItem("token")
+    Authorization: "Bearer " + sessionStorage.getItem("token")
   }
 });
 myAxios.interceptors.response.use(
@@ -76,7 +76,7 @@ myAxios.interceptors.response.use(
 );
 var authHelper = {
   isLoggedIn() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       var userData = this.parseToken(token);
       var expirationDate = new Date(userData.exp * 1000);
@@ -89,13 +89,29 @@ var authHelper = {
   parseToken(token) {
     return JSON.parse(window.atob(token.split(".")[1]));
   },
+  isLoggedIn__professional() {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      var userData = this.parseToken(token);
+      var expirationDate = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate) this.logOut();
+      if (userData.isProfessionalUser) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  },
   logOut(path = "./sign-in.html") {
-    localStorage.removeItem("token");
-    window.location.assign(path);
+    sessionStorage.removeItem("token");
   }
 };
 
 $(document).ready(function() {
+
+
   let markerInfo = [];
   const page = document.querySelector("div#page-container");
   const loader = document.querySelector("div#loader-div");
@@ -117,7 +133,12 @@ $(document).ready(function() {
 
   $(page).css("display", "none");
 
-
+if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng')) {
+  location.coords.latitude = sessionStorage.getItem('current-lat')
+  location.coords.longitude = sessionStorage.getItem('current-lng')
+} else {
+  console.log('current location not in SS')
+}
 
   function drawMap(geoPos) {
     geolocate = new google.maps.LatLng(
@@ -183,8 +204,11 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#back-button", function() {
-    window.location.assign("index.html");
-  });
+    // remove search query
+    sessionStorage.removeItem('searchQuery')
+    // go back
+    window.history.back(); 
+  });  
 
   $("body").on("click", "#search-button", function() {
     const search = document.querySelector("input#search-search").value.trim();
@@ -195,6 +219,9 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#home-button", function() {
+
+    sessionStorage.setItem('lastLocation', 'search')
+
     window.location.assign("index.html");
   });
 
@@ -241,7 +268,7 @@ $(document).ready(function() {
           );
           $(loader).fadeOut();
           $(page).fadeIn();
-          getGeolocation();
+          drawMap(location)
         } else {
           $("#listings-column")
               .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
@@ -331,7 +358,7 @@ $(document).ready(function() {
           );
           $(loader).fadeOut();
           $(page).fadeIn();
-          getGeolocation();
+          drawMap(location)
         } else {
           $("#listings-column")
               .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
@@ -402,9 +429,97 @@ $(document).ready(function() {
       });
   }
 
+  if (authHelper.isLoggedIn()) {
+    const token = sessionStorage.getItem("token");
+    const userInfo = authHelper.parseToken(token);
+    console.log(userInfo);
+    if (userInfo && userInfo.isClientUser) {
+      $("#register-column").html(`
+      <div id="client-drop-div">
+        <div id="client-dropdown" class="ui inline dropdown">
+          <div id="dropdown-text" class="text">
+          ${userInfo.email}
+        </div>
+        <i id="dropdown-icon" class="dropdown icon"></i>
+        <div class="menu">
+        <div id="saved-listings-option" class="item">
+        <p class="user-menu-option-text" ><i class="bookmark icon" ></i> Bookmarked Listings</p>
+      </div>
+      <div id="logout-menu-option" class="item">
+        <p class="user-menu-option-text" ><i class="power off icon" ></i> Logout</p>
+      </div>
+          </div>
+        </div>
+      </div>
+      `);
+      $(".ui.dropdown").dropdown({ transition: "drop" });
+      $("#sign-in-column").html(`
+      <div style="background: #696969; border-bottom: solid; border-color: #696969; border-width: 5px;" id="listBusiness-button">
+      <p style="color: white;" class="top-button listBusClick" id="register"><i class="store icon" ></i>List Your Business</p>
+      </div>
+      `);
+    } else if (userInfo && userInfo.isProfessionalUser) {
+      $("#register-column").html(`
+      <div id="client-drop-div">
+        <div id="client-dropdown" class="ui inline dropdown">
+          <div id="dropdown-text" class="text">
+          ${userInfo.email}
+        </div>
+        <i id="dropdown-icon" class="dropdown icon"></i>
+        <div class="menu">
+            <div id="dashboard-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="building icon" ></i> Dashboard</p>
+            </div>
+            <div id="saved-listings-option" class="item">
+              <p class="user-menu-option-text" ><i class="bookmark icon" ></i> Bookmarked Listings</p>
+            </div>
+            <div id="logout-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="power off icon" ></i> Logout</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      `);
+      $(".ui.dropdown").dropdown({ transition: "drop" });
+      $("#sign-in-column").html("");
+    } else if (userInfo && userInfo.isAdminUser) {
+      $("#register-column").html(
+        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
+      );
+      $("#sign-in-column").html(
+        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
+      );
+      $("#dashboard-column").html(`
+      <div id="dashboard-button"  ><p class="top-button" id="dashboard" >Dashboard</p></div>
+      `);
+    }
+  } else {
+    console.log("not logged in");
+    $("#logout-button").css("display", "none");
+  }
+
+  $("body").on("click", ".listBusClick", function() {
+    console.log("list business");
+    sessionStorage.setItem("lastLocation", "search");
+    if (authHelper.isLoggedIn()) {
+      window.location.assign("billing__new.html");
+    } else {
+      sessionStorage.setItem("routeToBilling", true);
+      window.location.assign("sign-in.html");
+    }
+  });
+
+
+  $("body").on("click", "#sign-in-button", function() {
+    event.preventDefault();
+
+    sessionStorage.setItem('lastLocation', 'index')
+    window.location.assign("sign-in.html");
+  });
+
   $("body").on("click", ".saveButton", function(e) {
     const id = $(this).attr("id");
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     console.log($(this));
     if (token) {
       myAxios
@@ -416,6 +531,8 @@ $(document).ready(function() {
         });
     } else {
       alert("please sign in to save listings");
+      sessionStorage.setItem('lastLocation', 'search')
+
       window.location.assign("sign-in.html");
     }
   });
@@ -434,13 +551,58 @@ $(document).ready(function() {
   //   window.location.assign("listing.html");
   // });
 
+  $("body").on("click", "#logout-menu-option", function() {
+    event.preventDefault();
+    authHelper.logOut();
+    $("#register-column").html(
+      `<div
+      id="listBusiness-button"
+    >
+      <p style="background: #696969; color: white;" class="top-button listBusClick" id="register">
+        <i class="store icon"></i>List Your Business
+      </p>
+    </div>`
+    );
+    $("#sign-in-column").html(
+      `<div id="sign-in-button"><p id="sign-in">Sign In</p></div>`
+    );
+    $("#dashboard-column").html("");
+    $("#logout-div").html("");
+  });
+
+  $("body").on("click", "#back-button", function() {
+
+    sessionStorage.setItem('lastLocation', 'search')
+    if (sessionStorage.getItem('lastLocation') === 'sign-in' ) {
+      window.location.assign('index.html')
+    } else if (sessionStorage.getItem('lastLocation') === 'search' ) {
+      window.location.assign('index.html')
+    } else {
+      window.history.back()
+    }
+  });
+
+  $("body").on("click", "#dashboard-menu-option", function() {
+    event.preventDefault();
+    
+    if (authHelper.isLoggedIn__professional()) {
+      sessionStorage.setItem("lastLocation", "index");
+      window.location.assign("dashboard.html");
+    } else {
+      alert('You must Have a verified business to view this page')
+    }
+  });
+
   $("body").on("click", "a", function(e) {
     const id = $(this).attr("id");
-    console.log(allListings)
+    // filter arr of all listings on page to find clicked on listing and get the id
     let getCoords = allListings.filter(x => x.id === id); 
-    console.log(getCoords)
+    // set the last window location to search 
+    sessionStorage.setItem('lastLocation', 'search')
+    // set the current listing lat and lng in SS
     sessionStorage.setItem('listing-lat', getCoords[0].lat)
     sessionStorage.setItem('listing-lng', getCoords[0].lng)
+    // set full address for if no coords 
     sessionStorage.setItem('listing-address', getCoords[0].full_address)
     sessionStorage.setItem("currentListing", id);
     window.location.assign("listing.html");

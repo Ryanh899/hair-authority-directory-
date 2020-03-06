@@ -4,11 +4,11 @@
 }
 
 body {
-    background: #79bcb8;
+    background: #1F7A8C;
 }
 
 #page-container {
-    background: #79bcb8;
+    background: #1F7A8C;
     height: 85vh;
 }
 
@@ -16,16 +16,14 @@ body {
     background: white ;
     color: black;
     padding: 5rem;
-    border: solid;
-    border-color: #3aa7a3;
-    border-width: 7.5px;
+   
 }
 
 #signIn-text {
     font-family: 'Lato', sans-serif;
     font-weight: 300;
     font-size: 25px;
-    color: #8b786d;
+    color: #696969;
     line-height: 1.5em;
 }
 
@@ -37,7 +35,7 @@ body {
     text-align: center;
     vertical-align: middle;
     display: table-cell;
-    color: #3aa7a3;
+    color: white;
     padding: 0.5rem;
   }
 
@@ -45,7 +43,8 @@ body {
     font-family: 'Raleway', sans-serif;
     font-weight: 700;
     font-size: 25px;
-    color: #8b786d;
+    color: #696969;
+    text-align: center;
 }
 
 #password {
@@ -58,7 +57,7 @@ body {
 
 .ha_button {
     text-align: center;
-    background: #79bcb8;
+    background: #1F7A8C;
     color: white;
     font-family: 'Lato', sans-serif;
     font-weight: 300;

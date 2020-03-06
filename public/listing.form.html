@@ -37,34 +37,35 @@
                     <div class="ui grid" id="landing-grid">
                       <div id="back-column" class="one wide column">
                         <div id="back-button">
-                          <p class="top-button" id="sign-in">
+                          <p id="back-p" class="top-button" >
                             <i class="left arrow icon"></i>
                           </p>
                         </div>
-                      </div>
-                      <div style="padding: .5rem;" class="one wide column">
+                      </div>  
+                      <!-- <div style="padding: .5rem;" class="one wide computer only column">
                         <img
                           style="margin-left: 1rem; padding: 0px;"
                           id="ha-logo-image"
-                          src="./images/logo-symbol-w.png"
+                          src="./images/logo-symbol-01.png"
                         />
+                      </div> -->
+                      <div style="padding: 1rem;" class="fourteen wide computer six wide mobile middle center aligned centered column">
+                        <p style="font-size: 40px; color: #1F7A8C;" id="ha-title">Hair Authority Directory</p>
                       </div>
-                      <div style="padding: 1rem;" class="twelve wide middle aligned column">
-                        <p id="ha-title">Hair Authority Directory</p>
-                      </div>
+                      <div class="one wide column"></div>
                     </div>
                   </div>
         <form id="form-1" class="ui equal width form">
             <p style="margin-top: 1rem;" class="form-h1">Business Title, Tagline & Category</p>
             <div class="field">
-                <label style="margin-top: 2rem;" id="labels-1">What's the name of your business?</label>
+                <label style="margin-top: 2rem;" id="labels-1">Business Title</label>
                 <div id="businessTitle-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                     <input name="businessTitle" type="text" placeholder="Ex. Google">
                     <i class="building outline icon"></i>
                 </div>
             </div>
             <div class="field">
-                <label style="margin-top: 2rem;" id="labels-1">Give a quick description of what you do</label>
+                <label style="margin-top: 2rem;" id="labels-1">Tagline or Slogan</label>
                 <div id="businessDescription-div" style="margin-top: 1rem;" class="ui transparent left icon input">
                     <input name="businessDescription" type="text"
                         placeholder="Ex. At the Hair Authority Directory we...">
@@ -72,9 +73,9 @@
                 </div style="margin-top: 2rem;">
             </div>
         <div class="field">
-            <label style="margin-top: 2rem;" id="labels-1">Select a category</label>
+            <label style="margin-top: 2rem;" id="labels-1">Category</label>
                 <div id="category-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                    <div class="ui fluid selection dropdown">
+                    <div multiple="" class="ui fluid multiple selection dropdown">
                         <input type="hidden" name="category">
                         <i class="dropdown icon"></i>
                         <div class="default text">--</div>
@@ -100,8 +101,8 @@
                           <div class="item" data-value="Trichologist">
                             Trichologist
                           </div>
-                          <div class="item" data-value="Wigs, Extensions, Hair Additions">
-                            Wigs, Extensions, Hair Additions
+                          <div class="item" data-value="Wigs / Extensions & Hair Additions">
+                            Wigs / Extensions & Hair Additions
                           </div>
                         </div>
                       </div>
@@ -205,7 +206,7 @@
             <div class="field">
                 <div class="ui toggle checkbox">
                     <input type="checkbox" tabindex="0" name="24hours" class="hidden">
-                    <label>24 Hours</label>
+                    <label>No Hours</label>
                 </div>
             </div>
             <a id="submit2">

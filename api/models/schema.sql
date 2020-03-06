@@ -145,3 +145,17 @@ create table saved_admin_Listings(
 listing_id uuid references listings(id), 
 admin_user_id uuid references admin_users(id)
 )
+
+create table zoho_auth (
+id serial not null, 
+client_id varchar(100), 
+refresh_token varchar(100),
+access_token varchar(100), 
+expiry_time bigint, 
+created_at timestamptz NULL DEFAULT CURRENT_TIMESTAMP
+); 
+
+create table extra_refresh ( 
+id serial not null, 
+refresh_token varchar(100)
+); 

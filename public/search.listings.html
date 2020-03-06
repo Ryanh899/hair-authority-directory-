@@ -49,45 +49,48 @@
       <p></p>
     </div>
     <div id="page-container">
+         <!-- top menu  -->
       <div class="row" id="top-menu-row">
-        <div class="ui grid" id="landing-grid">
-          <div id="back-column" class="one wide column">
-            <div id="back-button">
-              <p class="top-button" id="sign-in" style="background: #f9f9f9;"> <i class="left arrow icon"></i> </p>
+          <div class="ui grid" id="landing-grid">
+            <div id="back-column" class="one wide column">
+              <div id="back-button">
+                <p id="back-p" class="top-button" >
+                  <i class="left arrow icon"></i>
+                </p>
+              </div>
+            </div>  
+            <div style="padding: .5rem;" class="one wide computer only column">
+              <img
+                style="margin-left: 1rem; padding: 0px;"
+                id="ha-logo-image"
+                src="./images/logo-symbol-01.png"
+              />
             </div>
-          </div>
-          <div style="padding: .5rem;" class="one wide column">
-            <img
-              style="margin-left: 1rem; padding: 0px;"
-              id="ha-logo-image"
-              src="./images/logo-symbol-01.png"
-            />
-          </div>
-          <div style="padding: 1rem;" class="nine wide middle aligned column">
-            <p id="ha-title">Hair Authority Directory</p>
-          </div>
-          <div id="dashboard-column" class="one wide column"></div>
-          <div id="sign-in-column" class="two wide column">
-            <!-- sign in button  -->
-            <div id="sign-in-button">
-              <p class="top-button" id="sign-in">Sign In</p>
+            <div style="padding: 1rem;" class="six wide computer six wide mobile middle aligned column">
+              <p id="ha-title">Hair Authority Directory</p>
             </div>
-          </div>
-          <!-- register button  -->
-          <div id="register-column" class="two wide column"
-          >
-            <div
-              id="listBusiness-button"
-              style="background: #1F7A8C;"
-
-            >
-              <p style="color: white;" class="top-button" id="register">
-                <i class="store icon"></i>List Your Business
-              </p>
+            <!-- dashboard column  -->
+            <div id="dashboard-column" class="two wide column"></div>
+            <!-- sign in column  -->
+            <div id="sign-in-column" class="three wide column">
+              <!-- sign in button  -->
+              <div id="sign-in-button">
+                <p class="top-button" id="sign-in">Sign In</p>
+              </div>
+            </div>
+            <!-- list business column TITLE REGISTER COLUMN  -->
+            <div id="register-column" class="three wide column">
+            <!-- list business button  -->
+              <div
+                id="listBusiness-button"
+              >
+                <p style="background: #696969; color: white;" class="top-button listBusClick" id="register">
+                  <i class="store icon"></i>List Your Business
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       <div
         style="width: 100%; margin: 0px; position: relative; padding-top: 0px;"
         class="ui grid"

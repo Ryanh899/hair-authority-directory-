@@ -25,7 +25,9 @@ $(document).ready(function() {
   );
 
   $('.ui.dropdown')
-  .dropdown()
+  .dropdown({
+    allowAdditions: true
+  })
 ;
 
 var today = new Date();
@@ -463,7 +465,9 @@ function setCookie(name, value)
     window.location.assign('dashboard.html')
 });
 
-$('body').on('click', '#back-button', function () {
-  window.history.back()
-})
+  $("body").on("click", "#back-button", function() {
+
+    sessionStorage.setItem('lastLocation', 'listing.form')
+    window.history.back(); 
+  });
 });

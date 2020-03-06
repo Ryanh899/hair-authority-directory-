@@ -3,28 +3,18 @@ const _ = require("lodash");
 const jwt = require("jsonwebtoken");
 const Superagent = require("superagent");
 const axios = require("axios");
+const Zoho = require('../models/zoho'); 
+const keys = require('../config/env-config'); 
 
-const Zoho = {};
-
-const zohoOauth = {
-  access_token:
-    "1000.375b2e233c6e6b2ac50a38aaf4d9eaba.33c1d31a6975e7baa22c48ea9498a0ec",
-  refresh_token:
-    "1000.3dd6c7de496ef574f6996a615a0dfde3.94ea6ee6f2ddeddaba6042b04a8048f8",
-  api_domain: "https://www.zohoapis.com",
-  token_type: "Bearer",
-  expires_in: 3600
-};
-
-const secondOauth = {
-  access_token:
-    "1000.10239f998b12e692387859a5f7e0050b.e1ffe25b0def6e2a41ae950cd538b64e",
-  refresh_token:
-    "1000.f7b9f95a456bb042db7746fd359df4f3.0a4fc127d4eb97bee90cbcd9c184ec4b",
-  api_domain: "https://www.zohoapis.com",
-  token_type: "Bearer",
-  expires_in: 3600
-};
+// const secondOauth = {
+//   access_token:
+//     "1000.10239f998b12e692387859a5f7e0050b.e1ffe25b0def6e2a41ae950cd538b64e",
+//   refresh_token:
+//     "1000.f7b9f95a456bb042db7746fd359df4f3.0a4fc127d4eb97bee90cbcd9c184ec4b",
+//   api_domain: "https://www.zohoapis.com",
+//   token_type: "Bearer",
+//   expires_in: 3600
+// };
 
 router.post("/createCustomer", (req, res) => {
   Superagent.post("https://subscriptions.zoho.com/api/v1/customers")
@@ -77,17 +67,66 @@ router.post("/createCustomer", (req, res) => {
 
 router.post("/generateRefresh", (req, res) => {
   // params need to be passed in url
-  axios
-    .post(
-      "https://accounts.zoho.com/oauth/v2/token?grant_type=authorization_code&client_id=1000.SIX3ISK8PM6ID3DVC2INO65G2YYPWH&client_secret=7f56c4ed10eb417b432e9c1327f423f4b2095da15f&redirect_uri=http://localhost:3000/zoho/generateRefresh/&code=1000.72cc6180a2ed4ce449171360723c6f00.84caa3d6be7713d2b015317ac4223a1f"
+  Zoho.generateRefreshToken(res); 
+});
+
+router.get('/refreshAccessToken', async (req, res) => {
+  const newToken = await Zoho.getAccessToken()
+  res.status(200).json({ token: newToken }); 
+})
+
+router.post('/hostedpage/subscription/create', (req, res) => {
+  let plan = req.body.plan; 
+  
+
+})
+
+//for all requests, if access code invalid refreshAccessToken
+router.get("/findCustomer/:userToken", async (req, res) => {
+  // params need to be passed in url
+
+  // decode user token for user info
+  const user = jwt.decode(req.params.userToken)
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  console.log(user)
+  Superagent.get(`https://subscriptions.zoho.com/api/v1/customers/2192028000000070004`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
     )
+    .set("X-com-zoho-subscriptions-organizationid", "710064782")
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid customer id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
     .then(resp => {
-      // access token,refresh token, api_domain, token_type, expires in
-      console.log(resp.data);
-      res.json("token received");
+      console.log(resp.body.customer);
+      res.status(200).json(resp.body.customer)
     })
     .catch(err => {
-      console.log(err);
+      console.log('err');
     });
 });
 

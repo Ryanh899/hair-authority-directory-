@@ -17,3 +17,7 @@
     font-weight: 700;
     font-family: 'Roboto', sans-serif;
 }
+
+#email {
+    padding: 0px;
+}

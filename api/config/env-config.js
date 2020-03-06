@@ -13,6 +13,8 @@ module.exports = {
     prodDb: process.env.AWS_DB, 
     prodDbHost: process.env.AWS_HOST, 
     prodDbPswd: process.env.AWS_PSWD, 
-    prodDbUser: process.env.AWS_USER
-
+    prodDbUser: process.env.AWS_USER,
+    zohoRefresh: process.env.ZOHO_REFRESH_TOKEN, 
+    zohoClientId: process.env.ZOHO_CLIENT_ID, 
+    zohoClientSecret: process.env.ZOHO_CLIENT_SECRET
 };

@@ -51,7 +51,14 @@ function validatePhone(str) {
 }
 
 $(document).ready(function() {
-  $("#register-submit").on("click", function() {
+  
+  $('body').on('click', '#existing-account', function() {
+    sessionStorage.setItem('lastLocation', 'register');
+
+    window.location.assign('sign-in.html')
+  })
+
+  $("#submit-register").on("click", function() {
     event.preventDefault();
 
     const form = document.querySelector("form#register-form");
@@ -100,12 +107,14 @@ $(document).ready(function() {
         .post(`${API_URL}auth/register`, userInfo)
         .then(response => {
           console.log(response);
-          sessionStorage.setItem('justRegistered', true)
+          if (sessionStorage.getItem('addListing')) {
+            sessionStorage.setItem('routeToBilling', true); 
+          }
+          sessionStorage.setItem('lastLocation', 'register')
           window.location.assign("sign-in.html");
         })
         .catch(err => {
-          alert("user already exists");
-          window.location.assign("sign-in.html");
+          alert("That email has been taken");
         });
     }
   });

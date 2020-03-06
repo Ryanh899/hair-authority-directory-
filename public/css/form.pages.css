@@ -13,7 +13,8 @@
     border-color: #1F7A8C;
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
-    display: none;
+    border-radius: 15px;
+    /* display: none; */
 }
 
 #form-2 {
@@ -26,6 +27,7 @@
     margin-top: 2.5rem;
     display: none;
     margin-bottom: 2.5rem;
+    border-radius: 15px;
 }
 
 #form-3 {
@@ -38,6 +40,7 @@
     margin-top: 2.5rem;
     display: none;
     margin-bottom: 2.5rem;
+    border-radius: 15px;
 }
 
 #form-4 {
@@ -50,6 +53,7 @@
     margin-top: 2.5rem;
     display: none;
     margin-bottom: 2.5rem;
+    border-radius: 15px;
 }
 
 #form-5 {
@@ -62,6 +66,7 @@
     margin-top: 2.5rem;
     display: none;
     margin-bottom: 2.5rem;
+    border-radius: 15px;
 }
 
 #form-6 {
@@ -72,8 +77,9 @@
     padding: 2.5rem;
     border-color: #1F7A8C;
     margin-top: 2.5rem;
-    /* display: none; */
+    display: none;
     margin-bottom: 2.5rem;
+    border-radius: 15px;
 }
 
 #form-7 {
@@ -86,6 +92,7 @@
     margin-top: 2.5rem;
     display: none;
     margin-bottom: 2.5rem;
+    border-radius: 15px;
 }
 
 #labels-1 {
@@ -147,12 +154,12 @@
         color: white;
         text-align: center;
         font-family: 'Lato' sans-serif;
-        font-weight: 100;
+        font-weight: 300;
         font-size: 18px;
 }
 
 #back-button {
-    background: #9dd9d2;
+    background: #f9f9f9;
     font-family: "lato", sans-serif;
     font-weight: 400;
     font-size: 20px;
@@ -170,4 +177,13 @@
       position: fixed;
       bottom: 0rem;
 
+  }
+
+  #back-p {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    background: #f9f9f9;
+    color: #1f7a8c;
+    padding: 0.5rem;
   }

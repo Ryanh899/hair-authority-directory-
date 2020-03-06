@@ -1128,6 +1128,48 @@ body {
   margin-left: 3rem;
 }
 
+#client-dropdown {
+  height: 100%;
+  width: 100%;
+  display: table;
+}
+
+
+#client-drop-div {
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
+}
+
+#dropdown-text {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  font-family: 'Lato';
+  font-weight: 400;
+  font-size: 16px;
+  color: #696969;
+  padding: 0.5rem;
+}
+
+#dropdown-icon {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  color: black;
+  padding: 0.5rem;
+}
+
+.user-menu-option-text {
+  font-family: 'Lato';
+  font-weight: 400;
+  font-size: 16px;
+  color: #696969;
+}
+
 @media only screen and (max-width: 600px) {
 
   #problems-section {

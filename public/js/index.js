@@ -27,6 +27,21 @@ var authHelper = {
       return false;
     }
   },
+  isLoggedIn__professional() {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      var userData = this.parseToken(token);
+      var expirationDate = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate) this.logOut();
+      if (userData.isProfessionalUser) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  },
   parseToken(token) {
     if (token) {
       return JSON.parse(window.atob(token.split(".")[1]));
@@ -50,38 +65,65 @@ $(document).ready(function() {
   }
 
   function showPosition(position) {
-    sessionStorage.setItem("lat", position.coords.latitude);
-    sessionStorage.setItem("lng", position.coords.longitude);
+    sessionStorage.setItem("current-lat", position.coords.latitude);
+    sessionStorage.setItem("current-lng", position.coords.longitude);
   }
 
-  getLocation(); 
+  getLocation();
 
   if (authHelper.isLoggedIn()) {
     const token = sessionStorage.getItem("token");
     const userInfo = authHelper.parseToken(token);
     console.log(userInfo);
     if (userInfo && userInfo.isClientUser) {
-      $("#register-column").html(
-        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
-      );
-      $("#sign-in-column").html(
-        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
-      );
-      $("#dashboard-column").html(`
-      <div style="background: #8b786d; border-bottom: solid; border-color: #8b786d; border-width: 5px;" id="listBusiness-button">
+      $("#register-column").html(`
+      <div id="client-drop-div">
+        <div id="client-dropdown" class="ui inline dropdown">
+          <div id="dropdown-text" class="text">
+          ${userInfo.email}
+        </div>
+        <i id="dropdown-icon" class="dropdown icon"></i>
+        <div class="menu">
+        <div id="saved-listings-option" class="item">
+        <p class="user-menu-option-text" ><i class="bookmark icon" ></i> Bookmarked Listings</p>
+      </div>
+      <div id="logout-menu-option" class="item">
+        <p class="user-menu-option-text" ><i class="power off icon" ></i> Logout</p>
+      </div>
+          </div>
+        </div>
+      </div>
+      `);
+      $(".ui.dropdown").dropdown({ transition: "drop" });
+      $("#sign-in-column").html(`
+      <div style="background: #696969; border-bottom: solid; border-color: #696969; border-width: 5px;" id="listBusiness-button">
       <p style="color: white;" class="top-button listBusClick" id="register"><i class="store icon" ></i>List Your Business</p>
-    </div>
+      </div>
       `);
     } else if (userInfo && userInfo.isProfessionalUser) {
-      $("#register-column").html(
-        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
-      );
-      $("#sign-in-column").html(
-        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
-      );
-      $("#dashboard-column").html(`
-      <div id="dashboard-button"  ><p class="top-button" id="dashboard" >Dashboard</p></div>
+      $("#register-column").html(`
+      <div id="client-drop-div">
+        <div id="client-dropdown" class="ui inline dropdown">
+          <div id="dropdown-text" class="text">
+          ${userInfo.email}
+        </div>
+        <i id="dropdown-icon" class="dropdown icon"></i>
+        <div class="menu">
+            <div id="dashboard-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="building icon" ></i> Dashboard</p>
+            </div>
+            <div id="saved-listings-option" class="item">
+              <p class="user-menu-option-text" ><i class="bookmark icon" ></i> Bookmarked Listings</p>
+            </div>
+            <div id="logout-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="power off icon" ></i> Logout</p>
+            </div>
+          </div>
+        </div>
+      </div>
       `);
+      $(".ui.dropdown").dropdown({ transition: "drop" });
+      $("#sign-in-column").html("");
     } else if (userInfo && userInfo.isAdminUser) {
       $("#register-column").html(
         `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
@@ -99,6 +141,8 @@ $(document).ready(function() {
   }
   $("body").on("click", "#sign-in-button", function() {
     event.preventDefault();
+
+    sessionStorage.setItem("lastLocation", "index");
     window.location.assign("sign-in.html");
   });
 
@@ -112,34 +156,47 @@ $(document).ready(function() {
   // });
 
   $("body").on("click", ".listBusClick", function() {
-    console.log('list business')
+    console.log("list business");
+    sessionStorage.setItem("lastLocation", "index");
     if (authHelper.isLoggedIn()) {
-          window.location.assign('billing__new.html')
-        } else {
-          sessionStorage.setItem('addListing', true)
-          window.location.assign("sign-in.html");
-        }
+      window.location.assign("billing__new.html");
+    } else {
+      sessionStorage.setItem("routeToBilling", true);
+      window.location.assign("sign-in.html");
+    }
   });
 
-  $("body").on("click", "#dashboard-button", function() {
+  $("body").on("click", "#dashboard-menu-option", function() {
     event.preventDefault();
-    window.location.assign("dashboard.html");
+    
+    if (authHelper.isLoggedIn__professional()) {
+      sessionStorage.setItem("lastLocation", "index");
+      window.location.assign("dashboard.html");
+    } else {
+      alert('You must Have a verified business to view this page')
+    }
   });
 
-  $("body").on("click", "#saved-listings", function() {
+  $("body").on("click", "#saved-listings-option", function() {
+    sessionStorage.setItem("lastLocation", "index");
     window.location.assign("saved.listings.html");
   });
 
   $("body").on("click", "#admin-portal-button", function() {
+    sessionStorage.setItem("lastLocation", "index");
     window.location.assign("admin.portal.html");
   });
 
-  $("body").on("click", "#logout-button", function() {
+  $("body").on("click", "#logout-menu-option", function() {
     event.preventDefault();
     authHelper.logOut();
     $("#register-column").html(
-      `<div style="border-bottom: solid; border-color: #8b786d; border-width: 5px;" id="listBusiness-button">
-      <p style="color: white;" class="top-button" id="register"><i class="store icon" ></i>List Your Business</p>
+      `<div
+      id="listBusiness-button"
+    >
+      <p style="background: #696969; color: white;" class="top-button listBusClick" id="register">
+        <i class="store icon"></i>List Your Business
+      </p>
     </div>`
     );
     $("#sign-in-column").html(
@@ -185,7 +242,7 @@ $(document).ready(function() {
   or.id = "or-text";
   or.style.marginTop = "1rem";
   or.style.color = "white";
-  or.innerHTML = '- Or Search By Category -';
+  or.innerHTML = "- Or Search By Category -";
   catButtonDiv.appendChild(or);
   $("#search-appendButtons").append(catButtonDiv);
   categories.forEach(category => {
@@ -211,23 +268,26 @@ $(document).ready(function() {
     const search = document.querySelector("input#search-semantic").value.trim();
     console.log(search);
 
+    sessionStorage.setItem("lastLocation", "index");
     sessionStorage.setItem("searchQuery", search);
     window.location.assign("search.listings.html");
   });
 
   $("body").on("click", "#list-business-button", function() {
     const user = sessionStorage.getItem("token");
+    sessionStorage.setItem("lastLocation", "index");
 
     if (user) {
       window.location.assign("listing.form.html");
     } else {
       alert("please log in to make a listing");
-      sessionStorage.setItem('addListing', true); 
+      sessionStorage.setItem("addListing", true);
       window.location.assign("sign-in.html");
     }
   });
 
   $("body").on("click", "#landing-list-a", function() {
+    sessionStorage.setItem("lastLocation", "index");
     window.location.assign("listing.form.html");
   });
 
@@ -237,112 +297,115 @@ $(document).ready(function() {
   });
 
   $("body").on("click", ".catButtons", function(e) {
-    const search = $(e.target).text(); 
+    const search = $(e.target).text();
     console.log(search);
 
+    sessionStorage.setItem("lastLocation", "index");
     sessionStorage.setItem("searchQuery", search);
     window.location.assign("search.listings.html");
   });
 
-    // Execute a function when the user releases a key on the keyboard
-    $("body").keyup(function(event) {
-      console.log('pressed')
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Cancel the default action, if needed
-        event.preventDefault();
-        if ($("#search-semantic").val()) {
-          $("#search-button").click();
-        } else {
-          return
-        }
+  // enter button search functionality
+  $("body").keyup(function(event) {
+    console.log("pressed");
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      if ($("#search-semantic").val()) {
+        $("#search-button").click();
+      } else {
+        return;
       }
+    }
+  });
+
+  // fade ins and outs for logo text
+  $("body").on("click", "#ishrs-expand", function() {
+    $("#artas-grid").fadeOut(350);
+    $("#wts-grid").fadeOut(350);
+    $("#club-grid").fadeOut(350);
+    $("#ishrs-grid").fadeOut(500, () => {
+      $("#ishrs-hide").css("display", "");
+      $(this).css("display", "none");
+      $("#ishrs-truncate").addClass("truncated");
+      $("#ishrs-grid").fadeIn(500);
     });
+  });
 
-    $("body").on("click", "#ishrs-expand", function() {
-      $('#artas-grid').fadeOut(); 
-      $('#wts-grid').fadeOut();
-      $('#club-grid').fadeOut();
-      $('#ishrs-hide').css('display', ''); 
-      $(this).css('display', 'none'); 
-      $('#ishrs-truncate').addClass('truncated');
+  $("body").on("click", "#ishrs-hide", function() {
+    $("#artas-grid").fadeIn();
+    $("#wts-grid").fadeIn();
+    $("#club-grid").fadeIn();
+    $("#ishrs-expand").css("display", "");
+    $("#ishrs-hide").css("display", "none");
+    $("#ishrs-truncate").removeClass("truncated");
+  });
+
+  $("body").on("click", "#artas-expand", function() {
+    $("#ishrs-grid").fadeOut(350);
+    $("#wts-grid").fadeOut(350);
+    $("#club-grid").fadeOut(350);
+    $("#artas-grid").fadeOut(500, () => {
+      $("#artas-hide").css("display", "");
+      $(this).css("display", "none");
+      $("#artas-truncate").addClass("truncated");
+      $("#artas-grid").fadeIn(500);
     });
+  });
 
-    $("body").on("click", "#ishrs-hide", function() {
-      $('#artas-grid').fadeIn(); 
-      $('#wts-grid').fadeIn();
-      $('#club-grid').fadeIn();
-        $('#ishrs-expand').css('display', '')
-        $('#ishrs-hide').css('display', 'none')
-        $('#ishrs-truncate').removeClass('truncated');
+  $("body").on("click", "#artas-hide", function() {
+    $("#ishrs-grid").fadeIn();
+    $("#wts-grid").fadeIn();
+    $("#club-grid").fadeIn();
+    $("#artas-expand").css("display", "");
+    $("#artas-hide").css("display", "none");
+    $("#artas-truncate").removeClass("truncated");
+  });
+
+  $("body").on("click", "#wts-expand", function() {
+    $("#ishrs-grid").fadeOut(350);
+    $("#artas-grid").fadeOut(350);
+    $("#club-grid").fadeOut(350);
+    $("#wts-grid").fadeOut(500, () => {
+      $("#wts-hide").css("display", "");
+      $(this).css("display", "none");
+      $("#wts-truncate").addClass("truncated");
+      $("#wts-grid").fadeIn(500);
     });
+  });
 
-    $("body").on("click", "#artas-expand", function() {
-      $('#ishrs-grid').fadeOut(); 
-      $('#wts-grid').fadeOut();
-      $('#club-grid').fadeOut();
-      $('#artas-hide').css('display', '')
-      $(this).css('display', 'none')
-      $('#artas-truncate').addClass('truncated');
+  $("body").on("click", "#wts-hide", function() {
+    $("#artas-grid").fadeIn();
+    $("#ishrs-grid").fadeIn();
+    $("#club-grid").fadeIn();
+    $("#wts-expand").css("display", "");
+    $("#wts-hide").css("display", "none");
+    $("#wts-truncate").removeClass("truncated");
+  });
+
+  $("body").on("click", "#club-expand", function() {
+    $("#ishrs-grid").fadeOut(350);
+    $("#artas-grid").fadeOut(350);
+    $("#wts-grid").fadeOut(350);
+    $("#club-grid").fadeOut(500, () => {
+      $("#club-hide").css("display", "");
+      $(this).css("display", "none");
+      $("#club-truncate").addClass("truncated");
+      $("#club-grid").fadeIn(500);
     });
+  });
 
-    $("body").on("click", "#artas-hide", function() {
-      $('#ishrs-grid').fadeIn(); 
-      $('#wts-grid').fadeIn();
-      $('#club-grid').fadeIn();
-        $('#artas-expand').css('display', '')
-        $('#artas-hide').css('display', 'none')
-        $('#artas-truncate').removeClass('truncated');
-    });
+  $("body").on("click", "#club-hide", function() {
+    $("#artas-grid").fadeIn();
+    $("#wts-grid").fadeIn();
+    $("#ishrs-grid").fadeIn();
+    $("#club-expand").css("display", "");
+    $("#club-hide").css("display", "none");
+    $("#club-truncate").removeClass("truncated");
+  });
 
-    $("body").on("click", "#wts-expand", function() {
-      $('#ishrs-grid').fadeOut(); 
-      $('#artas-grid').fadeOut();
-      $('#club-grid').fadeOut();
-      $('#wts-hide').css('display', '')
-      $(this).css('display', 'none')
-      $('#wts-truncate').addClass('truncated');
-    });
-
-    $("body").on("click", "#wts-hide", function() {
-      $('#artas-grid').fadeIn(); 
-      $('#ishrs-grid').fadeIn();
-      $('#club-grid').fadeIn();
-        $('#wts-expand').css('display', '')
-        $('#wts-hide').css('display', 'none')
-        $('#wts-truncate').removeClass('truncated');
-    });
-
-    $("body").on("click", "#club-expand", function() {
-      $('#ishrs-grid').fadeOut(); 
-      $('#wts-grid').fadeOut();
-      $('#artas-grid').fadeOut();
-      $('#club-hide').css('display', '')
-      $(this).css('display', 'none')
-      $('#club-truncate').addClass('truncated');
-    });
-
-    $("body").on("click", "#club-hide", function() {
-      $('#artas-grid').fadeIn(); 
-      $('#wts-grid').fadeIn();
-      $('#ishrs-grid').fadeIn();
-        $('#club-expand').css('display', '')
-        $('#club-hide').css('display', 'none')
-        $('#club-truncate').removeClass('truncated');
-    });
-
-    
-    // $('.helpicon').on('click', function () {
-      
-    // });
-    
-    // $('.hide').on('click', function () {
-    //   $('.helpicon').css('display', '')
-    //   $('.hide').css('display', 'none')
-    //   $('.truncated').removeClass('truncated');
-    // });
-  
-
+  // landing image carousel js
   function slick() {
     $(".landing-images").slick({
       // dots: true,
