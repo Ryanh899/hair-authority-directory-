@@ -55,7 +55,7 @@ CREATE TABLE listings (
 );
 
 CREATE TABLE pending_listings (
-	id uuid primary key NOT NULL,
+	id uuid DEFAULT uuid_generate_v4() primary key NOT NULL,
 	professional_id uuid NULL,
 	business_title varchar(64) NOT NULL,
 	business_description text NOT NULL,

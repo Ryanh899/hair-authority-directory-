@@ -5,6 +5,20 @@ const Listings = require("../models/listings");
 const User = require("../models/user");
 const GeoCode = require("../geocoding");
 const NodeGeocoder = require("node-geocoder");
+// const Aws = require("../aws");
+const AWS = require("aws-sdk");
+const moment = require('moment')
+
+const s3 = new AWS.S3(); 
+
+AWS.config.getCredentials(function(err) {
+  if (err) console.log(err.stack);
+  // credentials not loaded
+  else {
+    console.log("Access key:", AWS.config.credentials.accessKeyId);
+    console.log("Secret access key:", AWS.config.credentials.secretAccessKey);
+  }
+});
 
 // const googleMapClient = require("@google/maps").createClient({
 //   key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"
@@ -21,7 +35,6 @@ const options = {
   apiKey: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo", // for Mapquest, OpenCage, Google Premier
   formatter: null // 'gpx', 'string', ...
 };
-
 
 const geocoder = NodeGeocoder(options);
 
@@ -93,69 +106,81 @@ router.put("/updateProfile", async (req, res) => {
 
 router.get("/search/category/:category/:location", async (req, res) => {
   const category = req.params.category.replace(/\+/g, "/");
-  console.log(category)
+  console.log(category);
   let location = req.params.location.split("+");
   if (location[0] === null || location[1] === null) {
     res.status(401).json({
       message: "no location given"
     });
   }
-  const city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
-  console.log(city)
+  const city = await geocoder
+    .reverse({ lat: Number(location[0]), lon: Number(location[1]) })
+    .catch(err => console.log(err));
+  console.log(city);
   location = {
     lat: location[0],
-    lng: location[1], 
-    city: city[0].city.toLowerCase(), 
+    lng: location[1],
+    city: city[0].city.toLowerCase(),
     state: city[0].administrativeLevels.level1short
   };
-  const searchPromises = await Listings.getByCategory__single(category, location); 
-    Promise.all(searchPromises).then(results => {
-      console.log('SEARCH PROMISES .THEN=>')
-      console.log(results)
-      return results
-    }).catch(err => {
-      console.error(err)
-      return results
+  const searchPromises = await Listings.getByCategory__single(
+    category,
+    location
+  );
+  Promise.all(searchPromises)
+    .then(results => {
+      console.log("SEARCH PROMISES .THEN=>");
+      console.log(results);
+      return results;
     })
-    .then((results) => {
-      const filtered = results.filter(x => x !== 0)
-      res.status(200).json(filtered)
+    .catch(err => {
+      console.error(err);
+      return results;
     })
+    .then(results => {
+      const filtered = results.filter(x => x !== 0);
+      res.status(200).json(filtered);
+    });
 });
 
-uniqueArray = a => [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s))
+uniqueArray = a =>
+  [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
 
 router.get("/search/:query/:location", async (req, res) => {
   const query = req.params.query.toLowerCase();
-  
+
   let location = req.params.location.split("+");
   if (location[0] === "null" || location[1] === "null") {
     return res.status(404).json({
       message: "location not found"
     });
   }
-  const city = await geocoder.reverse({lat: Number(location[0]), lon: Number(location[1])}).catch(err => console.log(err))
+  const city = await geocoder
+    .reverse({ lat: Number(location[0]), lon: Number(location[1]) })
+    .catch(err => console.log(err));
   location = {
     lat: location[0],
-    lng: location[1], 
+    lng: location[1],
     city: city[0].city.toLowerCase(),
     state: city[0].administrativeLevels.level1short
   };
-  console.log(query)
-  console.log(location)
-  const searchPromises = await Listings.getBySearch(query, location); 
-    Promise.all(searchPromises).then(results => {
-      console.log('SEARCH PROMISES .THEN=>')
-      console.log(results)
-      return results
-    }).catch(err => {
-      console.error(err)
-      return results
+  console.log(query);
+  console.log(location);
+  const searchPromises = await Listings.getBySearch(query, location);
+  Promise.all(searchPromises)
+    .then(results => {
+      console.log("SEARCH PROMISES .THEN=>");
+      console.log(results);
+      return results;
     })
-    .then((results) => {
-      const filtered = results.filter(x => x !== 0)
-      res.status(200).json(filtered)
+    .catch(err => {
+      console.error(err);
+      return results;
     })
+    .then(results => {
+      const filtered = results.filter(x => x !== 0);
+      res.status(200).json(filtered);
+    });
 });
 
 router.post("/saveListing/:id", async (req, res) => {
@@ -210,11 +235,153 @@ router.delete("/savedListings/delete/:listingId/:token", (req, res) => {
   }
 });
 
-router.get('/updateCity', async (req, res) => {
-  let resp = await Listings.addCityState(); 
-  res.status(200).json(resp)
+router.get("/updateCity", async (req, res) => {
+  let resp = await Listings.addCityState();
+  res.status(200).json(resp);
+});
+
+const policy = { "expiration": "2020-12-31T12:00:00.000Z",
+"conditions": [
+  {"bucket": "ha-images-02"},
+  ["starts-with", "$key", "uploads/2020/"],
+  {"acl": "public-read"},
+  ["starts-with", "$Content-Type", "image/"],
+  {"x-amz-meta-uuid": "3ea38cf1-c266-44ca-a309-1844207e77a7"},
+  {"x-amz-server-side-encryption": "AES256"},
+  ["starts-with", "$x-amz-meta-tag", ""],
+
+  {"x-amz-credential": "AKIAIB3553V7LVPV5KOQ/20201231/us-west-1/s3/aws4_request"},
+  {"x-amz-algorithm": "AWS4-HMAC-SHA256"},
+  {"x-amz-date": "20201231T000000Z" }
+]
+}
+
+// const policy = {
+//   expiration: "2007-12-01T12:00:00.000Z",
+//   conditions: [
+//     { bucket: "ha-images-02" },
+//     ["starts-with", "$key", "uploads/2020/"],
+//     { acl: "public-read" },
+//     ["starts-with", "$Content-Type", "image/"],
+//     { "x-amz-meta-uuid": "e15e27ad-0fed-4af0-8c20-f3d0884fe225" },
+//     ["starts-with", "$x-amz-meta-tag", ""]
+//   ]
+// };
+const getRandomFilename = () =>	require("crypto").randomBytes(16).toString("hex");
+
+router.get("/s3/sign_put", (req, res) => {
+	const contentType = req.query.contentType;
+	if (!contentType.startsWith("image/")) {
+		throw new Error("must be image/");
+	}
+	const userid = req.query.userId // some kind of auth
+  const year = moment().format('YYYY'); 
+  const month = moment().format('M'); 
+  const key = `uploads/${year}/${month}/${userid}-${getRandomFilename()}`
+	const url = s3.getSignedUrl("putObject", {
+		Bucket: process.env.BUCKETNAME,
+		Key: key, // add a part with the userid!
+		ContentType: contentType,
+		// can not set restrictions to the length of the content
+  });
+  console.log(`S3 SIGN PUT URL: ${url}`)
+	res.json({url, key});
+});
+
+router.get("/s3/sign_post", (req, res) => {
+	const userid = req.body.userId; // some kind of auth
+
+	const data = s3.createPresignedPost({
+		Bucket: process.env.BUCKETNAME,
+		Fields: {
+			key: getRandomFilename(), // totally random
+		},
+		Conditions: [
+			["content-length-range", 	0, 1000000], // content length restrictions: 0-1MB
+			["starts-with", "$Content-Type", "image/"], // content type restriction
+			["eq", "$x-amz-meta-userid", userid], // tag with userid <= the user can see this!
+		]
+	});
+
+	data.fields["x-amz-meta-userid"] = userid; // Don't forget to add this field too
+	res.json(data);
+});
+
+router.post('/storeimage', (req, res) => {
+  console.log(req.body)
+  Listings.storeImage(req.body)
+    .then(resp => {
+      console.log(resp)
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+    })
 })
 
+router.post('/stagelisting', (req, res) => {
+  console.log(req.body)
+  Listings.stageListing(req.body)
+    .then(resp => {
+      console.log(resp); 
+      res.json(resp); 
+    })
+    .catch(err => {
+      console.log(err); 
+    })
+})
 
+router.put('/stagelisting', (req, res) => {
+  let data = req.body; 
+  console.log(data)
+  Listings.updateStagedListing(data)
+    .then(resp => {
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+router.put('/stagelisting/:table', (req, res) => {
+  const table = req.params.table; 
+  const data = req.body; 
+
+  Listings.updateStagedListing__table(table, data)
+    .then(resp => {
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+// for forms that have data in multiple tables
+router.post('/stagelisting/:table/:form', async (req, res) => {
+  console.log(req.body)
+  const table = req.params.table; 
+  const primaryData = req.body[0];
+  const metaData = req.body[1];  
+  const listing_id = primaryData.id; 
+
+  let primaryUpdate = new Promise((resolve, reject) => {
+    resolve(Listings.updateStagedListing(primaryData))
+  }) 
+
+  primaryUpdate.then(resp => {
+    Listings.updateStagedListing__table(table, metaData)
+      .then(secondResp => {
+        console.log(resp)
+        console.log(secondResp); 
+        res.json(secondResp)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
 
 module.exports = router;

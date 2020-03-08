@@ -1,3 +1,57 @@
+var myAxios = axios.create({
+  headers: {
+    Authorization: "Bearer " + sessionStorage.getItem("token")
+  }
+});
+myAxios.interceptors.response.use(
+  function(response) {
+    return response;
+  },
+  function(error) {
+    if (error.response.status === 401) {
+      return authHelper.logOut("./sign-in.html");
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+var authHelper = {
+  isLoggedIn() {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      var userData = this.parseToken(token);
+      var expirationDate = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate) this.logOut();
+      return true;
+    } else {
+      return false;
+    }
+  },
+  isLoggedIn__professional() {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      var userData = this.parseToken(token);
+      var expirationDate = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate) this.logOut();
+      if (userData.isProfessionalUser) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  },
+  parseToken(token) {
+    if (token) {
+      return JSON.parse(window.atob(token.split(".")[1]));
+    }
+  },
+  logOut() {
+    sessionStorage.removeItem("token");
+  }
+};
+
 $(document).ready(function() {
   sessionStorage.setItem("faq", 1);
   sessionStorage.removeItem("24Hour");
@@ -75,7 +129,7 @@ function setCookie(name, value)
     // gets rid of empty responses 
       Object.keys(obj).forEach(key => {
         if (obj[key] && typeof obj[key] === "object") trimForm(obj[key]); // recurse
-        else if (obj[key] == "" || obj[key] == "-----") delete obj[key]; // delete
+        else if (obj[key] == "" || obj[key] == "--") delete obj[key]; // delete
       });
       return obj; 
 };
@@ -195,16 +249,24 @@ function setCookie(name, value)
       $('#category-div').css('border', 'solid')
       $('#category-div').css('border-color', 'red')
     } else {
-      finalForm.business_title = formData.get("businessTitle");
-      finalForm.business_description = formData.get("businessDescription");
-      finalForm.category = formData.get('category'); 
-      sessionStorage.setItem('formsCompleted', 1);
-      $(form1).css("display", "none");
-      $(form2).css("display", "block");
-      $("#businessTitle").toggleClass("active");
-      $("#businessTitle").addClass('completed')
-      $("#storefrontInfo").toggleClass("active");
-      console.log(finalForm);
+      myAxios.post('http://localhost:3000/api/stageListing', { business_title: formData.get('businessTitle') })
+        .then(resp => {
+          sessionStorage.setItem('stagedListing', resp.data[0]); 
+          finalForm.id = resp.data[0]; 
+          finalForm.tagline = formData.get("businessDescription");
+          finalForm.category = formData.get('category'); 
+          sessionStorage.setItem('formsCompleted', 1);
+          $(form1).css("display", "none");
+          $(form2).css("display", "block");
+          $("#businessTitle").toggleClass("active");
+          $("#businessTitle").addClass('completed')
+          $("#storefrontInfo").toggleClass("active");
+          console.log(finalForm);
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      // finalForm.business_title = formData.get("businessTitle");
     }
   });
 
@@ -212,6 +274,7 @@ function setCookie(name, value)
   $("body").on("click", "#submit2", function() {
     event.preventDefault();
     console.log("clicked");
+    let hoursForm = []; 
     const formData = new FormData(form2);
 
     if (formData.get("streetAddress") === "" || undefined) {
@@ -233,73 +296,109 @@ function setCookie(name, value)
     //     $('#hours-div').css('border-color', 'red')
     // }
     else {
-      (finalForm.street_address = formData.get("streetAddress")),
-        (finalForm.city = formData.get("city")),
-        (finalForm.state = formData.get("state")),
-        (finalForm.zip = formData.get("zip")),
-        (finalForm.monday = `${formData.get(
-          "opening-hours-mon"
-        )}-${formData.get("closing-hours-mon")}`),
-        (finalForm.tuesday = `${formData.get(
-          "opening-hours-tue"
-        )}-${formData.get("closing-hours-tue")}`),
-        (finalForm.wednesday = `${formData.get(
-          "opening-hours-wed"
-        )}-${formData.get("closing-hours-wed")}`),
-        (finalForm.thursday = `${formData.get(
-          "opening-hours-thu"
-        )}-${formData.get("closing-hours-thu")}`),
-        (finalForm.friday = `${formData.get(
-          "opening-hours-fri"
-        )}-${formData.get("closing-hours-fri")}`),
-        (finalForm.saturday = `${formData.get(
-          "opening-hours-sat"
-        )}-${formData.get("closing-hours-sat")}`),
-        (finalForm.sunday = `${formData.get(
-          "opening-hours-sun"
-        )}-${formData.get("closing-hours-sun")}`);
+      finalForm.street_address = formData.get("streetAddress")
+        finalForm.city = formData.get("city")
+        finalForm.state = formData.get("state")
+        finalForm.zip = formData.get("zip")
+        finalForm.full_address = `${finalForm.street_address}, ${finalForm.city} ${finalForm.state}, ${finalForm.zip}`
+        hoursForm.push({ opening_hours: `${formData.get("opening-hours-mon")}`,
+                          closing_hours: `${formData.get("closing-hours-mon")}`,
+                          day: 'Monday', 
+                          listing_id: finalForm.id
+                        })
+        hoursForm.push({ opening_hours: `${formData.get("opening-hours-tue")}`,
+                          closing_hours: `${formData.get("closing-hours-tue")}`,
+                          day: 'Tuesday', 
+                          listing_id: finalForm.id
+                        })
+        hoursForm.push({ opening_hours: `${formData.get("opening-hours-wed")}`,
+            closing_hours: `${formData.get("closing-hours-wed")}`,
+            day: 'Wednesday', 
+            listing_id: finalForm.id
+          })
+        hoursForm.push({ opening_hours: `${formData.get("opening-hours-thu")}`,
+          closing_hours: `${formData.get("closing-hours-thu")}`,
+          day: 'Thursday', 
+          listing_id: finalForm.id
+          })
+        hoursForm.push({ opening_hours: `${formData.get("opening-hours-fri")}`,
+          closing_hours: `${formData.get("closing-hours-fri")}`,
+          day: 'Friday', 
+          listing_id: finalForm.id
+          })
+          hoursForm.push({ opening_hours: `${formData.get("opening-hours-sat")}`,
+            closing_hours: `${formData.get("closing-hours-sat")}`,
+            day: 'Saturday', 
+            listing_id: finalForm.id
+          })
+          hoursForm.push({ opening_hours: `${formData.get("opening-hours-sun")}`,
+            closing_hours: `${formData.get("closing-hours-sun")}`,
+            day: 'Sunday', 
+            listing_id: finalForm.id
+          })
     }
+          
+
     if (sessionStorage.getItem("24Hour")) {
-      finalForm.hours = false;
+      hoursForm = null;
     }
-
+    let filteredHoursForm = hoursForm.filter(x => x.opening_hours !== '--' && x.closing_hours !== '--' )
     trimForm(finalForm); 
-
-    $(form2).css("display", "none");
-    $(form3).css("display", "block");
-    sessionStorage.setItem('formsCompleted', 2); 
-    $("#storefrontInfo").toggleClass("active");
-    $("#storefrontInfo").addClass('completed')
-    $("#website").toggleClass("active");
-    console.log(finalForm);
+    myAxios.post('http://localhost:3000/api/stagelisting/hours/form2', [finalForm, filteredHoursForm] )
+      .then(resp => {
+        console.log(resp)
+        $(form2).css("display", "none");
+        $(form3).css("display", "block");
+        sessionStorage.setItem('formsCompleted', 2); 
+        $("#storefrontInfo").toggleClass("active");
+        $("#storefrontInfo").addClass('completed')
+        $("#website").toggleClass("active");
+        console.log(hoursForm)
+        console.log(finalForm);
+      })
+      .catch(err => {
+        console.log(err)
+      })
   });
 
   //submit third form
   $("body").on("click", "#submit3", function() {
     event.preventDefault();
+    const smForm = [];  
     const formData = new FormData(form3);
     if (formData.get("website") !== "" || undefined)
-      finalForm.website = formData.get("website");
+    smForm.push({ platform: 'website', url: formData.get("website"), listing_id: finalForm.id }); 
 
     if (formData.get("instagram") !== "" || undefined)
-      finalForm.instagram = formData.get("instagram");
+    smForm.push({ platform: 'instagram', url: formData.get("instagram"), listing_id: finalForm.id });
 
     if (formData.get("facebook") !== "" || undefined)
-      finalForm.facebook = formData.get("facebook");
+    smForm.push({ platform: 'facebook', url: formData.get("facebook"), listing_id: finalForm.id });
 
     if (formData.get("twitter") !== "" || undefined)
-      finalForm.twitter = formData.get("twitter");
+    smForm.push({ platform: 'twitter', url: formData.get("twitter"), listing_id: finalForm.id });
 
     if (formData.get("linkedin") !== "" || undefined)
-      finalForm.linkedin = formData.get("linkedin");
+    smForm.push({ platform: 'linkedin', url: formData.get("linkedin"), listing_id: finalForm.id });
 
-    $(form3).css("display", "none");
-    $(form4).css("display", "block");
-    sessionStorage.setItem('formsCompleted', 3); 
-    $("#website").toggleClass("active");
-    $("#website").addClass('completed')
-    $("#contact").toggleClass("active");
-    console.log(finalForm);
+    if (formData.get("youtube") !== null || formData.get("youtube") !== "")
+    smForm.push({ platform: 'youtube', url: formData.get("youtube"), listing_id: finalForm.id });
+
+      myAxios.put('http://localhost:3000/api/stagelisting/social_media', smForm )
+      .then(resp => {
+        console.log(resp)
+        $(form3).css("display", "none");
+        $(form4).css("display", "block");
+        sessionStorage.setItem('formsCompleted', 3); 
+        $("#website").toggleClass("active");
+        $("#website").addClass('completed')
+        $("#contact").toggleClass("active");
+        console.log(smForm); 
+        console.log(finalForm);
+      })
+      .catch(err => {
+        console.log(err)
+      })
   });
 
   //submit fourth form
@@ -315,15 +414,24 @@ function setCookie(name, value)
       $("#email-div").css("border-color", "red");
     }
     if (formData.get("phone") && validatePhone(formData.get("phone"))) {
+      
       finalForm.phone = formData.get("phone");
-      $("#phone-div").css("border", "none");
-      $(form4).css("display", "none");
-      $(form5).css("display", "block");
-      sessionStorage.setItem('formsCompleted', 4); 
-      $("#contact").toggleClass("active");
-      $("#contact").addClass('completed')
-      $("#about").toggleClass("active");
-      console.log(finalForm);
+
+      myAxios.put('http://localhost:3000/api/stagelisting', finalForm )
+      .then(resp => {
+        console.log(resp)
+        $("#phone-div").css("border", "none");
+        $(form4).css("display", "none");
+        $(form5).css("display", "block");
+        sessionStorage.setItem('formsCompleted', 4); 
+        $("#contact").toggleClass("active");
+        $("#contact").addClass('completed')
+        $("#about").toggleClass("active");
+        console.log(finalForm);
+      })
+      .catch(err => {
+        console.log(err)
+      })
     } else {
       $("#phone-div").css("border", "solid");
       $("#phone-div").css("border-color", "red");
@@ -338,15 +446,22 @@ function setCookie(name, value)
     if (formData.get("ms") !== null || formData.get("ms") !== "")
       finalForm.mission_statement = formData.get("ms");
     if (formData.get("about") !== null || formData.get("about") !== "")
-      finalForm.about = formData.get("about");
+      finalForm.business_description = formData.get("about");
 
-    $(form5).css("display", "none");
-    $(form6).css("display", "block");
-    sessionStorage.setItem('formsCompleted', 5); 
-    $("#about").toggleClass("active");
-    $("#about").addClass('completed')
-    $("#images").toggleClass("active");
-    console.log(finalForm);
+    myAxios.put('http://localhost:3000/api/stagelisting', finalForm )
+      .then(resp => {
+        console.log(resp)
+        $(form5).css("display", "none");
+        $(form6).css("display", "block");
+        sessionStorage.setItem('formsCompleted', 5); 
+        $("#about").toggleClass("active");
+        $("#about").addClass('completed')
+        $("#images").toggleClass("active");
+        console.log(finalForm);
+      })
+      .catch(err => {
+        console.log(err)
+      })
   });
 
   //submit sixth form
@@ -355,112 +470,125 @@ function setCookie(name, value)
     const formData = new FormData(form6);
     // will be if for images
     // if (formData.get('ms') !== null || formData.get('ms') !== '') finalForm.missionStatement = formData.get('ms')
-    if (formData.get("youtube") !== null || formData.get("youtube") !== "")
-      finalForm.youtube = formData.get("youtube");
+        $(form6).css("display", "none");
+        $(form7).css("display", "block");
+        sessionStorage.setItem('formsCompleted', 6); 
+        $("#images").toggleClass("active");
+        $("#images").addClass('completed')
+        $("#faq").toggleClass("active");
+        console.log(finalForm);
 
-    $(form6).css("display", "none");
-    $(form7).css("display", "block");
-    sessionStorage.setItem('formsCompleted', 6); 
-    $("#images").toggleClass("active");
-    $("#images").addClass('completed')
-    $("#faq").toggleClass("active");
-    console.log(finalForm);
   });
 
   //submit seventh form
   $("body").on("click", "#submit7", function() {
     event.preventDefault();
+    const faqForm = []; 
     const formData = new FormData(form7);
 
     if (
       formData.get("faq-question-0") !== null ||
       formData.get("faq-question-0") !== ""
     ) {
-      finalForm.faq0 = formData.get("faq-question-0");
+      faqForm.push({ listing_id: finalForm.id, faq: formData.get("faq-question-0"), faq_answer: formData.get("faq-answer-0") || 'N/A' })
     }
-    if (
-      formData.get("faq-answer-0") !== null ||
-      formData.get("faq-answer-0") !== ""
-    )
-      finalForm.answer0 = formData.get("faq-answer-0");
+
     if (
       formData.get("faq-question-1") !== null ||
       formData.get("faq-question-1") !== ""
     )
-      finalForm.faq1 = formData.get("faq-question-1");
-    if (
-      formData.get("faq-answer-1") !== null ||
-      formData.get("faq-answer-1") !== ""
-    )
-      finalForm.answer1 = formData.get("faq-answer-1");
+    faqForm.push({ listing_id: finalForm.id, faq: formData.get("faq-question-1"), faq_answer: formData.get("faq-answer-1") || 'N/A' })
+
     if (
       formData.get("faq-question-2") !== null ||
       formData.get("faq-question-2") !== ""
     )
-      finalForm.faq2 = formData.get("faq-question-2");
-    if (
-      formData.get("faq-answer-2") !== null ||
-      formData.get("faq-answer-2") !== ""
-    )
-      finalForm.answer2 = formData.get("faq-answer-2");
+    faqForm.push({ listing_id: finalForm.id, faq: formData.get("faq-question-2"), faq_answer: formData.get("faq-answer-2") || 'N/A' })
+
     
-    trimForm(finalForm); 
+    trimForm(faqForm); 
+    console.log(faqForm)
     console.log(finalForm);
 
-    myAxios
-      .post(API_URL + "newListing", {
-        data: finalForm
-      })
-      .then(response => {
-        console.log(response);
-        alert('You will receive an email when your listing has been verified.'); 
+    myAxios.put('http://localhost:3000/api/stagelisting/faq', faqForm )
+      .then(resp => {
+        console.log(resp)
+        $(form5).css("display", "none");
+        $(form6).css("display", "block");
+        sessionStorage.setItem('formsCompleted', 5); 
+        $("#about").toggleClass("active");
+        $("#about").addClass('completed')
+        $("#images").toggleClass("active");
+        console.log(finalForm);
 
         sessionStorage.setItem('lastLocation', 'listing.form')
-        window.location.assign("index.html");
+        window.location.assign('index.html')
       })
       .catch(err => {
-        console.log(err);
-      });
+        console.log(err)
+      })
+
+    // myAxios
+    //   .post(API_URL + "newListing", {
+    //     data: finalForm
+    //   })
+    //   .then(response => {
+    //     console.log(response);
+    //     alert('You will receive an email when your listing has been verified.'); 
+
+    //     sessionStorage.setItem('lastLocation', 'listing.form')
+    //     window.location.assign("index.html");
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   });
 
   // faq js
-  const FAQ = document.querySelector("#faq-section");
+  // const FAQ = document.querySelector("#faq-section");
 
-  for (var i = 0; i < 3; i++) {
-    const faqLabel = document.createElement("label");
+  // for (var i = 0; i < 3; i++) {
+  //   const faqLabel = document.createElement("label");
 
-    const faqField = document.createElement("div");
-    faqField.className = "field";
-    faqField.id = i + "faq";
-    $(faqField).css("display", "none");
+  //   const faqField = document.createElement("div");
+  //   faqField.className = "field";
+  //   faqField.id = i + "faq";
+  //   $(faqField).css("display", "none");
 
-    const questionLabel = document.createElement("label");
-    questionLabel.textContent = "Question:";
-    $(questionLabel).css("display", "block");
+  //   const questionLabel = document.createElement("label");
+  //   questionLabel.textContent = "Question:";
+  //   $(questionLabel).css("display", "block");
 
-    const faqQuestion = document.createElement("input");
-    faqQuestion.name = "faq-question-" + i;
+  //   const faqQuestion = document.createElement("input");
+  //   faqQuestion.name = "faq-question-" + i;
 
-    const answerLabel = document.createElement("label");
-    answerLabel.textContent = "Answer:";
+  //   const answerLabel = document.createElement("label");
+  //   answerLabel.textContent = "Answer:";
 
-    const faqAnswer = document.createElement("textarea");
-    faqLabel.textContent = "FAQ #" + (i + 1);
-    faqAnswer.name = "faq-answer-" + i;
+  //   const faqAnswer = document.createElement("textarea");
+  //   faqLabel.textContent = "FAQ #" + (i + 1);
+  //   faqAnswer.name = "faq-answer-" + i;
 
-    FAQ.append(faqField);
-    faqField.append(faqLabel);
-    faqLabel.append(questionLabel);
-    questionLabel.append(faqQuestion);
-    faqLabel.append(answerLabel);
-    answerLabel.append(faqAnswer);
-  }
+  //   FAQ.append(faqField);
+  //   faqField.append(faqLabel);
+  //   faqLabel.append(questionLabel);
+  //   questionLabel.append(faqQuestion);
+  //   faqLabel.append(answerLabel);
+  //   answerLabel.append(faqAnswer);
+  // }
 
   $("body").on("click", "#add-faq", function(e) {
-    let questionNumber = sessionStorage.getItem("faq");
-    const question = questionNumber + "faq";
-    $(`#${question}`).css("display", "block");
-    sessionStorage.setItem("faq", Number(questionNumber) + 1);
+
+    if (Number(sessionStorage.getItem('faq') < 3)) {
+      let questionNumber = sessionStorage.getItem("faq");
+      sessionStorage.setItem("faq", (Number(questionNumber) + 1));
+  
+      const question = questionNumber + "faq";
+      $(`#${question}`).css("display", "block");
+    } else {
+      alert('Max of 3 FAQs allowed')
+    }
+
   });
 
   $("body").on("click", "#home-button", function(e) {
@@ -472,4 +600,107 @@ function setCookie(name, value)
     sessionStorage.setItem('lastLocation', 'listing.form')
     window.history.back(); 
   });
+
+  var images = [];
+
+  // read uploaded image
+function readFile(file) {
+
+      var FR = new FileReader();
+
+      FR.addEventListener('load', function (base64Img) {
+
+        // pass base64 image to be uploaded to jumbotron
+        displayPhoto(base64Img.target.result);
+        images.push(base64Img.target.result);
+        // console.log(`images: ${images}`);
+        console.log(images.length)
+
+        // check if max images allowed
+        maxPhotos(images.length);
+
+    });
+      FR.readAsDataURL(file);
+  }
+
+// display photo to top of jumbotron
+function displayPhoto(image) {
+  $('#other-append').append(`<img src="${image}" alt="image" class="ui small image">`);
+};
+
+// set max photos to 3
+function maxPhotos(max) {
+  if (max < 3) {
+      $('#add-pet-form-message').empty();
+      $('#add-pet-form-message').append('<i id="add-pet-upload" class="fas fa-camera fa-3x" for="add-pet-upload-photo"></i>');
+      $('#add-pet-form-message').append('<input type="file" id="add-pet-upload-image" style="display: none;" />');
+  } else if (max === 3) {
+      $('#add-pet-form-message').empty();
+      $('#add-pet-form-message').text('Max photos allowed!');
+  }
+};
+
+const handleFileUpload = (selector, handler) => {
+  document.querySelector(selector).addEventListener("change", (event) => {
+    const files = event.currentTarget.files;
+    if (files.length) {
+      handler(files[0]);
+    } else {
+      console.log('the fuck')
+    }
+  })
+}
+
+  handleFileUpload("#put", async (file) => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token")); 
+    const urlAndKey = await (await fetch(`/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`)).json();
+    console.log(urlAndKey)
+    await fetch(urlAndKey.url, {
+      method: "PUT",
+      body: file,
+    })
+    .then((data) => {
+      console.log(data);
+      let image_path = urlAndKey.key
+      console.log(image_path)
+      const storeImage = {
+        listing_id: sessionStorage.getItem('stagedListing'), 
+        image_path,  
+        // change to true and add to listing for featured 
+        featured_image: false, 
+      }
+      myAxios.post('http://localhost:3000/api/storeimage', storeImage)
+        .then(resp => {
+          console.log(resp)
+          console.log(file)
+          readFile(file)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  });
+
+  handleFileUpload("#post", async (file) => {
+    const data = await (await fetch("/sign_post")).json();
+
+    const formData = new FormData();
+    formData.append("Content-Type", file.type);
+    Object.entries(data.fields).forEach(([k, v]) => {
+      formData.append(k, v);
+    });
+    formData.append("file", file); // must be the last one
+
+    await fetch(data.url, {
+      method: "POST",
+      body: formData,
+    });
+  });
+
+  // $(window).bind('beforeunload', function(){
+  //   return 'Are you sure you want to leave?';
+  // });
 });

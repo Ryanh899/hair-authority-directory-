@@ -618,6 +618,23 @@ const Listings = {
         .first()
     );
   },
+  storeImage (imageInfo) {
+    return knex('images').insert(imageInfo)
+  }, 
+  stageListing (listingInfo) {
+    return knex('pending_listings')
+            .returning('id')
+            .insert(listingInfo)
+  }, 
+  updateStagedListing (listingInfo) {
+    return knex('pending_listings')
+            .update(listingInfo)
+            .where('id', listingInfo.id)
+  },
+  updateStagedListing__table(table, data) {
+    return knex(table).insert(data)
+
+  }, 
   // used to update city in db
   addCityState() {
     let results = [];
