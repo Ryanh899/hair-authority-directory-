@@ -214,6 +214,17 @@ const Listings = {
         console.log(err);
       });
   },
+  getByTitle__promise(title) {
+    return knex("listings")
+            .select()
+            .whereRaw(`LOWER(business_title) like ?`, [`${title}%`])
+            .then(resp => {
+              return resp
+            })
+            .catch(err => {
+              console.log(err)
+            })
+  },
   async getBySearch(title, currentLocation) {
     const listings = await knex("listings")
       .select()

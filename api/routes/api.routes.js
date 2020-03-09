@@ -93,6 +93,14 @@ router.get("/listing/:id", (req, res) => {
   Listings.getById(listing, res);
 });
 
+router.get("/listing/title/:title", async (req, res) => {
+  const listing = req.params.title;
+  console.log(listing);
+  const searchResults = await Listings.getByTitle__promise(listing); 
+  
+  res.json(searchResults)
+});
+
 router.put("/updateListing/:id", (req, res) => {
   const id = req.params.id;
   const listing = req.body;
@@ -459,5 +467,10 @@ router.post('/stagelisting/:table/:form', async (req, res) => {
     console.log(err)
   })
 })
+
+router.put('/updatestatus', (req, res) => {
+  console.log(req.body)
+  res.json({message: 'test'})
+})   
 
 module.exports = router;

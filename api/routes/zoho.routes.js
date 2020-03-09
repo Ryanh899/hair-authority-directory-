@@ -130,6 +130,50 @@ router.get("/findCustomer/:userToken", async (req, res) => {
     });
 });
 
+router.post('/retreiveHostedPage/newSubscription/:pageId', async (req, res) => {
+
+  const pageId = req.params.pageId; 
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  Superagent.get(`https://subscriptions.zoho.com/api/v1/hostedpages/${pageId}`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(resp => {
+      console.log(resp.body);
+      
+    })
+    .catch(err => {
+      console.log('err');
+    });
+})
+
 module.exports = router;
 
 // 1000.081743a133d1744a366ca051e0463a73.0ac9eeb589ee62312ec05c9f1c1db819&location=us

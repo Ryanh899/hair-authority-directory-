@@ -128,7 +128,8 @@ path text not null
 
 create table pending_claims (
 user_id uuid not null, 
-listing_id uuid not null
+listing_id uuid not null, 
+claim_id uuid default uuid_generate_v4() primary key
 ); 
 
 create table saved_listings (
@@ -160,10 +161,11 @@ id serial not null,
 refresh_token varchar(100)
 ); 
 
-create table zoho_status (
+create table subscriptions (
 user_id uuid not null, 
 customer_id text not null, 
-balace int, 
-payment_id text, 
-plan_code uuid 
+plan_code uuid, 
+status varchar(64), 
+subscriptions_id text, 
+card_id text
 ); 

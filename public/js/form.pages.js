@@ -49,12 +49,28 @@ var authHelper = {
   },
   logOut() {
     sessionStorage.removeItem("token");
+  }, 
+  zohoRedirectCheck () {
+    const url = window.location.href.split('='); 
+    const redirectId = url[1]; 
+    if (redirectId) {
+      return redirectId
+    } else {
+      return false
+    }
   }
 };
 
 $(document).ready(function() {
   sessionStorage.setItem("faq", 1);
   sessionStorage.removeItem("24Hour");
+  console.log(window.location.href)
+  if (!authHelper.zohoRedirectCheck()) {
+    window.location.assign('billing__new.html')
+  } else {
+    console.log(authHelper.zohoRedirectCheck())
+    myAxios.post('http://localhost:3000/zoho/')
+  }
 
   // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
   let API_URL = "http://localhost:3000/api/";
@@ -250,10 +266,10 @@ $(document).ready(function() {
       $("#category-div").css("border", "solid");
       $("#category-div").css("border-color", "red");
     } else {
-      // myAxios.post('http://localhost:3000/api/stageListing', { business_title: formData.get('businessTitle') })
-      // .then(resp => {
-      // sessionStorage.setItem('stagedListing', resp.data[0]);
-      // finalForm.id = resp.data[0];
+      myAxios.post('http://localhost:3000/api/stageListing', { business_title: formData.get('businessTitle') })
+      .then(resp => {
+      sessionStorage.setItem('stagedListing', resp.data[0]);
+      finalForm.id = resp.data[0];
       finalForm.tagline = formData.get("businessDescription");
       finalForm.category = formData.get("category");
       sessionStorage.setItem("formsCompleted", 1);
@@ -268,11 +284,11 @@ $(document).ready(function() {
       $("#businessTitle").addClass("completed");
       $("#storefrontInfo").toggleClass("active");
       console.log(finalForm);
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // })
-      // finalForm.business_title = formData.get("businessTitle");
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      finalForm.business_title = formData.get("businessTitle");
     }
   });
 
@@ -358,9 +374,9 @@ $(document).ready(function() {
       x => x.opening_hours !== "--" && x.closing_hours !== "--"
     );
     trimForm(finalForm);
-    // myAxios.post('http://localhost:3000/api/stagelisting/hours/form2', [finalForm, filteredHoursForm] )
-    //   .then(resp => {
-    //     console.log(resp)
+    myAxios.post('http://localhost:3000/api/stagelisting/hours/form2', [finalForm, filteredHoursForm] )
+      .then(resp => {
+        console.log(resp)
     $(form2).css("display", "none");
     $(form3).css("display", "block");
     sessionStorage.setItem("formsCompleted", 2);
@@ -372,10 +388,10 @@ $(document).ready(function() {
     $("#website").toggleClass("active");
     console.log(hoursForm);
     console.log(finalForm);
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+    })
+    .catch(err => {
+      console.log(err)
+    })
   });
 
   //submit third form
@@ -425,9 +441,9 @@ $(document).ready(function() {
         listing_id: finalForm.id
       });
 
-    // myAxios.put('http://localhost:3000/api/stagelisting/social_media', smForm )
-    // .then(resp => {
-    //   console.log(resp)
+    myAxios.put('http://localhost:3000/api/stagelisting/social_media', smForm )
+    .then(resp => {
+      console.log(resp)
     $(form3).css("display", "none");
     $(form4).css("display", "block");
     sessionStorage.setItem("formsCompleted", 3);
@@ -439,10 +455,10 @@ $(document).ready(function() {
     $("#contact").toggleClass("active");
     console.log(smForm);
     console.log(finalForm);
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+    })
+    .catch(err => {
+      console.log(err)
+    })
   });
 
   //submit fourth form
@@ -460,9 +476,9 @@ $(document).ready(function() {
     if (formData.get("phone") && validatePhone(formData.get("phone"))) {
       finalForm.phone = formData.get("phone");
 
-      // myAxios.put('http://localhost:3000/api/stagelisting', finalForm )
-      // .then(resp => {
-      //   console.log(resp)
+      myAxios.put('http://localhost:3000/api/stagelisting', finalForm )
+      .then(resp => {
+        console.log(resp)
       $("#phone-div").css("border", "none");
       $(form4).css("display", "none");
       $(form5).css("display", "block");
@@ -474,10 +490,10 @@ $(document).ready(function() {
       $("#contact").addClass("completed");
       $("#about").toggleClass("active");
       console.log(finalForm);
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // })
+      })
+      .catch(err => {
+        console.log(err)
+      })
     } else {
       $("#phone-div").css("border", "solid");
       $("#phone-div").css("border-color", "red");
@@ -494,9 +510,9 @@ $(document).ready(function() {
     if (formData.get("about") !== null || formData.get("about") !== "")
       finalForm.business_description = formData.get("about");
 
-    // myAxios.put('http://localhost:3000/api/stagelisting', finalForm )
-    //   .then(resp => {
-    //     console.log(resp)
+    myAxios.put('http://localhost:3000/api/stagelisting', finalForm )
+      .then(resp => {
+        console.log(resp)
     $(form5).css("display", "none");
     $(form6).css("display", "block");
     sessionStorage.setItem("formsCompleted", 5);
@@ -507,10 +523,10 @@ $(document).ready(function() {
     $("#about").addClass("completed");
     $("#images").toggleClass("active");
     console.log(finalForm);
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+    })
+    .catch(err => {
+      console.log(err)
+    })
   });
 
   //submit sixth form
@@ -832,7 +848,11 @@ $(document).ready(function() {
       })
   });
 
-  // $(window).bind('beforeunload', function(){
-  //   return 'Are you sure you want to leave?';
-  // });
+  $(window).bind('beforeunload', function(){
+    sessionStorage.removeItem('stagedListing')
+    sessionStorage.removeItem('faq')
+    sessionStorage.removeItem('imageUp')
+    sessionStorage.removeItem('formsCompleted')
+    sessionStorage.removeItem('plan')
+  });
 });
