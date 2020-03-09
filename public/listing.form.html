@@ -56,31 +56,21 @@
                       <div class="one wide column"></div>
                     </div>
                   </div>
-                  <div class="ui grid">
-                      <div class="four wide column">
-                            <div class="ui vertical steps">
-                                <div class="completed step">
-                                    <i class="truck icon"></i>
-                                    <div class="content">
-                                    <div class="title">Shipping</div>
-                                    <div class="description">Choose your shipping options</div>
-                                    </div>
-                                </div>
-                                <div class="completed step">
-                                    <i class="credit card icon"></i>
-                                    <div class="content">
-                                    <div class="title">Billing</div>
-                                    <div class="description">Enter billing information</div>
-                                    </div>
-                                </div>
-                                <div class="active step">
-                                    <i class="info icon"></i>
-                                    <div class="content">
-                                    <div class="title">Confirm Order</div>
-                                    <div class="description">Verify order details</div>
-                                    </div>
-                                </div>
-                            </div>
+                  <div style="width: 100%;" class="ui grid">
+                      <div class="row">
+                            <div class="sixteen wide centered column">
+                                    <ul class="progressBar" id="progressbar">
+                                            <li  class="progress active">Title, Tagline & Category</li>
+                                            <li  class="progress" >Location & Hours</li>
+                                            <li  class="progress">Social Media</li>
+                                            <li  class="progress">Contact</li>
+                                            <li  class="progress">Description & Mission</li>
+                                            <li class="progress">Images</li>
+                                            <li  class="progress">FAQ's</li>
+                                          </ul>
+                              </div>
+                      </div>
+                      <div class="three wide column">
                       </div>
                       <div class="ten wide column">
                             <form id="form-1" class="ui equal width form">
@@ -137,6 +127,7 @@
                                         </div style="margin-top: 2rem;">
                                     </div>
                                     <div id="submit1" class="submit-button">Next <i class="right arrow icon"></i></div>
+                                    
                                 </div>
                                 </form>
                                 <form id="form-2" class="ui equal width form">
@@ -329,90 +320,19 @@
                                 <!-- AWS SIGNED POST TO S3 TESTING  -->
                                 <form id="form-6" class="ui equal width form">
                                         <h1 class="form-h1">Images & Media</h1>
+                                    <div>
                                         <label style="margin-top: 2rem;" id="labels-1">Feature Image</label>
-                                        <p id="other-append" class="form-info" >Your logo / main image </p>
+                                        <p id="feature-append" class="form-info" >Your logo / main image </p>
                                         <input type="file" id="put" />
-                                        <!-- <div class="field">
-                                            <label style="margin-top: 2rem;" id="labels-1">Feature Image</label>
-                                            <p id="feature-append" class="form-info" >The first image that will be seen with your listing.</p>
-                                            <div class="text-center">
-                                                    <i id="add-pet-upload-feature" class="large camera icon" for="put"></i>
-                                                    <input type="file" id="put" />
-                                                </div>
-                                        </div> -->
-                                        <div class="field">
-                                                <label style="margin-top: 2rem;" id="labels-1">Other Images</label>
-                                                <p id="other-append" class="form-info" >All other images </p>
-                                                <div class="text-center">
-                                                        <!-- <i id="add-pet-upload" class="large camera icon" for="post"></i> -->
-                                                        <input type="file" id="post" />
-                                                    </div>
-                                            </div>
-                                        <div id="submit6" class="submit-button">Next <i class="right arrow icon"></i></div>
-                                    </form>
-                            
-                                <!-- possibly region in url causing err  -->
-                                
-                                <!-- <form id="form-6" action="https://ha-images-02.s3-us-west-1.amazonaws.com/" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="key" value="2020/${filename}"> <input type="hidden" name="AWSAccessKeyId" value="AKIAIB3553V7LVPV5KOQ">
-                                    <input type="hidden" name="acl" value="public-read">
-                                    <input type="hidden" name="policy" value="eyJleHBpcmF0aW9uIjoiMjAyMS0wMS0wMVQwMDowMDowMFoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJoYS1pbWFnZXMtMDIifSxbInN0YXJ0cy13aXRoIiwiJGtleSIsIjIwMjAvIl0seyJhY2wiOiJwdWJsaWMtcmVhZCJ9LFsic3RhcnRzLXdpdGgiLCIkQ29udGVudC1UeXBlIiwiIl0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMCwxMDQ4NTc2XV19">
-                                    <input type="hidden" name="signature" value="ImV5SmxlSEJwY21GMGFXOXVJam9pTWpBeU1TMHdNUzB3TVZRd01Eb3dNRG93TUZvaUxDSmpiMjVrYVhScGIyNXpJanBiZXlKaWRXTnJaWFFpT2lKb1lTMXBiV0ZuWlhNdE1ESWlmU3hiSW5OMFlYSjBjeTEzYVhSb0lpd2lKR3RsZVNJc0lqSXdNakF2SWwwc2V5SmhZMndpT2lKd2RXSnNhV010Y21WaFpDSjlMRnNpYzNSaGNuUnpMWGRwZEdnaUxDSWtRMjl1ZEdWdWRDMVVlWEJsSWl3aUlsMHNXeUpqYjI1MFpXNTBMV3hsYm1kMGFDMXlZVzVuWlNJc01Dd3hNRFE0TlRjMlhWMTki">
-                                    <input type="hidden" name="Content-Type" value="image/jpeg">
-                                    File to upload to S3: <input name="file" type="file">
-                                    <br>
-                                    <input type="submit" value="Upload File to S3">
-                                </form> -->
-                                <!-- <form id="form-6" class="ui equal width form">
-                                    <h1 class="form-h1">Images & Media</h1>
-                                    <div class="field">
-                                            <label style="margin-top: 2rem;" id="labels-1">Youtube</label>
-                                            <div id="youtube-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                                                <input name="youtube" type="text" placeholder="Ex. https://www.youtube.com/">
-                                                <i class="youtube icon"></i>
-                                            </div>
-                                        </div>
-                                    <div class="field">
-                                        <label style="margin-top: 2rem;" id="labels-1">Feature Image</label>
-                                        <div class="ui grid" >
-                                            <div class="sixteen wide column">
-                                                <form action="https://ha-images-02.s3-us-west-1.amazonaws.com/" method="post" enctype="multipart/form-data">
-                                                    <input type="hidden" name="key" value="2020/${filename}"> <input type="hidden" name="AKIAIB3553V7LVPV5KOQ" value="3dO9ckeB/qekrQHqcVeHGtNF4P3XSQiYqrilTKkD">
-                                                    <input type="hidden" name="acl" value="private">
-                                                    <input type="hidden" name="policy" value="eyJleHBpcmF0aW9uIjoiMjAyMS0wMS0wMVQwMDowMDowMFoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJoYS1pbWFnZXMtMDIifSxbInN0YXJ0cy13aXRoIiwiJGtleSIsIjIwMjAvIl0seyJhY2wiOiJwdWJsaWMtcmVhZCJ9LFsic3RhcnRzLXdpdGgiLCIkQ29udGVudC1UeXBlIiwiIl0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMCwxMDQ4NTc2XV19">
-                                                    <input type="hidden" name="signature" value="ImV5SmxlSEJwY21GMGFXOXVJam9pTWpBeU1TMHdNUzB3TVZRd01Eb3dNRG93TUZvaUxDSmpiMjVrYVhScGIyNXpJanBiZXlKaWRXTnJaWFFpT2lKb1lTMXBiV0ZuWlhNdE1ESWlmU3hiSW5OMFlYSjBjeTEzYVhSb0lpd2lKR3RsZVNJc0lqSXdNakF2SWwwc2V5SmhZMndpT2lKd2RXSnNhV010Y21WaFpDSjlMRnNpYzNSaGNuUnpMWGRwZEdnaUxDSWtRMjl1ZEdWdWRDMVVlWEJsSWl3aUlsMHNXeUpqYjI1MFpXNTBMV3hsYm1kMGFDMXlZVzVuWlNJc01Dd3hNRFE0TlRjMlhWMTki">
-                                                    <input type="hidden" name="Content-Type" value="image/jpeg">
-                                                    File to upload to S3: <input name="file" type="file">
-                                                    <br>
-                                                    <input type="submit" value="Upload File to S3">
-                                                </form>
-                                            </div>
-                                            <label style="margin-top: 2rem;" id="labels-1">Other Images</label>
-                                            <div class="sixteen wide column">
-                                                    <form action="https://s3-bucket.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
-                                                        <input type="hidden" name="key" value="uploads/${filename}"> <input type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY">
-                                                        <input type="hidden" name="acl" value="private">
-                                                        <input type="hidden" name="success_action_redirect" value="http://localhost/">
-                                                        <input type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
-                                                        <input type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
-                                                        <input type="hidden" name="Content-Type" value="image/jpeg">
-                                                        Include any additional input fields here
-                                                        File to upload to S3: <input name="file" type="file">
-                                                        <br>
-                                                        <input type="submit" value="Upload File to S3">
-                                                    </form>
-                                                </div>
-                                        </div>
-                                        <p id="feature-append" class="form-info" >The first image that will be seen with your listing.</p>
-                                        <div class="text-center">
-                                                <i id="img-upload-feature" class="large camera icon" for="img-upload-image-feature"></i>
-                                                <input style="display: none;" type="file" id="img-upload-image-feature" />
-                                            </div>
                                     </div>
-                                    
-                                    <div id="submit6" class="submit-button">Next <i class="right arrow icon"></i></div>
-                                </form> -->
-                        
+                                    <div>
+                                        <label style="margin-top: 2rem;" id="labels-1">Other Images</label>
+                                        <p id="other-append" class="form-info" >Any other images of your practice.</p>
+                                        <div id="other-image-append"></div>
+                                        <input type="file" id="otherimages" />
+                                    </div>
+                                    <div style="margin-top: 1rem;" id="submit6" class="submit-button">Next <i class="right arrow icon"></i></div>
+                                </form>
                                 <!-- form 7 -->
                                 <form id="form-7" class="ui equal width form">
                                     <h1 class="form-h1">Hair Authority Directory</h1>
@@ -438,10 +358,21 @@
                                             <textarea name="faq-answer-2"></textarea>
                                         </div>
                                     </div>
-                                    <div id="submit7" class="submit-button">Next <i class="right arrow icon"></i></div>
+                                    <div id="submit7" class="submit-button">Finish </div>
                                 </form>
+                                <div id="image-size-modal" class="ui basic modal">
+                                        <div class="ui icon header">
+                                          <i class="image outline icon"></i>
+                                          File size too large
+                                        </div>
+                                        <div style="text-align: center;" class="content">
+                                          <p>Images must be 2MB or less</p>
+                                          <button id="image-size-ok" class="ui white inverted button">Upload More</button>
+                                        </div>
+                                        </div>
+                                      </div>
                       </div>
-                      <div class="two wide column"></div>
+                      <div class="three wide column"></div>
                   </div>
         
     </div>

@@ -8,6 +8,7 @@ const NodeGeocoder = require("node-geocoder");
 // const Aws = require("../aws");
 const AWS = require("aws-sdk");
 const moment = require('moment')
+const crypto = require("crypto")
 
 const s3 = new AWS.S3(); 
 
@@ -267,13 +268,15 @@ const policy = { "expiration": "2020-12-31T12:00:00.000Z",
 //     ["starts-with", "$x-amz-meta-tag", ""]
 //   ]
 // };
-const getRandomFilename = () =>	require("crypto").randomBytes(16).toString("hex");
+const getRandomFilename = () =>	crypto.randomBytes(16).toString("hex");
 
 router.get("/s3/sign_put", (req, res) => {
 	const contentType = req.query.contentType;
 	if (!contentType.startsWith("image/")) {
 		throw new Error("must be image/");
-	}
+  }
+  const random = crypto.randomBytes(16).toString("hex");
+  // NEED TO DO AUTH HERE
 	const userid = req.query.userId // some kind of auth
   const year = moment().format('YYYY'); 
   const month = moment().format('M'); 
@@ -313,6 +316,79 @@ router.post('/storeimage', (req, res) => {
     .then(resp => {
       console.log(resp)
       res.json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+router.post('/storeimage/feature', (req, res) => {
+  console.log(req.body)
+  Listings.storeImage__featured(req.body)
+    .then(resp => {
+      console.log(resp)
+      return Listings.storeImage(req.body)
+    })
+    .then(resp => {
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+
+
+router.delete('/removeimage/:id', (req, res) => {
+  const imageId = req.params.id
+  const removeLocal = new Promise((resolve, reject) => {
+      Listings.removeImage(imageId)
+      .then(resp => {
+        resolve(resp)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    })
+    removeLocal.then(resp => {
+      console.log(resp)
+        s3.deleteObject({
+          Bucket: process.env.BUCKETNAME,
+          Key: resp[0].image_path
+        }, resp => {
+        console.log(resp)
+        res.json(resp)
+        })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+router.delete('/removeimage/feature/:id', (req, res) => {
+  const imageId = req.params.id
+  let imageKey = []; 
+  const removeLocal = new Promise((resolve, reject) => {
+      Listings.removeImage(imageId)
+        .then(resp => {
+          imageKey.push(resp[0].image_path)
+          return Listings.removeImage__feature(resp[0].listing_id)
+        })
+        .then(resp => {
+          resolve(resp)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    })
+    removeLocal.then(resp => {
+      console.log(resp)
+        s3.deleteObject({
+          Bucket: process.env.BUCKETNAME,
+          Key: imageKey[0]
+        }, resp => {
+          res.json(resp)
+        })
     })
     .catch(err => {
       console.log(err)

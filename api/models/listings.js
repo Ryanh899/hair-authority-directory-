@@ -140,7 +140,11 @@ const Listings = {
     let catSplit = category.split(",");
     const listings = await knex("listings")
       .select()
-      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [`%${catSplit[0].toLowerCase()}%`, currentLocation.state, null])
+      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [
+        `%${catSplit[0].toLowerCase()}%`,
+        currentLocation.state,
+        null
+      ])
       .limit(50)
       .then(response => {
         return response;
@@ -170,7 +174,11 @@ const Listings = {
     const listings = await knex("listings")
       .select()
       .limit(50)
-      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [`%${category.toLowerCase()}%`, currentLocation.state.toLowerCase(), null])
+      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [
+        `%${category.toLowerCase()}%`,
+        currentLocation.state.toLowerCase(),
+        null
+      ])
       .then(response => {
         console.log(response.length);
         return response;
@@ -210,7 +218,10 @@ const Listings = {
     const listings = await knex("listings")
       .select()
       .limit(50)
-      .whereRaw(`LOWER(business_title) LIKE ? and LOWER(state) = ?`, [`%${title.toLowerCase()}%`, currentLocation.state.toLowerCase()])
+      .whereRaw(`LOWER(business_title) LIKE ? and LOWER(state) = ?`, [
+        `%${title.toLowerCase()}%`,
+        currentLocation.state.toLowerCase()
+      ])
       .then(async response => {
         return uniqueArray(response);
       })
@@ -236,54 +247,64 @@ const Listings = {
   getById(id, cb) {
     let getListing = new Promise((resolve, reject) => {
       return knex("listings")
-      .select()
-      .where("id", id)
-      .then(resp => {
-        resolve(resp)
-      })
-      .catch(err => {
-        console.log(err);
-        cb.status(400).json({ message: "listing does not exist" });
-      });
-    })
-    getListing.then(listing => {
-      listing = listing[0]
-      knex('images')
         .select()
-        .where('listing_id', listing.id)
-        .then(response => {
-          listing.images = response; 
-          return knex('social_media').select().where('listing_id', listing.id)
-        })
-        .then(social => {
-          console.log(social)
-          let sm = social
-          sm.forEach(platform => {
-            listing[platform.platform] = platform.url
-          })
-          return knex('hours').select().where('listing_id', listing.id)
-        })
-        .then(hours => {
-          console.log(hours)
-          hours.forEach(day => {
-            listing[day.day] = { opening_hours: day.opening_hours, closing_hours: day.closing_hours }
-          })
-          return knex('faq').select().where('listing_id', listing.id); 
-        })
-        .then(faqs => {
-          console.log(faqs); 
-          if (faqs.length > 0) {
-            listing.faqs = faqs
-          }
-          return cb.status(200).json(listing); 
+        .where("id", id)
+        .then(resp => {
+          resolve(resp);
         })
         .catch(err => {
-          console.log(err)
-        })
-    }).catch(err => {
-      console.error(err)
-    })
-
+          console.log(err);
+          cb.status(400).json({ message: "listing does not exist" });
+        });
+    });
+    getListing
+      .then(listing => {
+        listing = listing[0];
+        knex("images")
+          .select()
+          .where("listing_id", listing.id)
+          .then(response => {
+            listing.images = response;
+            return knex("social_media")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(social => {
+            console.log(social);
+            let sm = social;
+            sm.forEach(platform => {
+              listing[platform.platform] = platform.url;
+            });
+            return knex("hours")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(hours => {
+            console.log(hours);
+            hours.forEach(day => {
+              listing[day.day] = {
+                opening_hours: day.opening_hours,
+                closing_hours: day.closing_hours
+              };
+            });
+            return knex("faq")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(faqs => {
+            console.log(faqs);
+            if (faqs.length > 0) {
+              listing.faqs = faqs;
+            }
+            return cb.status(200).json(listing);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+      });
   },
   saveListing(listingId, userId, cb) {
     return knex("saved_listings")
@@ -618,23 +639,33 @@ const Listings = {
         .first()
     );
   },
-  storeImage (imageInfo) {
-    return knex('images').insert(imageInfo)
-  }, 
-  stageListing (listingInfo) {
-    return knex('pending_listings')
-            .returning('id')
-            .insert(listingInfo)
-  }, 
-  updateStagedListing (listingInfo) {
-    return knex('pending_listings')
-            .update(listingInfo)
-            .where('id', listingInfo.id)
+  storeImage(imageInfo) {
+    return knex("images").returning(['image_id', 'image_path', 'listing_id']).insert(imageInfo);
+  },
+  storeImage__featured(imageInfo) {
+    return knex("pending_listings")
+      .update("feature_image", imageInfo.image_path)
+      .where("id", imageInfo.listing_id);
+  },
+  stageListing(listingInfo) {
+    return knex("pending_listings")
+      .returning("id")
+      .insert(listingInfo);
+  },
+  updateStagedListing(listingInfo) {
+    return knex("pending_listings")
+      .update(listingInfo)
+      .where("id", listingInfo.id);
   },
   updateStagedListing__table(table, data) {
-    return knex(table).insert(data)
-
+    return knex(table).insert(data);
+  },
+  removeImage(imageId) {
+    return knex('images').delete('*').where('image_id', imageId).returning(['image_id', 'image_path', 'listing_id'])
   }, 
+  removeImage__feature(listingId) {
+    return knex('pending_listings').update('feature_image', 'null').where('id', listingId)
+  },
   // used to update city in db
   addCityState() {
     let results = [];
@@ -659,8 +690,7 @@ const Listings = {
             });
         });
       });
-  },
- 
+  }
 };
 
 module.exports = Listings;
