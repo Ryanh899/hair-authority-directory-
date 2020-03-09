@@ -32,7 +32,7 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
          -3px 3px #696969,
          -4px 4px #696969,
          -5px 5px #696969;
-    display: none;
+    /* display: none; */
 }
 
 #form-2 {
@@ -123,7 +123,7 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
     padding-bottom: 3.5rem;
     border-color: #1F7A8C;
     margin-top: 2.5rem;
-    /* display: none; */
+    display: none;
     margin-bottom: 2.5rem;
     border-radius: 15px;
     border: 1px solid #696969;
