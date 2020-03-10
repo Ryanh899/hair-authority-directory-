@@ -717,7 +717,7 @@ body {
 
 #step-1-title {
   position: relative;
-  font-size: 65px;
+  font-size: 60px;
   font-weight: 700;
   font-family: "Raleway";
   margin-bottom: 1.5rem;
@@ -728,6 +728,7 @@ body {
 
 #step-1-content {
   line-height: 1.85em;
+  font-size: 22px;
 }
 
 #step-1-list {
@@ -791,6 +792,7 @@ body {
 
 #step-2-content {
   line-height: 1.85em;
+  font-size: 24px;
 }
 
 #step-2-list {
@@ -865,6 +867,7 @@ body {
 
 #step-3-content {
   line-height: 1.85em;
+  font-size: 24px;
 }
 
 #step-3-list {
