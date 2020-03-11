@@ -97,7 +97,7 @@ router.get("/listing/title/:title", async (req, res) => {
   const listing = req.params.title;
   console.log(listing);
   const searchResults = await Listings.getByTitle__promise(listing); 
-  
+
   res.json(searchResults)
 });
 
@@ -192,6 +192,43 @@ router.get("/search/:query/:location", async (req, res) => {
     });
 });
 
+router.get("/search/logo/:query/:location", async (req, res) => {
+  const query = req.params.query.toLowerCase();
+
+  let location = req.params.location.split("+");
+  if (location[0] === "null" || location[1] === "null") {
+    return res.status(404).json({
+      message: "location not found"
+    });
+  }
+  const city = await geocoder
+    .reverse({ lat: Number(location[0]), lon: Number(location[1]) })
+    .catch(err => console.log(err));
+  location = {
+    lat: location[0],
+    lng: location[1],
+    city: city[0].city.toLowerCase(),
+    state: city[0].administrativeLevels.level1short
+  };
+  console.log(query);
+  console.log(location);
+  const searchPromises = await Listings.getByLogo(query, location);
+  Promise.all(searchPromises)
+    .then(results => {
+      console.log("SEARCH PROMISES .THEN=>");
+      console.log(results);
+      return results;
+    })
+    .catch(err => {
+      console.error(err);
+      return results;
+    })
+    .then(results => {
+      const filtered = results.filter(x => x !== 0);
+      res.status(200).json(filtered);
+    });
+});
+
 router.post("/saveListing/:id", async (req, res) => {
   console.log(req.body);
   const listingId = req.params.id;
@@ -264,18 +301,6 @@ const policy = { "expiration": "2020-12-31T12:00:00.000Z",
   {"x-amz-date": "20201231T000000Z" }
 ]
 }
-
-// const policy = {
-//   expiration: "2007-12-01T12:00:00.000Z",
-//   conditions: [
-//     { bucket: "ha-images-02" },
-//     ["starts-with", "$key", "uploads/2020/"],
-//     { acl: "public-read" },
-//     ["starts-with", "$Content-Type", "image/"],
-//     { "x-amz-meta-uuid": "e15e27ad-0fed-4af0-8c20-f3d0884fe225" },
-//     ["starts-with", "$x-amz-meta-tag", ""]
-//   ]
-// };
 const getRandomFilename = () =>	crypto.randomBytes(16).toString("hex");
 
 router.get("/s3/sign_put", (req, res) => {

@@ -189,7 +189,7 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
     { title: "Wigs / Extensions & Hair Additions" },
     { title: "The Hair Club", abbreviation: "" },
     { title: "ARTAS Robotic Hair Restoration System" },
-    { title: "World Trichology Society", abbreviation: "WTS" },
+    { title: "World Trichology Society", abbreviation: "Trichologist" },
     {
       title: "The International Society of Hair Restoration Surgery (ISHRS)",
       abbreviation: "ISHRS"
@@ -226,12 +226,14 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
   });
 
   let search = sessionStorage.getItem("searchQuery");
+  const logoSearch = sessionStorage.getItem('logoSearch')
 
   let category = "";
+  let association = ""; 
 
   // check if it is a category
   categories.forEach(item => {
-    if (item.title === search) {
+    if (search && item.title.toLowerCase() === search.toLowerCase()) {
       category = search;
     }
   });
@@ -252,7 +254,7 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
 
 
   let allListings = []; 
-  if (category === "") {
+  if (category === "" && !logoSearch) {
     myAxios
       .get(
         API_URL + "search/" + search + "/" + location.coords.latitude + "+" + location.coords.longitude
@@ -315,10 +317,8 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
                     <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
                   </div>
                   
-                  <div class="fourteen wide column">
-                    <p style="margin-top: 1rem;" id="listing-tagline-search">
-                      ${listing.business_description} 
-                    </p>
+                  <div id="listing-tagline-search" class="fourteen wide column">
+                      ${listing.tagline} 
                   </div>
                   </div>
                   </div>
@@ -332,6 +332,97 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
 
           drawMap(location)
         }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else if ( logoSearch ) {
+
+    console.log(logoSearch)
+    myAxios
+      .get(
+        API_URL +
+          "search/logo/" +
+          logoSearch +
+          "/" +
+          location.coords.latitude + "+" + location.coords.longitude
+      )
+      .then(response => {
+        allListings = response.data
+        console.log(response)
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(loader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location)
+        } else {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          response.data.forEach(listing => {
+            $("#listings-column")
+              .append(`<div
+              style="margin-bottom: 1rem; background: #f8f8f8"
+              class="ui grid segment listingItem-search"
+              id="list-item"
+            >
+              <div style="padding: 1rem; padding-right: 0px;" class="row">
+                <div  class="five wide middle aligned column">
+                  <div class="ui image" >
+                      <img
+                      class="ui rounded image"
+                      src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
+                    />
+                  </div>
+                </div>
+                <div class="eleven wide column">
+                  <div class="ui grid">
+                      <div
+                      style="padding: 1rem 0rem 0rem .5rem;"
+                      class="ten wide column"
+                    >
+                      <a href="#"  id="${listing.id}" class="listingTitle-search">
+                        ${listing.business_title} <i class="small check circle icon" style="color: #1f7a8c;" ></i>
+                      </a>
+                      <p class="listingSubtitle-search">
+                        ${listing.category || "" }
+                      </p>
+                      
+                    </div>
+                    <div
+                    class="six wide computer only column"
+                  >
+                    <p class="listing-info-text">
+                      <i style="color: #1f7a8c;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                    </p>
+                    <p class="listing-info-text">
+                      <i style="color: #1f7a8c;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                    </p>
+                    <!-- <button style="margin-top: 1rem; background: #1f7a8c; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                  </div>
+                  
+                  <div class="fourteen wide column">
+                    <p style="margin-top: 1rem;" id="listing-tagline-search">
+                      ${listing.tagline} 
+                    </p>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+            </div>`);
+          });
+          
+          response.data.forEach(item => {
+            markerInfo.push(item);
+          });
+          drawMap(location)
+        }
+      })
+      .catch(err => {
+        console.log(err);
       })
       .catch(err => {
         console.log(err);
@@ -406,7 +497,7 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
                   
                   <div class="fourteen wide column">
                     <p style="margin-top: 1rem;" id="listing-tagline-search">
-                      ${listing.business_description} 
+                      ${listing.tagline} 
                     </p>
                   </div>
                   </div>

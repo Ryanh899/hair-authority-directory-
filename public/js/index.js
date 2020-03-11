@@ -405,6 +405,14 @@ $(document).ready(function() {
     $("#club-truncate").removeClass("truncated");
   });
 
+  $("body").on("click", ".logo-click", function() {
+    
+    console.log('clicked')
+    sessionStorage.setItem("lastLocation", "index");
+    sessionStorage.setItem("logoSearch", $(this).attr('id'));
+    window.location.assign("search.listings.html");
+  });
+
   // landing image carousel js
   function slick() {
     $(".landing-images").slick({

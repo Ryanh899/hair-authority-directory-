@@ -255,6 +255,37 @@ const Listings = {
       });
     });
   },
+  async getByLogo(tagline, currentLocation) {
+    const listings = await knex("listings")
+      .select()
+      .limit(50)
+      .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) = ?`, [
+        `%${tagline.toLowerCase()}%`,
+        currentLocation.state.toLowerCase()
+      ])
+      .then(async response => {
+        console.log(tagline)
+        return uniqueArray(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    return listings.map((listing, index) => {
+      return new Promise(async (resolve, reject) => {
+        let distance = await GeoCode.findDistance2(
+          { lat: listing.lat, lng: listing.lng, city: listing.city },
+          currentLocation
+        );
+        if (distance && distance.value < 16093400) {
+          console.log("LESS");
+          resolve(listing);
+        } else {
+          console.log("GREATER");
+          resolve(0);
+        }
+      });
+    });
+  },
   getById(id, cb) {
     let getListing = new Promise((resolve, reject) => {
       return knex("listings")
@@ -680,7 +711,7 @@ const Listings = {
   // used to update city in db
   addCityState() {
     let results = [];
-    fs.createReadStream("api/models/pg_hours_import.csv")
+    fs.createReadStream("api/models/pg_all_taglines_import.csv")
       .on("error", err => {
         if (err) throw err;
       })
@@ -690,8 +721,8 @@ const Listings = {
       })
       .on("end", async () => {
         results.forEach(result => {
-          knex("hours")
-            .update({ phone: result.phone, email: result.email })
+          knex("listings")
+            .update('tagline', result.tagline)
             .where("id", result.id)
             .then(() => {
               console.log("changed");

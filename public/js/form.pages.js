@@ -65,12 +65,12 @@ $(document).ready(function() {
   sessionStorage.setItem("faq", 1);
   sessionStorage.removeItem("24Hour");
   console.log(window.location.href)
-  if (!authHelper.zohoRedirectCheck()) {
-    window.location.assign('billing__new.html')
-  } else {
-    console.log(authHelper.zohoRedirectCheck())
-    myAxios.post('http://localhost:3000/zoho/')
-  }
+  // if (!authHelper.zohoRedirectCheck()) {
+  //   window.location.assign('billing__new.html')
+  // } else {
+  //   console.log(authHelper.zohoRedirectCheck())
+  //   // myAxios.post('http://localhost:3000/zoho/')
+  // }
 
   // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
   let API_URL = "http://localhost:3000/api/";
