@@ -48,34 +48,6 @@ const GeoCoding = {
   getMeters(i) {
     return i * 1609.344;
   },
-  findDistance(p1, p2) {
-    return new Promise((resolve, reject) => {
-      if (p1.lat === null || p2.lat === null) {
-        console.log("no location");
-      } else if (p1.lng && p2.lng) {
-        distance.get(
-          {
-            index: 1,
-            origin: `${p1.lat}, ${p1.lng}`,
-            travelMode: "DRIVING",
-            destination: `${p2.lat}, ${p2.lng}`
-          },
-          function(err, data) {
-            if (err) {
-              return err;
-            } else {
-              const km = data.distance.split(" ")[0];
-              resolve(km);
-            }
-          }
-        );
-      } else {
-        console.log("nada");
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-  },
   async findDistance2(p1, p2) {
   return new Promise((resolve, reject) => {
     let destinations = [`${p1.city}`, `${p1.lat},${p1.lng}`];
