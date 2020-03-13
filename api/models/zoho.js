@@ -18,7 +18,7 @@ const Zoho = {
         knex("zoho_auth")
           .insert({
             client_id: keys.zohoClientId,
-            refresh_token: keys.refresh_token,
+            refresh_token: keys.zohoRefresh,
             access_token: resp.data.access_token,
             created_at: now,
             expiry_time: hourFrom

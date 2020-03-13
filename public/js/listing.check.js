@@ -64,6 +64,8 @@ var myAxios = axios.create({
 
 // on ready
 $(document).ready(function () {
+    // hide loader
+    $('#check-loader').css('display', 'none'); 
 
     // establish api url 
     // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
@@ -77,10 +79,68 @@ $(document).ready(function () {
         const search = $('#check-search-input').val().trim(); 
         console.log(search)
         if (search) {
+            // show loader 
+            $('#check-loader').css('display', 'none'); 
+
             myAxios
                 .get(API_URL + 'listing/title/' + search)
-                .then(resp => {
-                    console.log(resp); 
+                .then(response => {
+                    console.log(response); 
+
+                    response.data.forEach(listing => {
+                        $("#results")
+                          .append(`<div
+                          style="margin-bottom: 1rem; background: #f8f8f8"
+                          class="ui grid segment listingItem-search"
+                          id="list-item"
+                        >
+                          <div style="padding: 1rem; padding-right: 0px;" class="row">
+                            <div  class="five wide middle aligned column">
+                              <div class="ui image" >
+                                  <img 
+                                  style="max-height: 200px;"
+                                  class="ui rounded fluid image"
+                                  src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
+                                />
+                              </div>
+                            </div>
+                            <div class="eleven wide column">
+                              <div class="ui grid">
+                                  <div
+                                  style="padding: 1rem 0rem 0rem .5rem;"
+                                  class="ten wide column"
+                                >
+                                  <a href="#" id="${listing.id}" class="listingTitle-search">
+                                    ${listing.business_title} <i class="tiny check circle icon" style="color: #1f7a8c;" ></i>
+                                  </a>
+                                  <p class="listingSubtitle-search">
+                                    ${listing.category || "" }
+                                  </p>
+                                  
+                                </div>
+                                <div
+                                class="six wide computer only column"
+                              >
+                                <p class="listing-info-text">
+                                  <i style="color: #1f7a8c;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                                </p>
+                                <p class="listing-info-text">
+                                  <i style="color: #1f7a8c;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                                </p>
+                                <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                              </div>
+                              
+                              <div id="listing-tagline-search" class="fourteen wide column">
+                                  ${listing.tagline} 
+                              </div>
+                              </div>
+                              </div>
+                            </div>
+                        </div>`);
+                      });
+
+                    // hide loader 
+                    $('#check-loader').css('display', 'none'); 
                 })
                 .catch(err => {
                     console.log(err)

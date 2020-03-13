@@ -217,7 +217,7 @@ const Listings = {
   getByTitle__promise(title) {
     return knex("listings")
             .select()
-            .whereRaw(`LOWER(business_title) like ?`, [`${title}%`])
+            .whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
             .then(resp => {
               return resp
             })
@@ -258,7 +258,6 @@ const Listings = {
   async getByLogo(tagline, currentLocation) {
     const listings = await knex("listings")
       .select()
-      .limit(50)
       .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) = ?`, [
         `%${tagline.toLowerCase()}%`,
         currentLocation.state.toLowerCase()

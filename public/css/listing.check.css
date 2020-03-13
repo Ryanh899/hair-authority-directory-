@@ -35,10 +35,6 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
     text-align: center;
 }
 
-#main-row {
-    height: 75vh;
-}
-
 .form-header {
     font-family: 'Raleway';
     font-weight: 500;

@@ -44,6 +44,45 @@ const User = {
       }
     }
   },
+  async findId(userInfo) {
+    // determines if email exists in either client or business table
+    let user = await knex("users")
+      .select()
+      .where("id", userInfo)
+      .then(response => {
+        return response;
+      })
+      .catch(err => console.log(err));
+    console.log(user);
+    if (user && user.length !== 0) {
+      console.log("client_user");
+      user = user[0];
+      user.isClientUser = true;
+      return user;
+    } else {
+      let professional_user = await knex("professional_users")
+        .select()
+        .where("id", userInfo);
+      if (professional_user && professional_user.length !== 0) {
+        console.log("professional_user");
+        professional_user = professional_user[0];
+        professional_user.isProfessionalUser = true;
+        return professional_user;
+      } else {
+        let admin_user = await knex("admin_users")
+          .select()
+          .where("id", userInfo);
+        if (admin_user && admin_user.length !== 0) {
+          console.log("admin_user");
+          admin_user = admin_user[0];
+          admin_user.isAdminUser = true;
+          return admin_user;
+        } else {
+          return [];
+        }
+      }
+    }
+  },
   async userToProfessional(user, cb) {
     let insert = new Promise((resolve, reject) => {
       knex("professional_users")

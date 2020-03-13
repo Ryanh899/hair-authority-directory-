@@ -699,4 +699,5 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
     window.location.assign("listing.html");
   });
 
+
 });
