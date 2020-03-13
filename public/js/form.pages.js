@@ -1,4 +1,4 @@
-var myAxios = axios.create({
+let myAxios = axios.create({
   headers: {
     Authorization: "Bearer " + sessionStorage.getItem("token")
   }
@@ -15,12 +15,12 @@ myAxios.interceptors.response.use(
     }
   }
 );
-var authHelper = {
+let authHelper = {
   isLoggedIn() {
     const token = sessionStorage.getItem("token");
     if (token) {
-      var userData = this.parseToken(token);
-      var expirationDate = new Date(userData.exp * 1000);
+      let userData = this.parseToken(token);
+      let expirationDate = new Date(userData.exp * 1000);
       if (Date.now() > expirationDate) this.logOut();
       return true;
     } else {
@@ -30,8 +30,8 @@ var authHelper = {
   isLoggedIn__professional() {
     const token = sessionStorage.getItem("token");
     if (token) {
-      var userData = this.parseToken(token);
-      var expirationDate = new Date(userData.exp * 1000);
+      let userData = this.parseToken(token);
+      let expirationDate = new Date(userData.exp * 1000);
       if (Date.now() > expirationDate) this.logOut();
       if (userData.isProfessionalUser) {
         return true;
@@ -75,7 +75,7 @@ $(document).ready(function() {
   // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
   let API_URL = "http://localhost:3000/api/";
 
-  var myAxios = axios.create({
+  let myAxios = axios.create({
     headers: {
       Authorization: "Bearer " + localStorage.getItem("token")
     }
@@ -97,8 +97,8 @@ $(document).ready(function() {
     allowAdditions: true
   });
 
-  var today = new Date();
-  var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+  let today = new Date();
+  let expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
 
   function setCookie(name, value) {
     document.cookie =
@@ -127,7 +127,7 @@ $(document).ready(function() {
   });
 
   function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
 
@@ -300,17 +300,20 @@ $(document).ready(function() {
     const formData = new FormData(form2);
 
     if (formData.get("streetAddress") === "" || undefined) {
-      $("#streetAddress-div").css("border", "solid");
-      $("#streetAddress-div").css("border-color", "red");
+      let label = $("label[for='streetAddress']");
+      $(label).css('color', 'red')
     } else if (formData.get("city") === "" || undefined) {
-      $("#city-div").css("border", "solid");
-      $("#city-div").css("border-color", "red");
+      let label = $("label[for='city']");
+      $(label).css('color', 'red')
     } else if (formData.get("state") === "" || undefined) {
-      $("#state-div").css("border", "solid");
-      $("#state-div").css("border-color", "red");
+      let label = $("label[for='state']");
+      $(label).css('color', 'red')
     } else if (formData.get("zip") === "" || undefined) {
-      $("#zip-div").css("border", "solid");
-      $("#zip-div").css("border-color", "red");
+      let label = $("label[for='zip']");
+      $(label).css('color', 'red')
+    } else if (formData.get("country") === "" || undefined) {
+      let label = $("label[for='country']");
+      $(label).css('color', 'red')
     }
     // else if (formData.get('hours') === null || undefined) {
     //     console.log(formData.get('hours'))
@@ -365,33 +368,35 @@ $(document).ready(function() {
         day: "Sunday",
         listing_id: finalForm.id
       });
+
+      if (sessionStorage.getItem("24Hour")) {
+        hoursForm = null;
+      }
+      let filteredHoursForm = hoursForm.filter(
+        x => x.opening_hours !== "--" && x.closing_hours !== "--"
+      );
+      trimForm(finalForm);
+      myAxios.post('http://localhost:3000/api/stagelisting/hours/form2', [finalForm, filteredHoursForm] )
+        .then(resp => {
+          console.log(resp)
+      $(form2).css("display", "none");
+      $(form3).css("display", "block");
+      sessionStorage.setItem("formsCompleted", 2);
+      $(".progress")
+        .eq(sessionStorage.getItem("formsCompleted"))
+        .addClass("active");
+      $("#storefrontInfo").toggleClass("active");
+      $("#storefrontInfo").addClass("completed");
+      $("#website").toggleClass("active");
+      console.log(hoursForm);
+      console.log(finalForm);
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
 
-    if (sessionStorage.getItem("24Hour")) {
-      hoursForm = null;
-    }
-    let filteredHoursForm = hoursForm.filter(
-      x => x.opening_hours !== "--" && x.closing_hours !== "--"
-    );
-    trimForm(finalForm);
-    myAxios.post('http://localhost:3000/api/stagelisting/hours/form2', [finalForm, filteredHoursForm] )
-      .then(resp => {
-        console.log(resp)
-    $(form2).css("display", "none");
-    $(form3).css("display", "block");
-    sessionStorage.setItem("formsCompleted", 2);
-    $(".progress")
-      .eq(sessionStorage.getItem("formsCompleted"))
-      .addClass("active");
-    $("#storefrontInfo").toggleClass("active");
-    $("#storefrontInfo").addClass("completed");
-    $("#website").toggleClass("active");
-    console.log(hoursForm);
-    console.log(finalForm);
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    
   });
 
   //submit third form
@@ -632,12 +637,12 @@ $(document).ready(function() {
     window.history.back();
   });
 
-  var images = [];
+  let images = [];
   let featurePut = document.getElementById('put'); 
 
   // read uploaded image
   function readFile(file, id) {
-    var FR = new FileReader();
+    let FR = new FileReader();
 
     FR.addEventListener("load", function(base64Img) {
       // pass base64 image to be uploaded to jumbotron
@@ -654,7 +659,7 @@ $(document).ready(function() {
 
   // read uploaded image
   function readOtherFile(file, id) {
-    var FR = new FileReader();
+    let FR = new FileReader();
 
     FR.addEventListener("load", function(base64Img) {
       // pass base64 image to be uploaded to jumbotron
@@ -846,6 +851,16 @@ $(document).ready(function() {
       .catch(err => {
         console.log(err)
       })
+  });
+
+  $(document).on("click", 'div.prev-button', function(e) {
+    e.preventDefault();
+
+    let thisForm = $(this).attr('id').split('-')[1]; 
+
+
+    $(`#form-${thisForm}`).css('display', 'none'); 
+    $(`#form-${thisForm-1}`).css('display', 'block'); 
   });
 
   $(window).bind('beforeunload', function(){

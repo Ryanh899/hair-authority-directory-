@@ -43,9 +43,13 @@
     />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link rel="stylesheet" type="text/css" href="./css/billing.css" />
+    <link rel="stylesheet" type="text/css" href="./css/search.listings.css" />
     <link rel="stylesheet" type="text/css" href="./css/listing.check.css" />
   </head>
   <body>
+    <div id="check-loader" class="ui active inverted dimmer">
+        <div class="ui text loader">Loading</div>
+    </div>
     <div class="ui grid" id="page-container">
           <!-- top menu  -->
           <div class="row" id="top-menu-row">
@@ -83,6 +87,7 @@
                                 Search
                             </button>
                         </div>
+                        <div style="text-align: left;" id="results"></div>
                     </div>
                   </div>
                   <div class="three wide column"></div>

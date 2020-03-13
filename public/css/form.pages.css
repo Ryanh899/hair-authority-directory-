@@ -15,7 +15,6 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
 }
 
 #form-1 {
-    /* width: 50%;  */
     margin: 0 auto; 
     border: solid; 
     border-width: .5rem;
@@ -211,10 +210,29 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
         padding-left: 2rem;
         background: #1F7A8C;;
         color: white;
+        width: 45%;
+        margin-left: 1rem;
+        display: inline-block;
         text-align: center;
         font-family: 'Lato' sans-serif;
         font-weight: 300;
         font-size: 18px;
+}
+
+.prev-button {
+    padding: 1rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    background: #70b891;
+    color: white;
+    width: 45%;
+    margin: 1rem;
+    margin-right: .5rem;
+    display: inline-block;
+    text-align: center;
+    font-family: 'Lato' sans-serif;
+    font-weight: 300;
+    font-size: 18px;
 }
 
 #back-button {
@@ -337,4 +355,11 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
 
   #other-image-append {
     display: table;
+  }
+
+  .form-headers {
+    font-size: 25px;
+    font-family: 'Lato' sans-serif;
+    font-weight: 300;
+    color: #696969;
   }

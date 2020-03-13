@@ -51,7 +51,8 @@ CREATE TABLE listings (
 	image_ids varchar(256) NULL,
 	date_published timestamptz NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created timestamp NULL,
-	claimed bool NOT NULL DEFAULT false
+	claimed bool NOT NULL DEFAULT false, 
+	country text
 );
 
 CREATE TABLE pending_listings (
@@ -74,7 +75,8 @@ CREATE TABLE pending_listings (
 	image_ids varchar(256) NULL,
 	date_published timestamptz NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created timestamp NULL,
-	claimed bool NOT NULL DEFAULT false
+	claimed bool NOT NULL DEFAULT false, 
+	country text
 );
 
 CREATE TABLE inactive_listings (
@@ -97,7 +99,8 @@ CREATE TABLE inactive_listings (
 	image_ids varchar(256) NULL,
 	date_published timestamptz NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created timestamp NULL,
-	claimed bool NOT NULL DEFAULT false
+	claimed bool NOT NULL DEFAULT false, 
+	country text
 );
 
 create table hours (

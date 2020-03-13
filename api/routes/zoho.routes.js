@@ -5,6 +5,7 @@ const Superagent = require("superagent");
 const axios = require("axios");
 const Zoho = require('../models/zoho'); 
 const keys = require('../config/env-config'); 
+const User = require('../models/user'); 
 
 // const secondOauth = {
 //   access_token:
@@ -171,6 +172,70 @@ router.post('/retreiveHostedPage/newSubscription/:pageId', async (req, res) => {
     })
     .catch(err => {
       console.log('err');
+    });
+})
+
+router.post('/subscription/create/free', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  // get customer info from req
+  const customerId = req.body.id; 
+  const business = req.body.business; 
+
+  const customer = await User.findId(customerId); 
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "add_to_unbilled_charges": true,
+      "customer": {
+          "display_name": "${customer.first_name} ${customer.last_name}",
+          "salutation": "Mr.",
+          "first_name": "${customer.first_name}",
+          "last_name": "${customer.last_name}",
+          "email": "${customer.email}",
+          "company_name": "${business}"
+        },
+      "plan": {
+          "plan_code": "free-trial",
+      },
+      "auto_collect": false
+  }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(resp => {
+      console.log(resp.body);
+      res.json(resp.body)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response.text); 
     });
 })
 
