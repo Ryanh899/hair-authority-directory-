@@ -317,10 +317,8 @@ $(document).ready(function() {
           );
         }
 
-        if (listing.claimed) {
-          $(titleSection).prepend(`<p style="color: #1f7a8c;" id="claimed" >Claimed <i style="color: #3aa7a3;;" class="check icon" ></i></p>`)
-        } else {
-          $(titleSection).append(`<button id="claim-button" style="background: #1f7a8c; color: white;" class="ui button" >Claim This Business</button>`)
+        if (!listing.claimed) {
+          $('#right-rail').prepend(`<button id="claim-button" style="background: orange; color: white;" class="ui button" >Claim Your Business</button>`)
         }
 
         // prepend title to title section
@@ -539,9 +537,17 @@ $(document).ready(function() {
 
   $("body").on("click", "#claim-button", function() {
     if (sessionStorage.getItem('token')) {
+
+      sessionStorage.setItem('lastLocation', 'listing'); 
+      sessionStorage.setItem('claimListing', sessionStorage.getItem('currentListing')); 
+      sessionStorage.removeItem('currentListing');
       window.location.assign('billing__new.html'); 
     } else {
-      window.location.assign('sign-in.html')
+
+      sessionStorage.removeItem('currentListing');
+      sessionStorage.setItem('lastLocation', 'listing'); 
+      sessionStorage.setItem('claimListing', sessionStorage.getItem('currentListing')); 
+      window.location.assign('sign-in.html');
     }
   });
 });

@@ -268,22 +268,81 @@ $(document).ready(function() {
     } else {
       myAxios.post('http://localhost:3000/api/stageListing', { business_title: formData.get('businessTitle') })
       .then(resp => {
-      sessionStorage.setItem('stagedListing', resp.data[0]);
-      finalForm.id = resp.data[0];
-      finalForm.tagline = formData.get("businessDescription");
-      finalForm.category = formData.get("category");
-      sessionStorage.setItem("formsCompleted", 1);
-      console.log(sessionStorage.getItem("formsCompleted"));
-      console.log($(".progress").eq(1));
-      $(".progress")
-        .eq(sessionStorage.getItem("formsCompleted"))
-        .addClass("active");
-      $(form1).css("display", "none");
-      $(form2).css("display", "block");
-      $("#businessTitle").toggleClass("active");
-      $("#businessTitle").addClass("completed");
-      $("#storefrontInfo").toggleClass("active");
-      console.log(finalForm);
+      console.log(resp)
+      if (resp.data.exists) {
+        resp.data.listings.forEach(listing => {
+            $("#exists-modal")
+              .append(`<div
+              style="margin-bottom: 1rem; background: #f8f8f8"
+              class="ui grid segment listingItem-search"
+              id="list-item"
+            >
+              <div style="padding: 1rem; padding-right: 0px;" class="row">
+                <div  class="five wide middle aligned column">
+                      <img
+                      class="ui rounded image"
+                      src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
+                    />
+                </div>
+                <div class="eleven wide column">
+                  <div class="ui grid">
+                      <div
+                      style="padding: 1rem 0rem 0rem .5rem;"
+                      class="ten wide column"
+                    >
+                      <a href="#"  id="${listing.id}" class="listingTitle-search">
+                        ${listing.business_title} <i class="small check circle icon" style="color: #1f7a8c;" ></i>
+                      </a>
+                      <p class="listingSubtitle-search">
+                        ${listing.category || "" }
+                      </p>
+                      
+                    </div>
+                    <div
+                    class="six wide computer only column"
+                  >
+                    <p class="listing-info-text">
+                      <i style="color: #1f7a8c;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                    </p>
+                    <p class="listing-info-text">
+                      <i style="color: #1f7a8c;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                    </p>
+                    <!-- <button style="margin-top: 1rem; background: #1f7a8c; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                  </div>
+                  
+                  <div class="fourteen wide column">
+                    <p style="margin-top: 1rem;" id="listing-tagline-search">
+                      ${listing.tagline} 
+                    </p>
+                     <button id="claim-${listing.id}" style="background: orange; color: white;" class="ui button claimButton" >Claim Your Business</button>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+            </div>`)
+          })
+          $('.ui.modal#exists-modal')
+          .modal('show')
+        ;
+
+      } else {
+        sessionStorage.setItem('stagedListing', resp.data[0]);
+        finalForm.id = resp.data[0];
+        finalForm.tagline = formData.get("businessDescription");
+        finalForm.category = formData.get("category");
+        sessionStorage.setItem("formsCompleted", 1);
+        console.log(sessionStorage.getItem("formsCompleted"));
+        console.log($(".progress").eq(1));
+        $(".progress")
+          .eq(sessionStorage.getItem("formsCompleted"))
+          .addClass("active");
+        $(form1).css("display", "none");
+        $(form2).css("display", "block");
+        $("#businessTitle").toggleClass("active");
+        $("#businessTitle").addClass("completed");
+        $("#storefrontInfo").toggleClass("active");
+        console.log(finalForm);
+      }
       })
       .catch(err => {
         console.log(err)
@@ -851,6 +910,26 @@ $(document).ready(function() {
       .catch(err => {
         console.log(err)
       })
+  });
+
+  $(document).on("click", 'button.claim-button', function(e) {
+    e.preventDefault();
+    console.log($(this).attr('id'))
+    const clicked = $(this).attr('id').split('-')[1]; 
+
+    if (sessionStorage.getItem('token')) {
+
+      sessionStorage.setItem('lastLocation', 'listing'); 
+      sessionStorage.setItem('claimListing', sessionStorage.getItem('currentListing')); 
+      sessionStorage.removeItem('currentListing');
+      // window.location.assign('billing__new.html'); 
+    } else {
+
+      sessionStorage.removeItem('currentListing');
+      sessionStorage.setItem('lastLocation', 'listing'); 
+      sessionStorage.setItem('claimListing', sessionStorage.getItem('currentListing')); 
+      window.location.assign('sign-in.html');
+    }
   });
 
   $(document).on("click", 'div.prev-button', function(e) {

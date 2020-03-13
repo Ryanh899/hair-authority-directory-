@@ -70,10 +70,11 @@ $(document).ready(function () {
 
     $('body').on('click', '.continue-button', function (e) {
         let plan = this.id; 
+        let claimCheck = sessionStorage.getItem('claim')
 
         sessionStorage.setItem('plan', plan)
         sessionStorage.setItem('lastLocation', 'billing__new')
-        if (plan === 'free-access') window.location.assign('listing.check.html')
+        if (plan === 'free-access' ) window.location.assign('listing.check.html')
         else if (plan === 'light-access') window.open("https://subscriptions.zoho.com/subscribe/2b47bf8abcb465deb8e32adfbb4e9754a7726ba08b65d6ccad482bf477cf719e/d2f4f1f0-1ad5-4c3a-912d-6646a5a46d08")
         else if (plan === 'standard-access') window.open("https://subscriptions.zoho.com/subscribe/2b47bf8abcb465deb8e32adfbb4e9754a7726ba08b65d6ccad482bf477cf719e/ea78d785-2a2c-4b74-b578-fab3509b669c")
         else if (plan === 'premium-access') window.open("https://subscriptions.zoho.com/subscribe/2b47bf8abcb465deb8e32adfbb4e9754a7726ba08b65d6ccad482bf477cf719e/2528891f-8535-41dc-b07e-952b25113bd0")

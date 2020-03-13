@@ -205,7 +205,7 @@ const Listings = {
   getByTitle(title) {
     return knex("listings")
       .select()
-      .whereRaw(`LOWER(business_title) like ${title}%`)
+      .whereRaw(`LOWER(business_title) like ${title.toLowerCase()}%`)
       .limit(100)
       .then(response => {
         return response;
@@ -220,6 +220,25 @@ const Listings = {
             .whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
             .then(resp => {
               return resp
+            })
+            .catch(err => {
+              console.log(err)
+            })
+  },
+  getAllByTitle__promise(title) {
+    const results = []; 
+    return knex("pending_listings")
+            .select()
+            .whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
+            .then(resp => {
+              console.log(resp)
+              resp.forEach(listing => results.push(listing))
+              return knex('listings').select().whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
+            })
+            .then(response => {
+              console.log(response)
+              response.forEach(listing => results.push(listing))
+              return results
             })
             .catch(err => {
               console.log(err)

@@ -361,4 +361,12 @@ hr.style14 {
   font-size: 20px;
 }
 
+#claim-button {
+  width: 100%;
+  padding: 1rem;
+  font-family: 'Raleway';
+  font-size: 20px;
+  font-weight: 500;
+}
+
 

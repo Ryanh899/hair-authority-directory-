@@ -67,6 +67,8 @@ $(document).ready(function () {
     // hide loader
     $('#check-loader').css('display', 'none'); 
 
+    let allListings; 
+
     // establish api url 
     // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
      let API_URL = "http://localhost:3000/api/";
@@ -82,14 +84,19 @@ $(document).ready(function () {
             // show loader 
             $('#check-loader').css('display', 'none'); 
 
+
+
             myAxios
                 .get(API_URL + 'listing/title/' + search)
                 .then(response => {
                     console.log(response); 
 
+                    // populate all listings 
+                    allListings = response.data
+
                     response.data.forEach(listing => {
                         $("#results")
-                          .append(`<div
+                          .html(`<div
                           style="margin-bottom: 1rem; background: #f8f8f8"
                           class="ui grid segment listingItem-search"
                           id="list-item"
@@ -151,4 +158,19 @@ $(document).ready(function () {
         }
        
     })
+
+    $("body").on("click", "a", function(e) {
+        const id = $(this).attr("id");
+        // filter arr of all listings on page to find clicked on listing and get the id
+        let getCoords = allListings.filter(x => x.id === id); 
+        // set the last window location to search 
+        sessionStorage.setItem('lastLocation', 'search')
+        // set the current listing lat and lng in SS
+        sessionStorage.setItem('listing-lat', getCoords[0].lat)
+        sessionStorage.setItem('listing-lng', getCoords[0].lng)
+        // set full address for if no coords 
+        sessionStorage.setItem('listing-address', getCoords[0].full_address)
+        sessionStorage.setItem("currentListing", id);
+        window.location.assign("listing.html");
+      });
 })

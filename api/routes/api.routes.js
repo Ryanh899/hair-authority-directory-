@@ -428,9 +428,15 @@ router.delete('/removeimage/feature/:id', (req, res) => {
     })
 })
 
-router.post('/stagelisting', (req, res) => {
+router.post('/stagelisting', async (req, res) => {
   console.log(req.body)
-  Listings.stageListing(req.body)
+  const title = req.body.business_title
+  const titleCheck = await Listings.getAllByTitle__promise(title); 
+  console.log('TITLECHECK')
+  console.log(titleCheck)
+  if (!titleCheck.length) {
+    console.log('STAGE LISTING')
+    Listings.stageListing(req.body)
     .then(resp => {
       console.log(resp); 
       res.json(resp); 
@@ -438,6 +444,11 @@ router.post('/stagelisting', (req, res) => {
     .catch(err => {
       console.log(err); 
     })
+  } else {
+    console.log('DONT STAGE')
+    res.json({ exists: true, listings: titleCheck})
+  }
+
 })
 
 router.put('/stagelisting', (req, res) => {
