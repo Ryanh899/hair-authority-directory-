@@ -6,6 +6,7 @@ const axios = require("axios");
 const Zoho = require('../models/zoho'); 
 const keys = require('../config/env-config'); 
 const User = require('../models/user'); 
+const Listings = require('../models/listings')
 
 // const secondOauth = {
 //   access_token:
@@ -175,13 +176,14 @@ router.post('/retreiveHostedPage/newSubscription/:pageId', async (req, res) => {
     });
 })
 
-router.post('/subscription/create/free', async (req, res) => {
+router.post('/subscription/createfree', async (req, res) => {
 
   //declare access token
   let accessToken; 
 
   // check for access token => Arr or false 
   let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
 
   // if token exists and is valid 
   if (checkToken && checkToken.length) {
@@ -193,11 +195,13 @@ router.post('/subscription/create/free', async (req, res) => {
     accessToken = await Zoho.getAccessToken(); 
   }
 
+  console.log(accessToken)
   // get customer info from req
-  const customerId = req.body.id; 
-  const business = req.body.business; 
+  console.log(req.body)
+  const customerId = jwt.decode(req.body.token); 
 
-  const customer = await User.findId(customerId); 
+  console.log(customerId)
+  const customer = await User.findId(customerId.id); 
 
   Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
     .set(
@@ -207,14 +211,12 @@ router.post('/subscription/create/free', async (req, res) => {
     .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
     .set("Content-Type", "application/json;charset=UTF-8")
     .send(`{
-      "add_to_unbilled_charges": true,
       "customer": {
           "display_name": "${customer.first_name} ${customer.last_name}",
           "salutation": "Mr.",
           "first_name": "${customer.first_name}",
           "last_name": "${customer.last_name}",
           "email": "${customer.email}",
-          "company_name": "${business}"
         },
       "plan": {
           "plan_code": "free-trial",
@@ -229,9 +231,20 @@ router.post('/subscription/create/free', async (req, res) => {
         return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
       }
     })
-    .then(resp => {
+    .then(async resp => {
       console.log(resp.body);
-      res.json(resp.body)
+      const subInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const addSubscription = await Listings.addSubscription__free(subInfo)
+
+      addSubscription.then(response => {
+        console.log(response)
+        res.json(resp.body)
+      })
+      .catch(err => {
+        res.status(400).json(err)
+        console.log(err)
+      })
+
     })
     .catch(err => {
       console.log(err);

@@ -28,7 +28,7 @@ $( document ).ready(function() {
                 if (sessionStorage.getItem('routeToBilling')) {
                     sessionStorage.removeItem('routeToBilling')
 
-                    window.location.assign('listing.check.html')
+                    window.location.assign('billing__new.html')
                 } else if (sessionStorage.getItem('lastLocation') !== 'register' ) {
                     sessionStorage.setItem('lastLocation', 'sign-in')
 

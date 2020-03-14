@@ -54,7 +54,7 @@ const Zoho = {
         let duration = moment(IsoStartDate).diff(moment(IsoEndDate), "hours");
         console.log("duration");
         console.log(duration);
-        if (duration >= 1) {
+        if (duration >= 1 || duration < 0) {
           knex("zoho_auth")
             .where("id", token.id)
             .del()
@@ -65,6 +65,7 @@ const Zoho = {
         }
       });
     } else {
+      console.log('ELSE ')
       return false;
     }
     return validTokens;

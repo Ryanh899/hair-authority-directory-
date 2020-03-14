@@ -750,6 +750,10 @@ const Listings = {
             });
         });
       });
+  }, 
+  addSubscription__free (subInfo) {
+    return knex('subscriptions')
+      .insert(subInfo)
   }
 };
 
