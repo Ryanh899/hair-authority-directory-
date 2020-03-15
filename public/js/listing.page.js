@@ -536,17 +536,19 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#claim-button", function() {
+    const currentListing = sessionStorage.getItem('currentListing')
+
     if (sessionStorage.getItem('token')) {
 
       sessionStorage.setItem('lastLocation', 'listing'); 
-      sessionStorage.setItem('claimListing', sessionStorage.getItem('currentListing')); 
+      sessionStorage.setItem('claimListing', JSON.stringify({ timeStamp: new Date(), value: currentListing })); 
       sessionStorage.removeItem('currentListing');
       window.location.assign('billing__new.html'); 
     } else {
 
       sessionStorage.removeItem('currentListing');
       sessionStorage.setItem('lastLocation', 'listing'); 
-      sessionStorage.setItem('claimListing', sessionStorage.getItem('currentListing')); 
+      sessionStorage.setItem('claimListing', JSON.stringify({ timeStamp: new Date(), value: currentListing })); 
       window.location.assign('sign-in.html');
     }
   });

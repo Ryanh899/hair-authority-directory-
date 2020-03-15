@@ -77,6 +77,24 @@ let authHelper = {
     } else {
       return false 
     }
+  }, 
+  claim__check () {
+    const claim = JSON.parse(sessionStorage.getItem('claimListing')); 
+
+    if (claim) {
+      now = new Date();
+      expiration = new Date(claim.timestamp);
+      expiration.setMinutes(expiration.getMinutes() + 30);
+
+      // ditch the content if too old
+      if (now.getTime() > expiration.getTime()) {
+          return false
+      } else {
+        return true
+      }
+    } else {
+      return false 
+    }
   }
 };
 
@@ -87,7 +105,14 @@ $(document).ready(function() {
   sessionStorage.removeItem("24Hour");
   const allListings = [];
   
-  let hostedCheck = authHelper.zohoRedirectCheck(); 
+  let hostedCheck = false; 
+
+  // if (!authHelper.claim__check()) {
+  //   hostedCheck = authHelper.zohoRedirectCheck()
+  // } else {
+  //   alert('youll be emailed when your claim is verified'); 
+  //   window.location.assign('index.html')
+  // }
 
   if (hostedCheck) {
     const hostedId = hostedCheck
