@@ -430,13 +430,20 @@ router.delete('/removeimage/feature/:id', (req, res) => {
 
 router.post('/stagelisting', async (req, res) => {
   console.log(req.body)
-  const title = req.body.business_title
-  const titleCheck = await Listings.getAllByTitle__promise(title); 
+  const user = jwt.decode(req.body.token)
+  const subInfo = {
+    title: req.body.business_title, 
+    subscription_id: req.body.subscription_id, 
+    customer_id: req.body.customer_id, 
+    user
+  }
+
+  const titleCheck = await Listings.getByTitle__promise(subInfo); 
   console.log('TITLECHECK')
   console.log(titleCheck)
   if (!titleCheck.length) {
     console.log('STAGE LISTING')
-    Listings.stageListing(req.body)
+    Listings.stageListing(subInfo)
     .then(resp => {
       console.log(resp); 
       res.json(resp); 

@@ -214,10 +214,10 @@ const Listings = {
         console.log(err);
       });
   },
-  getByTitle__promise(title) {
+  getByTitle__promise(listingInfo) {
     return knex("listings")
             .select()
-            .whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
+            .whereRaw(`LOWER(business_title) like ?`, [`${listingInfo.title.toLowerCase()}%`])
             .then(resp => {
               return resp
             })
@@ -225,15 +225,15 @@ const Listings = {
               console.log(err)
             })
   },
-  getAllByTitle__promise(title) {
+  getAllByTitle__promise(listingInfo) {
     const results = []; 
     return knex("pending_listings")
             .select()
-            .whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
+            .whereRaw(`LOWER(business_title) like ?`, [`${listingInfo.title.toLowerCase()}%`])
             .then(resp => {
               console.log(resp)
               resp.forEach(listing => results.push(listing))
-              return knex('listings').select().whereRaw(`LOWER(business_title) like ?`, [`${title.toLowerCase()}%`])
+              return knex('listings').select().whereRaw(`LOWER(business_title) like ?`, [`${listingInfo.title.toLowerCase()}%`])
             })
             .then(response => {
               console.log(response)
@@ -356,7 +356,7 @@ const Listings = {
             if (faqs.length > 0) {
               listing.faqs = faqs;
             }
-            return cb.status(200).json(listing);
+            return cb.json(listing);
           })
           .catch(err => {
             console.log(err);
@@ -709,8 +709,12 @@ const Listings = {
   },
   stageListing(listingInfo) {
     return knex("pending_listings")
-      .returning("id")
-      .insert(listingInfo);
+            .returning("id")
+            .insert({ business_title: listingInfo.title, professional_id: listingInfo.user.id })
+            .then(resp => {
+              console.log(resp)
+              return knex('subscriptions').update('listing_id', resp[0]).where('subscription_id', listingInfo.subscription_id).returning('listing_id')
+            })
   },
   updateStagedListing(listingInfo) {
     return knex("pending_listings")
@@ -750,10 +754,6 @@ const Listings = {
             });
         });
       });
-  }, 
-  addSubscription__free (subInfo) {
-    return knex('subscriptions')
-      .insert(subInfo)
   }
 };
 

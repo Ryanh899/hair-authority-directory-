@@ -137,6 +137,14 @@ $(document).ready(function() {
     }
   } else {
     console.log("not logged in");
+    sessionStorage.removeItem('plan'); 
+    sessionStorage.removeItem('currentListing'); 
+    sessionStorage.removeItem('subscription_id'); 
+    sessionStorage.removeItem('customer_id'); 
+    sessionStorage.removeItem('listing-lat'); 
+    sessionStorage.removeItem('listing-lng'); 
+    sessionStorage.removeItem('listing-address'); 
+    sessionStorage.removeItem('logoSearch'); 
     $("#logout-button").css("display", "none");
   }
   $("body").on("click", "#sign-in-button", function() {

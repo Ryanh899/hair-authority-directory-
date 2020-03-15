@@ -95,6 +95,54 @@ const Zoho = {
         cb.status(400).json({ error: err })
       });
   }, 
+  getSubscription (userId) {
+    return knex("subscriptions")
+      .select()
+      .where('user_id', userId)
+      .then(response => {
+        return response
+      }).catch(err => {
+        console.log(err)
+      })
+  }, 
+  addSubscription__free (subInfo) {
+    console.log(subInfo)
+    return knex('subscriptions')
+      .insert(subInfo)
+      .returning('*')
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, 
+  addSubscription__paid (subInfo) {
+    console.log(subInfo)
+    return knex('subscriptions')
+      .insert(subInfo)
+      .returning('*')
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.log(err)
+        return false 
+      })
+      
+  }, 
+  subscriptionCheck__id (subId) {
+    console.log(subId)
+    return knex('subscriptions')
+      .select()
+      .where('subscription_id', subId)
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 };
 
 module.exports = Zoho;

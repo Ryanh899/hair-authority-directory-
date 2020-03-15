@@ -18,6 +18,7 @@ $( document ).ready(function() {
             email: $('#email').val().trim(), 
             password: $('#password').val().trim()
         }
+        const registerCheck = sessionStorage.getItem('lastLocation')
         axios.post(`${API_URL}auth/login`, userInfo)
             .then(response => {
                 console.log(response)
@@ -25,11 +26,17 @@ $( document ).ready(function() {
                 console.log(window.history)
                 sessionStorage.setItem('lastLocation', 'sign-in')
 
+                sessionStorage.removeItem('currentListing')
+                sessionStorage.removeItem('customer_id')
+                sessionStorage.removeItem('subscription_id')
+
                 if (sessionStorage.getItem('routeToBilling')) {
                     sessionStorage.removeItem('routeToBilling')
 
                     window.location.assign('billing__new.html')
-                } else if (sessionStorage.getItem('lastLocation') !== 'register' ) {
+                } else if (registerCheck !== 'register') {
+                    console.log('REGISTER')
+                    console.log(sessionStorage.getItem('registered'))
                     sessionStorage.setItem('lastLocation', 'sign-in')
 
                     window.history.back(); 
@@ -50,29 +57,7 @@ $( document ).ready(function() {
         window.location.assign('register.html')
     })
     
-    $( '#submit-other' ).on('click', function () {
-        const userInfo = {
-            email: $('#email').val().trim(), 
-            password: $('#password').val().trim()
-        }
-        axios.post(`${API_URL}auth/login`, userInfo)
-            .then(response => {
-                console.log(response)
-                sessionStorage.setItem('token', response.data); 
-                if (sessionStorage.getItem('addListing')) {
-                    sessionStorage.setItem('lastLocation', 'sign-in')
-                    window.location.assign('billing__new.html')
-                } else {
-                    sessionStorage.setItem('lastLocation', 'sign-in')
-                    window.history.back()
-                }
-            })
-            .catch(err => {
-                alert('email or password not found')
-                // window.location.assign('register.html')
-                console.log(err); 
-            })
-    })
+    
     $( '#back' ).on('click', function () {
         window.location.assign('index.html')
     })

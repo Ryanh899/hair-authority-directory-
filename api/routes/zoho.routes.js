@@ -77,9 +77,54 @@ router.get('/refreshAccessToken', async (req, res) => {
   res.status(200).json({ token: newToken }); 
 })
 
-router.post('/hostedpage/subscription/create', (req, res) => {
-  let plan = req.body.plan; 
-  
+router.post('/hostedpage/create/existing', async (req, res) => {
+  const plan = req.body.plan; 
+  const customerId = req.body.customer_id;
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  Superagent.get(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", `${process.env.ORGANIZATION_ID}`)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer_id": ${customerId}, 
+      "plan": {
+        "plan_code": ${plan}
+      }
+    }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid customer id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(resp => {
+      console.log(resp.body);
+      res.status(200).json(resp.body)
+    })
+    .catch(err => {
+      console.log('err');
+    });
 
 })
 
@@ -132,10 +177,67 @@ router.get("/findCustomer/:userToken", async (req, res) => {
     });
 });
 
-router.post('/retreiveHostedPage/newSubscription/:pageId', async (req, res) => {
+router.get("/findCustomer/user/:token", async (req, res) => {
+  // params need to be passed in url
 
-  const pageId = req.params.pageId; 
+  // decode user token for user info
+  const user = jwt.decode(req.params.token)
 
+  console.log(user)
+
+  const subscription = await Zoho.getSubscription(user.id); 
+
+  console.log(subscription)
+  if (subscription.length) {
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  console.log(user)
+  Superagent.get(`https://subscriptions.zoho.com/api/v1/customers/${subscription[0].customer_id}`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", "710064782")
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid customer id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(resp => {
+      console.log(resp.body.customer);
+      res.status(200).json(resp.body.customer)
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  } else {
+    res.status(200).json([])
+  }
+});
+
+router.post('/hostedpage/retrieve/new', async (req, res) => {
+
+  const pageId = req.body.hostedId; 
+  const user = jwt.decode(req.body.token); 
   //declare access token
   let accessToken; 
 
@@ -167,16 +269,35 @@ router.post('/retreiveHostedPage/newSubscription/:pageId', async (req, res) => {
         return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
       }
     })
-    .then(resp => {
-      console.log(resp.body);
-      
+    .then(async resp => {
+      console.log(JSON.parse(resp.text));
+      const info = JSON.parse(resp.text); 
+
+      const subCheck = await Zoho.subscriptionCheck__id(info.data.subscription.subscription_id); 
+
+      if (!subCheck.length) {
+        const subInfo = {
+          subscription_id: info.data.subscription.subscription_id, 
+          plan_code: info.data.subscription.plan.plan_code, 
+          customer_id: info.data.subscription.customer.customer_id, 
+          status: info.data.subscription.status, 
+          user_id: user.id
+        }
+        console.log(subInfo)
+        const addSub = await Zoho.addSubscription__paid(subInfo)
+  
+        res.json(addSub)
+      } else {
+        res.status(200).json({ exists: true, subCheck })
+      }
     })
     .catch(err => {
-      console.log('err');
+      console.log(err);
+      res.status(err.status).json(err)
     });
 })
 
-router.post('/subscription/createfree', async (req, res) => {
+router.post('/subscription/createfree/new', async (req, res) => {
 
   //declare access token
   let accessToken; 
@@ -233,23 +354,100 @@ router.post('/subscription/createfree', async (req, res) => {
     })
     .then(async resp => {
       console.log(resp.body);
-      const subInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
-      const addSubscription = await Listings.addSubscription__free(subInfo)
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const subInfo = {
+        subscription_id: pickInfo.subscription_id, 
+        plan_code: pickInfo.plan.plan_code, 
+        customer_id: pickInfo.customer.customer_id, 
+        status: pickInfo.status, 
+        user_id: customer.id
+      }
+      console.log(subInfo)
+      const addSubscription = await Zoho.addSubscription__free(subInfo)
 
-      addSubscription.then(response => {
-        console.log(response)
-        res.json(resp.body)
-      })
-      .catch(err => {
-        res.status(400).json(err)
-        console.log(err)
-      })
+      res.json(addSubscription)
 
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err.response.text); 
+      res.status(err.status).json(err.response); 
     });
+})
+
+router.post('/subscription/createfree/existing', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  // get customer info from req
+  console.log(req.body)
+  const customerId = req.body.customer_id; 
+
+
+
+  console.log(customerId)
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer_id": "${customerId}",
+      "plan": {
+          "plan_code": "free-trial",
+      },
+      "auto_collect": false
+  }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const subInfo = {
+        subscription_id: pickInfo.subscription_id, 
+        plan_code: pickInfo.plan.plan_code, 
+        customer_id: pickInfo.customer.customer_id, 
+        status: pickInfo.status, 
+        user_id: customer.id
+      }
+      console.log(subInfo)
+      const addSubscription = await Zoho.addSubscription__free(subInfo)
+
+      res.json(addSubscription)
+
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
+})
+
+router.post('/subscription/hostedpage', (req, res) => {
+
 })
 
 module.exports = router;

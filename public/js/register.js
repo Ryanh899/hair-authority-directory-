@@ -58,6 +58,10 @@ $(document).ready(function() {
     window.location.assign('sign-in.html')
   })
 
+  $( '#back' ).on('click', function () {
+    window.history.back()
+})
+
   $("#submit-register").on("click", function() {
     event.preventDefault();
 
