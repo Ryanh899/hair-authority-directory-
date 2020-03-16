@@ -42,16 +42,17 @@ const Zoho = {
         }
       });
     let validTokens;
+    console.log(tokens)
     if (tokens) {
       validTokens = await tokens.filter(token => {
-        const IsoStartDate = moment(token.created_at, "DD/MM/YYYY").format(
+        const isoStartDate = moment().format(
           "YYYY-MM-DD[T]HH:mm:ss"
         );
-        const IsoEndDate = moment(token.expiry_time, "DD/MM/YYYY").format(
+        const isoEndDate = moment(token.expiry_time, "DD/MM/YYYY").format(
           "YYYY-MM-DD[T]HH:mm:ss"
         );
-        console.log(IsoEndDate, IsoStartDate);
-        let duration = moment(IsoStartDate).diff(moment(IsoEndDate), "hours");
+        console.log(isoEndDate, isoStartDate);
+        let duration = moment(isoEndDate).diff(moment(isoStartDate), "hours");
         console.log("duration");
         console.log(duration);
         if (duration >= 1 || duration < 0) {
@@ -61,6 +62,7 @@ const Zoho = {
             .catch(err => console.error(err));
           return;
         } else {
+          console.log('Else', token)
           return token;
         }
       });
@@ -141,6 +143,7 @@ const Zoho = {
       })
       .catch(err => {
         console.log(err)
+        return false 
       })
   }
 };

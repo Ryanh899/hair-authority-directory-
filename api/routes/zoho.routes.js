@@ -97,7 +97,7 @@ router.post('/hostedpage/create/existing', async (req, res) => {
     accessToken = await Zoho.getAccessToken(); 
   }
 
-  Superagent.get(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
     .set(
       "Authorization",
       `Zoho-oauthtoken ${accessToken}`
@@ -446,9 +446,381 @@ router.post('/subscription/createfree/existing', async (req, res) => {
     });
 })
 
-router.post('/subscription/hostedpage', (req, res) => {
+// router.post('/subscription/hostedpage', (req, res) => {
+
+// })
+
+router.post('/subscription/claimfree/existing', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  // get customer info from req
+  console.log(req.body)
+  const customerId = req.body.customer_id; 
+  const listingId = req.body.claim
+
+  const listingTitle = await Listings.getListingTitle__id(listingId)
+  console.log(customerId)
+  console.log(listingTitle); 
+
+// if listing is not claimed + getting title 
+if ( listingTitle && listingTitle.length ) {
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer_id": "${customerId}",
+      "customer": {
+        "company_name": "${listingTitle}"
+      },
+      "plan": {
+          "plan_code": "free-trial",
+      },
+      "auto_collect": false
+  }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const subInfo = {
+        subscription_id: pickInfo.subscription_id, 
+        plan_code: pickInfo.plan.plan_code, 
+        customer_id: pickInfo.customer.customer_id, 
+        status: pickInfo.status, 
+        user_id: customer.id, 
+        listing_id: listingId
+      }
+      const claimInfo = _.pick(subInfo, 'user_id', 'subscription_id', 'listing_id')
+
+      console.log(subInfo)
+      const addPendingClaim = await Listings.addPendingClaim(claimInfo)
+      const addSubscription = await Zoho.addSubscription__free(subInfo)
+
+      res.json({ subscription: addSubscription, claim: addPendingClaim })
+
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
+  } else {
+    res.status(401).json({ message: "This business has already been claimed" })
+  }
 
 })
+
+router.post('/subscription/claimfree/new', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  // get customer info from req
+  console.log(req.body)
+  const customerId = jwt.decode(req.body.token); 
+  const listingId = req.body.claim
+
+  const listingTitle = await Listings.getListingTitle__id(listingId)
+  console.log(listingTitle); 
+
+
+  console.log(customerId)
+  const customer = await User.findId(customerId.id); 
+
+  // if listing is not claimed + getting title 
+if ( listingTitle && listingTitle.length) {
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer": {
+          "display_name": "${customer.first_name} ${customer.last_name}",
+          "salutation": "Mr.",
+          "first_name": "${customer.first_name}",
+          "last_name": "${customer.last_name}",
+          "email": "${customer.email}",
+          "company_name": "${listingTitle}"
+        },
+      "plan": {
+          "plan_code": "free-trial",
+      },
+      "auto_collect": false
+  }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const subInfo = {
+        subscription_id: pickInfo.subscription_id, 
+        plan_code: pickInfo.plan.plan_code, 
+        customer_id: pickInfo.customer.customer_id, 
+        status: pickInfo.status, 
+        user_id: customer.id, 
+        listing_id: listingId
+      }
+      const claimInfo = _.pick(subInfo, 'user_id', 'subscription_id', 'listing_id')
+
+      console.log(subInfo)
+      const addPendingClaim = await Listings.addPendingClaim (claimInfo)
+      const addSubscription = await Zoho.addSubscription__free(subInfo)
+
+      res.json({ subscription: addSubscription, claim: addPendingClaim })
+
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
+  } else {
+    res.status(401).json({ message: "This business has already been claimed" })
+  }
+})
+
+router.post('/hostedpage/retrieve/claim', async (req, res) => {
+
+  const pageId = req.body.hostedId; 
+  const user = jwt.decode(req.body.token); 
+  const listing_id = req.body.listing_id
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  Superagent.get(`https://subscriptions.zoho.com/api/v1/hostedpages/${pageId}`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(JSON.parse(resp.text));
+      const info = JSON.parse(resp.text); 
+
+      const subCheck = await Zoho.subscriptionCheck__id(info.data.subscription.subscription_id); 
+
+      console.log('Sub Check', subCheck); 
+      if (!subCheck.length) {
+        const subInfo = {
+          subscription_id: info.data.subscription.subscription_id, 
+          plan_code: info.data.subscription.plan.plan_code, 
+          customer_id: info.data.subscription.customer.customer_id, 
+          status: info.data.subscription.status, 
+          user_id: user.id, 
+          listing_id
+        }
+        const claimInfo = _.pick(subInfo, 'user_id', 'subscription_id', 'listing_id')
+        console.log(claimInfo)
+
+        console.log(subInfo)
+        const addPendingClaim = await Listings.addPendingClaim(claimInfo)
+        const addSub = await Zoho.addSubscription__paid(subInfo)
+        
+        console.log(addPendingClaim)
+        console.log(addSub)
+        res.json({ subscription: addSub, claim: addPendingClaim })
+      } else {
+        console.log('Reason')
+        res.status(200).json({ exists: true, subCheck })
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err)
+    });
+})
+
+router.post('/hostedpage/claim/existing', async (req, res) => {
+  const plan = req.body.plan; 
+  const customerId = req.body.customer_id;
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+
+
+  const thankYouUrl = 'http://localhost:3000/thank-you.html'
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", `${process.env.ORGANIZATION_ID}`)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer": ${customerId}, 
+      "plan": {
+        "plan_code": ${plan}
+      }, 
+      "redirect_url": "${thankYouUrl}"
+    }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid customer id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(resp => {
+      console.log(resp.body);
+      res.status(200).json(resp.body)
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+})
+
+router.post('/hostedpage/claim/new', async (req, res) => {
+  const plan = req.body.plan; 
+  const customerId = jwt.decode(req.body.token).id 
+
+  console.log(customerId)
+  const customer = await User.findId(customerId); 
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  const thankYouUrl = 'http://localhost:3000/thank-you.html'
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", `${process.env.ORGANIZATION_ID}`)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer": {
+        "display_name": "${customer.first_name} ${customer.last_name}",
+        "first_name": "${customer.first_name}",
+        "last_name": "${customer.last_name}",
+        "email": "${customer.email}",
+      },
+      "plan": {
+        "plan_code": ${plan}
+      }, 
+      "redirect_url": "${thankYouUrl}"
+    }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid customer id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(resp => {
+      console.log(resp.body);
+      res.status(200).json(resp.body)
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+})
+
 
 module.exports = router;
 

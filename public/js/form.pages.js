@@ -1096,31 +1096,31 @@ $(document).ready(function() {
       });
   });
 
-  $(document).on("click", "button.claim-button", function(e) {
-    e.preventDefault();
-    console.log($(this).attr("id"));
-    const clicked = $(this)
-      .attr("id")
-      .split("-")[1];
+  // $(document).on("click", "button.claim-button", function(e) {
+  //   e.preventDefault();
+  //   console.log($(this).attr("id"));
+  //   const clicked = $(this)
+  //     .attr("id")
+  //     .split("-")[1];
 
-    if (sessionStorage.getItem("token")) {
-      sessionStorage.setItem("lastLocation", "listing");
-      sessionStorage.setItem(
-        "claimListing",
-        sessionStorage.getItem("currentListing")
-      );
-      sessionStorage.removeItem("currentListing");
-      // window.location.assign('billing__new.html');
-    } else {
-      sessionStorage.removeItem("currentListing");
-      sessionStorage.setItem("lastLocation", "listing");
-      sessionStorage.setItem(
-        "claimListing",
-        sessionStorage.getItem("currentListing")
-      );
-      window.location.assign("sign-in.html");
-    }
-  });
+  //   if (sessionStorage.getItem("token")) {
+  //     sessionStorage.setItem("lastLocation", "listing");
+  //     sessionStorage.setItem(
+  //       "claimListing",
+  //       sessionStorage.getItem("currentListing")
+  //     );
+  //     sessionStorage.removeItem("currentListing");
+  //     // window.location.assign('billing__new.html');
+  //   } else {
+  //     sessionStorage.removeItem("currentListing");
+  //     sessionStorage.setItem("lastLocation", "listing");
+  //     sessionStorage.setItem(
+  //       "claimListing",
+  //       sessionStorage.getItem("currentListing")
+  //     );
+  //     window.location.assign("sign-in.html");
+  //   }
+  // });
 
   $(document).on("click", "div.prev-button", function(e) {
     e.preventDefault();
@@ -1149,6 +1149,24 @@ $(document).ready(function() {
     sessionStorage.setItem("listing-address", getCoords[0].full_address);
     sessionStorage.setItem("currentListing", id);
     window.location.assign("listing.html");
+  });
+
+  $("body").on("click", "button.claim-button", function() {
+    const currentListing = $(this).attr("id").split("-")[1];
+
+    if (sessionStorage.getItem('token')) {
+
+      sessionStorage.setItem('lastLocation', 'listing.form'); 
+      sessionStorage.setItem('claimListing', JSON.stringify({ timeStamp: new Date(), value: currentListing })); 
+      sessionStorage.removeItem('currentListing');
+      window.location.assign('billing__new.html'); 
+    } else {
+
+      sessionStorage.removeItem('currentListing');
+      sessionStorage.setItem('lastLocation', 'listing.form'); 
+      sessionStorage.setItem('claimListing', JSON.stringify({ timeStamp: new Date(), value: currentListing })); 
+      window.location.assign('sign-in.html');
+    }
   });
 
   // $(window).bind('beforeunload', function(){

@@ -104,7 +104,7 @@ function youtube_parser(url) {
 // on ready
 $(document).ready(function() {
   // select dom elements
-  const page = document.querySelector("div#page-container");
+  const page = document.querySelector("div#listing-page-container");
   const loader = document.querySelector("div#loader-div");
   const listingColumn = document.querySelector("div#listing-column");
   const titleSection = document.querySelector("div#title-section");
@@ -113,7 +113,7 @@ $(document).ready(function() {
   const carousel = document.querySelector("ul#content");
 
   // hide the page and let the loader run
-  $(page).css("dislplay", "none");
+  $(page).fadeOut()
 
   // function to initiate map
   function getGeolocation() {
@@ -156,7 +156,7 @@ $(document).ready(function() {
       // reveal page and hide loader
       $("#images").css("dislplay", "");
       $(loader).css("display", "none");
-      $(page).css("display", "");
+      $(page).fadeIn(250)
     }
     // if the address exists
     else if (sessionStorage.getItem("listing-address") !== "null") {
@@ -192,7 +192,7 @@ $(document).ready(function() {
           // reveal page and hide loader
           $("#images").css("dislplay", "");
           $(loader).css("display", "none");
-          $(page).css("display", "");
+          $(page).fadeIn(250)
         } else {
           console.log(
             "Geocode was not successful for the following reason: " + status

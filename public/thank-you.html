@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>International Hair Authority</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js"
+      integrity="sha256-J6UlS3kpnhiSiNQ9lGoV9Q94ZpIPff3UZcR0dDwIT6g="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Roboto:100&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700|Source+Sans+Pro:300,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="./css/billing.css" />
+  </head>
+  <body>
+        <div id="loader-div">
+            <div class="ui active inverted dimmer">
+                <div style="color: #2ca6a4;" class="ui text loader">Loading</div>
+            </div>
+            <p></p>
+        </div>
+    <div class="ui grid" id="page-container">
+          <!-- top menu  -->
+          <div class="row" id="top-menu-row">
+              <div class="ui grid" id="landing-grid">
+                <div style="padding: .5rem;" class="one wide computer only column">
+                  <img
+                    style="margin-left: 1rem; padding: 0px;"
+                    id="ha-logo-image"
+                    src="./images/logo-symbol-01.png"
+                  />
+                </div>
+                <div style="padding: 1rem;" class="six wide computer six wide mobile middle aligned column">
+                  <p id="ha-title">Hair Authority Directory</p>
+                </div>
+              </div>
+            </div>
+            <div class=" row">
+                <div style="width: 100%; height: 100%;" class="ui centered grid">
+                    <div class="ten wide center aligned column">
+                        <img class="ui large centered image" src="./images/logo-symbol-01.png" >
+                    </div>
+                    <div class="eight wide center aligned column">
+                        <p class="plan-header" style="color: black;"  >Thank You for Subscribing! </p>
+                    </div>
+                    <div id="subInfo" class="twelve wide center aligned column">
+                        
+                        <button id="home-button" class="ui huge button" >Home</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <script src="./js/thank-you.js"></script>
+  </body>
+</html>

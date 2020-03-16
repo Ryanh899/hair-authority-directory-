@@ -730,6 +730,12 @@ const Listings = {
   removeImage__feature(listingId) {
     return knex('pending_listings').update('feature_image', 'null').where('id', listingId)
   },
+  addPendingClaim (claimInfo) {
+    return knex('pending_claims').insert(claimInfo).then(response => response).catch(err => err)
+  },
+  getListingTitle__id (id) {
+    return knex('listings').select('business_title').where({ id: id, claimed: false }).then(response => response[0].business_title).catch(err => false)
+  }, 
   // used to update city in db
   addCityState() {
     let results = [];
