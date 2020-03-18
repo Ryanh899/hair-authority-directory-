@@ -257,7 +257,9 @@ var myAxios = axios.create({
             "textarea#mission_statement"
           );
           const about = document.querySelector("textarea#about");
+          const form = document.querySelector('form#admin-form'); 
     
+          $(form).prepend(`<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`)
           $(title).attr("value", listing.business_title);
           $(description).attr("value", listing.business_description);
           $(address).attr("value", listing.street_address);
@@ -267,6 +269,16 @@ var myAxios = axios.create({
           $(missionStatement).attr("value", listing.mission_statement);
           $(about).attr("value", listing.about);
           categoryDefault.textContent = listing.category
+        
+          const userValues = Object.values(user)
+          Object.keys(user).forEach((attr, index) => {
+              $('#user-segment').append(`<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]} <a id="edit-${attr}" >Edit</a></p> `)
+          })
+
+          const subValues = Object.values(subscription)
+          Object.keys(subscription).forEach((item, index) => {
+              $('#subscription-segment').append(`<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} <a id="edit-${item}" >Edit</a></p> `)
+          })
 
           if (listing.tagline) {
             const website = document.querySelector("input#tagline");
@@ -326,6 +338,41 @@ var myAxios = axios.create({
             $(faq2).attr("value", listing.faq2);
             $(answer).attr("value", listing.answer2);
           }
+
+          if (listing.feature_image) {
+            const featureImageSegment = document.querySelector('div#feature_image'); 
+            const featureImage = document.createElement('img')
+            featureImage.src = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`
+            featureImage.className = 'ui large image'
+
+            featureImageSegment.appendChild(featureImage)
+          }
+
+          // filter images for null values
+        let filteredImg = listing.images.filter(
+            x => x.image_path !== "true" && x.image_path !== ""
+          );
+  
+          // map images into an arr of dom elements
+          const images = await filteredImg.map(image => {
+            if (image.image_path !== "false") {
+              // p tag
+              let thisImage = document.createElement("img");
+              // src
+              thisImage.src = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
+              // margin and padding
+              thisImage.style.padding = "1rem 0 0 1rem";
+              thisImage.style.margin = "auto 0 0 0";
+              // class name
+              thisImage.className = "ui large fluid image";
+  
+              return thisImage;
+            }
+          });
+  
+          // then filter those images for undefined
+          let filteredImgs = images.filter(x => x !== undefined);
+          
 
       })
       .catch(err => {

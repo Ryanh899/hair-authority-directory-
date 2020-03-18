@@ -1,11 +1,11 @@
 body {
     width: 100%;
-    background: #1f7a8c;
+    /* background: #1f7a8c;
 background: -webkit-linear-gradient(left, #1f7a8c, #79bcb8);
 background: -moz-linear-gradient(left, #1f7a8c, #79bcb8);
 background: -ms-linear-gradient(left, #1f7a8c, #79bcb8);
 background: -o-linear-gradient(left, #1f7a8c, #79bcb8);
-background: linear-gradient(to right, #1f7a8c, #79bcb8);
+background: linear-gradient(to right, #1f7a8c, #79bcb8); */
 }
 
 #form-page-container {
@@ -17,7 +17,7 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
 }
 
 #admin-form {
-    background: white;
+    background: #f9f9f9;
     color: black;
     padding: 2rem;
 }
@@ -235,3 +235,18 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8);
     font-weight: 300;
     color: #696969;
   }
+
+  #map-container {
+      position: relative;
+      height: 35vh;
+  }
+
+  #map{
+    height: 100%;
+}
+
+.userInfo {
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 16px;
+}
