@@ -60,15 +60,14 @@
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Business Title*</label>
                                 <div id="businessTitle-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="businessTitle" type="text" placeholder="Ex. Google">
+                                    <input id="business_title" name="businessTitle" type="text" >
                                     <i class="building outline icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Tagline or Slogan</label>
                                 <div id="businessDescription-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="businessDescription" type="text"
-                                        placeholder="Ex. At the Hair Authority Directory we...">
+                                    <input id="tagline" name="tagline" type="text">
                                     <i class="edit icon"></i>
                                 </div >
                             </div>
@@ -76,7 +75,7 @@
                             <label style="margin-top: 2rem;" id="labels-1">Category*</label>
                                 <div id="category-div" style="margin-top: 1rem;" class="ui  left icon input">
                                     <div multiple="" class="ui fluid multiple selection dropdown">
-                                        <input type="hidden" name="category">
+                                        <input id="category" type="hidden" name="category">
                                         <i class="dropdown icon"></i>
                                         <div class="default text">Select all that apply</div>
                                         <div class="menu">
@@ -113,15 +112,15 @@
                                 <div class="field">
                                     <label for="streetAddress" id="labels-1">Street Address*</label>
                                     <div id="streetAddress-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                        <input class="ui input" id="streetAddress" name="streetAddress" type="text"
-                                            placeholder="123 Silva Rd.">
+                                        <input class="ui input" id="street_address" name="streetAddress" type="text"
+                                            >
                                         <i class="map signs icon"></i>
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label for="city" id="labels-1">City*</label>
                                     <div id="city-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                        <input name="city" type="text" placeholder="Los Angeles">
+                                        <input name="city" type="text" id="city" >
                                         <i class="city icon"></i>
                                     </div >
                                 </div>
@@ -188,7 +187,7 @@
                                 <div class="field">
                                     <label for="zip" id="labels-1">Zip*</label>
                                     <div id="zip-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                        <input name="zip" type="text" placeholder="99999">
+                                        <input name="zip" type="text" id="zip" >
                                         <i class="hashtag icon"></i>
                                     </div >
                                 </div>
@@ -454,48 +453,48 @@
                                 <div id='opening-hours-field' style="display: inline-block; width: 50%;" class="fields"></div>
                                 <div id='closing-hours-field' style="display: inline-block; width: 50%; " class="fields"></div>
                             </div> -->
-                            <div class="field">
+                            <!-- <div class="field">
                                 <div class="ui toggle checkbox">
                                     <input type="checkbox" tabindex="0" name="24hours" class="hidden">
                                     <label>No Hours</label>
                                 </div>
-                            </div>
+                            </div> -->
                           
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Website</label>
                                 <div style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="website" type="text" placeholder="Ex. https://www.google.com">
+                                    <input id="website" name="website" type="text" >
                                     <i class="search icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Social Media</label>
                                 <div id="instagram-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="instagram" type="text" placeholder="  Ex. https://www.instagram.com/john_smith">
+                                    <input id="instagram" name="instagram" type="text" >
                                     <i class="large instagram icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                 <div id="facebook-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="facebook" type="text" placeholder="  Ex. https://www.facebook.com/johnsmith">
+                                    <input id="facebook" name="facebook" type="text" >
                                     <i class="large facebook icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                 <div id="twitter-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="twitter" type="text" placeholder="  Ex. https://twitter.com/johnsmith">
+                                    <input id="twitter" name="twitter" type="text" >
                                     <i class="large twitter icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                 <div id="linkedIn-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="linkedin" type="text" placeholder="  Ex. https://www.google.com">
+                                    <input id="linkedin" name="linkedin" type="text">
                                     <i class="large linkedin icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                     <div id="youtube-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                        <input name="youtube" type="text" placeholder="  Ex. https://www.youtube.com/">
+                                        <input id="youtube" name="youtube" type="text" >
                                         <i class="large youtube icon"></i>
                                     </div>
                                 </div>
@@ -504,14 +503,14 @@
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Email*</label>
                                 <div id="email-div" style="margin-top: 1rem;" class="ui left icon input">
-                                    <input name="email" type="text" placeholder="Ex. johnsmith@gmail.com">
+                                    <input id="email" name="email" type="text" >
                                     <i class="envelope icon"></i>
                                 </div>
                             </div>
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Phone*</label>
                                 <div id="phone-div" style="margin-top: 1rem;" class="ui left icon input">
-                                    <input name="phone" type="text" placeholder="Ex. 999-999-9999">
+                                    <input id="phone" name="phone" type="text" >
                                     <i class="phone icon"></i>
                                 </div>
                             </div>
@@ -520,14 +519,14 @@
                             <div class="field">
                                     <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
                                     <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
-                                        <textarea name="about" type="text" placeholder="Ex. The history, the story"></textarea>
+                                        <textarea id="business_description" name="about" type="text" ></textarea>
                                     </div>
                                 </div>
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Mission Statement</label>
                                 <div id="ms-div" style="margin-top: 1rem;" class="ui left icon input">
-                                    <textarea name="ms" type="text"
-                                        placeholder="Ex. Patagonia: Build the best product, cause no unnecessary harm, use business to inspire and implement solutions to the environmental crisis."></textarea>
+                                    <textarea id="mission_statement" name="ms" type="text"
+                                        ></textarea>
                                 </div>
                             </div>
                 
@@ -542,30 +541,29 @@
                                 <div id="other-image-append"></div>
                                 <input type="file" id="otherimages" />
                             </div>
-                            <button class="ui button" >Submit</button>
                             
                             <div id="faq-section">
                                 <i id="add-faq" class="large plus circle icon"></i>
                                 <div class="field" id="0faq" style="display: block;">
                                     <label>FAQ #1<label style="display: block;">Question: </label>
-                                    <input name="faq-question-0">
+                                    <input id="faq0" name="faq-question-0">
                                     <label>Answer: </label>
-                                    <textarea name="faq-answer-0"></textarea>
+                                    <textarea id="answer0" name="faq-answer-0"></textarea>
                                 </div>
                                 <div style="display: none;" class="field" id="1faq" style="display: block;">
                                     <label>FAQ #2<label style="display: block;">Question: </label>
-                                    <input name="faq-question-1">
+                                    <input id="faq1" name="faq-question-1">
                                     <label>Answer: </label>
-                                    <textarea name="faq-answer-1"></textarea>
+                                    <textarea id="answer1" name="faq-answer-1"></textarea>
                                 </div>
                                 <div style="display: none;" class="field" id="2faq" style="display: block;">
                                     <label>FAQ #3<label style="display: block;">Question: </label>
-                                    <input name="faq-question-2">
+                                    <input id="faq2" name="faq-question-2">
                                     <label>Answer: </label>
-                                    <textarea name="faq-answer-2"></textarea>
+                                    <textarea id="answer2" name="faq-answer-2"></textarea>
                                 </div>
                             </div>
-                        <!-- <div id="image-size-modal" class="ui basic modal">
+                        <div id="image-size-modal" class="ui basic modal">
                                 <div class="ui icon header">
                                   <i class="image outline icon"></i>
                                   File size too large
@@ -574,7 +572,7 @@
                                   <p>Images must be 2MB or less</p>
                                   <button id="image-size-ok" class="ui white inverted button">Upload More</button>
                                 </div>
-                                </div> -->
+                                </div>
                             </form>
             </div>
             <div id="user-column" class="six wide column">

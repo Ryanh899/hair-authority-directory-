@@ -240,10 +240,101 @@ var myAxios = axios.create({
       .get(ADMIN_URL + "listing/" + currentListing)
       .then(async response => {
           console.log(response)
+          const listing = response.data.listing; 
+          const user = response.data.user; 
+          const subscription = response.data.subscription
+          console.log(listing, user, subscription)
+
+          const title = document.querySelector("input#business_title");
+          const description = document.querySelector("textarea#business_description");
+          const address = document.querySelector("input#street_address");
+          const city = document.querySelector("input#city");
+          const state = document.querySelector("input#state");
+          const zip = document.querySelector("input#zip");
+          const category = document.querySelector('input#category')
+          const categoryDefault =document.querySelector('#category')
+          const missionStatement = document.querySelector(
+            "textarea#mission_statement"
+          );
+          const about = document.querySelector("textarea#about");
+    
+          $(title).attr("value", listing.business_title);
+          $(description).attr("value", listing.business_description);
+          $(address).attr("value", listing.street_address);
+          $(city).attr("value", listing.city);
+          $(state).attr("value", listing.state);
+          $(zip).attr("value", listing.zip);
+          $(missionStatement).attr("value", listing.mission_statement);
+          $(about).attr("value", listing.about);
+          categoryDefault.textContent = listing.category
+
+          if (listing.tagline) {
+            const website = document.querySelector("input#tagline");
+            $(website).attr("value", listing.tagline);
+          }
+    
+          if (listing.website) {
+            const website = document.querySelector("input#website");
+            $(website).attr("value", listing.website);
+          }
+          if (listing.instagram) {
+            const instagram = document.querySelector("input#instagram");
+            $(instagram).attr("value", listing.instagram);
+          }
+          if (listing.facebook) {
+            const facebook = document.querySelector("input#facebook");
+            $(facebook).attr("value", listing.facebook);
+          }
+          if (listing.twitter) {
+            const twitter = document.querySelector("input#twitter");
+            $(twitter).attr("value", listing.twitter);
+          }
+          if (listing.linkedin) {
+            const linkedin = document.querySelector("input#linkedin");
+            $(linkedin).attr("value", listing.linkedin);
+          }
+          if (listing.youtube) {
+            const youtube = document.querySelector("input#youtube");
+            $(youtube).attr("value", listing.youtube);
+          }
+          if (listing.phone) {
+            const phone = document.querySelector("input#phone");
+            $(phone).attr("value", listing.phone);
+          }
+          if (listing.email) {
+            const email = document.querySelector("input#email");
+            $(email).attr("value", listing.email);
+          }
+          if (listing.faq0 && listing.answer0) {
+            const faq0 = document.querySelector("input#faq0");
+            const answer = document.querySelector("textarea#answer0");
+    
+            $(faq0).attr("value", listing.faq0);
+            $(answer).attr("value", listing.answer0);
+          }
+          if (listing.faq1 && listing.answer1) {
+            const faq1 = document.querySelector("input#faq1");
+            const answer = document.querySelector("textarea#answer1");
+    
+            $(faq1).attr("value", listing.faq1);
+            $(answer).attr("value", listing.answer1);
+          }
+          if (listing.faq2 && listing.answer2) {
+            const faq2 = document.querySelector("input#faq2");
+            const answer = document.querySelector("textarea#answer2");
+    
+            $(faq2).attr("value", listing.faq2);
+            $(answer).attr("value", listing.answer2);
+          }
+
       })
       .catch(err => {
           console.log(err)
       })
   }
+
+  $(".ui.dropdown").dropdown({
+    allowAdditions: true
+  });
   });
   

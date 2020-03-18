@@ -244,11 +244,11 @@ const User = {
       });
   },
   getUserInfo__client (id) {
-    knex('users')
-      .select()
+    return knex('users')
+      .select('email', 'first_name', 'last_name', 'phone', 'id')
       .where('id', id)
       .then(response => {
-        return response
+        return response[0]
       })
       .catch(err => {
         console.log(err); 

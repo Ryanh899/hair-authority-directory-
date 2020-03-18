@@ -371,46 +371,48 @@ const Listings = {
       });
   },
   getById__pending(id, cb) {
-    let getListing = new Promise((resolve, reject) => {
-      return knex("pending_listings")
+    return new Promise((resolve, reject) => {
+      knex("pending_listings")
         .select()
         .where("id", id)
         .then(resp => {
+          console.log('first promise')
+          console.log(resp)
           resolve(resp);
         })
         .catch(err => {
           console.log(err);
           cb.status(400).json({ message: "listing does not exist" });
         });
-    });
-    getListing
-      .then(listing => {
-        listing = listing[0];
-        let user; 
-        let subscription; 
-        knex("images")
+    })
+    .then(async listing => {
+        listing = listing[0]
+        const thisListing = listing; 
+        console.log(thisListing); 
+        console.log('response from promise')
+        return knex("images")
           .select()
           .where("listing_id", listing.id)
           .then(response => {
-            listing.images = response;
+            thisListing.images = response;
             return knex("social_media")
               .select()
               .where("listing_id", listing.id);
           })
           .then(social => {
-            console.log(social);
+            // console.log(social);
             let sm = social;
             sm.forEach(platform => {
-              listing[platform.platform] = platform.url;
+              thisListing[platform.platform] = platform.url;
             });
             return knex("hours")
               .select()
               .where("listing_id", listing.id);
           })
           .then(hours => {
-            console.log(hours);
+            // console.log(hours);
             hours.forEach(day => {
-              listing[day.day] = {
+              thisListing[day.day] = {
                 opening_hours: day.opening_hours,
                 closing_hours: day.closing_hours
               };
@@ -420,16 +422,17 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(faqs => {
-            console.log(faqs);
+            // console.log(faqs);
             if (faqs.length > 0) {
-              listing.faqs = faqs;
+              thisListing.faqs = faqs;
             }
-
-            return listing
+            console.log(thisListing)
+            return thisListing
           })
           .catch(err => {
             console.log(err);
           });
+          console.log(thisListing)
       })
       .catch(err => {
         console.error(err);

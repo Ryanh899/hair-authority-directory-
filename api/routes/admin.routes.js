@@ -33,13 +33,15 @@ router.get("/listing/:id", async (req, res) => {
     console.log(listingId);
 
     const subscription = await Zoho.subscriptionCheck__listingId(listingId); 
+    const listing = await Listings.getById__pending(listingId);
+
+    console.log(listing)
     console.log(subscription)
     if (subscription && subscription.length) {
-        let user; 
-        const listing = await Listings.getById__pending(listingId);
         if (listing.professional_id !== null && listing.professional_id) {
-            user = await User.getUserInfo__client(subscription[0].user_id); 
-            res.json({ listing, user })
+            const user = await User.getUserInfo__client(subscription[0].user_id); 
+            console.log(user)
+            res.json({ listing, user, subscription: subscription[0] })
         } else {
             res.json({ listing })
         }
