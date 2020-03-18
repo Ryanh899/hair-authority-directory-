@@ -31,7 +31,7 @@ router.post('/professional-admin', async (req, res) => {
     // need to set up authentication on this route for admin only 
     console.log(req.body)
     // const userInfo = req.body
-    const userInfo = {email: 'ryan@gmail.com'}
+    const userInfo = {email: 'ryan_admin@gmail.com'}
     const user = await User.findEmail(userInfo.email)
     console.log('user', user)
     if (user.length !== 0 && user.isProfessionalUser) {

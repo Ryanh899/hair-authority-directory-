@@ -3,6 +3,7 @@ const _ = require("lodash");
 const Auth = require("../../auth_resources");
 const jwt = require("jsonwebtoken");
 const Listings = require("./listings");
+const Zoho = require('./zoho');
 
 const User = {
   async findEmail(userInfo) {
@@ -17,38 +18,38 @@ const User = {
     console.log(user);
     if (user && user.length !== 0) {
       console.log("client_user");
-      user = user[0];
-      user.isClientUser = true;
+      console.log(user)
+      user = user[0]; 
+
+      const subCheck = await Zoho.subscriptionCheck__userId(user.id)
+      console.log(subCheck)
+
+      if (!subCheck.length) {
+        user.isClientUser = true;
+      } else if (subCheck && subCheck.length) { 
+        user.isProfessionalUser = true; 
+      }
+
       return user;
     } else {
-      let professional_user = await knex("professional_users")
+      let admin_user = await knex("admin_users")
         .select()
         .where("email", userInfo);
-      if (professional_user && professional_user.length !== 0) {
-        console.log("professional_user");
-        professional_user = professional_user[0];
-        professional_user.isProfessionalUser = true;
-        return professional_user;
+      if (admin_user && admin_user.length !== 0) {
+        console.log("admin_user");
+        admin_user = admin_user[0];
+        admin_user.isAdminUser = true;
+        return admin_user;
       } else {
-        let admin_user = await knex("admin_users")
-          .select()
-          .where("email", userInfo);
-        if (admin_user && admin_user.length !== 0) {
-          console.log("admin_user");
-          admin_user = admin_user[0];
-          admin_user.isAdminUser = true;
-          return admin_user;
-        } else {
-          return [];
-        }
+        return [];
       }
     }
   },
-  async findId(userInfo) {
+  async findId(userId) {
     // determines if email exists in either client or business table
     let user = await knex("users")
       .select()
-      .where("id", userInfo)
+      .where("id", userId)
       .then(response => {
         return response;
       })
@@ -56,30 +57,30 @@ const User = {
     console.log(user);
     if (user && user.length !== 0) {
       console.log("client_user");
-      user = user[0];
-      user.isClientUser = true;
+      console.log(user)
+      user = user[0]; 
+
+      const subCheck = await Zoho.subscriptionCheck__userId(user.id)
+      console.log(subCheck)
+      
+      if (!subCheck.length) {
+        user.isClientUser = true;
+      } else if (subCheck && subCheck.length) { 
+        user.isProfessionalUser = true; 
+      }
+
       return user;
     } else {
-      let professional_user = await knex("professional_users")
+      let admin_user = await knex("admin_users")
         .select()
-        .where("id", userInfo);
-      if (professional_user && professional_user.length !== 0) {
-        console.log("professional_user");
-        professional_user = professional_user[0];
-        professional_user.isProfessionalUser = true;
-        return professional_user;
+        .where("id", userId);
+      if (admin_user && admin_user.length !== 0) {
+        console.log("admin_user");
+        admin_user = admin_user[0];
+        admin_user.isAdminUser = true;
+        return admin_user;
       } else {
-        let admin_user = await knex("admin_users")
-          .select()
-          .where("id", userInfo);
-        if (admin_user && admin_user.length !== 0) {
-          console.log("admin_user");
-          admin_user = admin_user[0];
-          admin_user.isAdminUser = true;
-          return admin_user;
-        } else {
-          return [];
-        }
+        return [];
       }
     }
   },

@@ -145,6 +145,26 @@ const Zoho = {
         console.log(err)
         return false 
       })
+  }, 
+  subscriptionCheck__userId (userId) {
+    return knex('subscriptions')
+            .select()
+            .where('user_id', userId)
+            .then(response => {
+              return response
+            }).catch(err => {
+              console.log(err)
+            })
+  }, 
+  subscriptionCheck__listingId (listingId) {
+    return knex('subscriptions')
+            .select()
+            .where('listing_id', listingId)
+            .then(response => {
+              return response
+            }).catch(err => {
+              console.log(err)
+            })
   }
 };
 

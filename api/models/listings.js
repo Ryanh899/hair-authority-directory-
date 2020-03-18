@@ -2,6 +2,7 @@ const knex = require("../config/knex/knex");
 
 const NodeGeocoder = require("node-geocoder");
 const GeoCode = require("../geocoding");
+const User = require('./user')
 
 const options = {
   provider: "google",
@@ -20,6 +21,9 @@ const distance = require("google-distance-matrix");
 distance.key(keys.googleDevKey);
 
 const geocoder = NodeGeocoder(options);
+
+const moment = require("moment");
+moment().format();
 
 uniqueArray = a => [...new Set(a.map(item => item.business_title))];
 
@@ -366,6 +370,71 @@ const Listings = {
         console.error(err);
       });
   },
+  getById__pending(id, cb) {
+    let getListing = new Promise((resolve, reject) => {
+      return knex("pending_listings")
+        .select()
+        .where("id", id)
+        .then(resp => {
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log(err);
+          cb.status(400).json({ message: "listing does not exist" });
+        });
+    });
+    getListing
+      .then(listing => {
+        listing = listing[0];
+        let user; 
+        let subscription; 
+        knex("images")
+          .select()
+          .where("listing_id", listing.id)
+          .then(response => {
+            listing.images = response;
+            return knex("social_media")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(social => {
+            console.log(social);
+            let sm = social;
+            sm.forEach(platform => {
+              listing[platform.platform] = platform.url;
+            });
+            return knex("hours")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(hours => {
+            console.log(hours);
+            hours.forEach(day => {
+              listing[day.day] = {
+                opening_hours: day.opening_hours,
+                closing_hours: day.closing_hours
+              };
+            });
+            return knex("faq")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(faqs => {
+            console.log(faqs);
+            if (faqs.length > 0) {
+              listing.faqs = faqs;
+            }
+
+            return listing
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  },
   saveListing(listingId, userId, cb) {
     return knex("saved_listings")
       .insert({
@@ -631,9 +700,22 @@ const Listings = {
         console.log(err);
       });
   },
+  getPendingListings__recent(cb) {
+    const lastMonth = moment().subtract(7, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    console.log(lastMonth)
+    return knex("pending_listings")
+      .select("*")
+      .where('date_published', '>', lastMonth)
+      .limit(100)
+      .then(response => {
+        cb.status(200).json(response);
+      })
+      .catch(err => console.log(err));
+  },
   getPendingListings(cb) {
     return knex("pending_listings")
       .select("*")
+      .limit(100)
       .then(response => {
         cb.status(200).json(response);
       })
@@ -664,18 +746,18 @@ const Listings = {
         cb.status(400).json(err);
       });
   },
-  getPendingListing(listingId, cb) {
-    knex("pending_listings")
-      .select()
-      .where("id", listingId)
-      .then(response => {
-        cb.status(200).json(response);
-      })
-      .catch(err => {
-        console.log(err);
-        cb.status(400).json(err);
-      });
-  },
+  // getPendingListing(listingId, cb) {
+  //   knex("pending_listings")
+  //     .select()
+  //     .where("id", listingId)
+  //     .then(response => {
+  //       cb.status(200).json(response);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       cb.status(400).json(err);
+  //     });
+  // },
   async getAllListings__admin(res) {
     return camelizeKeys(
       await knex

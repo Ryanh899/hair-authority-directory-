@@ -40,7 +40,7 @@ const PROD_API_URL = 'ec2-54-90-69-186.compute-1.amazonaws.com/api/'
 const API_URL = "http://localhost:3000/api/";
 const ADMIN_URL = "http://localhost:3000/admin/";
 
-function getPendingListings(loader, page, text) {
+function getPendingListings(loader, page, text, pendingArr) {
  
   myAxios
     .get(ADMIN_URL + "pendingListings")
@@ -52,32 +52,57 @@ function getPendingListings(loader, page, text) {
       if (listings.length !== 0) {
         listings.forEach(listing => {
           $(page)
-            .append(`<div style="margin-bottom: 1rem;" class="listingItem ui grid">
-                <div class="row">
-                  <div class="six wide middle aligned column">
-                    <p class="listingTitle">
-                      ${listing.business_title}
-                    </p>
-                    <p class="listingSubtitle">${listing.business_description}</p>
-                  </div>
-                  <div class="six wide column"></div>
-                  <div class="four wide column">
-                    <a id="${listing.id}" class="viewButton">
-                      <div style="color: white;" class="listing-buttons " id="${listing.id}">
-                        <i style="pointer-events:none" class="eye icon"></i> View
-                      </div>
-                    </a>
-                    <a id="${listing.id}" class="verifyButton">
-                      <div  style="color: white;" class="listing-buttons ">
-                        <i id="${listing.id}" style="pointer-events:none" style="color: red;" class="check icon"></i>
-                        Verify
-                      </div>
-                    </a>
-                  </div>
+            .append(`<div
+            style="margin-bottom: 1rem; background: #f8f8f8"
+            class="ui grid segment listingItem-search"
+            id="list-item"
+          >
+            <div style="padding: 1rem; padding-right: 0px;" class="row">
+              <div  class="five wide middle aligned column">
+                <div class="ui image" >
+                    <img 
+                    style="max-height: 200px;"
+                    class="ui rounded fluid image"
+                    src="https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image || "placeholder.png"}"
+                  />
                 </div>
-              </div>`);
+              </div>
+              <div class="eleven wide column">
+                <div class="ui grid">
+                    <div
+                    style="padding: 1rem 0rem 0rem .5rem;"
+                    class="ten wide column"
+                  >
+                    <a href="#" id="${listing.id}" class="listingTitle-search">
+                      ${listing.business_title} <i class="tiny check circle icon" style="color: #1f7a8c;" ></i>
+                    </a>
+                    <p class="listingSubtitle-search">
+                      ${listing.category || "" }
+                    </p>
+                    
+                  </div>
+                  <div
+                  class="six wide computer only column"
+                >
+                  <p class="listing-info-text">
+                    <i style="color: #1f7a8c;" class="small phone icon" ></i>${listing.phone || "999-999-9999"}
+                  </p>
+                  <p class="listing-info-text">
+                    <i style="color: #1f7a8c;" class="location small arrow icon" ></i>${listing.city || listing.full_address}
+                  </p>
+                  <!-- <button style="margin-top: 1rem; background: #79bcb8; color: white; margin-right: 1.5rem;" class="ui right floated button">Preview</button> -->
+                </div>
+                
+                <div id="listing-tagline-search" class="fourteen wide column">
+                    ${listing.tagline} 
+                </div>
+                </div>
+                </div>
+              </div>
+          </div>`);
+          pendingArr.push(listing)
         });
-        $(pendingLoader).css('display', 'none')
+        $(loader).css('display', 'none')
       } else {
         console.log('nothin')
         $(loader).css('display', 'none')
@@ -126,7 +151,7 @@ function getAllListings(loader, page, text) {
                 </div>
               </div>`);
         });
-        $(pendingLoader).css('display', 'none')
+        $(loader).css('display', 'none')
       } else {
         console.log('nothin')
         $(loader).css('display', 'none')
@@ -149,6 +174,8 @@ $(document).ready(function() {
   const allLoader = document.querySelector('div#all-loader')
   const allDiv = document.querySelector('div#all-div'); 
 
+  let pendingListings = []; 
+
 
   $(loader).css("display", "none");
   $(pendingLoader).css("display", "none");
@@ -164,7 +191,7 @@ $(document).ready(function() {
 
   $("body").on("click", "#pending-tab", function(event) {
     $(pendingLoader).css("display", "");
-    getPendingListings(pendingLoader, pendingDiv, pendingText);
+    getPendingListings(pendingLoader, pendingDiv, pendingText, pendingListings);
   });
 
   $("body").on("click", "#home-button", function() {
@@ -206,4 +233,20 @@ $(document).ready(function() {
         console.log(err);
       });
   });
+
+  $("body").on("click", "a.listingTitle-search", function(e) {
+    const id = $(this).attr("id");
+    // filter arr of all listings on page to find clicked on listing and get the id
+    let getCoords = pendingListings.filter(x => x.id === id); 
+    // set the last window location to search 
+    sessionStorage.setItem('lastLocation', 'search')
+    // set the current listing lat and lng in SS
+    sessionStorage.setItem('listing-lat', getCoords[0].lat)
+    sessionStorage.setItem('listing-lng', getCoords[0].lng)
+    // set full address for if no coords 
+    sessionStorage.setItem('listing-address', getCoords[0].full_address)
+    sessionStorage.setItem("currentListing", id);
+    window.location.assign("admin.listing.html");
+  });
+   
 });

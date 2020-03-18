@@ -10,9 +10,12 @@ const zohoRoutes = require('./api/routes/zoho.routes');
 
 const PORT = process.env.PORT || 3000;
 
-// const auth = jwt({
-//   secret: process.env.PRIVATE_KEY
-// });
+const basicAuth = jwt({
+  secret: process.env.PRIVATE_KEY
+});
+const adminAuth = jwt({
+  secret: process.env.ADMIN_KEY
+})
 //express middleware
 app.use(
   express.urlencoded({
@@ -27,10 +30,12 @@ app.use(morgan('dev'))
 app.use(express.static("public"));
 
 app.use("/auth", authRoutes);
-app.use('/admin', adminRoutes)
 app.use('/zoho', zohoRoutes)
-// app.use(auth);
+// app.use(basicAuth);
 app.use("/api", apiRoutes);
+// app.use(adminAuth)
+app.use('/admin', adminRoutes)
+
 
 app.listen(PORT, () => {
   console.log("app listening on port ", PORT);

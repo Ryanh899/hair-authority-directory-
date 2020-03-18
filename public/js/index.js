@@ -42,6 +42,23 @@ var authHelper = {
       return false;
     }
   },
+  isLoggedIn__admin() {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const userData = this.parseToken(token);
+      const expirationDate = new Date(userData.exp * 1000);
+      const adminToken = this.parseToken(userData.adminToken);
+      const expirationDate__admin = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate || Date.now() > expirationDate__admin) this.logOut();
+      if (userData.isAdminUser && adminToken.admin ) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  },
   parseToken(token) {
     if (token) {
       return JSON.parse(window.atob(token.split(".")[1]));
@@ -63,6 +80,7 @@ $(document).ready(function() {
       console.log("Geolocation is not supported by this browser.");
     }
   }
+
 
   function showPosition(position) {
     sessionStorage.setItem("current-lat", position.coords.latitude);
@@ -125,25 +143,42 @@ $(document).ready(function() {
       $(".ui.dropdown").dropdown({ transition: "drop" });
       $("#sign-in-column").html("");
     } else if (userInfo && userInfo.isAdminUser) {
-      $("#register-column").html(
-        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
-      );
-      $("#sign-in-column").html(
-        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
-      );
-      $("#dashboard-column").html(`
-      <div id="dashboard-button"  ><p class="top-button" id="dashboard" >Dashboard</p></div>
+      $("#register-column").html(`
+      <div id="client-drop-div">
+        <div id="client-dropdown" class="ui inline dropdown">
+          <div id="dropdown-text" class="text">
+          ${userInfo.email}
+        </div>
+        <i id="dropdown-icon" class="dropdown icon"></i>
+        <div class="menu">
+            <div id="admin-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="chart pie icon" ></i> Admin Portal</p>
+            </div>
+            <div id="dashboard-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="building icon" ></i> Dashboard</p>
+            </div>
+            <div id="saved-listings-option" class="item">
+              <p class="user-menu-option-text" ><i class="bookmark icon" ></i> Bookmarked Listings</p>
+            </div>
+            <div id="logout-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="power off icon" ></i> Logout</p>
+            </div>
+          </div>
+        </div>
+      </div>
       `);
+      $(".ui.dropdown").dropdown({ transition: "drop" });
+      $("#sign-in-column").html("");
     }
   } else {
     console.log("not logged in");
     sessionStorage.removeItem('plan'); 
-    sessionStorage.removeItem('currentListing'); 
+    // sessionStorage.removeItem('currentListing'); 
     sessionStorage.removeItem('subscription_id'); 
     sessionStorage.removeItem('customer_id'); 
-    sessionStorage.removeItem('listing-lat'); 
-    sessionStorage.removeItem('listing-lng'); 
-    sessionStorage.removeItem('listing-address'); 
+    // sessionStorage.removeItem('listing-lat'); 
+    // sessionStorage.removeItem('listing-lng'); 
+    // sessionStorage.removeItem('listing-address'); 
     sessionStorage.removeItem('logoSearch'); 
     $("#logout-button").css("display", "none");
   }
@@ -171,6 +206,17 @@ $(document).ready(function() {
     } else {
       sessionStorage.setItem("routeToBilling", true);
       window.location.assign("sign-in.html");
+    }
+  });
+
+  $("body").on("click", "#admin-menu-option", function() {
+    event.preventDefault();
+    
+    if (authHelper.isLoggedIn__admin()) {
+      sessionStorage.setItem("lastLocation", "index");
+      window.location.assign("admin.portal.html");
+    } else {
+      alert('You must Have a verified business to view this page')
     }
   });
 

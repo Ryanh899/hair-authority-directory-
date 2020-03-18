@@ -42,8 +42,14 @@ module.exports = {
             if (attemptedHash === userInfo.hash) {
                 const toSend = _.pick(userInfo, 'id', 'email')
                 if (userInfo.isClientUser) toSend.isClientUser = true; 
-                else if (userInfo.isProfessionalUser) toSend.isProfessionalUser = true; 
-                else if (userInfo.isAdminUser) toSend.isAdminUser = true; 
+                else if (userInfo.isProfessionalUser) {
+                    toSend.isProfessionalUser = true; 
+                    toSend.professionalToken = await jwt.sign({ professional: true }, process.env.PROFESSIONAL_KEY, { expiresIn: "6h" }); 
+                } 
+                else if (userInfo.isAdminUser) {
+                    toSend.isAdminUser = true;
+                    toSend.adminToken = await jwt.sign({ admin: true }, process.env.ADMIN_KEY, { expiresIn: "6h" }); 
+                } 
                 const token = await jwt.sign(
                     toSend,
                     keys.privateKey,
