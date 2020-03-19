@@ -250,3 +250,9 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8); */
     font-weight: 400;
     font-size: 16px;
 }
+
+#labels-1 {
+    font-family: 'Raleway';
+    font-weight: 500;
+    font-size: 25px;
+}

@@ -1,112 +1,112 @@
 // axios interceptor and creater
 var myAxios = axios.create({
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token")
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("token")
+  }
+});
+myAxios.interceptors.response.use(
+  function(response) {
+    return response;
+  },
+  function(error) {
+    console.log(error);
+  }
+);
+
+//auth helper functions
+var authHelper = {
+  isLoggedIn() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      var userData = this.parseToken(token);
+      var expirationDate = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate) this.logOut();
+      return true;
+    } else {
+      return false;
     }
-  });
-  myAxios.interceptors.response.use(
-    function(response) {
-      return response;
-    },
-    function(error) {
-      console.log(error)
+  },
+  parseToken(token) {
+    if (token) {
+      return JSON.parse(window.atob(token.split(".")[1]));
     }
+  },
+  logOut() {
+    localStorage.removeItem("token");
+  }
+};
+
+// API URL
+// let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
+let API_URL = "http://localhost:3000/api/";
+const googleApiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
+
+// days of the week for business hours
+const weekDays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+];
+
+// parse youtube
+function YouTubeGetID(url) {
+  var ID = "";
+  url = url
+    .replace(/(>|<)/gi, "")
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if (url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  } else {
+    ID = url;
+  }
+  return ID;
+}
+
+// get channel from user url
+function getChannelFromUrl(url) {
+  var pattern = new RegExp(
+    "^(https?://)?(www.)?youtube.com/(user/)?([a-z-_0-9]+)/?([?#]?.*)",
+    "i"
   );
-  
-  //auth helper functions
-  var authHelper = {
-    isLoggedIn() {
-      const token = localStorage.getItem("token");
-      if (token) {
-        var userData = this.parseToken(token);
-        var expirationDate = new Date(userData.exp * 1000);
-        if (Date.now() > expirationDate) this.logOut();
-        return true;
-      } else {
-        return false;
-      }
-    },
-    parseToken(token) {
-      if (token) {
-        return JSON.parse(window.atob(token.split(".")[1]));
-      }
-    },
-    logOut() {
-      localStorage.removeItem("token");
-    }
-  };
-  
-  // API URL
-  // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
-  let API_URL = "http://localhost:3000/api/";
-  const googleApiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
-  
-  // days of the week for business hours
-  const weekDays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-  
-  // parse youtube
-  function YouTubeGetID(url) {
-    var ID = "";
-    url = url
-      .replace(/(>|<)/gi, "")
-      .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    if (url[2] !== undefined) {
-      ID = url[2].split(/[^0-9a-z_\-]/i);
-      ID = ID[0];
-    } else {
-      ID = url;
-    }
-    return ID;
-  }
-  
-  // get channel from user url
-  function getChannelFromUrl(url) {
-    var pattern = new RegExp(
-      "^(https?://)?(www.)?youtube.com/(user/)?([a-z-_0-9]+)/?([?#]?.*)",
-      "i"
-    );
-    var matches = url.match(pattern);
-    if (matches) {
-      return matches[4];
-    }
-  
-    return url;
-  }
-  
-  function getChannelIdFromUrl(url) {
-    var pattern = /^(?:(http|https):\/\/[a-zA-Z-]*\.{0,1}[a-zA-Z-]{3,}\.[a-z]{2,})\/channel\/([a-zA-Z0-9_]{3,})$/;
-    var matchs = url.match(pattern);
-    if (!matchs === null) {
-      return matchs[2];
-    } else {
-      return;
-    }
-  }
-  
-  function youtube_parser(url) {
-    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-    var match = url.match(regExp);
-    return match && match[7].length == 11 ? match[7] : false;
+  var matches = url.match(pattern);
+  if (matches) {
+    return matches[4];
   }
 
-  const ADMIN_URL = "http://localhost:3000/admin/";
-  
-  // on ready
-  $(document).ready(function() {
+  return url;
+}
 
-    const page = document.querySelector("div#listing-page-container");
-    const loader = document.querySelector("div#loader-div");
-    const listingColumn = document.querySelector("div#listing-column");
-    const titleSection = document.querySelector("div#title-section");
-   // function to initiate map
+function getChannelIdFromUrl(url) {
+  var pattern = /^(?:(http|https):\/\/[a-zA-Z-]*\.{0,1}[a-zA-Z-]{3,}\.[a-z]{2,})\/channel\/([a-zA-Z0-9_]{3,})$/;
+  var matchs = url.match(pattern);
+  if (!matchs === null) {
+    return matchs[2];
+  } else {
+    return;
+  }
+}
+
+function youtube_parser(url) {
+  var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  return match && match[7].length == 11 ? match[7] : false;
+}
+
+const ADMIN_URL = "http://localhost:3000/admin/";
+
+// on ready
+$(document).ready(function() {
+  const page = document.querySelector("div#listing-page-container");
+  const loader = document.querySelector("div#loader-div");
+  const listingColumn = document.querySelector("div#listing-column");
+  const titleSection = document.querySelector("div#title-section");
+  const form = document.querySelector('form#admin-form')
+  // function to initiate map
   function getGeolocation() {
     console.log("map");
     // navigator.geolocation.getCurrentPosition(drawMap);
@@ -147,7 +147,7 @@ var myAxios = axios.create({
       // reveal page and hide loader
       $("#images").css("dislplay", "");
       $(loader).css("display", "none");
-      $(page).fadeIn(250)
+      $(page).fadeIn(250);
     }
     // if the address exists
     else if (sessionStorage.getItem("listing-address") !== "null") {
@@ -183,7 +183,7 @@ var myAxios = axios.create({
           // reveal page and hide loader
           $("#images").css("dislplay", "");
           $(loader).css("display", "none");
-          $(page).fadeIn(250)
+          $(page).fadeIn(250);
         } else {
           console.log(
             "Geocode was not successful for the following reason: " + status
@@ -234,154 +234,555 @@ var myAxios = axios.create({
   // getting the current listing id from session storage
   const currentListing = sessionStorage.getItem("currentListing");
 
+  let images = [];
+  let featurePut = document.getElementById("put");
+
+  function displayOtherPhoto(image, id) {
+    $("#other-image-append").append(
+      `<div style="display: none;" class="image other-image-display">
+        <div class="overlay">
+            <button id="${id}" type="button" class="ui basic icon button other-remove">
+                <i style="color: red;" class="large x icon" ></i>
+            </button>
+        </div>
+        <img src="${image}" class="ui image">
+      </div>`
+    );
+    let otherImages = document.querySelectorAll("div.other-image-display");
+    $(otherImages).fadeIn();
+  }
+
+  // read uploaded image
+  function readFile(file, id) {
+    let FR = new FileReader();
+
+    FR.addEventListener("load", function(base64Img) {
+      // pass base64 image to be uploaded to jumbotron
+      displayPhoto(base64Img.target.result, id);
+      images.push(base64Img.target.result);
+      // console.log(`images: ${images}`);
+      console.log(images.length);
+
+      // check if max images allowed
+      // maxPhotos(images.length);
+    });
+    FR.readAsDataURL(file);
+  }
+
+  // read uploaded image
+  function readOtherFile(file, id) {
+    let FR = new FileReader();
+
+    FR.addEventListener("load", function(base64Img) {
+      // pass base64 image to be uploaded to jumbotron
+      displayOtherPhoto(base64Img.target.result, id);
+      images.push(base64Img.target.result);
+      // console.log(`images: ${images}`);
+      console.log(images.length);
+
+      // check if max images allowed
+      // maxPhotos(images.length);
+    });
+    FR.readAsDataURL(file);
+  }
+
+  // display photo to top of jumbotron
+  function displayPhoto(image, id) {
+    // $('#other-append').append(`<img src="${image}" alt="image" class="ui small image">`);
+    $(
+      "#feature-append"
+    ).append(`<div style="display: none;" id="feature-image-display" class="image">
+    <div class="overlay">
+        <button id="${id}" type="button" class="ui basic icon button feature-remove">
+            <i style="color: red;" class="large x icon" ></i>
+        </button>
+    </div>
+    <img src="${image}" class="ui image">
+    </div>`);
+    $("#feature-image-display").fadeIn();
+    $(featurePut).prop("disabled", true);
+  }
+
+  //   function displayOtherPhoto(image, id) {
+  //     $("#other-image-append").append(
+  //       `<div style="display: none;" class="image other-image-display">
+  //         <div class="overlay">
+  //             <button id="${id}" type="button" class="ui basic icon button other-remove">
+  //                 <i style="color: red;" class="large x icon" ></i>
+  //             </button>
+  //         </div>
+  //         <img src="${image}" class="ui image">
+  //       </div>`
+  //     );
+  //     let otherImages = document.querySelectorAll("div.other-image-display");
+  //     $(otherImages).fadeIn();
+  //   }
+
+  const handleFileUpload = (selector, handler) => {
+    document.querySelector(selector).addEventListener("change", event => {
+      const files = event.currentTarget.files;
+      const size = (files[0].size / 1024 / 1024).toFixed(2);
+      sessionStorage.setItem("imageUp", 0);
+      if (files.length && size < 2) {
+        handler(files[0]);
+      } else {
+        $("#submit6").css("background", "#696969");
+        $("#submit6").off();
+        $(featurePut).val("");
+        $(".ui.basic.modal").modal("show");
+        return false;
+      }
+    });
+  };
+
+  handleFileUpload("#put", async file => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    const urlAndKey = await (
+      await fetch(
+        `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
+      )
+    ).json();
+    console.log(urlAndKey);
+    await fetch(urlAndKey.url, {
+      method: "PUT",
+      body: file
+    })
+      .then(data => {
+        sessionStorage.setItem(
+          "imageUp",
+          Number(sessionStorage.getItem("imageUp")) + 1
+        );
+        console.log(data);
+        let image_path = urlAndKey.key;
+        const storeImage = {
+          listing_id: sessionStorage.getItem("currentListing"),
+          image_path,
+          featured_image: true
+        };
+        myAxios
+          .post("http://localhost:3000/api/storeimage/feature", storeImage)
+          .then(resp => {
+            console.log(resp);
+            readFile(file, resp.data[0].image_id);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+  handleFileUpload("#otherimages", async file => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    const urlAndKey = await (
+      await fetch(
+        `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
+      )
+    ).json();
+    console.log(urlAndKey);
+    await fetch(urlAndKey.url, {
+      method: "PUT",
+      body: file
+    })
+      .then(data => {
+        sessionStorage.setItem(
+          "imageUp",
+          Number(sessionStorage.getItem("imageUp")) + 1
+        );
+        if (sessionStorage.getItem("imageUp") >= 8) {
+          $("#otherimages").prop("disabled", true);
+        }
+        let image_path = urlAndKey.key;
+        const storeImage = {
+          listing_id: sessionStorage.getItem("currentListing"),
+          image_path,
+          featured_image: false
+        };
+        myAxios
+          .post("http://localhost:3000/api/storeimage", storeImage)
+          .then(resp => {
+            console.log(resp);
+            readOtherFile(file, resp.data[0].image_id);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+  $("body").on("click", "#image-size-ok", function() {
+    $(".ui.basic.modal").modal("hide");
+    $(featurePut).click();
+  });
+
+  $(document).on("click", "button.feature-remove", function(e) {
+    e.preventDefault();
+    console.log($(this).attr("id"));
+    const clicked = $(this).attr("id");
+    myAxios
+      .delete(`http://localhost:3000/api/removeimage/feature/${clicked}`)
+      .then(resp => {
+        console.log(resp);
+        $("#put").val("");
+        $(featurePut).prop("disabled", false);
+        sessionStorage.setItem(
+          "imageUp",
+          Number(sessionStorage.getItem("imageUp")) - 1
+        );
+        $("#feature-image-display").fadeOut();
+        $("#feature-image-display").html("");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+  $(document).on("click", "button.other-remove", function(e) {
+    e.preventDefault();
+    console.log($(this).attr("id"));
+    const clicked = $(this).attr("id");
+    myAxios
+      .delete(`http://localhost:3000/api/removeimage/${clicked}`)
+      .then(resp => {
+        console.log(resp);
+        $("#otherimages").val("");
+        $("#otherimages").prop("disabled", false);
+        sessionStorage.setItem(
+          "imageUp",
+          Number(sessionStorage.getItem("imageUp")) - 1
+        );
+        $(this)
+          .parent()
+          .parent()
+          .fadeOut(500);
+        $(this)
+          .parent()
+          .parent()
+          .html("");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
   if (currentListing) {
     // hit the api for the listing data by the id
     myAxios
       .get(ADMIN_URL + "listing/" + currentListing)
       .then(async response => {
-          console.log(response)
-          const listing = response.data.listing; 
-          const user = response.data.user; 
-          const subscription = response.data.subscription
-          console.log(listing, user, subscription)
+        console.log(response);
+        const listing = response.data.listing;
+        const user = response.data.user;
+        const subscription = response.data.subscription;
+        const subscription__client = _.pick(
+          subscription,
+          "subscription_id",
+          "status",
+          "plan_code",
+          "customer_id"
+        );
+        console.log(listing, user, subscription);
 
-          const title = document.querySelector("input#business_title");
-          const description = document.querySelector("textarea#business_description");
-          const address = document.querySelector("input#street_address");
-          const city = document.querySelector("input#city");
-          const state = document.querySelector("input#state");
-          const zip = document.querySelector("input#zip");
-          const category = document.querySelector('input#category')
-          const categoryDefault =document.querySelector('#category')
-          const missionStatement = document.querySelector(
-            "textarea#mission_statement"
-          );
-          const about = document.querySelector("textarea#about");
-          const form = document.querySelector('form#admin-form'); 
-    
-          $(form).prepend(`<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`)
-          $(title).attr("value", listing.business_title);
-          $(description).attr("value", listing.business_description);
-          $(address).attr("value", listing.street_address);
-          $(city).attr("value", listing.city);
-          $(state).attr("value", listing.state);
-          $(zip).attr("value", listing.zip);
-          $(missionStatement).attr("value", listing.mission_statement);
-          $(about).attr("value", listing.about);
-          categoryDefault.textContent = listing.category
-        
-          const userValues = Object.values(user)
+        const title = document.querySelector("input#business_title");
+        const description = document.querySelector(
+          "textarea#business_description"
+        );
+        const address = document.querySelector("input#street_address");
+        const city = document.querySelector("input#city");
+        const state = document.querySelector("input#state");
+        const zip = document.querySelector("input#zip");
+        const category = document.querySelector("input#category");
+        const categoryAppend = document.querySelector("label.categoryAppend");
+        const categoryDefault = document.querySelector("#category");
+        const missionStatement = document.querySelector(
+          "textarea#mission_statement"
+        );
+        const about = document.querySelector("textarea#about");
+        const form = document.querySelector("form#admin-form");
+
+        $(form).prepend(
+          `<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`
+        );
+        $(title).attr("value", listing.business_title);
+        $(description).attr("placeholder", listing.business_description);
+        $(address).attr("value", listing.street_address);
+        $(city).attr("value", listing.city);
+        $(state).attr("value", listing.state);
+        $(zip).attr("value", listing.zip);
+        $(missionStatement).attr("placeholder", listing.mission_statement);
+        $(about).attr("value", listing.about);
+        $(categoryAppend).append(
+          `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >${listing.category}</p>`
+        );
+        categoryDefault.textContent = listing.category;
+
+        if (user) {
+          const userValues = Object.values(user);
           Object.keys(user).forEach((attr, index) => {
-              $('#user-segment').append(`<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]} <a id="edit-${attr}" >Edit</a></p> `)
-          })
-
-          const subValues = Object.values(subscription)
-          Object.keys(subscription).forEach((item, index) => {
-              $('#subscription-segment').append(`<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} <a id="edit-${item}" >Edit</a></p> `)
-          })
-
-          if (listing.tagline) {
-            const website = document.querySelector("input#tagline");
-            $(website).attr("value", listing.tagline);
-          }
-    
-          if (listing.website) {
-            const website = document.querySelector("input#website");
-            $(website).attr("value", listing.website);
-          }
-          if (listing.instagram) {
-            const instagram = document.querySelector("input#instagram");
-            $(instagram).attr("value", listing.instagram);
-          }
-          if (listing.facebook) {
-            const facebook = document.querySelector("input#facebook");
-            $(facebook).attr("value", listing.facebook);
-          }
-          if (listing.twitter) {
-            const twitter = document.querySelector("input#twitter");
-            $(twitter).attr("value", listing.twitter);
-          }
-          if (listing.linkedin) {
-            const linkedin = document.querySelector("input#linkedin");
-            $(linkedin).attr("value", listing.linkedin);
-          }
-          if (listing.youtube) {
-            const youtube = document.querySelector("input#youtube");
-            $(youtube).attr("value", listing.youtube);
-          }
-          if (listing.phone) {
-            const phone = document.querySelector("input#phone");
-            $(phone).attr("value", listing.phone);
-          }
-          if (listing.email) {
-            const email = document.querySelector("input#email");
-            $(email).attr("value", listing.email);
-          }
-          if (listing.faq0 && listing.answer0) {
-            const faq0 = document.querySelector("input#faq0");
-            const answer = document.querySelector("textarea#answer0");
-    
-            $(faq0).attr("value", listing.faq0);
-            $(answer).attr("value", listing.answer0);
-          }
-          if (listing.faq1 && listing.answer1) {
-            const faq1 = document.querySelector("input#faq1");
-            const answer = document.querySelector("textarea#answer1");
-    
-            $(faq1).attr("value", listing.faq1);
-            $(answer).attr("value", listing.answer1);
-          }
-          if (listing.faq2 && listing.answer2) {
-            const faq2 = document.querySelector("input#faq2");
-            const answer = document.querySelector("textarea#answer2");
-    
-            $(faq2).attr("value", listing.faq2);
-            $(answer).attr("value", listing.answer2);
-          }
-
-          if (listing.feature_image) {
-            const featureImageSegment = document.querySelector('div#feature_image'); 
-            const featureImage = document.createElement('img')
-            featureImage.src = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`
-            featureImage.className = 'ui large image'
-
-            featureImageSegment.appendChild(featureImage)
-          }
-
-          // filter images for null values
-        let filteredImg = listing.images.filter(
-            x => x.image_path !== "true" && x.image_path !== ""
-          );
-  
-          // map images into an arr of dom elements
-          const images = await filteredImg.map(image => {
-            if (image.image_path !== "false") {
-              // p tag
-              let thisImage = document.createElement("img");
-              // src
-              thisImage.src = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
-              // margin and padding
-              thisImage.style.padding = "1rem 0 0 1rem";
-              thisImage.style.margin = "auto 0 0 0";
-              // class name
-              thisImage.className = "ui large fluid image";
-  
-              return thisImage;
+            if (attr !== "id") {
+              $("#user-segment").append(
+                `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]} <a id="edit-${attr}" >Edit</a></p> `
+              );
+            } else {
+              $("#user-segment").append(
+                `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]}`
+              );
             }
           });
-  
-          // then filter those images for undefined
-          let filteredImgs = images.filter(x => x !== undefined);
-          
+        } else {
+          $("#user-segment").append(
+            `<p class="userInfo" style="text-align: center; font-size: 20px;" >Listing has not been claimed`
+          );
+        }
 
+        const subValues = Object.values(subscription__client);
+        Object.keys(subscription__client).forEach((item, index) => {
+          $("#subscription-segment").append(
+            `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+          );
+        });
+
+        if (listing.tagline) {
+          const website = document.querySelector("input#tagline");
+          $(website).attr("value", listing.tagline);
+        }
+
+        if (listing.website) {
+          const website = document.querySelector("input#website");
+          $(website).attr("value", listing.website);
+        }
+        if (listing.instagram) {
+          const instagram = document.querySelector("input#instagram");
+          $(instagram).attr("value", listing.instagram);
+        }
+        if (listing.facebook) {
+          const facebook = document.querySelector("input#facebook");
+          $(facebook).attr("value", listing.facebook);
+        }
+        if (listing.twitter) {
+          const twitter = document.querySelector("input#twitter");
+          $(twitter).attr("value", listing.twitter);
+        }
+        if (listing.linkedin) {
+          const linkedin = document.querySelector("input#linkedin");
+          $(linkedin).attr("value", listing.linkedin);
+        }
+        if (listing.youtube) {
+          const youtube = document.querySelector("input#youtube");
+          $(youtube).attr("value", listing.youtube);
+        }
+        if (listing.phone) {
+          const phone = document.querySelector("input#phone");
+          $(phone).attr("value", listing.phone);
+        }
+        if (listing.email) {
+          const email = document.querySelector("input#email");
+          $(email).attr("value", listing.email);
+        }
+        if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
+         ) {
+          const faq0 = document.querySelector("input#faq0");
+          const answer = document.querySelector("textarea#answer0");
+
+          console.log(listing.faqs[0].faq_answer)
+          $(faq0).val(listing.faqs[0].faq);
+          $(answer).val(listing.faqs[0].faq_answer);
+        }
+        if (listing.faqs[1] && listing.faqs[1].faq !== '') {
+          const faq1 = document.querySelector("input#faq1");
+          const answer = document.querySelector("textarea#answer1");
+
+          $('#1faq').show()
+          $(faq1).attr("value", listing.faqs[1].faq);
+          $(answer).attr("value", listing.faqs[1].faq_answer);
+        }
+        if (listing.faqs[2] && listing.faqs[2].faq !== '') {
+          const faq2 = document.querySelector("input#faq2");
+          const answer = document.querySelector("textarea#answer2");
+
+          $('#2faq').show()
+          $(faq2).attr("value", listing.faqs[2].faq);
+          $(answer).attr("value", listing.faqs[2].faq_answer);
+        }
+
+        if (listing.feature_image && listing.feature_image !== null) {
+          const featureImageSegment = document.querySelector(
+            "div#feature_image"
+          );
+          const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
+          const featureId = listing.images.filter(x => !x.feature_image);
+          console.log(featureId);
+          displayPhoto(featureImage, featureId[0].image_id);
+        }
+
+        // filter images for null values
+        let filteredImg = listing.images.filter(
+          x => x.image_path !== "true" && x.image_path !== ""
+        );
+
+        console.log(filteredImg);
+
+        // map images into an arr of dom elements
+        const images = await filteredImg.map(image => {
+          if (image.image_path !== "false") {
+            let image_id = image.image_id;
+            let feature_image = image.featured_image;
+
+            let thisImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
+
+            return { image_id, thisImage, feature_image };
+          }
+        });
+        // then filter those images for undefined
+        let filteredImgs = images.filter(
+          x => x.thisImage !== undefined && !x.feature_image
+        );
+
+        console.log(filteredImgs);
+
+        filteredImgs.forEach(image => {
+          displayOtherPhoto(image.thisImage, image.image_id);
+        });
       })
       .catch(err => {
-          console.log(err)
-      })
+        console.log(err);
+      });
   }
+
+  const updates = { social_media: [], listing: {}, hours: [], faq: [] };
+
+  $("input.social_media").on("input", function(e) {
+    const id = $(e.target).attr("id");
+    console.log(id);
+    if (id !== undefined) {
+        const findPlatform = updates.social_media.filter(x => x.platform === id ); 
+        console.log(findPlatform)
+      if (findPlatform.length) {
+          console.log(findPlatform)
+        let cut = updates.social_media.splice(updates.social_media.indexOf(findPlatform), 1); 
+        console.log(cut)
+        console.log(updates.social_media)
+        updates.social_media.push({ platform: id, url: $(e.target).val().trim(), listing_id: sessionStorage.getItem('currentListing') })
+      } else {
+        updates.social_media.push({ platform: id, url: $(e.target).val().trim(), listing_id: sessionStorage.getItem('currentListing') })
+      }
+      console.log(updates);
+    }
+
+    $("#submit-button").show();
+  });
+
+  $("input.main").on("input", function(e) {
+    const id = $(e.target).attr("id");
+    if (id !== undefined) {
+      updates.listing[id] = $(e.target)
+        .val()
+        .trim();
+      console.log(updates);
+    }
+
+    $("#submit-button").show();
+  });
+
+  $("textarea.main").on("input", function(e) {
+    const id = $(e.target).attr("id");
+    if (id !== undefined) {
+      updates.listing[id] = $(e.target)
+        .val()
+        .trim();
+      console.log(updates);
+    }
+
+    $("#submit-button").show();
+  });
+
+  $("select.main").on("change", function(e) {
+    const id = $(e.target).attr("id");
+    if (id !== undefined) {
+      updates.listing[id] = $(e.target)
+        .val()
+        .trim();
+      console.log(updates);
+    }
+
+    $("#submit-button").show();
+  });
+
+  $("input#category").on("change", function(e) {
+    const id = $(e.target).attr("id");
+    if (id !== undefined) {
+      updates.listing[id] = $(e.target)
+        .val()
+        .trim();
+      console.log(updates);
+    }
+
+    $("#submit-button").show();
+  });
+
+
+  $("input.faq").on("input", function(e) {
+    const id = $(e.target).attr("id");
+    const answer = `faq_answer${id.split('')[3]}`; 
+    const number = id.split('')[3]; 
+    console.log(id);
+
+    $(`#faq${number}-button`).show();
+  });
+
+  $("textarea.answer").on("input", function(e) {
+    const id = $(e.target).attr("id");
+    const answer = `faq_answer${id.split('')[6]}`; 
+    const number = id.split('')[6]; 
+    console.log(id);
+
+
+    $(`#faq${number}-button`).show();
+  });
+
+  $('body').on('click', 'button.faqSubmit', function (e) {
+      const id = $(e.target).attr('id')
+      const number = id.split('')[3]; 
+
+      
+  })
+
+  $("body").on("click", "#submit-button", function() {
+    console.log(updates);
+    if (Object.values(updates.listing).length) {
+    updates.listing.id = sessionStorage.getItem('currentListing')
+      myAxios
+        .put("http://localhost:3000/api/stagelisting", updates.listing)
+        .then(resp => {
+            console.log(resp);
+            // window.location.reload(); 
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    
+    if (updates.social_media.length) {
+    updates.social_media.listing_id = sessionStorage.getItem('currentListing')
+      myAxios
+        .put("http://localhost:3000/api/stagelisting/social_media", updates.social_media)
+        .then(resp => {
+          console.log(resp);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }   
+
+
+  });
 
   $(".ui.dropdown").dropdown({
     allowAdditions: true
   });
-  });
-  
+});
