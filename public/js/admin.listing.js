@@ -233,6 +233,7 @@ $(document).ready(function() {
 
   // getting the current listing id from session storage
   const currentListing = sessionStorage.getItem("currentListing");
+  const pendingListing = sessionStorage.getItem("pendingListing");
 
   let images = [];
   let featurePut = document.getElementById("put");
@@ -470,10 +471,11 @@ $(document).ready(function() {
       });
   });
 
-  if (currentListing) {
+  if (pendingListing) {
+    console.log('pending')
     // hit the api for the listing data by the id
     myAxios
-      .get(ADMIN_URL + "listing/" + currentListing)
+      .get(ADMIN_URL + "listing/pending/" + pendingListing)
       .then(async response => {
         console.log(response);
         const listing = response.data.listing;
@@ -584,30 +586,32 @@ $(document).ready(function() {
           const email = document.querySelector("input#email");
           $(email).attr("value", listing.email);
         }
-        if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
-         ) {
-          const faq0 = document.querySelector("input#faq0");
-          const answer = document.querySelector("textarea#answer0");
-
-          console.log(listing.faqs[0].faq_answer)
-          $(faq0).val(listing.faqs[0].faq);
-          $(answer).val(listing.faqs[0].faq_answer);
-        }
-        if (listing.faqs[1] && listing.faqs[1].faq !== '') {
-          const faq1 = document.querySelector("input#faq1");
-          const answer = document.querySelector("textarea#answer1");
-
-          $('#1faq').show()
-          $(faq1).attr("value", listing.faqs[1].faq);
-          $(answer).attr("value", listing.faqs[1].faq_answer);
-        }
-        if (listing.faqs[2] && listing.faqs[2].faq !== '') {
-          const faq2 = document.querySelector("input#faq2");
-          const answer = document.querySelector("textarea#answer2");
-
-          $('#2faq').show()
-          $(faq2).attr("value", listing.faqs[2].faq);
-          $(answer).attr("value", listing.faqs[2].faq_answer);
+        if (listing.faqs) {
+          if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
+          ) {
+           const faq0 = document.querySelector("input#faq0");
+           const answer = document.querySelector("textarea#answer0");
+ 
+           console.log(listing.faqs[0].faq_answer)
+           $(faq0).val(listing.faqs[0].faq);
+           $(answer).val(listing.faqs[0].faq_answer);
+         }
+         if (listing.faqs[1] && listing.faqs[1].faq !== '') {
+           const faq1 = document.querySelector("input#faq1");
+           const answer = document.querySelector("textarea#answer1");
+ 
+           $('#1faq').show()
+           $(faq1).attr("value", listing.faqs[1].faq);
+           $(answer).attr("value", listing.faqs[1].faq_answer);
+         }
+         if (listing.faqs[2] && listing.faqs[2].faq !== '') {
+           const faq2 = document.querySelector("input#faq2");
+           const answer = document.querySelector("textarea#answer2");
+ 
+           $('#2faq').show()
+           $(faq2).attr("value", listing.faqs[2].faq);
+           $(answer).attr("value", listing.faqs[2].faq_answer);
+         }
         }
 
         if (listing.feature_image && listing.feature_image !== null) {
@@ -652,6 +656,192 @@ $(document).ready(function() {
       .catch(err => {
         console.log(err);
       });
+  } else if (currentListing) {
+    console.log('current')
+    console.log(currentListing)
+        // hit the api for the listing data by the id
+        myAxios
+        .get(ADMIN_URL + "listing/" + currentListing)
+        .then(async response => {
+          console.log(response);
+          const listing = response.data.listing;
+          const user = response.data.user;
+          const subscription = response.data.subscription;
+          const subscription__client = _.pick(
+            subscription,
+            "subscription_id",
+            "status",
+            "plan_code",
+            "customer_id"
+          );
+          console.log(listing, user, subscription);
+  
+          const title = document.querySelector("input#business_title");
+          const description = document.querySelector(
+            "textarea#business_description"
+          );
+          const address = document.querySelector("input#street_address");
+          const city = document.querySelector("input#city");
+          const state = document.querySelector("input#state");
+          const zip = document.querySelector("input#zip");
+          const category = document.querySelector("input#category");
+          const categoryAppend = document.querySelector("label.categoryAppend");
+          const categoryDefault = document.querySelector("#category");
+          const missionStatement = document.querySelector(
+            "textarea#mission_statement"
+          );
+          const about = document.querySelector("textarea#about");
+          const form = document.querySelector("form#admin-form");
+  
+          $(form).prepend(
+            `<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`
+          );
+          $(title).attr("value", listing.business_title);
+          $(description).attr("placeholder", listing.business_description);
+          $(address).attr("value", listing.street_address);
+          $(city).attr("value", listing.city);
+          $(state).attr("value", listing.state);
+          $(zip).attr("value", listing.zip);
+          $(missionStatement).attr("placeholder", listing.mission_statement);
+          $(about).attr("value", listing.about);
+          $(categoryAppend).append(
+            `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >${listing.category}</p>`
+          );
+          categoryDefault.textContent = listing.category;
+  
+          if (user) {
+            const userValues = Object.values(user);
+            Object.keys(user).forEach((attr, index) => {
+              if (attr !== "id") {
+                $("#user-segment").append(
+                  `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]} <a id="edit-${attr}" >Edit</a></p> `
+                );
+              } else {
+                $("#user-segment").append(
+                  `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]}`
+                );
+              }
+            });
+          } else {
+            $("#user-segment").append(
+              `<p class="userInfo" style="text-align: center; font-size: 20px;" >Listing has not been claimed`
+            );
+          }
+  
+          const subValues = Object.values(subscription__client);
+          Object.keys(subscription__client).forEach((item, index) => {
+            $("#subscription-segment").append(
+              `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+            );
+          });
+  
+          if (listing.tagline) {
+            const website = document.querySelector("input#tagline");
+            $(website).attr("value", listing.tagline);
+          }
+  
+          if (listing.website) {
+            const website = document.querySelector("input#website");
+            $(website).attr("value", listing.website);
+          }
+          if (listing.instagram) {
+            const instagram = document.querySelector("input#instagram");
+            $(instagram).attr("value", listing.instagram);
+          }
+          if (listing.facebook) {
+            const facebook = document.querySelector("input#facebook");
+            $(facebook).attr("value", listing.facebook);
+          }
+          if (listing.twitter) {
+            const twitter = document.querySelector("input#twitter");
+            $(twitter).attr("value", listing.twitter);
+          }
+          if (listing.linkedin) {
+            const linkedin = document.querySelector("input#linkedin");
+            $(linkedin).attr("value", listing.linkedin);
+          }
+          if (listing.youtube) {
+            const youtube = document.querySelector("input#youtube");
+            $(youtube).attr("value", listing.youtube);
+          }
+          if (listing.phone) {
+            const phone = document.querySelector("input#phone");
+            $(phone).attr("value", listing.phone);
+          }
+          if (listing.email) {
+            const email = document.querySelector("input#email");
+            $(email).attr("value", listing.email);
+          }
+          if (listing.faqs) {
+            if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
+            ) {
+             const faq0 = document.querySelector("input#faq0");
+             const answer = document.querySelector("textarea#answer0");
+   
+             console.log(listing.faqs[0].faq_answer)
+             $(faq0).val(listing.faqs[0].faq);
+             $(answer).val(listing.faqs[0].faq_answer);
+           }
+           if (listing.faqs[1] && listing.faqs[1].faq !== '') {
+             const faq1 = document.querySelector("input#faq1");
+             const answer = document.querySelector("textarea#answer1");
+   
+             $('#1faq').show()
+             $(faq1).attr("value", listing.faqs[1].faq);
+             $(answer).attr("value", listing.faqs[1].faq_answer);
+           }
+           if (listing.faqs[2] && listing.faqs[2].faq !== '') {
+             const faq2 = document.querySelector("input#faq2");
+             const answer = document.querySelector("textarea#answer2");
+   
+             $('#2faq').show()
+             $(faq2).attr("value", listing.faqs[2].faq);
+             $(answer).attr("value", listing.faqs[2].faq_answer);
+           }
+          }
+  
+          if (listing.feature_image && listing.feature_image !== null) {
+            const featureImageSegment = document.querySelector(
+              "div#feature_image"
+            );
+            const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
+            const featureId = listing.images.filter(x => !x.feature_image);
+            console.log(featureId);
+            displayPhoto(featureImage, featureId[0].image_id);
+          }
+  
+          // filter images for null values
+          let filteredImg = listing.images.filter(
+            x => x.image_path !== "true" && x.image_path !== ""
+          );
+  
+          console.log(filteredImg);
+  
+          // map images into an arr of dom elements
+          const images = await filteredImg.map(image => {
+            if (image.image_path !== "false") {
+              let image_id = image.image_id;
+              let feature_image = image.featured_image;
+  
+              let thisImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
+  
+              return { image_id, thisImage, feature_image };
+            }
+          });
+          // then filter those images for undefined
+          let filteredImgs = images.filter(
+            x => x.thisImage !== undefined && !x.feature_image
+          );
+  
+          console.log(filteredImgs);
+  
+          filteredImgs.forEach(image => {
+            displayOtherPhoto(image.thisImage, image.image_id);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
   }
 
   const updates = { social_media: [], listing: {}, hours: [], faq: [] };
@@ -785,4 +975,8 @@ $(document).ready(function() {
   $(".ui.dropdown").dropdown({
     allowAdditions: true
   });
+
+  $('body').on('click', '#back-button', function () {
+    window.history.back()
+  })
 });

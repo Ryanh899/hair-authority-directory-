@@ -28,7 +28,7 @@ router.get('/allListings', (req, res) => {
     Listings.getAllListings__admin(res)
 })
 
-router.get("/listing/:id", async (req, res) => {
+router.get("/listing/pending/:id", async (req, res) => {
     const listingId = req.params.id;
     console.log(listingId);
 
@@ -46,7 +46,30 @@ router.get("/listing/:id", async (req, res) => {
             res.json({ listing })
         }
     } else {
-        res.status(401).json({ message: 'User does not have subscription' })
+        res.status(200).json({ listing: listing })
+    }
+    
+  });
+
+  router.get("/listing/:id", async (req, res) => {
+    const listingId = req.params.id;
+    console.log(listingId);
+
+    const subscription = await Zoho.subscriptionCheck__listingId(listingId); 
+    const listing = await Listings.getById__admin(listingId);
+
+    console.log(listing)
+    console.log(subscription)
+    if (subscription && subscription.length) {
+        if (listing.professional_id !== null && listing.professional_id) {
+            const user = await User.getUserInfo__client(subscription[0].user_id); 
+            console.log(user)
+            res.json({ listing, user, subscription: subscription[0] })
+        } else {
+            res.json({ listing })
+        }
+    } else {
+        res.status(200).json({ listing: listing })
     }
     
   });

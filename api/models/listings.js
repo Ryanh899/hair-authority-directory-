@@ -432,7 +432,73 @@ const Listings = {
           .catch(err => {
             console.log(err);
           });
-          console.log(thisListing)
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  },
+  getById__admin(id, cb) {
+    return new Promise((resolve, reject) => {
+      knex("listings")
+        .select()
+        .where("id", id)
+        .then(resp => {
+          console.log('first promise')
+          console.log(resp)
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log(err);
+          cb.status(400).json({ message: "listing does not exist" });
+        });
+    })
+    .then(async listing => {
+        listing = listing[0]
+        const thisListing = listing; 
+        console.log(thisListing); 
+        console.log('response from promise')
+        return knex("images")
+          .select()
+          .where("listing_id", listing.id)
+          .then(response => {
+            thisListing.images = response;
+            return knex("social_media")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(social => {
+            // console.log(social);
+            let sm = social;
+            sm.forEach(platform => {
+              thisListing[platform.platform] = platform.url;
+            });
+            return knex("hours")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(hours => {
+            // console.log(hours);
+            hours.forEach(day => {
+              thisListing[day.day] = {
+                opening_hours: day.opening_hours,
+                closing_hours: day.closing_hours
+              };
+            });
+            return knex("faq")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(faqs => {
+            // console.log(faqs);
+            if (faqs.length > 0) {
+              thisListing.faqs = faqs;
+            }
+            console.log(thisListing)
+            return thisListing
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
       .catch(err => {
         console.error(err);
@@ -762,27 +828,35 @@ const Listings = {
   //     });
   // },
   async getAllListings__admin(res) {
-    return camelizeKeys(
-      await knex
-        .select(
-          "u.id",
-          "u.first_name",
-          "u.last_name",
-          "u.username",
-          "u.image_url",
-          "u.is_admin",
-          "u.phone",
-          "u.info",
-          "la.email",
-          "cu.customer_id",
-          "cu.department_id"
-        )
-        .from("user AS u")
-        .leftJoin("local_auth AS la", "la.user_id", "u.id")
-        .leftJoin("customer_user AS cu", "cu.user_id", "u.id")
-        .where("u.id", "=", id)
-        .first()
-    );
+    let listings = []; 
+    return knex('listings')
+      .select()
+      .limit('100')
+      .then(response => {
+        const ids = response.map(listing => listing.id ); 
+        response.forEach(listing => {
+          listings.push(listing)
+        })
+        console.log(ids)
+        return knex('subscriptions').select().where('listing_id', ids)
+      }).then(async response => {
+        console.log(response)
+          const subs = response.map(x => x.listing_id)
+          const newListings = await listings.map(listing => {
+              if (subs.includes(listing.id)) {
+                const subsIndex = subs.indexOf(listing.id); 
+                const listingIndex = listings.map(n => n.id).indexOf(listing.id)
+                listings[listingIndex].subscription = response[subsIndex]
+              } else {
+                return listing
+              }
+          });
+        res.json(newListings) 
+      })
+      .catch(err => {
+        res.json(err)
+        console.log(err)
+      })
   },
   storeImage(imageInfo) {
     return knex("images").returning(['image_id', 'image_path', 'listing_id']).insert(imageInfo);
