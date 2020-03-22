@@ -278,6 +278,19 @@ const Listings = {
       });
     });
   },
+  async getBySearch__admin(title) {
+    return knex("listings")
+      .select()
+      .whereRaw(`LOWER(business_title) LIKE ?;`, [
+        `%${title.toLowerCase()}%`
+      ])
+      .then(async response => {
+        return response; 
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
   async getByLogo(tagline, currentLocation) {
     const listings = await knex("listings")
       .select()
@@ -769,17 +782,40 @@ const Listings = {
         console.log(err);
       });
   },
-  getPendingListings__recent(cb) {
-    const lastMonth = moment().subtract(7, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+  getPendingListings__recent(res) {
+    const lastMonth = moment().subtract(14, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth)
+    let listings = []; 
     return knex("pending_listings")
       .select("*")
       .where('date_published', '>', lastMonth)
       .limit(100)
       .then(response => {
-        cb.status(200).json(response);
+        const ids = response.map(listing => listing.id ); 
+        response.forEach(listing => {
+          listings.push(listing)
+        })
+        console.log(ids)
+        return knex('subscriptions').select().where('listing_id', ids)
+      }).then(async response => {
+        console.log(response)
+          const subs = response.map(x => x.listing_id)
+          console.log(subs)
+          const newListings = await listings.map(listing => {
+              if (subs.includes(listing.id)) {
+                const subsIndex = subs.indexOf(listing.id); 
+                const listingIndex = listings.map(n => n.id).indexOf(listing.id)
+                listings[listingIndex].subscription = response[subsIndex]
+              } else {
+                return listing
+              }
+          });
+        res.json(newListings) 
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        res.json(err)
+        console.log(err)
+      })
   },
   getPendingListings(cb) {
     return knex("pending_listings")

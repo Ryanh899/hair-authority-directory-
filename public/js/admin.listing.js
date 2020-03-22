@@ -826,8 +826,11 @@ $(document).ready(function() {
               let thisImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
   
               return { image_id, thisImage, feature_image };
+            } else {
+              return { thisImage: undefined }
             }
           });
+          console.log(images)
           // then filter those images for undefined
           let filteredImgs = images.filter(
             x => x.thisImage !== undefined && !x.feature_image

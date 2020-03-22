@@ -40,6 +40,25 @@ const PROD_API_URL = 'ec2-54-90-69-186.compute-1.amazonaws.com/api/'
 const API_URL = "http://localhost:3000/api/";
 const ADMIN_URL = "http://localhost:3000/admin/";
 
+const categories = [
+  { title: "Dermatologist" },
+  { title: "Hair Care Salons" },
+  { title: "Hair Loss / Hair Care Products & Treatments" },
+  { title: "Hair Replacement & Hair Systems" },
+  { title: "Laser Therapy" },
+  { title: "Medical / Hair Transplants" },
+  { title: "Trichologist" },
+  { title: "Medical Hair Restoration" },
+  { title: "Wigs / Extensions & Hair Additions" },
+  { title: "The Hair Club", abbreviation: "" },
+  { title: "ARTAS Robotic Hair Restoration System" },
+  { title: "World Trichology Society", abbreviation: "Trichologist" },
+  {
+    title: "The International Society of Hair Restoration Surgery (ISHRS)",
+    abbreviation: "ISHRS"
+  }
+];
+
 function appendPendingListings (listings, loader, page) {
   if (listings.length !== 0) {
     listings.forEach(listing => {
@@ -48,7 +67,7 @@ function appendPendingListings (listings, loader, page) {
         <td style="width: 20%"><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
         <td style="width: 20%" class="table-category">${listing.category}</td>
         <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-        <td style="width: 20%">${listing.business_title}</td>
+        <td style="width: 20%">${listing.subscription || 'N/A'}</td>
         <td style="width: 20%">${listing.date_published}</td>
       </tr>`);
     });
@@ -59,17 +78,18 @@ function appendPendingListings (listings, loader, page) {
   }
 }
 
-function appendListings (listings, loader, page) {
+function appendListings (listings, loader, page, allListings) {
   if (listings.length !== 0) {
     listings.forEach(listing => {
-      $(page)
+      $('tbody#all-table')
         .append(`<tr>
-        <td style="width: 20%"><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
+        <td style="width: 20%"><a id="${listing.id}"  class="listingTitle" >${listing.business_title}</a></td>
         <td style="width: 20%" class="table-category">${listing.category}</td>
         <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-        <td style="width: 20%">${listing.business_title}</td>
+        <td style="width: 20%">${listing.subscription || 'N/A'}</td>
         <td style="width: 20%">${listing.date_published}</td>
       </tr>`);
+      allListings.push(listing)
     });
     $(loader).css('display', 'none')
   } else {
@@ -94,7 +114,7 @@ function getPendingListings(loader, page, text, pendingArr) {
             <td style="width: 20%" ><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
             <td style="width: 20%" class="table-category">${listing.category}</td>
             <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-            <td style="width: 20%">${listing.business_title}</td>
+            <td style="width: 20%">${listing.subscription || 'N/A'}</td>
             <td style="width: 20%">${listing.date_published}</td>
           </tr>`);
           pendingArr.push(listing)
@@ -145,6 +165,108 @@ function getAllListings(loader, page, listingsArr) {
     });
 }
 
+function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
+  $("#all-table tr").remove();
+
+  let category = ""; 
+  categories.forEach(item => {
+    if (search && item.title.toLowerCase() === search.toLowerCase()) {
+      category = search;
+    }
+  });
+ 
+  if (category === "" && !logoSearch) {
+    myAxios
+      .get(
+        ADMIN_URL + "search/" + search 
+      )
+      .then(response => {
+        allListings = response.data
+        console.log(response);
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(loader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location);
+        } else {
+          appendListings(allListings, allLoader, allDiv, listings)
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else if ( logoSearch ) {
+
+    console.log(logoSearch)
+    myAxios
+      .get(
+        ADMIN_URL +
+          "search/logo/" +
+          logoSearch 
+          
+      )
+      .then(response => {
+        allListings = response.data
+        console.log(response)
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(loader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location)
+        } else {
+            appendListings(response.data, allLoader, allDiv, listings)
+  
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    let newSearch = category.replace(/\//g, '+');
+    console.log(newSearch)
+    myAxios
+      .get(
+        ADMIN_URL +
+          "search/category/" +
+          newSearch 
+      )
+      .then(response => {
+        allListings = response.data
+        console.log(response)
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(loader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location)
+        } else {
+          appendListings(response.data, allLoader, allDiv, listings)
+       
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+}
+
 $(document).ready(function() {
   const loader = document.querySelector("div#loader-div");
   const page = document.querySelector("div#dashboard-container");
@@ -152,6 +274,8 @@ $(document).ready(function() {
   const pendingLoader = document.querySelector("div#pending-loader");
   const pendingDiv = document.querySelector("tbody#pending-table");
   const pendingText = document.querySelector('div#no-pending')
+  const logoSearch = sessionStorage.getItem('logoSearch'); 
+
 
   const allLoader = document.querySelector('div#all-loader')
   const allDiv = document.querySelector('tbody#all-table'); 
@@ -166,6 +290,11 @@ $(document).ready(function() {
   $(".vertical.menu .item").tab();
 
   getAllListings(allLoader, allDiv, listings)
+
+  if (sessionStorage.getItem('searchQuery')) {
+    const search = sessionStorage.getItem('searchQuery')
+    listingSearch(search, logoSearch, allLoader, allDiv, listings)
+}
 
   // $(page).css("display", "none");
   // getPendingListings(loader, page);
@@ -249,8 +378,11 @@ $(document).ready(function() {
   $("body").on("click", "a.listingTitle", function(e) {
     const id = $(this).attr("id");
     console.log(id)
+    console.log(listings)
+
     // filter arr of all listings on page to find clicked on listing and get the id
     let getCoords = listings.filter(x => x.id === id); 
+    console.log(getCoords)
     // set the last window location to search 
     sessionStorage.setItem('lastLocation', 'search')
     // set the current listing lat and lng in SS
@@ -258,6 +390,7 @@ $(document).ready(function() {
     sessionStorage.setItem('listing-lng', getCoords[0].lng)
     // set full address for if no coords 
     sessionStorage.setItem('listing-address', getCoords[0].full_address)
+    sessionStorage.removeItem('pendingListing')
     sessionStorage.setItem("currentListing", id);
     window.location.assign("admin.listing.html");
   })
@@ -278,5 +411,18 @@ $(document).ready(function() {
       sessionStorage.setItem("pendingListing", id);
       window.location.assign("admin.listing.html");
     });
+
+    $("body").on("click", "#search-listings-button", function(e) {
+      e.preventDefault()
+      const search = $('#search-listings').val().trim();
+      console.log(search);
+  
+      sessionStorage.setItem("searchQuery", search);
+      listingSearch(search)
+
+      // window.location.assign("search.listings.html");
+    });
+
+    
 
 });

@@ -74,5 +74,34 @@ router.get("/listing/pending/:id", async (req, res) => {
     
   });
 
+  router.get("/search/:title", async (req, res) => {
+    const title = req.params.title;
+    console.log(title);
+
+    // const subscription = await Zoho.subscriptionCheck__listingId(listingId); 
+    try {
+        const listing = await Listings.getBySearch__admin(title);
+        res.json(listing);
+    } catch (error) {
+        console.error(error)
+        res.status(500).json(error);
+    };
+
+    
+    // console.log(subscription)
+    // if (subscription && subscription.length) {
+    //     if (listing.professional_id !== null && listing.professional_id) {
+    //         const user = await User.getUserInfo__client(subscription[0].user_id); 
+    //         console.log(user)
+    //         res.json({ listing, user, subscription: subscription[0] })
+    //     } else {
+    //         res.json({ listing })
+    //     }
+    // } else {
+    //     res.status(200).json({ listing: listing })
+    // }
+    
+  });
+
 
 module.exports = router; 

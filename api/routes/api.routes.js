@@ -229,6 +229,7 @@ router.get("/search/logo/:query/:location", async (req, res) => {
     });
 });
 
+
 router.post("/saveListing/:id", async (req, res) => {
   console.log(req.body);
   const listingId = req.params.id;
@@ -463,7 +464,7 @@ router.put('/stagelisting', (req, res) => {
   console.log(data)
   Listings.updateStagedListing(data)
     .then(resp => {
-      res.json(resp)
+      res.json(resp) 
     })
     .catch(err => {
       console.log(err)
