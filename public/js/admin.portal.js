@@ -62,12 +62,14 @@ const categories = [
 function appendPendingListings (listings, loader, page) {
   if (listings.length !== 0) {
     listings.forEach(listing => {
+      let plan; 
+          listing.subscription ? plan = listing.subscription.plan_code : undefined
       $(page)
         .append(`<tr>
         <td style="width: 20%"><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
         <td style="width: 20%" class="table-category">${listing.category}</td>
         <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-        <td style="width: 20%">${listing.subscription || 'N/A'}</td>
+        <td style="width: 20%">${plan || 'N/A'}</td>
         <td style="width: 20%">${listing.date_published}</td>
       </tr>`);
     });
@@ -81,12 +83,14 @@ function appendPendingListings (listings, loader, page) {
 function appendListings (listings, loader, page, allListings) {
   if (listings.length !== 0) {
     listings.forEach(listing => {
+      let plan; 
+          listing.subscription ? plan = listing.subscription.plan_code : undefined
       $('tbody#all-table')
         .append(`<tr>
         <td style="width: 20%"><a id="${listing.id}"  class="listingTitle" >${listing.business_title}</a></td>
         <td style="width: 20%" class="table-category">${listing.category}</td>
         <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-        <td style="width: 20%">${listing.subscription || 'N/A'}</td>
+        <td style="width: 20%">${plan || 'N/A'}</td>
         <td style="width: 20%">${listing.date_published}</td>
       </tr>`);
       allListings.push(listing)
@@ -109,12 +113,14 @@ function getPendingListings(loader, page, text, pendingArr) {
       // $(page).fadeIn();
       if (listings.length !== 0) {
         listings.forEach(listing => {
+          let plan; 
+          listing.subscription ? plan = listing.subscription.plan_code : undefined
           $(page)
             .append(`<tr>
             <td style="width: 20%" ><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
             <td style="width: 20%" class="table-category">${listing.category}</td>
             <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-            <td style="width: 20%">${listing.subscription || 'N/A'}</td>
+            <td style="width: 20%">${plan || 'N/A'}</td>
             <td style="width: 20%">${listing.date_published}</td>
           </tr>`);
           pendingArr.push(listing)
@@ -142,12 +148,14 @@ function getAllListings(loader, page, listingsArr) {
       // $(page).fadeIn();
       if (listings.length !== 0) {
         listings.forEach(listing => {
+          let plan; 
+          listing.subscription ? plan = listing.subscription.plan_code : undefined
           $(page)
             .append(`<tr>
             <td style="width: 20%" ><a id="${listing.id}"  class="listingTitle" >${listing.business_title}</a></td>
             <td style="width: 20%" >${listing.category}</td>
             <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
-            <td style="width: 20%">${listing.subscription || 'N/A'}</td>
+            <td style="width: 20%">${plan || 'N/A'}</td>
             <td style="width: 20%">${listing.date_published}</td>
           </tr>`);
           listingsArr.push(listing)
@@ -181,7 +189,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
         ADMIN_URL + "search/" + search 
       )
       .then(response => {
-        allListings = response.data
+        let allListings = response.data
         console.log(response);
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -210,7 +218,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           
       )
       .then(response => {
-        allListings = response.data
+        let allListings = response.data
         console.log(response)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -222,7 +230,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           $(page).fadeIn();
           drawMap(location)
         } else {
-            appendListings(response.data, allLoader, allDiv, listings)
+            appendListings(allListings, allLoader, allDiv, listings)
   
         }
       })
@@ -242,7 +250,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           newSearch 
       )
       .then(response => {
-        allListings = response.data
+        let allListings = response.data
         console.log(response)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -254,7 +262,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           $(page).fadeIn();
           drawMap(location)
         } else {
-          appendListings(response.data, allLoader, allDiv, listings)
+          appendListings(allListings, allLoader, allDiv, listings)
        
         }
       })
@@ -418,11 +426,16 @@ $(document).ready(function() {
       console.log(search);
   
       sessionStorage.setItem("searchQuery", search);
-      listingSearch(search)
+      listingSearch(search, logoSearch, allLoader, allDiv, listings)
 
       // window.location.assign("search.listings.html");
     });
 
-    
+
+
+});
+
+window.addEventListener('beforeunload', (event) => {
+  sessionStorage.removeItem('searchQuery')
 
 });

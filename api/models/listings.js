@@ -783,7 +783,7 @@ const Listings = {
       });
   },
   getPendingListings__recent(res) {
-    const lastMonth = moment().subtract(14, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    const lastMonth = moment().subtract(10, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth)
     let listings = []; 
     return knex("pending_listings")
@@ -796,7 +796,7 @@ const Listings = {
           listings.push(listing)
         })
         console.log(ids)
-        return knex('subscriptions').select().where('listing_id', ids)
+        return knex('subscriptions').select().whereIn('listing_id', ids)
       }).then(async response => {
         console.log(response)
           const subs = response.map(x => x.listing_id)
@@ -804,8 +804,11 @@ const Listings = {
           const newListings = await listings.map(listing => {
               if (subs.includes(listing.id)) {
                 const subsIndex = subs.indexOf(listing.id); 
+                console.log(`sub index: ${subsIndex}`)
                 const listingIndex = listings.map(n => n.id).indexOf(listing.id)
-                listings[listingIndex].subscription = response[subsIndex]
+                console.log(`listing index: ${listingIndex}`)
+                listing.subscription = response[subsIndex]
+                return listing;
               } else {
                 return listing
               }

@@ -271,92 +271,53 @@ $(document).ready(function() {
   if (sessionStorage.getItem('stagedListing')) {
     finalForm.id = sessionStorage.getItem('stagedListing')
   }
+
+  const updates = { hours: [] }
   
 
-  const openingHoursField = document.querySelector("#opening-hours-field");
-  const closingHoursField = document.querySelector("#closing-hours-field");
-
-  const hours = [
-    "--",
-    "12:00 am",
-    "1:00 am",
-    "2:00 am",
-    "3:00 am",
-    "4:00 am",
-    "5:00 am",
-    "6:00 am",
-    "7:00 am",
-    "8:00 am",
-    "9:00 am",
-    "10:00 am",
-    "11:00 am",
-    "12:00 pm",
-    "1:00 pm",
-    "2:00 pm",
-    "3:00 pm",
-    "4:00 pm",
-    "5:00 pm",
-    "6:00 pm",
-    "7:00 pm",
-    "8:00 pm",
-    "9:00 pm",
-    "10:00 pm",
-    "11:00 pm"
-  ];
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   days.forEach(day => {
-    const field = document.createElement("div");
-    field.className = "field";
-    field.id = day;
+    const fields = document.createElement('div')
+    fields.className = 'fields'
+    fields.id = day
+    
+    const opening_field = document.createElement("div");
+    opening_field.className = "field";
+    opening_field.id = day + 'opening-div'
 
-    const label = document.createElement("label");
-    label.textContent = `${day}`;
-    label.id = "labels-1";
-    $(label).css("font-size", "16px");
+    const opening_label = document.createElement("label");
+    opening_label.textContent = `${day} open:`;
+    opening_label.id = "labels-1";
+    $(opening_label).css("font-size", "16px");
 
-    const select = document.createElement("select");
-    select.className = day + " ui search dropdown";
-    select.name = "opening-hours-" + day.toLowerCase();
+    const opening_input = document.createElement("input");
+    opening_input.className = day + " ui search dropdown hours";
+    opening_input.id = day + '-opening'
+    opening_input.type = 'time'
+    opening_input.name = "opening-hours-" + day.toLowerCase();
 
-    const options = hours.map((hour, index) => {
-      return (option = new Option(hour, hour));
-    });
+    const closing_field = document.createElement("div");
+    closing_field.className = "field";
+    closing_field.id = day + 'closing-field'
 
-    const dash = document.createElement("div");
-    dash.textContent = "--";
-    $(dash).css("display", "inline");
+    const closing_label = document.createElement("label");
+    closing_label.textContent = `${day} close:`;
+    closing_label.id = "labels-1";
+    $(closing_label).css("font-size", "16px");
 
-    openingHoursField.appendChild(field);
-    field.appendChild(label);
-    label.appendChild(select);
-    options.forEach(option => {
-      select.append(option);
-    });
-  });
-  days.forEach(day => {
-    const field = document.createElement("div");
-    field.id = day;
-    field.className = "field";
+    const closing_input = document.createElement("input");
+    closing_input.className = day + " ui search dropdown hours";
+    closing_input.id = day + '-closing'
+    closing_input.type = 'time'
+    closing_input.name = "closing-hours-" + day.toLowerCase();
 
-    const label = document.createElement("label");
-    label.textContent = `Close`;
-    label.id = "labels-1";
-    $(label).css("font-size", "16px");
+    const hoursDiv = document.querySelector('div#hours-div')
 
-    const select = document.createElement("select");
-    select.className = day + " ui search dropdown";
-    select.name = "closing-hours-" + day.toLowerCase();
-
-    const options = hours.map((hour, index) => {
-      return (option = new Option(hour, hour));
-    });
-    closingHoursField.appendChild(field);
-    field.appendChild(label);
-    label.appendChild(select);
-    options.forEach(option => {
-      select.append(option);
-    });
+    $(hoursDiv).append(fields); 
+    $(fields).append(opening_field, closing_field)
+    $(opening_field).append(opening_label, opening_input)
+    $(closing_field).append(closing_label, closing_input)
   });
 
   //submit first form
@@ -530,60 +491,17 @@ $(document).ready(function() {
       finalForm.state = formData.get("state");
       finalForm.zip = formData.get("zip");
       finalForm.full_address = `${finalForm.street_address}, ${finalForm.city} ${finalForm.state}, ${finalForm.zip}`;
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-mon")}`,
-        closing_hours: `${formData.get("closing-hours-mon")}`,
-        day: "Monday",
-        listing_id: finalForm.id
-      });
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-tue")}`,
-        closing_hours: `${formData.get("closing-hours-tue")}`,
-        day: "Tuesday",
-        listing_id: finalForm.id
-      });
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-wed")}`,
-        closing_hours: `${formData.get("closing-hours-wed")}`,
-        day: "Wednesday",
-        listing_id: finalForm.id
-      });
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-thu")}`,
-        closing_hours: `${formData.get("closing-hours-thu")}`,
-        day: "Thursday",
-        listing_id: finalForm.id
-      });
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-fri")}`,
-        closing_hours: `${formData.get("closing-hours-fri")}`,
-        day: "Friday",
-        listing_id: finalForm.id
-      });
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-sat")}`,
-        closing_hours: `${formData.get("closing-hours-sat")}`,
-        day: "Saturday",
-        listing_id: finalForm.id
-      });
-      hoursForm.push({
-        opening_hours: `${formData.get("opening-hours-sun")}`,
-        closing_hours: `${formData.get("closing-hours-sun")}`,
-        day: "Sunday",
-        listing_id: finalForm.id
-      });
 
       if (sessionStorage.getItem("24Hour")) {
         hoursForm = null;
       }
-      let filteredHoursForm = hoursForm.filter(
-        x => x.opening_hours !== "--" && x.closing_hours !== "--"
-      );
+
       trimForm(finalForm);
+      console.log(updates.hours)
       myAxios
         .post("http://localhost:3000/api/stagelisting/hours/form2", [
           finalForm,
-          filteredHoursForm
+          updates.hours
         ])
         .then(resp => {
           console.log(resp);
@@ -1167,6 +1085,29 @@ $(document).ready(function() {
       sessionStorage.setItem('claimListing', JSON.stringify({ timeStamp: new Date(), value: currentListing })); 
       window.location.assign('sign-in.html');
     }
+
+    
+  });
+
+  $("body").on("change", 'input.hours' ,function(e) {
+    const id = $(e.target).attr("id").split('-')[0]; 
+    const open = $(e.target).attr("id").split('-')[1] === 'opening' ? true : false
+    console.log(id);
+    if (id !== undefined) {
+        const findPlatform = updates.hours.filter(x => x.day === id ); 
+        console.log(findPlatform)
+      if (findPlatform.length) {
+          console.log(findPlatform)
+        let cut = updates.hours.splice(updates.hours.indexOf(findPlatform), 1); 
+        console.log(cut)
+        console.log(updates.hours)
+        updates.hours.push({ day: id, opening_hours: $(`#${id}-opening`).val(), closing_hours: $(`#${id}-closing`).val(),listing_id: sessionStorage.getItem('stagedListing')})
+      } else {
+        updates.hours.push({ day: id, opening_hours: $(`#${id}-opening`).val(), closing_hours: $(`#${id}-closing`).val(),listing_id: sessionStorage.getItem('stagedListing')})
+      }
+      console.log(updates);
+    }
+
   });
 
   // $(window).bind('beforeunload', function(){
