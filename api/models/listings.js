@@ -3,6 +3,7 @@ const knex = require("../config/knex/knex");
 const NodeGeocoder = require("node-geocoder");
 const GeoCode = require("../geocoding");
 const User = require('./user')
+const Uuid = require('uuid')
 
 const options = {
   provider: "google",
@@ -15,6 +16,8 @@ const options = {
 
 const fs = require("fs");
 const csv = require("csv-parser");
+
+const uuidParse = require('uuid-parse');
 
 const keys = require("../config/env-config");
 const distance = require("google-distance-matrix");
@@ -783,7 +786,7 @@ const Listings = {
       });
   },
   getPendingListings__recent(res) {
-    const lastMonth = moment().subtract(10, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    const lastMonth = moment().subtract(30, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth)
     let listings = []; 
     return knex("pending_listings")
@@ -791,7 +794,11 @@ const Listings = {
       .where('date_published', '>', lastMonth)
       .limit(100)
       .then(response => {
-        const ids = response.map(listing => listing.id ); 
+        const ids = response.map(listing => {
+          const bytes = uuidParse.parse(listing.id); 
+          const string = uuidParse.unparse(bytes); 
+          return string
+        }); 
         response.forEach(listing => {
           listings.push(listing)
         })
@@ -872,12 +879,16 @@ const Listings = {
       .select()
       .limit('100')
       .then(response => {
-        const ids = response.map(listing => listing.id ); 
+        const ids = response.map(listing => {
+          const bytes = uuidParse.parse(listing.id); 
+          const string = uuidParse.unparse(bytes); 
+          return string
+        }); 
         response.forEach(listing => {
           listings.push(listing)
         })
         console.log(ids)
-        return knex('subscriptions').select().where('listing_id', ids)
+        return knex('subscriptions').select().whereIn('listing_id', ids)
       }).then(async response => {
         console.log(response)
           const subs = response.map(x => x.listing_id)
@@ -891,6 +902,27 @@ const Listings = {
               }
           });
         res.json(newListings) 
+      })
+      .catch(err => {
+        res.json(err)
+        console.log(err)
+      })
+  },
+  getPendingClaims(res) {
+    const lastMonth = moment().subtract(10, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    console.log(lastMonth)
+    let listings = []; 
+    return knex("pending_claims")
+      .select("*")
+      .where('date_created', '>', lastMonth)
+      .limit(100)
+      .then(response => {
+        let subs = response.map(x => x.subscription_id)
+        console.log(subs)
+        return knex('subscriptions').select('*').whereIn('subscription_id', subs).leftJoin('listings', 'subscriptions.listing_id', '=', 'listings.id')
+      }).then(resp => {
+        console.log(resp)
+        res.json(resp)
       })
       .catch(err => {
         res.json(err)
