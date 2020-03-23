@@ -318,7 +318,8 @@ router.get("/s3/sign_put", (req, res) => {
 	const url = s3.getSignedUrl("putObject", {
 		Bucket: process.env.BUCKETNAME,
 		Key: key, // add a part with the userid!
-		ContentType: contentType,
+    ContentType: contentType,
+    ACL: 'public-read'
 		// can not set restrictions to the length of the content
   });
   console.log(`S3 SIGN PUT URL: ${url}`)

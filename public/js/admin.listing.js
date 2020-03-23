@@ -308,19 +308,28 @@ $(document).ready(function() {
 
   // display photo to top of jumbotron
   function displayPhoto(image, id) {
+    console.log(image)
+    let imageSplit = image.split('/')
+    let exists = imageSplit[imageSplit.length-1]
+    console.log(exists)
     // $('#other-append').append(`<img src="${image}" alt="image" class="ui small image">`);
-    $(
-      "#feature-append"
-    ).append(`<div style="display: none;" id="feature-image-display" class="image">
-    <div class="overlay">
-        <button id="${id}" type="button" class="ui basic icon button feature-remove">
-            <i style="color: red;" class="large x icon" ></i>
-        </button>
-    </div>
-    <img src="${image}" class="ui image">
-    </div>`);
-    $("#feature-image-display").fadeIn();
-    $(featurePut).prop("disabled", true);
+    if (exists && exists !== 'null') {
+      $(
+        "#feature-append"
+      ).append(`<div style="display: none;" id="feature-image-display" class="image">
+      <div class="overlay">
+          <button id="${id}" type="button" class="ui basic icon button feature-remove">
+              <i style="color: red;" class="large x icon" ></i>
+          </button>
+      </div>
+      <img src="${image}" class="ui image">
+      </div>`);
+      $("#feature-image-display").fadeIn();
+      $(featurePut).prop("disabled", true);
+    } else {
+      console.log('no image')
+    }
+   
   }
 
   //   function displayOtherPhoto(image, id) {
@@ -357,6 +366,7 @@ $(document).ready(function() {
 
   handleFileUpload("#put", async file => {
     const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    console.log(file)
     const urlAndKey = await (
       await fetch(
         `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
@@ -375,7 +385,7 @@ $(document).ready(function() {
         console.log(data);
         let image_path = urlAndKey.key;
         const storeImage = {
-          listing_id: sessionStorage.getItem("currentListing"),
+          listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
           image_path,
           featured_image: true
         };
@@ -396,6 +406,7 @@ $(document).ready(function() {
 
   handleFileUpload("#otherimages", async file => {
     const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    console.log(file)
     const urlAndKey = await (
       await fetch(
         `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
@@ -416,7 +427,7 @@ $(document).ready(function() {
         }
         let image_path = urlAndKey.key;
         const storeImage = {
-          listing_id: sessionStorage.getItem("currentListing"),
+          listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
           image_path,
           featured_image: false
         };
@@ -723,7 +734,7 @@ $(document).ready(function() {
             "div#feature_image"
           );
           const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
-          const featureId = listing.images.filter(x => !x.feature_image);
+          const featureId = listing.images.filter(x => !x.feature_image );
           console.log(featureId);
           displayPhoto(featureImage, featureId[0].image_id);
         }

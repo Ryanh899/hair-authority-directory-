@@ -107,12 +107,12 @@ $(document).ready(function() {
   
   let hostedCheck = false; 
 
-  // if (!authHelper.claim__check()) {
-  //   hostedCheck = authHelper.zohoRedirectCheck()
-  // } else {
-  //   alert('youll be emailed when your claim is verified'); 
-  //   window.location.assign('index.html')
-  // }
+  if (!authHelper.claim__check()) {
+    hostedCheck = authHelper.zohoRedirectCheck()
+  } else {
+    alert('youll be emailed when your claim is verified'); 
+    window.location.assign('index.html')
+  }
 
   if (hostedCheck) {
     const hostedId = hostedCheck

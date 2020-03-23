@@ -363,7 +363,7 @@ $(document).ready(function() {
   });
 
   $("body").on("click", "#logout-button", function() {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     window.location.assign("index.html");
   });
 

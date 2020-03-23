@@ -55,7 +55,7 @@ const Zoho = {
         let duration = moment(isoEndDate).diff(moment(isoStartDate), "hours");
         console.log("duration");
         console.log(duration);
-        if (duration >= 1 || duration < 0) {
+        if (duration >= 1 || duration <= 0) {
           knex("zoho_auth")
             .where("id", token.id)
             .del()
