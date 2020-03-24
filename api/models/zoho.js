@@ -139,6 +139,7 @@ const Zoho = {
       .select()
       .where('subscription_id', subId)
       .then(response => {
+        console.log(response)
         return response
       })
       .catch(err => {
@@ -165,7 +166,8 @@ const Zoho = {
             }).catch(err => {
               console.log(err)
             })
-  }
+  }, 
+
 };
 
 module.exports = Zoho;

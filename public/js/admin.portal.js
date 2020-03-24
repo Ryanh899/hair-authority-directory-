@@ -60,6 +60,7 @@ const categories = [
 ];
 
 function appendPendingListings (listings, loader, page) {
+  $(page).empty()
   if (listings.length !== 0) {
     listings.forEach(listing => {
       let plan; 
@@ -67,7 +68,7 @@ function appendPendingListings (listings, loader, page) {
       $(page)
         .append(`<tr>
         <td style="width: 20%"><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
-        <td style="width: 20%" class="table-category">${listing.category}</td>
+        <td style="width: 20%" class="table-category">${listing.category || ''}</td>
         <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
         <td style="width: 20%">${plan || 'N/A'}</td>
         <td style="width: 20%">${listing.date_published}</td>
@@ -80,22 +81,25 @@ function appendPendingListings (listings, loader, page) {
   }
 }
 
-function appendListings (listings, loader, page, allListings) {
+function appendListings (listings, loader, page, arr) {
+  $(page).empty()
   if (listings.length !== 0) {
     listings.forEach(listing => {
       let plan; 
           listing.subscription ? plan = listing.subscription.plan_code : undefined
-      $('tbody#all-table')
+      $(page)
         .append(`<tr>
         <td style="width: 20%"><a id="${listing.id}"  class="listingTitle" >${listing.business_title}</a></td>
-        <td style="width: 20%" class="table-category">${listing.category}</td>
+        <td style="width: 20%" class="table-category">${listing.category || ''}</td>
         <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
         <td style="width: 20%">${plan || 'N/A'}</td>
         <td style="width: 20%">${listing.date_published}</td>
       </tr>`);
-      allListings.push(listing)
+      if (arr) {
+        arr.push(listing)
+      }
     });
-    $(loader).css('display', 'none')
+    // $(loader).css('display', 'none')
   } else {
     console.log('nothin')
     $(loader).css('display', 'none')
@@ -118,7 +122,7 @@ function getPendingListings(loader, page, text, pendingArr) {
           $(page)
             .append(`<tr>
             <td style="width: 20%" ><a id="${listing.id}"  class="pendingTitle" >${listing.business_title}</a></td>
-            <td style="width: 20%" class="table-category">${listing.category}</td>
+            <td style="width: 20%" class="table-category">${listing.category || ''}</td>
             <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
             <td style="width: 20%">${plan || 'N/A'}</td>
             <td style="width: 20%">${listing.date_published}</td>
@@ -148,18 +152,19 @@ function getAllListings(loader, page, listingsArr) {
       // $(page).fadeIn();
       if (listings.length !== 0) {
         listings.forEach(listing => {
-          let plan; 
+          if (listing !== null) {
+            let plan; 
           listing.subscription ? plan = listing.subscription.plan_code : undefined
           $(page)
             .append(`<tr>
             <td style="width: 20%" ><a id="${listing.id}"  class="listingTitle" >${listing.business_title}</a></td>
-            <td style="width: 20%" >${listing.category}</td>
+            <td style="width: 20%" >${listing.category || ''}</td>
             <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
             <td style="width: 20%">${plan || 'N/A'}</td>
             <td style="width: 20%">${listing.date_published}</td>
           </tr>`);
           listingsArr.push(listing)
-
+          }
         }); 
         $(loader).css('display', 'none')
       } else {
@@ -275,6 +280,74 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
   }
 }
 
+function getClaims (claimsDiv, loader, claims) {
+  myAxios
+    .get(ADMIN_URL + "claims/pending")
+    .then(response => {
+      const listings = response.data;
+      console.log(response);
+      // $(loader).css("display", "none");
+      // $(page).fadeIn();
+      if (listings.length > 0) {
+        listings.forEach(listing => {
+          let plan; 
+          listing.plan_code ? plan = listing.plan_code : plan = undefined
+          console.log(plan)
+          $(claimsDiv)
+            .append(`<tr>
+            <td style="width: 20%" ><a id="${listing.id}"  class="claimsTitle" >${listing.business_title}</a></td>
+            <td style="width: 20%" class="table-category">${listing.category || ''}</td>
+            <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
+            <td style="width: 20%">${plan || 'N/A'}</td>
+            <td style="width: 20%">${listing.date_published}</td>
+          </tr>`);
+          claims.push(listing)
+        });
+        // $(loader).css('display', 'none')
+      } else {
+        console.log('nothin')
+        $(loader).css('display', 'none')
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+function getInactiveListings (inactiveTable, loader, inactiveListings) {
+  myAxios
+    .get(ADMIN_URL + "listings/inactive")
+    .then(response => {
+      const listings = response.data;
+      console.log(response);
+      // $(loader).css("display", "none");
+      // $(page).fadeIn();
+      if (listings.length > 0) {
+        listings.forEach(listing => {
+          let plan; 
+          listing.plan_code ? plan = listing.plan_code : plan = undefined
+          console.log(plan)
+          $(inactiveTable)
+            .append(`<tr>
+            <td style="width: 20%" ><a id="${listing.id}"  class="inactiveTitle" >${listing.business_title}</a></td>
+            <td style="width: 20%" class="table-category">${listing.category || ''}</td>
+            <td style="width: 20%">${listing.professional_id || 'N/A'}</td>
+            <td style="width: 20%">${plan || 'N/A'}</td>
+            <td style="width: 20%">${listing.date_published}</td>
+          </tr>`);
+          inactiveListings.push(listing)
+        });
+        // $(loader).css('display', 'none')
+      } else {
+        console.log('nothin')
+        $(loader).css('display', 'none')
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
 $(document).ready(function() {
   const loader = document.querySelector("div#loader-div");
   const page = document.querySelector("div#dashboard-container");
@@ -283,14 +356,22 @@ $(document).ready(function() {
   const pendingDiv = document.querySelector("tbody#pending-table");
   const pendingText = document.querySelector('div#no-pending')
   const logoSearch = sessionStorage.getItem('logoSearch'); 
+  const inactiveListingsTable = document.querySelector('tbody#inactiveListings-table')
 
 
   const allLoader = document.querySelector('div#all-loader')
   const allDiv = document.querySelector('tbody#all-table'); 
 
+  const claimsDiv = document.querySelector('tbody#claims-table'); 
+
   let pendingListings = []; 
   let listings = []; 
   let claims = []; 
+  const inactiveListings = []; 
+
+  // remove pending and current from SS
+  sessionStorage.removeItem('currentListing'); 
+  sessionStorage.removeItem('pendingListing');
 
 
   $(loader).css("display", "none");
@@ -299,8 +380,8 @@ $(document).ready(function() {
 
   getAllListings(allLoader, allDiv, listings)
 
-  if (sessionStorage.getItem('searchQuery')) {
-    const search = sessionStorage.getItem('searchQuery')
+  if (sessionStorage.getItem('adminSearchQuery')) {
+    const search = sessionStorage.getItem('adminSearchQuery')
     listingSearch(search, logoSearch, allLoader, allDiv, listings)
 }
 
@@ -308,7 +389,6 @@ $(document).ready(function() {
   // getPendingListings(loader, page);
 
   $('body').on('click', 'a.nav-link', function (e) {
-    console.log('click')
     e.preventDefault()
     $(this).tab('show')
   })
@@ -328,17 +408,27 @@ $(document).ready(function() {
       $(pendingLoader).css("display", "");
       getPendingListings(pendingLoader, pendingDiv, pendingText, pendingListings);
     } else {
-      appendPendingListings(pendingListings, pendingText, pendingDiv, pendingListings)
+      appendPendingListings(pendingListings, pendingLoader, pendingDiv )
     }
     
   });
 
-  $("body").on("click", "#claim-tab", function(event) {
+  $("body").on("click", "#claims-tab", function(event) {
     if (!claims.length) {
       // $(pendingLoader).css("display", "");
-      getClaims(pendingLoader, pendingDiv, pendingText, pendingListings);
+      getClaims( claimsDiv, pendingLoader, claims);
     } else {
-      appendClaims(pendingListings, pendingText, pendingDiv, pendingListings)
+      appendListings(claims, pendingLoader, claimsDiv)
+    }
+    
+  });
+
+  $("body").on("click", "#inactiveListings-tab", function(event) {
+    if (!inactiveListings.length) {
+      // $(pendingLoader).css("display", "");
+      getInactiveListings( inactiveListingsTable, pendingLoader, inactiveListings);
+    } else {
+      appendListings(inactiveListings, pendingLoader, inactiveListingsTable)
     }
     
   });
@@ -383,6 +473,47 @@ $(document).ready(function() {
       });
   });
 
+  $("body").on("click", "a.inactiveTitle", function(e) {
+    const id = $(this).attr("id");
+    console.log(id)
+    console.log(listings)
+
+    // filter arr of all listings on page to find clicked on listing and get the id
+    let getCoords = inactiveListings.filter(x => x.id === id); 
+    console.log(getCoords)
+    // set the last window location to search 
+    sessionStorage.setItem('lastLocation', 'search')
+    // set the current listing lat and lng in SS
+    sessionStorage.setItem('listing-lat', getCoords[0].lat)
+    sessionStorage.setItem('listing-lng', getCoords[0].lng)
+    // set full address for if no coords 
+    sessionStorage.setItem('listing-address', getCoords[0].full_address)
+    sessionStorage.removeItem('pendingListing')
+    sessionStorage.removeItem('currentListing')
+    sessionStorage.setItem("inactiveListing", id);
+    window.location.assign("admin.listing.html");
+  })
+
+  $("body").on("click", "a.claimsTitle", function(e) {
+    const id = $(this).attr("id");
+    console.log(id)
+    console.log(listings)
+
+    // filter arr of all listings on page to find clicked on listing and get the id
+    let getCoords = claims.filter(x => x.id === id); 
+    console.log(getCoords)
+    // set the last window location to search 
+    sessionStorage.setItem('lastLocation', 'search')
+    // set the current listing lat and lng in SS
+    sessionStorage.setItem('listing-lat', getCoords[0].lat)
+    sessionStorage.setItem('listing-lng', getCoords[0].lng)
+    // set full address for if no coords 
+    sessionStorage.setItem('listing-address', getCoords[0].full_address)
+    sessionStorage.removeItem('pendingListing')
+    sessionStorage.setItem("currentListing", id);
+    window.location.assign("admin.listing.html");
+  })
+
   $("body").on("click", "a.listingTitle", function(e) {
     const id = $(this).attr("id");
     console.log(id)
@@ -425,7 +556,7 @@ $(document).ready(function() {
       const search = $('#search-listings').val().trim();
       console.log(search);
   
-      sessionStorage.setItem("searchQuery", search);
+      sessionStorage.setItem("adminSearchQuery", search);
       listingSearch(search, logoSearch, allLoader, allDiv, listings)
 
       // window.location.assign("search.listings.html");
@@ -436,6 +567,6 @@ $(document).ready(function() {
 });
 
 window.addEventListener('beforeunload', (event) => {
-  sessionStorage.removeItem('searchQuery')
+  sessionStorage.removeItem('adminSearchQuery')
 
 });

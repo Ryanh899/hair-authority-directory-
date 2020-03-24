@@ -79,3 +79,17 @@ td {
     font-size: 16px;
 }
 
+a.listingTitle:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+a.pendingTitle:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+a.claimsTitle:hover {
+    color: blue;
+    text-decoration: underline;
+}

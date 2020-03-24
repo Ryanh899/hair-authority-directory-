@@ -104,6 +104,23 @@ var authHelper = {
       return false;
     }
   },
+  isLoggedIn__admin() {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      const userData = this.parseToken(token);
+      const expirationDate = new Date(userData.exp * 1000);
+      const adminToken = this.parseToken(userData.adminToken);
+      const expirationDate__admin = new Date(userData.exp * 1000);
+      if (Date.now() > expirationDate || Date.now() > expirationDate__admin) this.logOut();
+      if (userData.isAdminUser && adminToken.admin ) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  },
   logOut(path = "./sign-in.html") {
     sessionStorage.removeItem("token");
   }
@@ -574,20 +591,88 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
       $(".ui.dropdown").dropdown({ transition: "drop" });
       $("#sign-in-column").html("");
     } else if (userInfo && userInfo.isAdminUser) {
-      $("#register-column").html(
-        `<div id="logout-button"><p class="top-button" id="register">Logout</p></div>`
-      );
-      $("#sign-in-column").html(
-        `<div id="saved-listings"><p class="top-button" id="sign-in">My Listings</p></div>`
-      );
-      $("#dashboard-column").html(`
-      <div id="dashboard-button"  ><p class="top-button" id="dashboard" >Dashboard</p></div>
+      $("#register-column").html(`
+      <div id="client-drop-div">
+        <div id="client-dropdown" class="ui inline dropdown">
+          <div id="dropdown-text" class="text">
+          ${userInfo.email}
+        </div>
+        <i id="dropdown-icon" class="dropdown icon"></i>
+        <div class="menu">
+            <div id="admin-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="chart pie icon" ></i> Admin Portal</p>
+            </div>
+            <div id="dashboard-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="building icon" ></i> Dashboard</p>
+            </div>
+            <div id="saved-listings-option" class="item">
+              <p class="user-menu-option-text" ><i class="bookmark icon" ></i> Bookmarked Listings</p>
+            </div>
+            <div id="logout-menu-option" class="item">
+              <p class="user-menu-option-text" ><i class="power off icon" ></i> Logout</p>
+            </div>
+          </div>
+        </div>
+      </div>
       `);
+      $(".ui.dropdown").dropdown({ transition: "drop" });
+      $("#sign-in-column").html("");
     }
-  } else {
+    } else {
     console.log("not logged in");
     $("#logout-button").css("display", "none");
   }
+
+  $("body").on("click", "#admin-menu-option", function() {
+    event.preventDefault();
+    
+    if (authHelper.isLoggedIn__admin()) {
+      sessionStorage.setItem("lastLocation", "index");
+      window.location.assign("admin.portal.html");
+    } else {
+      alert('You must Have a verified business to view this page')
+    }
+  });
+
+  $("body").on("click", "#dashboard-menu-option", function() {
+    event.preventDefault();
+    
+    if (authHelper.isLoggedIn__professional()) {
+      sessionStorage.setItem("lastLocation", "index");
+      window.location.assign("dashboard.html");
+    } else {
+      alert('You must Have a verified business to view this page')
+    }
+  });
+
+  $("body").on("click", "#saved-listings-option", function() {
+    sessionStorage.setItem("lastLocation", "index");
+    window.location.assign("saved.listings.html");
+  });
+
+  $("body").on("click", "#admin-portal-button", function() {
+    sessionStorage.setItem("lastLocation", "index");
+    window.location.assign("admin.portal.html");
+  });
+
+  $("body").on("click", "#logout-menu-option", function() {
+    event.preventDefault();
+    authHelper.logOut();
+    $("#register-column").html(
+      `<div
+      id="listBusiness-button"
+    >
+      <p style="background: #696969; color: white;" class="top-button listBusClick" id="register">
+        <i class="store icon"></i>List Your Business
+      </p>
+    </div>`
+    );
+    $("#sign-in-column").html(
+      `<div id="sign-in-button"><p id="sign-in">Sign In</p></div>`
+    );
+    $("#dashboard-column").html("");
+    $("#logout-div").html("");
+  });
 
   $("body").on("click", ".listBusClick", function() {
     console.log("list business");

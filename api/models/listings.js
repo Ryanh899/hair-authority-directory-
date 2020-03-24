@@ -2,8 +2,9 @@ const knex = require("../config/knex/knex");
 
 const NodeGeocoder = require("node-geocoder");
 const GeoCode = require("../geocoding");
-const User = require('./user')
-const Uuid = require('uuid')
+const User = require('./user');
+const Uuid = require('uuid');
+const Zoho = require('../models/zoho')
 
 const options = {
   provider: "google",
@@ -57,7 +58,11 @@ const Listings = {
         .then(response => {
           return response;
         });
-    });
+    })
+    .catch(err => {
+      console.error(err)
+      return err
+    })
   },
   async addToListings_Inactive(listing) {
     console.log(listing);
@@ -82,6 +87,7 @@ const Listings = {
         listing.lng = response[0].longitude;
         listing.email = listing.email.toLowerCase();
         listing.city = listing.city.toLowerCase();
+        listing.full_address = `${listing.street_address}, ${listing.city} ${listing.state}, ${listing.zip}`;
         return knex("pending_listings")
           .insert(listing)
           .then(resp => {
@@ -97,14 +103,22 @@ const Listings = {
   },
   addToInactive(listing) {
     knex("inactive_listings")
-      .insert(listing)
+      .insert(listing.listing)
       .then(response => {
         console.log(response);
-        return response;
+        return knex('listings').del().where('id', listing.listingId)
+      })
+      .then(resp => {
+        return resp
       })
       .catch(err => {
         console.log(err);
       });
+  },
+  async makeInactive (subscription_id, user_id, listing_id) {
+    const terminateSubscription = await Zoho.terminateSubscription(subscription_id)
+
+
   },
   updateListing(listing, id) {
     if (listing.street_address || listing.city) {
@@ -520,6 +534,73 @@ const Listings = {
         console.error(err);
       });
   },
+  getInactiveById__admin(id, cb) {
+    return new Promise((resolve, reject) => {
+      knex("inactive_listings")
+        .select()
+        .where("id", id)
+        .then(resp => {
+          console.log('first promise')
+          console.log(resp)
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log(err);
+          cb.status(400).json({ message: "listing does not exist" });
+        });
+    })
+    .then(async listing => {
+        listing = listing[0]
+        const thisListing = listing; 
+        console.log(thisListing); 
+        console.log('response from promise')
+        return knex("images")
+          .select()
+          .where("listing_id", listing.id)
+          .then(response => {
+            thisListing.images = response;
+            return knex("social_media")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(social => {
+            // console.log(social);
+            let sm = social;
+            sm.forEach(platform => {
+              thisListing[platform.platform] = platform.url;
+            });
+            return knex("hours")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(hours => {
+            // console.log(hours);
+            hours.forEach(day => {
+              thisListing[day.day] = {
+                opening_hours: day.opening_hours,
+                closing_hours: day.closing_hours
+              };
+            });
+            return knex("faq")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(faqs => {
+            // console.log(faqs);
+            if (faqs.length > 0) {
+              thisListing.faqs = faqs;
+            }
+            console.log(thisListing)
+            return thisListing
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  },
   saveListing(listingId, userId, cb) {
     return knex("saved_listings")
       .insert({
@@ -827,6 +908,48 @@ const Listings = {
         console.log(err)
       })
   },
+  getInactiveListings(res) {
+    const lastMonth = moment().subtract(30, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    console.log(lastMonth)
+    let listings = []; 
+    return knex("inactive_listings")
+      .select("*")
+      .where('date_published', '>', lastMonth)
+      .limit(100)
+      .then(response => {
+        const ids = response.map(listing => {
+          const bytes = uuidParse.parse(listing.id); 
+          const string = uuidParse.unparse(bytes); 
+          return string
+        }); 
+        response.forEach(listing => {
+          listings.push(listing)
+        })
+        console.log(ids)
+        return knex('subscriptions').select().whereIn('listing_id', ids)
+      }).then(async response => {
+        console.log(response)
+          const subs = response.map(x => x.listing_id)
+          console.log(subs)
+          const newListings = await listings.map(listing => {
+              if (subs.includes(listing.id)) {
+                const subsIndex = subs.indexOf(listing.id); 
+                console.log(`sub index: ${subsIndex}`)
+                const listingIndex = listings.map(n => n.id).indexOf(listing.id)
+                console.log(`listing index: ${listingIndex}`)
+                listing.subscription = response[subsIndex]
+                return listing;
+              } else {
+                return listing
+              }
+          });
+        res.json(newListings) 
+      })
+      .catch(err => {
+        res.json(err)
+        console.log(err)
+      })
+  },
   getPendingListings(cb) {
     return knex("pending_listings")
       .select("*")
@@ -836,7 +959,7 @@ const Listings = {
       })
       .catch(err => console.log(err));
   },
-  verifyListing(listingId, cb) {
+  verifyListing(listingId, professional_id, cb) {
     let select = new Promise((resolve, reject) => {
       knex("pending_listings")
         .select()
@@ -853,12 +976,45 @@ const Listings = {
       .then(listing => {
         console.log(listing);
         verifiedListing = listing[0];
+        verifiedListing.professional_id = professional_id; 
+        verifiedListing.claimed = true; 
 
         cb.status(200).json(this.addToListings_Pending(verifiedListing));
       })
       .catch(err => {
         console.log(err);
         cb.status(400).json(err);
+      });
+  },
+  verifyClaim(listingId, professional_id, subscription_id, res) {
+    let listing;
+    let select = new Promise((resolve, reject) => {
+      knex("listings")
+        .update({
+          professional_id: professional_id, 
+          claimed: true
+        })
+        .where("id", listingId)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+    select
+      .then(resp => {
+        listing = resp
+        console.log(resp);
+        return knex('pending_claims').delete().where('subscription_id', subscription_id)
+      })
+      .then(response => {
+        res.json({ del: response, update: listing })
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(400).json(err);
       });
   },
   // getPendingListing(listingId, cb) {
@@ -966,6 +1122,30 @@ const Listings = {
   getListingTitle__id (id) {
     return knex('listings').select('business_title').where({ id: id, claimed: false }).then(response => response[0].business_title).catch(err => false)
   }, 
+  getClaimById__subscription (subscription_id) {
+    console.log(subscription_id)
+  return knex('pending_claims')
+      .select()
+      .where('subscription_id', subscription_id)
+      .then(resp => {
+        return resp
+      })
+      .catch(err => {
+        console.error(err); 
+        return err
+      })
+  }, 
+  getListing__id (listingId) {
+  return knex('listings')
+          .select('*')
+          .where('id', listingId)
+          .then(resp => {
+            return resp
+          })
+          .catch(err => {
+            console.error(err)
+          })
+  },
   // used to update city in db
   addCityState() {
     let results = [];

@@ -40,8 +40,11 @@
      
         
         <div class="container-fluid">
+            <div id="pending-loader" class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
            <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-          <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Hair Authority Directory</a>
+          <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="index.html">Hair Authority Directory</a>
           <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
           <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
@@ -73,11 +76,17 @@
                     </a>
                   </li>
                   <li class="nav-item">
+                      <a id="inactiveListings-tab" data-toggle="tab" href="#inactiveListings" role="tab" aria-controls="inactiveListings" aria-selected="false" class="nav-link sidebar-link" >
+                        <span data-feather="users"></span>
+                        Inactive Listings
+                      </a>
+                    </li>
+                  <!-- <li class="nav-item">
                     <a id="subscriptions-tab" data-toggle="tab" href="#subscriptions" role="tab" aria-controls="subscriptions" aria-selected="false" class="nav-link sidebar-link" >
                       <span data-feather="users"></span>
                       Subscriptions
                     </a>
-                  </li>
+                  </li> -->
                  
         
                 
@@ -168,12 +177,40 @@
                                   <th>Date</th>
                                 </tr>
                               </thead>
-                              <!-- pending listing info rendered by js  -->
+                              <!-- pending claim info rendered by js  -->
                               <tbody id="claims-table" ></tbody>
                             </table>
                           </div>
                     </div>
-                    <div class="tab-pane" id="subscriptions" role="tabpanel" aria-labelledby="subscriptions-tab"><p>subscriptions</p></div>
+                    <!-- <div class="tab-pane" id="subscriptions" role="tabpanel" aria-labelledby="subscriptions-tab"><p>subscriptions</p></div> -->
+                    <div class="tab-pane" id="inactiveListings" role="tabpanel" aria-labelledby="inactiveListings-tab">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Inactive Listings</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                              <div class="btn-group mr-2">
+                              </div>
+                              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                                <span data-feather="calendar"></span>
+                                This week
+                              </button>
+                            </div>
+                          </div>
+                          <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                              <thead>
+                                <tr>
+                                  <th><a class="titleClick" >Business Title</a></th>
+                                  <th>Listing Category</th>
+                                  <th>Customer</th>
+                                  <th>Subscription</th>
+                                  <th>Date</th>
+                                </tr>
+                              </thead>
+                              <!-- pending claim info rendered by js  -->
+                              <tbody id="inactiveListings-table" ></tbody>
+                            </table>
+                          </div>
+                    </div>
                   </div>
               
             </main>

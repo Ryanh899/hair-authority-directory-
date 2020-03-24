@@ -6,7 +6,8 @@ const axios = require("axios");
 const Zoho = require('../models/zoho'); 
 const keys = require('../config/env-config'); 
 const User = require('../models/user'); 
-const Listings = require('../models/listings')
+const Listings = require('../models/listings');
+const knex = require('../config/knex/knex'); 
 
 // const secondOauth = {
 //   access_token:
@@ -819,6 +820,141 @@ router.post('/hostedpage/claim/new', async (req, res) => {
       console.log(err);
     });
 
+})
+
+router.post('/subscription/createfree/existing', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  // get customer info from req
+  console.log(req.body)
+  const customerId = req.body.customer_id; 
+
+
+
+  console.log(customerId)
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "customer_id": "${customerId}",
+      "plan": {
+          "plan_code": "free-trial",
+      },
+      "auto_collect": false
+  }`)
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const subInfo = {
+        subscription_id: pickInfo.subscription_id, 
+        plan_code: pickInfo.plan.plan_code, 
+        customer_id: pickInfo.customer.customer_id, 
+        status: pickInfo.status, 
+        user_id: customer.id
+      }
+      console.log(subInfo)
+      const addSubscription = await Zoho.addSubscription__free(subInfo)
+
+      res.json(addSubscription)
+
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
+})
+
+router.post('/subscription/cancel', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  // get customer info from req
+  console.log(req.body)
+  const subscription_id = req.body.subscription_id; 
+
+
+
+  console.log(subscription_id)
+
+  // Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions/${subscription_id}/cancel?cancel_at_end=true`)
+  //   .set(
+  //     "Authorization",
+  //     `Zoho-oauthtoken ${accessToken}`
+  //   )
+  //   .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+  //   .set("Content-Type", "application/json;charset=UTF-8")
+  //   .on('error', (err) => {
+  //     let error = JSON.parse(err.response.text)
+  //     const errCode = error.code; 
+  //     if (errCode == 3004) {
+  //       console.log('invalid page id')
+  //       return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+  //     }
+  //   })
+  //   .then(async resp => {
+  //     console.log(resp.body);
+      return knex('subscriptions').update('status', 'cancelled').where('subscription_id', subscription_id).returning('listing_id', 'subscription_id')
+    // })
+    .then(async resp => {
+      const getListing = await Listings.getListing__id(resp[0]); 
+      return { listing: getListing, listingId: resp[0] }
+    })
+    .then(resp => {
+      return Listings.addToInactive(resp)
+    })
+    .then(resp => {
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
 })
 
 

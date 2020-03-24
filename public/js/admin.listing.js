@@ -40,6 +40,7 @@ var authHelper = {
 // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
 let API_URL = "http://localhost:3000/api/";
 const googleApiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
+const ZOHO_URL = "http://localhost:3000/zoho/";
 
 // days of the week for business hours
 const weekDays = [
@@ -253,6 +254,7 @@ $(document).ready(function() {
   // getting the current listing id from session storage
   const currentListing = sessionStorage.getItem("currentListing");
   const pendingListing = sessionStorage.getItem("pendingListing");
+  const inactiveListing = sessionStorage.getItem("inactiveListing");
 
   let images = [];
   let featurePut = document.getElementById("put");
@@ -654,15 +656,21 @@ $(document).ready(function() {
     $(closing_field).append(closing_label, closing_input)
   });
 
+  //activate button
+  const activate = document.querySelector('button.activate'); 
+  const deactivate = document.querySelector('button.deactivate'); 
 
-
-
-        const subValues = Object.values(subscription__client);
-        Object.keys(subscription__client).forEach((item, index) => {
-          $("#subscription-segment").append(
-            `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
-          );
-        });
+    if (subscription) {
+      const subValues = Object.values(subscription__client);
+      Object.keys(subscription__client).forEach((item, index) => {
+        $("#subscription-segment").append(
+          `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+        );
+      });
+      activate.id = subscription.subscription_id
+      deactivate.id = subscription.subscription_id
+    }
+ 
 
         if (listing.tagline) {
           const website = document.querySelector("input#tagline");
@@ -835,13 +843,16 @@ $(document).ready(function() {
                 );
               } else {
                 $("#user-segment").append(
-                  `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]}`
+                  `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]}</p>`
                 );
               }
             });
+            $("#user-segment").append(
+              `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
+            );
           } else {
             $("#user-segment").append(
-              `<p class="userInfo" style="text-align: center; font-size: 20px;" >Listing has not been claimed`
+              `<p class="userInfo" style="text-align: center; font-size: 20px;" >Listing has not been claimed</p>`
             );
           }
 
@@ -925,53 +936,304 @@ $(document).ready(function() {
   });
 
 
+  
+   //activate button
+  const activate = document.querySelector('button.activate'); 
+  const cancel = document.querySelector('button.cancel'); 
+
+    if (subscription) {
+      const subValues = Object.values(subscription__client);
+      Object.keys(subscription__client).forEach((item, index) => {
+        $("#subscription-segment").append(
+          `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+        );
+      });
+      activate.id = subscription.subscription_id
+      cancel.id = subscription.subscription_id
+    }
+  
+          if (listing.tagline) {
+            const website = document.querySelector("input#tagline");
+            $(website).attr("value", listing.tagline);
+          }
+  
+          if (listing.website) {
+            const website = document.querySelector("input#website");
+            $(website).attr("value", listing.website);
+          }
+          if (listing.instagram) {
+            const instagram = document.querySelector("input#instagram");
+            $(instagram).attr("value", listing.instagram);
+          }
+          if (listing.facebook) {
+            const facebook = document.querySelector("input#facebook");
+            $(facebook).attr("value", listing.facebook);
+          }
+          if (listing.twitter) {
+            const twitter = document.querySelector("input#twitter");
+            $(twitter).attr("value", listing.twitter);
+          }
+          if (listing.linkedin) {
+            const linkedin = document.querySelector("input#linkedin");
+            $(linkedin).attr("value", listing.linkedin);
+          }
+          if (listing.youtube) {
+            const youtube = document.querySelector("input#youtube");
+            $(youtube).attr("value", listing.youtube);
+          }
+          if (listing.phone) {
+            const phone = document.querySelector("input#phone");
+            $(phone).attr("value", listing.phone);
+          }
+          if (listing.email) {
+            const email = document.querySelector("input#email");
+            $(email).attr("value", listing.email);
+          }
+          if (listing.faqs) {
+            if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
+            ) {
+             const faq0 = document.querySelector("input#faq0");
+             const answer = document.querySelector("textarea#answer0");
+   
+             console.log(listing.faqs[0].faq_answer)
+             $(faq0).val(listing.faqs[0].faq);
+             $(answer).val(listing.faqs[0].faq_answer);
+           }
+           if (listing.faqs[1] && listing.faqs[1].faq !== '') {
+             const faq1 = document.querySelector("input#faq1");
+             const answer = document.querySelector("textarea#answer1");
+   
+             $('#1faq').show()
+             $(faq1).attr("value", listing.faqs[1].faq);
+             $(answer).attr("value", listing.faqs[1].faq_answer);
+           }
+           if (listing.faqs[2] && listing.faqs[2].faq !== '') {
+             const faq2 = document.querySelector("input#faq2");
+             const answer = document.querySelector("textarea#answer2");
+   
+             $('#2faq').show()
+             $(faq2).attr("value", listing.faqs[2].faq);
+             $(answer).attr("value", listing.faqs[2].faq_answer);
+           }
+          }
+  
+          if (listing.feature_image && listing.feature_image !== null) {
+            const featureImageSegment = document.querySelector(
+              "div#feature_image"
+            );
+            const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
+            const featureId = listing.images.filter(x => !x.feature_image);
+            console.log(featureId);
+            displayPhoto(featureImage, featureId[0].image_id);
+          }
+  
+          // filter images for null values
+          let filteredImg = listing.images.filter(
+            x => x.image_path !== "true" && x.image_path !== ""
+          );
+  
+          console.log(filteredImg);
+  
+          // map images into an arr of dom elements
+          const images = await filteredImg.map(image => {
+            if (image.image_path !== "false") {
+              let image_id = image.image_id;
+              let feature_image = image.featured_image;
+  
+              let thisImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
+  
+              return { image_id, thisImage, feature_image };
+            } else {
+              return { thisImage: undefined }
+            }
+          });
+          console.log(images)
+          // then filter those images for undefined
+          let filteredImgs = images.filter(
+            x => x.thisImage !== undefined && !x.feature_image
+          );
+  
+          console.log(filteredImgs);
+  
+          filteredImgs.forEach(image => {
+            displayOtherPhoto(image.thisImage, image.image_id);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+  } else if (inactiveListing) {
+    console.log('current')
+    console.log(inactiveListing)
+        // hit the api for the listing data by the id
+        myAxios
+        .get(ADMIN_URL + "listing/inactive/" + inactiveListing)
+        .then(async response => {
+          console.log(response);
+          const listing = response.data.listing;
+          const user = response.data.user;
+          const subscription = response.data.subscription;
+          const subscription__client = _.pick(
+            subscription,
+            "subscription_id",
+            "status",
+            "plan_code",
+            "customer_id"
+          );
+          console.log(listing, user, subscription);
+  
+          const title = document.querySelector("input#business_title");
+          const description = document.querySelector(
+            "textarea#business_description"
+          );
+          const address = document.querySelector("input#street_address");
+          const city = document.querySelector("input#city");
+          const state = document.querySelector("input#state");
+          const zip = document.querySelector("input#zip");
+          const category = document.querySelector("input#category");
+          const categoryAppend = document.querySelector("label.categoryAppend");
+          const fullAddress = document.querySelector('input#full_address')
+          const categoryDefault = document.querySelector("#category");
+          const missionStatement = document.querySelector(
+            "textarea#mission_statement"
+          );
+          const about = document.querySelector("textarea#about");
+          const form = document.querySelector("form#admin-form");
+  
+          $(form).prepend(
+            `<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`
+          );
+          $(title).attr("value", listing.business_title);
+          $(description).attr("placeholder", listing.business_description);
+          $(address).attr("value", listing.street_address);
+          $(city).attr("value", listing.city);
+          $(state).attr("value", listing.state);
+          $(zip).attr("value", listing.zip);
+          $(missionStatement).attr("placeholder", listing.mission_statement);
+          $(fullAddress).attr("value", listing.full_address);
+          $(about).attr("value", listing.about);
+          $(categoryAppend).append(
+            `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >${listing.category}</p>`
+          );
+          categoryDefault.textContent = listing.category;
+  
+          if (user) {
+            const userValues = Object.values(user);
+            Object.keys(user).forEach((attr, index) => {
+              if (attr !== "id") {
+                $("#user-segment").append(
+                  `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]} <a id="edit-${attr}" >Edit</a></p> `
+                );
+              } else {
+                $("#user-segment").append(
+                  `<p class="userInfo" ><strong>${attr}</strong>: ${userValues[index]}</p>`
+                );
+              }
+            });
+            $("#user-segment").append(
+              `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
+            );
+          } else {
+            $("#user-segment").append(
+              `<p class="userInfo" style="text-align: center; font-size: 20px;" >Listing has not been claimed</p>`
+            );
+          }
 
 
+  const hours = [
+    "--",
+    "12:00 am",
+    "1:00 am",
+    "2:00 am",
+    "3:00 am",
+    "4:00 am",
+    "5:00 am",
+    "6:00 am",
+    "7:00 am",
+    "8:00 am",
+    "9:00 am",
+    "10:00 am",
+    "11:00 am",
+    "12:00 pm",
+    "1:00 pm",
+    "2:00 pm",
+    "3:00 pm",
+    "4:00 pm",
+    "5:00 pm",
+    "6:00 pm",
+    "7:00 pm",
+    "8:00 pm",
+    "9:00 pm",
+    "10:00 pm",
+    "11:00 pm"
+  ];
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  // days.forEach(day => {
-  //   const field = document.createElement("div");
-  //   field.id = day;
-  //   field.className = "field";
-
-  //   const label = document.createElement("label");
-  //   label.textContent = `Close`;
-  //   label.id = "labels-1";
-  //   $(label).css("font-size", "16px");
-
-  //   const input = document.createElement("input");
-  //   input.className = day + " ui search dropdown";
-  //   input.id = day + '-closing'; 
-  //   input.type = 'time'
-  //   input.name = "closing-hours-" + day.toLowerCase();
-
-  //   const options = hours.map((hour, index) => {
-  //     return (option = new Option(hour, hour));
-  //   });
-  //   closingHoursField.appendChild(field);
-  //   field.appendChild(label);
-  //   label.appendChild(input);
+  days.forEach(day => {
+    const fields = document.createElement('div')
+    fields.className = 'fields'
+    fields.id = day
     
-  // });
+    const opening_field = document.createElement("div");
+    opening_field.className = "field";
+    opening_field.id = day + 'opening-div'
 
-  // if (listing.Monday) {
-  //   console.log('Monday')
-  //   const Monday = document.querySelector("select#Mon");
-  //   let day = listing.Monday
-  //   let opening = day.opening_hours
-  //   let contains = opening.split('')
-  //   contains[0] === '0' ? contains = contains.join('').substring(1) : contains = contains.join('')
-  //   console.log(contains)
-  //   $(`select#Mon option:contains('9:00 am')`).prop("selected", true);
-  //   $(`select#Mon-closing option:contains('9:00 am')`).prop("selected", true);
-  // }
+    const opening_label = document.createElement("label");
+    opening_label.textContent = `${day} open:`;
+    opening_label.id = "labels-1";
+    $(opening_label).css("font-size", "16px");
+
+    const opening_input = document.createElement("input");
+    opening_input.className = day + " ui search dropdown hours";
+    opening_input.id = day + '-opening'
+    opening_input.type = 'time'
+    opening_input.name = "opening-hours-" + day.toLowerCase();
+    if (listing[day]) {
+      opening_input.defaultValue = am_pm_to_hours(listing[day].opening_hours)
+    }
+
+    const closing_field = document.createElement("div");
+    closing_field.className = "field";
+    closing_field.id = day + 'closing-field'
+
+    const closing_label = document.createElement("label");
+    closing_label.textContent = `${day} close:`;
+    closing_label.id = "labels-1";
+    $(closing_label).css("font-size", "16px");
+
+    const closing_input = document.createElement("input");
+    closing_input.className = day + " ui search dropdown hours";
+    closing_input.id = day + '-closing'
+    closing_input.type = 'time'
+    closing_input.name = "closing-hours-" + day.toLowerCase();
+    if (listing[day]) {
+      closing_input.defaultValue = am_pm_to_hours(listing[day].closing_hours)
+    }
+
+    const hoursDiv = document.querySelector('div#hours-div')
+
+    $(hoursDiv).append(fields); 
+    $(fields).append(opening_field, closing_field)
+    $(opening_field).append(opening_label, opening_input)
+    $(closing_field).append(closing_label, closing_input)
+  });
+
 
   
-          const subValues = Object.values(subscription__client);
-          Object.keys(subscription__client).forEach((item, index) => {
-            $("#subscription-segment").append(
-              `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
-            );
-          });
+   //activate button
+  const activate = document.querySelector('button.activate'); 
+  const cancel = document.querySelector('button.cancel'); 
+
+    if (subscription) {
+      const subValues = Object.values(subscription__client);
+      Object.keys(subscription__client).forEach((item, index) => {
+        $("#subscription-segment").append(
+          `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+        );
+      });
+      activate.id = subscription.subscription_id
+      cancel.id = subscription.subscription_id
+    }
   
           if (listing.tagline) {
             const website = document.querySelector("input#tagline");
@@ -1254,5 +1516,44 @@ $(document).ready(function() {
 
   $('body').on('click', '#back-button', function () {
     window.history.back()
+  })
+
+  $('body').on('click', 'button.verify-claim', function (e) {
+    let subId = $(this).attr('id'); 
+    myAxios.post(ADMIN_URL + 'claims/verify', { subscription: subId })
+      .then(resp => {
+        console.log(resp)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }); 
+
+  $('body').on('click', 'button.activate', function () {
+    const subId = $(this).attr('id')
+
+    if (subId) {
+      myAxios.post(ADMIN_URL + 'pending/verify', { subscription: subId})
+        .then(resp => {
+          console.log(resp)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+  })
+
+  $('body').on('click', 'button.cancel', function () {
+    const subId = $(this).attr('id')
+
+    if (subId) {
+      myAxios.post(ZOHO_URL + 'subscription/cancel', { subscription_id: subId})
+        .then(resp => {
+          console.log(resp)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
   })
 });
