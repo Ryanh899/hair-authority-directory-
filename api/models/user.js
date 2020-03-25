@@ -157,7 +157,7 @@ const User = {
       });
   },
   getProfessionalProfile(user, cb) {
-    return knex("professional_users")
+    return knex("users")
       .select()
       .where("id", user.id)
       .catch(err => console.log(err));

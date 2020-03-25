@@ -58,6 +58,7 @@
 
 #listings-grid {
     padding: 2rem;
+    padding-top: 0rem;
 }
 
 #billing-tab {
@@ -201,6 +202,70 @@
 .listing-menu {
     font-family: 'Raleway';
     font-weight: 500;
-    font-size: 25px;
+    font-size: 30px;
     color: black;
+}
+
+.menu-item-dash {
+    font-family: 'Raleway';
+    font-weight: 500;
+    font-size: 25px;
+    color: #696969;
+}
+
+ #admin-form {
+	font-family: 'Open Sans Condensed', arial, sans;
+	padding: 30px;
+	background: #FFFFFF;
+	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+	-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+	-webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
+
+}
+
+.image {
+    position: relative;
+    display: block;
+    height: 200px;
+    width: auto;
+  }
+  
+  .overlay {
+    position: absolute;
+    left: 0;
+    z-index: 5;
+  }
+
+  div.other-image-display {
+    position: relative;
+    display: inline-block;
+    height: 200px;
+    width: auto;
+    /* max-width: 50%; */
+    margin: .5rem;
+    clear: left;
+  }
+
+  #other-append {
+      margin-top: .5rem;
+  }
+
+  #other-image-append {
+    display: table;
+  }
+
+  .form-headers {
+    font-size: 25px;
+    font-family: 'Lato' sans-serif;
+    font-weight: 300;
+    color: #696969;
+  }
+
+  #map-container {
+      position: relative;
+      height: 35vh;
+  }
+
+  #map{
+    height: 100%;
 }

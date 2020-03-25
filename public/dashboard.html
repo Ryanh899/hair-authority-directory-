@@ -22,17 +22,62 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
 
   <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
-  <link rel="stylesheet" href="./css/search.css" />
+  <link rel="stylesheet" href="./css/styles.css" />
 <body>
+    <div class="row" id="top-menu-row">
+        <div class="ui grid" id="landing-grid">
+          <div id="back-column" class="one wide column">
+            <div id="back-button">
+              <p id="back-p" class="top-button" >
+                <i class="large home icon"></i>
+              </p>
+            </div>
+          </div>  
+          <div style="padding: .5rem;" class="one wide computer only column">
+            <img
+              style="margin-left: 1rem; padding: 0px;"
+              id="ha-logo-image"
+              src="./images/logo-symbol-01.png"
+            />
+          </div>
+          <div style="padding: 1rem;" class="six wide computer six wide mobile middle aligned column">
+            <p id="ha-title">Hair Authority Directory</p>
+          </div>
+        </div>
+      </div>
   <div id="page-container" >
+      <div class="ui grid" style="width: 50%;" id="profile-grid">
+          <div style="padding-bottom: 0px;" class="sixteen wide left aligned column">
+            <p id="display-name" class="h1" style="margin-bottom: .5rem;"></p>
+          </div>
+          <div style="margin-left: 2.5rem;" class="eight wide left aligned column">
+              <div class="ui list">
+                  <div class="item">
+                    <i class="phone icon"></i>
+                    <div id="user-phone" class="content userInfo">
+                    </div>
+                  </div>
+                  <div class="item">
+                    <i class="mail icon"></i>
+                    <div class="content userInfo">
+                      <a style="color: black;" id="user-email" href="mailto:jack@semantic-ui.com"></a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <i class="linkify icon"></i>
+                    <div class="content userInfo">
+                      
+                      <a href="https://subscriptions.zoho.com/portal/hairauthoritydirectory/login"><p style="color: #696969;" >(Billing Portal)</p> https://subscriptions.zoho.com/portal/hairauthoritydirectory/login</a>
+                    </div>
+                  </div>
+                </div>
+          </div>
+        </div>
       <div class="ui secondary pointing tabular menu">
-          <a data-tab="listings" class="item">
+          <a data-tab="listings" class="item menu-item-dash">
             Listings
           </a>
-          <a data-tab="billing" class="item">
-            Billing
-          </a>
-          <a href="billing__new.html" class="item">
+          <a href="billing__new.html" class="item menu-item-dash">
             New Listing
           </a>
           <div class="right menu">
@@ -41,40 +86,18 @@
             </a>
           </div>
         </div>
-        <div class="ui grid" style="width: 50%;" id="profile-grid">
-            <div class="sixteen wide left aligned column">
-              <p class="h1">Ryan Hazzard</p>
-            </div>
-            <div style="margin-left: 2.5rem;" class="eight wide left aligned column">
-                <div class="ui list">
-                    <div class="item">
-                      <i class="phone icon"></i>
-                      <div class="content userInfo">
-                        999-999-9999
-                      </div>
-                    </div>
-                    <div class="item">
-                      <i class="mail icon"></i>
-                      <div class="content userInfo">
-                        <a href="mailto:jack@semantic-ui.com">jack@semantic-ui.com</a>
-                      </div>
-                    </div>
-                    <div class="item">
-                      <i class="linkify icon"></i>
-                      <div class="content userInfo">
-                        <a href="http://www.semantic-ui.com">Zoho.dashboard.com</a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-          </div>
-        <div data-tab="listings" class="ui tab raised segment">
-          <div id="listings-grid" class="ui grid">
-            <div class="ui dropdown" id="dropdown-column" ></div>
-            <div class="sixteen wide column">
 
-            <form id="admin-form" class="ui equal width form">
+        <div data-tab="listings" class="ui tab ">
+            <p class="h1" style="color: #696969; margin-bottom: .5rem;">Listings</p>
+          <div id="listings-grid" class="ui grid" >
+            <div class="twelve wide column">
+                <div class="ui dropdown" id="dropdown-column" ></div>
+            </div>
+            <div class="eleven wide left aligned column ">
+
+            <form id="admin-form" style="padding-top: .5rem;" class="ui equal width form">
                 <div class="field">
+                    <label style="margin-top: 2rem;" id="labels-1">Business Title</label>
                     <div id="businessTitle-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="main" id="business_title" name="businessTitle" type="text" >
                         <i class="building outline icon"></i>
@@ -88,7 +111,7 @@
                     </div >
                 </div>
             <div class="field">
-                <label class="categoryAppend" style="margin-top: 2rem;" id="labels-1">Category</label>
+                <label class="categoryAppend" style="margin-top: 2rem;" id="labels-1">Category: </label>
                     <div id="category-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <div multiple="" id="category-drop" class="ui fluid multiple selection dropdown main">
                             <input id="category" type="hidden" name="category">
@@ -539,7 +562,6 @@
                     </div>
                 </div>
                
-    
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
                     <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
@@ -553,13 +575,6 @@
                             ></textarea>
                     </div>
                 </div>
-
-                <div id="feature_image" >
-                    <p class="logo-header" style="font-size: 25px; color: #696969;">Feature Image</p>
-                    <p id="feature-append" class="form-info" >Edit </p>
-                    <input type="file" id="put" />
-                </div>
-    
                 <div>
                     <label style="margin-top: 2rem;" id="labels-1">Images</label>
                     <div id="other-image-append"></div>
@@ -603,12 +618,29 @@
                     </div>
                 </form>
               </div>
+              <div class="five wide column">
+                  <div class="ui raised segment" id="map-container">
+                      <div id="map"></div>
+                  </div>
+                  <div id="feature_image" class="ui raised segment">
+                      <p class="logo-header" style="font-size: 25px; color: #696969;">Feature Image</p>
+                  </div>
+                  <div class="ui bottom attached raised segment">
+                      <p id="feature-append" class="form-info" >Edit </p>
+                      <input type="file" id="put" />
+                  </div>
+
+                </div>
+              </div>
           </div>
-        </div>
-        <div data-tab="billing" class="ui tab segment">
-          <p></p>
-        </div>
+      </div>
+
   </div>
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo&callback="
+  async
+  defer
+></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js" integrity="sha256-VeNaFBVDhoX3H+gJ37DpT/nTuZTdjYro9yBruHjVmoQ=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
   <script src="./js/dashboard.js"></script>

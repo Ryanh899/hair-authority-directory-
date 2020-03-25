@@ -1172,6 +1172,27 @@ body {
   color: #696969;
 }
 
+#back-button {
+  background: #1f7a8c;
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
+}
+
+
+
+#back-p {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  background: #f9f9f9;
+  color: #696969;
+  padding: 0.5rem;
+}
+
 @media only screen and (max-width: 600px) {
 
   #problems-section {
@@ -1268,3 +1289,5 @@ body {
     margin-left: 0px;
   }
 }
+
+

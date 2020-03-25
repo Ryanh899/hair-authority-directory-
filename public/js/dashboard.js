@@ -18,6 +18,19 @@ myAxios.interceptors.response.use(
     }
   }
 );
+
+const categories = [
+  { title: "Dermatologist" },
+  { title: "Hair Care Salons" },
+  { title: "Hair Loss / Hair Care Products & Treatments" },
+  { title: "Hair Replacement & Hair Systems" },
+  { title: "Laser Therapy" },
+  { title: "Medical / Hair Transplants" },
+  { title: "Trichologist" },
+  { title: "Medical Hair Restoration" },
+  { title: "Wigs / Extensions & Hair Additions" }
+];
+
 var authHelper = {
   isLoggedIn() {
     const token = localStorage.getItem("token");
@@ -155,7 +168,7 @@ function getMenuParams (listings) {
   })
 }
 
-async function appendListing (thisListing) {
+async function appendListing (thisListing, listingArr) {
   sessionStorage.setItem('currentListing', thisListing.id)
   let listing = thisListing
 
@@ -189,7 +202,7 @@ async function appendListing (thisListing) {
       $(about).attr("value", listing.about);
       $(tagline).attr('value', listing.tagline)
       $(categoryAppend).html(
-        `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >${listing.category}</p>`
+        `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >Category: ${listing.category}</p>`
       );
       categoryDefault.textContent = listing.category;
 
@@ -244,6 +257,7 @@ days.forEach(day => {
   $(opening_field).append(opening_label, opening_input)
   $(closing_field).append(closing_label, closing_input)
 });
+
 
 
 
@@ -340,8 +354,7 @@ days.forEach(day => {
         x => x.thisImage !== undefined && !x.feature_image
       );
 
-      $('.ui.dropdown.listings').dropdown(options); 
-      $('.ui.dropdown.main').dropdown(); 
+     
 
       console.log(filteredImgs);
 
@@ -371,7 +384,7 @@ const am_pm_to_hours = time => {
 
 
 async function getListings (token, listingArr, div, loader) {
-  myAxios.get(API_URL + '/dashboard/listings/' + token)
+  myAxios.get(API_URL + 'dashboard/listings/' + token)
     .then(async response => {
       console.log(response)
       const listings = response.data; 
@@ -396,32 +409,31 @@ async function getListings (token, listingArr, div, loader) {
       dropdownButton.className = 'huge dropdown icon'
       dropDownColumn.appendChild(dropdownButton)
 
-      let dropDownMenu = document.createElement('div')
-      dropDownMenu.className = 'ui menu listing-menu-drop'
-      dropDownMenu.id = 'listing-menu'
-      dropDownColumn.appendChild(dropDownMenu)
+      // let dropDownMenu = document.createElement('div')
+      // dropDownMenu.className = 'ui menu listing-menu-drop'
+      // dropDownMenu.id = 'listing-menu'
+      // dropDownColumn.appendChild(dropDownMenu)
 
-      listings.forEach((listing, index) => {
-        if (index === 0) {
-          let dropDownA = document.createElement('a'); 
-          dropDownA.className = 'listing-menu'
-          dropDownA.className = 'active item'
-          dropDownA.textContent = listing.business_title
+      // listings.forEach((listing, index) => {
+      //   if (index === 0) {
+      //     let dropDownA = document.createElement('a'); 
+      //     dropDownA.className = 'listing-menu active item'
+      //     dropDownA.textContent = listing.business_title
   
-          dropDownMenu.appendChild(dropDownA)
-        } else {
-          let dropDownA = document.createElement('a'); 
-          dropDownA.className = 'listing-menu'
-          dropDownA.className = 'item'
-          dropDownA.textContent = listing.business_title
+      //     dropDownMenu.appendChild(dropDownA)
+      //   } else {
+      //     let dropDownA = document.createElement('a'); 
+      //     dropDownA.className = 'listing-menu item'
+      //     dropDownA.textContent = listing.business_title
   
-          dropDownMenu.appendChild(dropDownA)
-        }
+      //     dropDownMenu.appendChild(dropDownA)
+      //   }
         
-      })
+      // })
       let options = {}; 
+      console.log(listingArr)
       options.values = getMenuParams(listingArr)
-      console.log({options})
+      console.log(options)
      
       console.log($('input#dropdown-menu').val())
 
@@ -457,9 +469,13 @@ async function getListings (token, listingArr, div, loader) {
       $(about).attr("value", listing.about);
       $(tagline).attr('value', listing.tagline)
       $(categoryAppend).html(
-        `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >${listing.category}</p>`
+        `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >Category: ${listing.category}</p>`
       );
       $('#category').attr('placeholder', listing.category)
+      
+      $('#dropdown-column').dropdown(options); 
+      
+      $('.dropdown.main').dropdown(); 
 
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -512,6 +528,8 @@ days.forEach(day => {
   $(opening_field).append(opening_label, opening_input)
   $(closing_field).append(closing_label, closing_input)
 });
+
+
 
 
 
@@ -738,7 +756,130 @@ $(document).ready(function() {
 //   }
 // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
 
+// function to initiate map
+function getGeolocation() {
+  console.log("map");
+  // navigator.geolocation.getCurrentPosition(drawMap);
+  drawMap();
+}
 
+// function called by getGeolocation
+async function drawMap(geoPos) {
+  // map center coords
+  let geolocate;
+
+  // if listing coords exist
+  if (
+    sessionStorage.getItem("listing-lat") !== "null" &&
+    sessionStorage.getItem("listing-lng") !== "null"
+  ) {
+    console.log("COORDINATES");
+    geolocate = new google.maps.LatLng(
+      parseFloat(sessionStorage.getItem("listing-lat")),
+      parseFloat(sessionStorage.getItem("listing-lng"))
+    );
+
+    // create map props for map generator
+    let mapProp = {
+      center: geolocate,
+      zoom: 10,
+      disableDefaultUI: true,
+      zoomControl: false
+    };
+    // call google maps api to append the map to the #map div
+    let map = new google.maps.Map(document.getElementById("map"), mapProp);
+    // create a marker for the business
+    let marker = new google.maps.Marker({
+      position: geolocate,
+      map: map,
+      animation: google.maps.Animation.DROP
+    });
+    // reveal page and hide loader
+    $("#images").css("dislplay", "");
+    // $(loader).css("display", "none");
+    // $(page).fadeIn(250);
+  }
+  // if the address exists
+  else if (sessionStorage.getItem("listing-address") !== "null") {
+    console.log("ADDRESS");
+    // google geo coder init
+    let geocoder = new google.maps.Geocoder();
+    // get the address
+    let full_address = sessionStorage.getItem("listing-address");
+    console.log(full_address);
+    // hit the google api with the address to get coordinates
+    geocoder.geocode({ address: full_address }, function(results, status) {
+      if (status == "OK") {
+        console.log(results);
+        geolocate = results[0].geometry.location;
+        // create map props for map generator
+        let mapProp = {
+          center: geolocate,
+          zoom: 10,
+          disableDefaultUI: true,
+          zoomControl: false
+        };
+        // call google maps api to append the map to the #map div
+        let map = new google.maps.Map(
+          document.getElementById("map"),
+          mapProp
+        );
+        // create a marker for the business
+        let marker = new google.maps.Marker({
+          position: geolocate,
+          map: map,
+          animation: google.maps.Animation.DROP
+        });
+        // reveal page and hide loader
+        $("#images").css("dislplay", "");
+        // $(loader).css("display", "none");
+        // $(page).fadeIn(250);
+      } else {
+        console.log(
+          "Geocode was not successful for the following reason: " + status
+        );
+      }
+    });
+    // if no location get current location
+  } else {
+    // console.log("OTHER");
+    // geolocate = new google.maps.LatLng(
+    //   geoPos.coords.latitude,
+    //   geoPos.coords.longitude
+    // );
+    //  // create map props for map generator
+    //  let mapProp = {
+    //   center: geolocate,
+    //   zoom: 10,
+    //   disableDefaultUI: true,
+    //   zoomControl: false
+    // };
+    // // call google maps api to append the map to the #map div
+    // let map = new google.maps.Map(
+    //   document.getElementById("map"),
+    //   mapProp
+    // );
+    // // create a marker for the business
+    // let marker = new google.maps.Marker({
+    //   position: geolocate,
+    //   map: map,
+    //   animation: google.maps.Animation.DROP
+    // });
+    // reveal page and hide loader
+    $("#images").css("dislplay", "");
+    $(loader).css("display", "none");
+    $(page).css("display", "");
+  }
+}
+
+// grabbing location from session storage
+let location = {
+  lat: sessionStorage.getItem("listing-lat"),
+  lng: sessionStorage.getItem("listing-lng")
+};
+
+// calling function to init map
+getGeolocation();
 
   // style js
   $(".vertical.menu .item").tab();
@@ -767,53 +908,40 @@ $(document).ready(function() {
   $('body').on('change', '#dropdown-menu', function () {
     let active = $('#dropdown-menu').val(); 
     let thisListing = listings.filter(listing => listing.id === active ); 
-    console.log(thisListing)
-    appendListing(thisListing[0])
+    thisListing = thisListing[0];
+    appendListing(thisListing, listings) 
+    if (thisListing.lat && thisListing.lng) {
+      sessionStorage.setItem('listing-lat', thisListing.lat)
+      sessionStorage.setItem('listing-lng', thisListing.lng)
+    } else if (thisListing.full_address) {
+      sessionStorage.setItem('listing-lat', 'null')
+      sessionStorage.setItem('listing-lng', 'null')
+      sessionStorage.setItem('listing-address', thisListing.full_address)
+    }
+
+    getGeolocation()
   })
 
   // get profile info
 
   function getProfile() {
-    if ((process.env.NODE_ENV = "production")) {
-      myAxios
-        .get(API_URL + "profile/" + localStorage.getItem("token"))
-        .then(resp => {
-          if (resp.data.length !== 0) {
-            const user = resp.data[0];
+    const token = sessionStorage.getItem('token'); 
 
-            $(email).attr("placeholder", user.email);
-            $(firstName).attr("placeholder", user.first_name);
-            $(lastName).attr("placeholder", user.last_name);
-            $(phone).attr("placeholder", user.phone);
-            profileName.textContent = `${titleCase(
-              user.first_name
-            )} ${titleCase(user.last_name)}`;
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } else {
-      myAxios
-        .get(API_URL + "profile/" + localStorage.getItem("token"))
-        .then(resp => {
-          if (resp.data.length !== 0) {
-            const user = resp.data[0];
+    myAxios.get(API_URL + 'user/profile/' + token)
+      .then(response => {
+        const user = response.data[0]
+        console.log(user)
 
-            $(email).attr("placeholder", user.email);
-            $(firstName).attr("placeholder", user.first_name);
-            $(lastName).attr("placeholder", user.last_name);
-            $(phone).attr("placeholder", user.phone);
-            profileName.textContent = `${titleCase(
-              user.first_name
-            )} ${titleCase(user.last_name)}`;
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+        $('#display-name').html(`${user.first_name} ${user.last_name}`)
+        $('#user-phone').html(`${user.phone}`)
+        $('#user-email').html(`${user.email}`)
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
+
+  getProfile()
 
   let images = [];
 let featurePut = document.getElementById("put");
@@ -982,6 +1110,10 @@ $(document).on("click", "button.other-remove", function(e) {
     // window.location.reload();
   });
 
+  $('body').on('click', '#back-button', function () {
+    window.location.assign('index.html')
+  })
+
   const updates = { social_media: [], listing: {}, hours: [], faq: [] };
 
   $("input.social_media").on("input", function(e) {
@@ -1104,8 +1236,21 @@ $(document).on("click", "button.other-remove", function(e) {
 
   $("body").on("click", "#submit-button", function() {
     console.log(updates);
-    if (Object.values(updates.listing).length) {
-    updates.listing.id = sessionStorage.getItem('currentListing')
+    let pendingCheck = sessionStorage.getItem('pendingListing')
+    let currentListing = sessionStorage.getItem('currentListing')
+    if (Object.values(updates.listing).length && currentListing) {
+    updates.listing.id = currentListing
+      myAxios
+        .put("http://localhost:3000/api/updatelisting", updates.listing)
+        .then(resp => {
+            console.log(resp);
+            // window.location.reload(); 
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else if (Object.values(updates.listing).length && pendingListing) {
+      updates.listing.id = pendingListing
       myAxios
         .put("http://localhost:3000/api/stagelisting", updates.listing)
         .then(resp => {
@@ -1129,7 +1274,7 @@ $(document).on("click", "button.other-remove", function(e) {
         });
     }   
 
-    if (updates.hours) {
+    if (updates.hours.length) {
       updates.social_media.listing_id = sessionStorage.getItem('currentListing')
         myAxios
           .put("http://localhost:3000/api/stagelisting/hours", updates.hours)

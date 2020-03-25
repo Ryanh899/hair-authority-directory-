@@ -867,7 +867,7 @@ const Listings = {
       });
   },
   getPendingListings__recent(res) {
-    const lastMonth = moment().subtract(30, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    const lastMonth = moment().subtract(60, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth)
     let listings = []; 
     return knex("pending_listings")
@@ -1105,10 +1105,33 @@ const Listings = {
   updateStagedListing(listingInfo) {
     return knex("pending_listings")
       .update(listingInfo)
-      .where("id", listingInfo.id);
+      .where("id", listingInfo.id)
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  },
+  updateListing(listingInfo) {
+    return knex("listings")
+      .update(listingInfo)
+      .where("id", listingInfo.id)
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.error(err)
+      })
   },
   updateStagedListing__table(table, data) {
-    return knex(table).insert(data);
+    return knex(table).insert(data).where('listing_id', data.id)
+      .then(response => {
+        return response
+      })
+      .catch(err => {
+        console.log(err)
+      })
   },
   removeImage(imageId) {
     return knex('images').delete('*').where('image_id', imageId).returning(['image_id', 'image_path', 'listing_id'])

@@ -741,7 +741,7 @@ router.post('/hostedpage/claim/existing', async (req, res) => {
     .set("X-com-zoho-subscriptions-organizationid", `${process.env.ORGANIZATION_ID}`)
     .set("Content-Type", "application/json;charset=UTF-8")
     .send(`{
-      "customer": ${customerId}, 
+      "customer_id": ${customerId}, 
       "plan": {
         "plan_code": ${plan}
       }, 

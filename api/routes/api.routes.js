@@ -81,7 +81,7 @@ router.post("/newListing", async (req, res) => {
   }
 });
 
-router.get("/profile/:token", async (req, res) => {
+router.get("/user/profile/:token", async (req, res) => {
   const userToken = jwt.decode(req.params.token);
   const user = await User.getProfessionalProfile(userToken);
 
@@ -466,6 +466,20 @@ router.put('/stagelisting', (req, res) => {
   console.log(data)
   Listings.updateStagedListing(data)
     .then(resp => {
+      console.log(resp)
+      res.json(resp) 
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+router.put('/updatelisting', (req, res) => {
+  let data = req.body; 
+  console.log(data)
+  Listings.updateListing(data)
+    .then(resp => {
+      console.log(resp)
       res.json(resp) 
     })
     .catch(err => {
