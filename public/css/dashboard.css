@@ -3,9 +3,10 @@
     margin: 0px; 
 }
 
-#dashboard-container {
-    margin: 0px; 
-    width: 100%
+#page-container {
+    width: 100%; 
+    padding: 2.5rem;
+    padding-top: 0rem;
 }
 
 .tab-div {
@@ -18,22 +19,18 @@
 }
 
 .h1 { 
-    font-family: 'Roboto';
-    font-weight: 100;
+    font-family: 'Raleway';
+    font-weight: 700;
     font-size: 40px;
     color: black;
 }
 
 .h2 {
-    font-family: 'Roboto';
+    font-family: 'Lato';
     font-weight: 100;
     font-size: 25px;
     color: black;
 }
-
-#listings-div {
-    /* text-align: center; */
-}   
 
 #navbar {
     padding: .5rem;
@@ -48,33 +45,30 @@
     background: white;
     color: rgba(39, 76, 119, 1);;
     text-align: center;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
     font-weight: 400;
     font-size: 18px;
 }
 
 .tab-div {
-    font-family: 'Montserrat' sans-serif;
+    font-family: 'Raleway' sans-serif;
     font-weight: 300;
     font-size: 18px;
 }
 
-#listings-tab {
-    font-family: 'Montserrat' sans-serif;
-    font-weight: 500;
-    font-size: 18px;
-    color: rgba(39, 76, 119, 1);
+#listings-grid {
+    padding: 2rem;
 }
 
 #billing-tab {
-    font-family: 'Montserrat' sans-serif;
+    font-family: 'Raleway' sans-serif;
     font-weight: 500;
     font-size: 18px;
     color: rgba(39, 76, 119, 1);
 }
 
 #profile-tab {
-    font-family: 'Montserrat' sans-serif;
+    font-family: 'Raleway' sans-serif;
     font-weight: 500;
     font-size: 18px;
     color: rgba(39, 76, 119, 1);
@@ -89,12 +83,12 @@
 
 #labels-1 {
     font-size: 20px;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
     font-weight: 100;
 }
 
 .form-header {
-    font-family: 'Montserrat';
+    font-family: 'Raleway';
     font-weight: 700;
     font-size: 20px;
     margin: .25rem;
@@ -109,7 +103,7 @@
 }
 
 .listingTitle {
-    font-family: 'Montserrat';
+    font-family: 'Raleway';
     font-weight: 700;
     color: rgba(39, 76, 119, 1);
     display: inline;
@@ -117,7 +111,7 @@
 }
 
 .listingSubtitle {
-    font-family: 'Montserrat';
+    font-family: 'Raleway';
     font-weight: 300;
     font-size: 16p;
     color: grey;
@@ -134,65 +128,79 @@
 #first_name {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #last_name {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #phone {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #email {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #instagram {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #youtube {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #twitter {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #linkedin {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #about {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #facebook {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
 }
 
 #website {
     font-size: 20px;
     font-weight: 100;
-    font-family: 'Roboto' sans-serif;
+    font-family: 'Lato' sans-serif;
+}
+
+.userInfo {
+    font-family: 'Lato';
+    font-weight: 300;
+    color: #696969;
+    font-size: 18px;
+}
+
+.listing-menu {
+    font-family: 'Raleway';
+    font-weight: 500;
+    font-size: 25px;
+    color: black;
 }

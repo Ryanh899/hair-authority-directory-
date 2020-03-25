@@ -341,8 +341,9 @@ router.post('/subscription/createfree/new', async (req, res) => {
           "email": "${customer.email}",
         },
       "plan": {
-          "plan_code": "free-trial",
+          "plan_co0de": "free-trial",
       },
+      "is_portal_enabled": true,
       "auto_collect": false
   }`)
     .on('error', (err) => {
@@ -398,6 +399,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
   // get customer info from req
   console.log(req.body)
   const customerId = req.body.customer_id; 
+  const customer = jwt.decode(req.body.token); 
 
 
 
@@ -415,6 +417,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
       "plan": {
           "plan_code": "free-trial",
       },
+      "is_portal_enabled": true,
       "auto_collect": false
   }`)
     .on('error', (err) => {
@@ -498,6 +501,7 @@ if ( listingTitle && listingTitle.length ) {
       "plan": {
           "plan_code": "free-trial",
       },
+      "is_portal_enabled": true,
       "auto_collect": false
   }`)
     .on('error', (err) => {
@@ -592,6 +596,7 @@ if ( listingTitle && listingTitle.length) {
       "plan": {
           "plan_code": "free-trial",
       },
+      "is_portal_enabled": true,
       "auto_collect": false
   }`)
     .on('error', (err) => {
@@ -740,6 +745,7 @@ router.post('/hostedpage/claim/existing', async (req, res) => {
       "plan": {
         "plan_code": ${plan}
       }, 
+      "is_portal_enabled": true,
       "redirect_url": "${thankYouUrl}"
     }`)
     .on('error', (err) => {
@@ -802,6 +808,7 @@ router.post('/hostedpage/claim/new', async (req, res) => {
       "plan": {
         "plan_code": ${plan}
       }, 
+      "is_portal_enabled": true,
       "redirect_url": "${thankYouUrl}"
     }`)
     .on('error', (err) => {
@@ -862,6 +869,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
       "plan": {
           "plan_code": "free-trial",
       },
+      "is_portal_enabled": true,
       "auto_collect": false
   }`)
     .on('error', (err) => {
@@ -922,25 +930,25 @@ router.post('/subscription/cancel', async (req, res) => {
 
   console.log(subscription_id)
 
-  // Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions/${subscription_id}/cancel?cancel_at_end=true`)
-  //   .set(
-  //     "Authorization",
-  //     `Zoho-oauthtoken ${accessToken}`
-  //   )
-  //   .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
-  //   .set("Content-Type", "application/json;charset=UTF-8")
-  //   .on('error', (err) => {
-  //     let error = JSON.parse(err.response.text)
-  //     const errCode = error.code; 
-  //     if (errCode == 3004) {
-  //       console.log('invalid page id')
-  //       return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
-  //     }
-  //   })
-  //   .then(async resp => {
-  //     console.log(resp.body);
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions/${subscription_id}/cancel?cancel_at_end=true`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
       return knex('subscriptions').update('status', 'cancelled').where('subscription_id', subscription_id).returning('listing_id', 'subscription_id')
-    // })
+    })
     .then(async resp => {
       const getListing = await Listings.getListing__id(resp[0]); 
       return { listing: getListing, listingId: resp[0] }

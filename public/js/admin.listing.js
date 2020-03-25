@@ -534,6 +534,7 @@ $(document).ready(function() {
         const categoryAppend = document.querySelector("label.categoryAppend");
         const categoryDefault = document.querySelector("#category");
         const fullAddress = document.querySelector('input#full_address')
+        const tagline = document.querySelector('input#tagline')
         const missionStatement = document.querySelector(
           "textarea#mission_statement"
         );
@@ -551,6 +552,7 @@ $(document).ready(function() {
         $(fullAddress).attr("value", listing.full_address);
         $(missionStatement).attr("placeholder", listing.mission_statement);
         $(about).attr("value", listing.about);
+        $(tagline).attr('value', listing.tagline)
         $(categoryAppend).append(
           `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >${listing.category}</p>`
         );
@@ -575,36 +577,6 @@ $(document).ready(function() {
           );
         }
 
-        const openingHoursField = document.querySelector("#opening-hours-field");
-  const closingHoursField = document.querySelector("#closing-hours-field");
-
-  const hours = [
-    "--",
-    "12:00 am",
-    "1:00 am",
-    "2:00 am",
-    "3:00 am",
-    "4:00 am",
-    "5:00 am",
-    "6:00 am",
-    "7:00 am",
-    "8:00 am",
-    "9:00 am",
-    "10:00 am",
-    "11:00 am",
-    "12:00 pm",
-    "1:00 pm",
-    "2:00 pm",
-    "3:00 pm",
-    "4:00 pm",
-    "5:00 pm",
-    "6:00 pm",
-    "7:00 pm",
-    "8:00 pm",
-    "9:00 pm",
-    "10:00 pm",
-    "11:00 pm"
-  ];
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   days.forEach(day => {
@@ -658,7 +630,7 @@ $(document).ready(function() {
 
   //activate button
   const activate = document.querySelector('button.activate'); 
-  const deactivate = document.querySelector('button.deactivate'); 
+  const deactivate = document.querySelector('button.cancel'); 
 
     if (subscription) {
       const subValues = Object.values(subscription__client);
@@ -672,10 +644,6 @@ $(document).ready(function() {
     }
  
 
-        if (listing.tagline) {
-          const website = document.querySelector("input#tagline");
-          $(website).attr("value", listing.tagline);
-        }
 
         if (listing.website) {
           const website = document.querySelector("input#website");
@@ -847,9 +815,16 @@ $(document).ready(function() {
                 );
               }
             });
-            $("#user-segment").append(
-              `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
-            );
+            if (!listing.claimed) {
+              $("#user-segment").append(
+                `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >Verify</button> <button id='${subscription.subscription_id}' class="ui compact button deny-claim" >Deny</button> </p> `
+              );
+            } else {
+              $("#user-segment").append(
+                `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
+              );
+            }
+             
           } else {
             $("#user-segment").append(
               `<p class="userInfo" style="text-align: center; font-size: 20px;" >Listing has not been claimed</p>`
@@ -1521,6 +1496,17 @@ $(document).ready(function() {
   $('body').on('click', 'button.verify-claim', function (e) {
     let subId = $(this).attr('id'); 
     myAxios.post(ADMIN_URL + 'claims/verify', { subscription: subId })
+      .then(resp => {
+        console.log(resp)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }); 
+
+  $('body').on('click', 'button.deny-claim', function (e) {
+    let subId = $(this).attr('id'); 
+    myAxios.post(ADMIN_URL + 'claims/deny', { subscription: subId })
       .then(resp => {
         console.log(resp)
       })

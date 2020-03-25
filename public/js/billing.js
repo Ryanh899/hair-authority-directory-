@@ -102,10 +102,11 @@ $(document).ready(function () {
           myAxios.get(`http://localhost:3000/zoho/findcustomer/user/${token}`)
             .then(customer => {
               console.log(customer)
-              if (customer.status === 200 && customer.data.length) {
-                const customer_id = customer.customer_id
+              if (customer.status === 200 && customer.data) {
+                const customer_id = customer.data.customer_id
+                const token = sessionStorage.getItem('token')
                 if (plan === 'free-access' ) {
-                  myAxios.post('http://localhost:3000/zoho/subscription/createfree/existing', { customer_id })
+                  myAxios.post('http://localhost:3000/zoho/subscription/createfree/existing', { customer_id, token })
                     .then(subscription => {
                       console.log(subscription)
                       if (subscription.status === 200) {
@@ -149,7 +150,7 @@ $(document).ready(function () {
                     })
                 }
 
-              } else if (customer.status === 200 && !customer.data.length) {
+              } else if (customer.status === 200 && !customer.data) {
                 if (plan === 'free-access' ) {
                   myAxios.post('http://localhost:3000/zoho/subscription/createfree/new', { token })
                     .then(resp => {
@@ -254,7 +255,7 @@ $(document).ready(function () {
                     })
                 }
               // if not existing zoho customer 
-              } else if (customer.status === 200 && !customer.data.length) {
+              } else if (customer.status === 200 && !customer.data) {
                 if (plan === 'free-access' ) {
                   // create sub with existing customer id for free plan 
                     // 1. Get response --> insert into subs table --> insert into claims table --> send back status 

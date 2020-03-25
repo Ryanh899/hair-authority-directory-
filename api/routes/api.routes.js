@@ -9,6 +9,7 @@ const NodeGeocoder = require("node-geocoder");
 const AWS = require("aws-sdk");
 const moment = require('moment')
 const crypto = require("crypto")
+const Zoho = require('../models/zoho'); 
 
 const s3 = new AWS.S3(); 
 
@@ -517,5 +518,21 @@ router.put('/updatestatus', (req, res) => {
   console.log(req.body)
   res.json({message: 'test'})
 })   
+
+router.get('/dashboard/listings/:token', async (req, res) => {
+  const user = jwt.decode(req.params.token); 
+console.log(user)
+  // get subscription
+  const subscriptions = await Zoho.subscriptionCheck__userId(user.id); 
+  // if subscription exists 
+  if (subscriptions.length) {
+    // get listing info 
+    const listings = await Listings.getById__userId(user.id, res); 
+
+  } else {
+    res.status(401).json({ error: 'User has no subscription' })
+  }
+
+})
 
 module.exports = router;

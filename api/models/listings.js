@@ -1146,6 +1146,81 @@ const Listings = {
             console.error(err)
           })
   },
+  getById__userId (userId, res) {
+    console.log(userId)
+    return new Promise((resolve, reject) => {
+      knex("listings")
+        .select('*')
+        .where("professional_id", userId)
+        .then(resp => {
+          console.log('first promise')
+          console.log(resp)
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(400).json({ message: "listing does not exist" });
+        });
+    })
+    .then(async listings => {
+      let userListings = []; 
+      console.log(listings)
+      listings.forEach((listing, index) => {
+        const thisListing = listing; 
+        console.log(thisListing); 
+        console.log('response from promise')
+        return knex("images")
+          .select()
+          .where("listing_id", listing.id)
+          .then(response => {
+            thisListing.images = response;
+            return knex("social_media")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(social => {
+            // console.log(social);
+            let sm = social;
+            sm.forEach(platform => {
+              thisListing[platform.platform] = platform.url;
+            });
+            return knex("hours")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(hours => {
+            // console.log(hours);
+            hours.forEach(day => {
+              thisListing[day.day] = {
+                opening_hours: day.opening_hours,
+                closing_hours: day.closing_hours
+              };
+            });
+            return knex("faq")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(faqs => {
+            // console.log(faqs);
+            if (faqs.length > 0) {
+              thisListing.faqs = faqs;
+            }
+            console.log(thisListing)
+            userListings.push(thisListing)
+            let length = listings.length
+            if (index === length - 1) {
+              res.json(userListings)
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+    })
+      .catch(err => {
+        console.error(err);
+      });
+  },
   // used to update city in db
   addCityState() {
     let results = [];

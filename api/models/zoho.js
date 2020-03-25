@@ -2,6 +2,8 @@ const knex = require("../config/knex/knex");
 const axios = require("axios");
 const keys = require("../config/env-config");
 const moment = require("moment");
+const jwt = require("jsonwebtoken");
+const Superagent = require("superagent");
 moment().format();
 
 const Zoho = {
@@ -167,7 +169,58 @@ const Zoho = {
               console.log(err)
             })
   }, 
+  async denyClaim (subscription_id, res) {
+    // declare access token
+  let accessToken; 
 
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  console.log(subscription_id)
+
+  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions/${subscription_id}/cancel?cancel_at_end=true`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
+      return knex('subscriptions').update('status', 'cancelled').where('subscription_id', subscription_id).returning('listing_id', 'subscription_id')
+    })
+    .then(async resp => {
+      return knex('pending_claims').del().where('subscription_id', subscription_id)
+    })
+    .then(resp => {
+      console.log(resp)
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
+  }
 };
 
 module.exports = Zoho;
