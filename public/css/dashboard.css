@@ -61,6 +61,12 @@
     padding-top: 0rem;
 }
 
+#profile-grid {
+    padding: 2rem;
+    padding-bottom: 0px;
+    padding-left: 0px;
+}
+
 #billing-tab {
     font-family: 'Raleway' sans-serif;
     font-weight: 500;
@@ -84,8 +90,8 @@
 
 #labels-1 {
     font-size: 20px;
-    font-family: 'Lato' sans-serif;
-    font-weight: 100;
+    font-family: 'Lato';
+    font-weight: 300;
 }
 
 .form-header {
@@ -126,7 +132,11 @@
     text-align: center;
 }
 
-#first_name {
+#dashboard-tab-menu {
+    margin-top: 0rem;
+}
+
+/* #first_name {
     font-size: 20px;
     font-weight: 100;
     font-family: 'Lato' sans-serif;
@@ -190,7 +200,7 @@
     font-size: 20px;
     font-weight: 100;
     font-family: 'Lato' sans-serif;
-}
+} */
 
 .userInfo {
     font-family: 'Lato';
@@ -268,4 +278,10 @@
 
   #map{
     height: 100%;
+}
+
+.input_text {
+    font-family: 'lato';
+    font-weight: 300;
+    font-size: 16px;
 }

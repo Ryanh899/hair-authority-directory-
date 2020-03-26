@@ -46,6 +46,15 @@
   </head>
   <body>
     <div class="ui grid" id="page-container">
+        <div id="error-modal" class="ui modal">
+            <i class="close icon"></i>
+            <div id="error-header" class="header modalHeader"></div>
+              <div id="error-description" class="description modalDescription"></div>
+            <div class="fluid actions">
+                <a href="index.html"><div style="width: 48%;" class="ui button modal-cancel modalDescription"> Cancel</div></a>
+                <a href="sign-in.html"><div style="width: 48%;" class="ui button modal-signIn modalDescription">Sign In</div></a> 
+            </div>
+          </div>
           <!-- top menu  -->
           <div class="row" id="top-menu-row">
               <div class="ui grid" id="landing-grid">

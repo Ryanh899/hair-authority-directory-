@@ -80,8 +80,12 @@ var authHelper = {
     if (token) {
       var userData = this.parseToken(token);
       var expirationDate = new Date(userData.exp * 1000);
-      if (Date.now() > expirationDate) this.logOut();
+      if (Date.now() > expirationDate) {
+        this.logOut();
+      return false 
+    } else {
       return true;
+    }
     } else {
       return false;
     }
@@ -278,19 +282,23 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
       )
       .then(response => {
         allListings = response.data
+        let searchAppend = ''
+        sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category
         console.log(response);
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
-              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+              .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           $("#listings-column").append(
-            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+            `<p id="no-results-text" >There are no results for "${searchAppend}" in your area.`
           );
           $(loader).fadeOut();
           $(page).fadeIn();
           drawMap(location)
         } else {
+          let searchAppend = ''
+        sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category
           $("#listings-column")
-              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+              .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           response.data.forEach(listing => {
             $("#listings-column")
               .append(`<div
@@ -366,19 +374,21 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
       )
       .then(response => {
         allListings = response.data
+        let searchAppend = ''
+        sessionStorage.getItem('logoSearch') ? searchAppend = sessionStorage.getItem('logoSearch') : searchAppend = search
         console.log(response)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
-              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+              .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           $("#listings-column").append(
-            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+            `<p id="no-results-text" >There are no results for "${searchAppend}" in your area.`
           );
           $(loader).fadeOut();
           $(page).fadeIn();
           drawMap(location)
         } else {
           $("#listings-column")
-              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+              .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           response.data.forEach(listing => {
             $("#listings-column")
               .append(`<div
@@ -457,19 +467,21 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
       )
       .then(response => {
         allListings = response.data
+        let searchAppend = ''
+        category ? searchAppend = sessionStorage.getItem('logoSearch') : searchAppend = search
         console.log(response)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
-              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+              .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           $("#listings-column").append(
-            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+            `<p id="no-results-text" >There are no results for "${searchAppend}" in your area.`
           );
           $(loader).fadeOut();
           $(page).fadeIn();
           drawMap(location)
         } else {
           $("#listings-column")
-              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+              .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           response.data.forEach(listing => {
             $("#listings-column")
               .append(`<div

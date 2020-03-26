@@ -182,6 +182,7 @@ $(document).ready(function() {
     sessionStorage.removeItem('logoSearch'); 
     $("#logout-button").css("display", "none");
   }
+
   $("body").on("click", "#sign-in-button", function() {
     event.preventDefault();
 
@@ -260,24 +261,6 @@ $(document).ready(function() {
     $("#logout-div").html("");
   });
 
-  // const categories = [
-  //   { title: "Dermatologist" },
-  //   { title: "Hair Care Salons" },
-  //   { title: "Hair Loss / Hair Care Products & Treatments" },
-  //   { title: "Hair Replacement & Hair Systems" },
-  //   { title: "Laser Therapy" },
-  //   { title: "Medial / Hair Transplants" },
-  //   { title: "Trichologist" },
-  //   { title: "Wigs, Extensions, Hair Additions" },
-  //   { title: "The Hair Club", abbreviation: "" },
-  //   { title: "ARTAS Robotic Hair Restoration System" },
-  //   { title: "World Trichology Society", abbreviation: "WTS" },
-  //   {
-  //     title: "The International Society of Hair Restoration Surgery (ISHRS)",
-  //     abbreviation: "ISHRS"
-  //   }
-  // ];
-
   const categories = [
     { title: "Dermatologist" },
     { title: "Hair Care Salons" },
@@ -292,11 +275,13 @@ $(document).ready(function() {
   let catButtonDiv = document.createElement("div");
   catButtonDiv.className = "computer only";
   catButtonDiv.id = "append-cat-buttons";
+  catButtonDiv.style.textAlign = 'center'
   let or = document.createElement("p");
   or.id = "or-text";
   or.style.marginTop = "1rem";
   or.style.color = "white";
-  or.innerHTML = "- Or Search By Category -";
+  or.style.textAlign = "center";
+  or.innerHTML = "<i class='small down arrow icon' ></i>Or click on a category button to search <i class='small down arrow icon' ></i> ";
   catButtonDiv.appendChild(or);
   $("#search-appendButtons").append(catButtonDiv);
   categories.forEach(category => {

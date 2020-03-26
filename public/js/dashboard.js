@@ -37,8 +37,12 @@ var authHelper = {
     if (token) {
       var userData = this.parseToken(token);
       var expirationDate = new Date(userData.exp * 1000);
-      if (Date.now() > expirationDate) this.logOut();
-      return true;
+      if (Date.now() > expirationDate) {
+        this.logOut();
+      return false 
+      } else {
+        return true;
+      }
     } else {
       return false;
     }
@@ -202,7 +206,7 @@ async function appendListing (thisListing, listingArr) {
       $(about).attr("value", listing.about);
       $(tagline).attr('value', listing.tagline)
       $(categoryAppend).html(
-        `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >Category: ${listing.category}</p>`
+        `<p id="labels-1" style="margin-top: .5rem; margin-bottom: .5rem; color: black;" >Category: <p class="input_text" style="margin-bottom: .25rem;" >${listing.category}</p></p>`
       );
       categoryDefault.textContent = listing.category;
 

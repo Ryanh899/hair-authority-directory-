@@ -25,8 +25,12 @@ var myAxios = axios.create({
       if (token) {
         var userData = this.parseToken(token);
         var expirationDate = new Date(userData.exp * 1000);
-        if (Date.now() > expirationDate) this.logOut();
-        return true;
+        if (Date.now() > expirationDate) {
+          this.logOut();
+          return false 
+        } else {
+          return true;
+        }
       } else {
         return false;
       }
@@ -73,6 +77,13 @@ var myAxios = axios.create({
       }
     }
   };
+
+  function showErrModal (modal, header, description, errHeader, errMessage) {
+    $(header).text(errHeader)
+    $(description).text(errMessage)
+
+    $(modal).modal('show')
+  }
   
   // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
   let API_URL = "http://localhost:3000/api/";
@@ -91,13 +102,18 @@ $(document).ready(function () {
     // 4. get succesful results, subscription info, plan info, card info, customer info, invoice and payment info
     // 5. get customer id, balance, payment_id, plan_code and put in zoho status table
 
+    if ( !authHelper.isLoggedIn() ) {
+      console.log('Not logged in')
+      showErrModal('#error-modal', '#error-header', '#error-description', 'Account Error', 'You must be signed in to create a subscription')
+    }
+
     $('body').on('click', '.continue-button', function (e) {
         let plan = this.id; 
         const claimCheck = authHelper.claim__check()
 
         sessionStorage.setItem('plan', plan)
         sessionStorage.setItem('lastLocation', 'billing__new')
-        if (sessionStorage.getItem('token') && !claimCheck ) {
+        if (authHelper.isLoggedIn() && !claimCheck ) {
           const token = sessionStorage.getItem('token')
           myAxios.get(`http://localhost:3000/zoho/findcustomer/user/${token}`)
             .then(customer => {
@@ -193,7 +209,7 @@ $(document).ready(function () {
               // 4. Free + Paid: End at home page, let client know he will be emailed upon verification. 
           
           // if its a claim
-          } else if ( sessionStorage.getItem('token') && claimCheck ) {
+          } else if ( authHelper.isLoggedIn() && claimCheck ) {
             // get listing to be claimed 
             const claim = JSON.parse(sessionStorage.getItem('claimListing')).value
             // get user token 
@@ -316,6 +332,9 @@ $(document).ready(function () {
                 console.log(err)
               })
             
+          } else if ( !authHelper.isLoggedIn() ) {
+            console.log('Not logged in')
+            showErrModal('#error-modal', '#error-header', '#error-description', 'Account Error', 'You must be signed in to create a subscription')
           }
     }); 
 

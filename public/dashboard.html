@@ -18,7 +18,6 @@
     href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
     rel="stylesheet"
   />
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
 
   <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
@@ -34,23 +33,16 @@
             </div>
           </div>  
           <div style="padding: .5rem;" class="one wide computer only column">
-            <img
-              style="margin-left: 1rem; padding: 0px;"
-              id="ha-logo-image"
-              src="./images/logo-symbol-01.png"
-            />
           </div>
-          <div style="padding: 1rem;" class="six wide computer six wide mobile middle aligned column">
+          <div style="padding: 1rem;" class="six wide computer six wide mobile centered column">
             <p id="ha-title">Hair Authority Directory</p>
           </div>
         </div>
       </div>
   <div id="page-container" >
-      <div class="ui grid" style="width: 50%;" id="profile-grid">
-          <div style="padding-bottom: 0px;" class="sixteen wide left aligned column">
-            <p id="display-name" class="h1" style="margin-bottom: .5rem;"></p>
-          </div>
+      <div class="ui grid" id="profile-grid">
           <div style="margin-left: 2.5rem;" class="eight wide left aligned column">
+              <p id="display-name" class="h1" style="margin-bottom: .5rem;"></p>
               <div class="ui list">
                   <div class="item">
                     <i class="phone icon"></i>
@@ -60,7 +52,7 @@
                   <div class="item">
                     <i class="mail icon"></i>
                     <div class="content userInfo">
-                      <a style="color: black;" id="user-email" href="mailto:jack@semantic-ui.com"></a>
+                      <a style="color: black;" id="user-email" ></a>
                     </div>
                   </div>
                   <div class="item">
@@ -72,19 +64,19 @@
                   </div>
                 </div>
           </div>
+          <div class="seven wide right aligned column">
+            <div style="height: 100%; width: 100%;" class="ui raised segment">
+            <img src="https://www.datapine.com/blog/wp-content/uploads/2014/06/Stacked-Column-Chart.png" alt="" class="ui right aligned huge image">
+            </div>
+          </div>
         </div>
-      <div class="ui secondary pointing tabular menu">
+      <div id="dashboard-tab-menu" class="ui secondary pointing tabular menu">
           <a data-tab="listings" class="item menu-item-dash">
             Listings
           </a>
           <a href="billing__new.html" class="item menu-item-dash">
             New Listing
           </a>
-          <div class="right menu">
-            <a class="ui item">
-              Logout
-            </a>
-          </div>
         </div>
 
         <div data-tab="listings" class="ui tab ">
@@ -96,17 +88,18 @@
             <div class="eleven wide left aligned column ">
 
             <form id="admin-form" style="padding-top: .5rem;" class="ui equal width form">
+              <p class="input_text">Edit your business information here <i style="color: #696969;" class="small down arrow icon" ></i></p>
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Business Title</label>
                     <div id="businessTitle-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="main" id="business_title" name="businessTitle" type="text" >
+                        <input class="main input_text" id="business_title" name="businessTitle" type="text" >
                         <i class="building outline icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Tagline or Slogan</label>
                     <div id="businessDescription-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="main" id="tagline" name="tagline" type="text">
+                        <input class="main input_text" id="tagline" name="tagline" type="text">
                         <i class="edit icon"></i>
                     </div >
                 </div>
@@ -114,9 +107,9 @@
                 <label class="categoryAppend" style="margin-top: 2rem;" id="labels-1">Category: </label>
                     <div id="category-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <div multiple="" id="category-drop" class="ui fluid multiple selection dropdown main">
-                            <input id="category" type="hidden" name="category">
+                            <input id="category" type="hidden" name="category" class=" input_text" >
                             <i class="dropdown icon"></i>
-                            <div class="default text">Edit</div>
+                            <div class="default text input_text">Edit</div>
                             <div class="menu">
                               <div class="item" data-value="Dermatologist">
                                 Dermatologist
@@ -149,26 +142,26 @@
             
                 <div class="fields">
                     <div class="field">
-                        <label for="streetAddress" id="labels-1">Street Address*</label>
+                        <label for="streetAddress" id="labels-1">Street Address</label>
                         <div id="streetAddress-div" style="margin-top: 1rem;" class="ui  left icon input">
-                            <input class="ui input main" id="street_address" name="streetAddress" type="text"
+                            <input class="ui input main input_text" id="street_address" name="streetAddress" type="text"
                                 >
                             <i class="map signs icon"></i>
                         </div>
                     </div>
                     <div class="field">
-                        <label for="city" id="labels-1">City*</label>
+                        <label for="city" id="labels-1">City</label>
                         <div id="city-div" style="margin-top: 1rem;" class="ui  left icon input">
-                            <input name="city" type="text" id="city" class="main">
+                            <input name="city" type="text" id="city" class="main input_text">
                             <i class="city icon"></i>
                         </div >
                     </div>
                 </div>
                 <div class="fields">
                         <div class="field">
-                                <label for="state" id="labels-1">State*</label>
+                                <label for="state" id="labels-1">State</label>
                                 <div id="state-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <select id="state" name="state" class="ui search dropdown main">
+                                    <select id="state" name="state" class="ui search dropdown main input_text">
                                         <option value="">State</option>
                                         <option value="AL">Alabama</option>
                                         <option value="AK">Alaska</option>
@@ -225,16 +218,16 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label for="zip" id="labels-1">Zip*</label>
+                                <label for="zip" id="labels-1">Zip</label>
                                 <div id="zip-div" style="margin-top: 1rem;" class="ui  left icon input">
-                                    <input name="zip" type="text" id="zip" class="main">
+                                    <input name="zip" type="text" id="zip" class="main input_text">
                                     <i class="hashtag icon"></i>
                                 </div >
                             </div>
                             <div class="field">
-                                    <label for="country" style="margin-bottom: 1rem;" id="labels-1" >Country*</label>
+                                    <label for="country" style="margin-bottom: 1rem;" id="labels-1" >Country</label>
                                 <div  >
-                                        <select id="country" name="country" class="ui search dropdown main">
+                                        <select id="country" name="country" class="ui search dropdown main input_text">
                                           <option value="">Select Country</option>
                                           <option value="US">United States</option>
                                           <option value="AF">Afghanistan</option>
@@ -492,7 +485,7 @@
                 <div class="field">
                     <label for="full_address" id="labels-1">Full Address</label>
                     <div id="full_address-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input name="full_address" type="text" id="full_address" class="main">
+                        <input name="full_address" type="text" id="full_address" class="main input_text">
                         <i class="hashtag icon"></i>
                     </div >
                 </div>   
@@ -510,54 +503,54 @@
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Website</label>
                     <div style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="main" id="website" name="website" type="text" >
+                        <input class="main input_text" id="website" name="website" type="text" >
                         <i class="search icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Social Media</label>
                     <div id="instagram-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="social_media" id="instagram" name="instagram" type="text" >
+                        <input class="social_media input_text" id="instagram" name="instagram" type="text" >
                         <i class="large instagram icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <div id="facebook-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="social_media" id="facebook" name="facebook" type="text" >
+                        <input class="social_media input_text" id="facebook" name="facebook" type="text" >
                         <i class="large facebook icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <div id="twitter-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="social_media" id="twitter" name="twitter" type="text" >
+                        <input class="social_media input_text" id="twitter" name="twitter" type="text" >
                         <i class="large twitter icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <div id="linkedIn-div" style="margin-top: 1rem;" class="ui  left icon input">
-                        <input class="social_media" id="linkedin" name="linkedin" type="text">
+                        <input class="social_media input_text" id="linkedin" name="linkedin" type="text">
                         <i class="large linkedin icon"></i>
                     </div>
                 </div>
                 <div class="field">
                         <div id="youtube-div" style="margin-top: 1rem;" class="ui  left icon input">
-                            <input class="social_media" id="youtube" name="youtube" type="text" >
+                            <input class="social_media input_text" id="youtube" name="youtube" type="text" >
                             <i class="large youtube icon"></i>
                         </div>
                     </div>
                 
     
                 <div class="field">
-                    <label style="margin-top: 2rem;" id="labels-1">Email*</label>
+                    <label style="margin-top: 2rem;" id="labels-1">Email</label>
                     <div id="email-div" style="margin-top: 1rem;" class="ui left icon input">
-                        <input class="main" id="email" name="email" type="text" >
+                        <input class="main input_text" id="email" name="email" type="text" >
                         <i class="envelope icon"></i>
                     </div>
                 </div>
                 <div class="field">
-                    <label style="margin-top: 2rem;" id="labels-1">Phone*</label>
+                    <label style="margin-top: 2rem;" id="labels-1">Phone</label>
                     <div id="phone-div" style="margin-top: 1rem;" class="ui left icon input">
-                        <input class="main" id="phone" name="phone" type="text" >
+                        <input class="main input_text" id="phone" name="phone" type="text" >
                         <i class="phone icon"></i>
                     </div>
                 </div>
@@ -565,13 +558,13 @@
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
                     <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
-                        <textarea class="main" id="business_description" name="about" type="text" ></textarea>
+                        <textarea class="main input_text" id="business_description" name="about" type="text" ></textarea>
                     </div>
                 </div>
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Mission Statement</label>
                     <div id="ms-div" style="margin-top: 1rem;" class="ui left icon input">
-                        <textarea class="main" id="mission_statement" name="ms" type="text"
+                        <textarea class="main input_text" id="mission_statement" name="ms" type="text"
                             ></textarea>
                     </div>
                 </div>
@@ -585,23 +578,23 @@
                     <i id="add-faq" class="large plus circle icon"></i>
                     <div class="field" id="0faq" style="display: block;">
                         <label>FAQ #1<label style="display: block;">Question: </label>
-                        <input class="faq" id="faq0" name="faq-question-0">
+                        <input class="faq  input_text" id="faq0" name="faq-question-0">
                         <label>Answer: </label>
-                        <textarea class="answer" id="answer0" name="faq-answer-0"></textarea>
+                        <textarea class="answer  input_text" id="answer0" name="faq-answer-0"></textarea>
                         <button style="display: none;" class="ui button faqSubmit" id="faq0-button">Update</button>
                     </div>
                     <div style="display: none;" class="field" id="1faq" style="display: block;">
                         <label>FAQ #2<label style="display: block;">Question: </label>
-                        <input class="faq" id="faq1" name="faq-question-1">
+                        <input class="faq input_text" id="faq1" name="faq-question-1">
                         <label>Answer: </label>
-                        <textarea class="answer" id="answer1" name="faq-answer-1"></textarea>
+                        <textarea class="answer input_text" id="answer1" name="faq-answer-1"></textarea>
                         <button style="display: none;" class="ui button faqSubmit" id="faq1-button">Update</button>
                     </div>
                     <div style="display: none;" class="field" id="2faq" style="display: block;">
                         <label>FAQ #3<label style="display: block;">Question: </label>
-                        <input class="faq" id="faq2" name="faq-question-2">
+                        <input class="faq input_text" id="faq2" name="faq-question-2">
                         <label>Answer: </label>
-                        <textarea class="answer" id="answer2" name="faq-answer-2"></textarea>
+                        <textarea class="answer input_text" id="answer2" name="faq-answer-2"></textarea>
                         <button style="display: none;" class="ui button faqSubmit" id="faq2-button">Update</button>
                     </div>
                 </div>

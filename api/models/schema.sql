@@ -172,3 +172,11 @@ status varchar(64),
 subscriptions_id text, 
 card_id text
 ); 
+
+create table pageviews (
+id serial, 
+listing_id uuid not null, 
+count int, 
+search text, 
+date_viewed timestamp default current_timestamp
+); 
