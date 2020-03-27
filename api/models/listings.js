@@ -1124,6 +1124,32 @@ const Listings = {
         console.error(err)
       })
   },
+  updateDescription (description) {
+    const listingId = description.listing_id; 
+    console.log(description)
+    return knex('listings')
+            .update({ business_description: description.html })
+            .where('id', listingId)
+            .then(updateHtml => {
+              console.log(updateHtml); 
+              return knex('quill_deltas').update({ delta: JSON.stringify(description.delta) }).where('listing_id', listingId)
+            })
+            .then(updateDelta => {
+              console.log(`updateDelta: ${updateDelta}`); 
+              if ( updateDelta ) {
+                return updateDelta
+              } else {
+                return knex('quill_deltas')
+                  .insert({ delta: JSON.stringify(description.delta), listing_id: listingId })
+                  .then(insert => {
+                    return insert
+                  }); 
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+  }, 
   updateStagedListing__table(table, data) {
     return knex(table).insert(data).where('listing_id', data.id)
       .then(response => {
@@ -1229,6 +1255,13 @@ const Listings = {
               thisListing.faqs = faqs;
             }
             console.log(thisListing)
+            return knex('quill_deltas').select().where('listing_id', listing.id); 
+          })
+          .then(delta => {
+            if (delta.length) {
+              thisListing.delta = delta[0].delta
+            }
+
             userListings.push(thisListing)
             let length = listings.length
             if (index === length - 1) {

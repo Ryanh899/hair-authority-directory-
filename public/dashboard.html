@@ -19,7 +19,7 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
-
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./css/dashboard.css" />
   <link rel="stylesheet" href="./css/styles.css" />
 <body>
@@ -556,10 +556,13 @@
                 </div>
                
                 <div class="field">
-                    <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
-                    <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
-                        <textarea class="main input_text" id="business_description" name="about" type="text" ></textarea>
+                    <label style="margin-top: 2rem;" id="labels-1">Description of your Business</label>
+                    <div class="description" id="editor">
+                        
                     </div>
+                    <!-- <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
+                        <textarea class="main input_text" id="business_description" name="about" type="text" ></textarea>
+                    </div> -->
                 </div>
                 <div class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Mission Statement</label>
@@ -634,6 +637,7 @@
   async
   defer
 ></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js" integrity="sha256-VeNaFBVDhoX3H+gJ37DpT/nTuZTdjYro9yBruHjVmoQ=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
   <script src="./js/dashboard.js"></script>

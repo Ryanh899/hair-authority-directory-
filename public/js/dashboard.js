@@ -172,13 +172,13 @@ function getMenuParams (listings) {
   })
 }
 
-async function appendListing (thisListing, listingArr) {
+async function appendListing (thisListing, quill, listingArr) {
   sessionStorage.setItem('currentListing', thisListing.id)
   let listing = thisListing
 
       const title = document.querySelector("input#business_title");
       const description = document.querySelector(
-        "textarea#business_description"
+        "div#editor"
       );
       const address = document.querySelector("input#street_address");
       const city = document.querySelector("input#city");
@@ -196,7 +196,12 @@ async function appendListing (thisListing, listingArr) {
       const form = document.querySelector("form#admin-form");
  
       $(title).attr("value", listing.business_title);
-      $(description).attr("placeholder", listing.business_description);
+      // $(description).text(listing.business_description);
+      if (listing.delta) {
+        quill.setContents(JSON.parse(listing.delta))
+      } else {
+        quill.dangerouslyPasteHTML(listing.business_description)
+      }
       $(address).attr("value", listing.street_address);
       $(city).attr("value", listing.city);
       $(state).attr("value", listing.state);
@@ -387,7 +392,7 @@ const am_pm_to_hours = time => {
 }
 
 
-async function getListings (token, listingArr, div, loader) {
+async function getListings (token, quill, listingArr, div, loader) {
   myAxios.get(API_URL + 'dashboard/listings/' + token)
     .then(async response => {
       console.log(response)
@@ -445,7 +450,7 @@ async function getListings (token, listingArr, div, loader) {
 
       const title = document.querySelector("input#business_title");
       const description = document.querySelector(
-        "textarea#business_description"
+        "div#editor"
       );
       const address = document.querySelector("input#street_address");
       const city = document.querySelector("input#city");
@@ -463,7 +468,12 @@ async function getListings (token, listingArr, div, loader) {
       const form = document.querySelector("form#admin-form");
 
       $(title).attr("value", listing.business_title);
-      $(description).attr("placeholder", listing.business_description);
+      // $(description).attr(listing.business_description);
+      if (listing.delta) {
+        quill.setContents(JSON.parse(listing.delta))
+      } else {
+        quill.dangerouslyPasteHTML(listing.business_description)
+      }
       $(address).attr("value", listing.street_address);
       $(city).attr("value", listing.city);
       $(state).attr("value", listing.state);
@@ -748,6 +758,10 @@ handleFileUpload("#otherimages", async file => {
 
 $(document).ready(function() {
 
+  const quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+
   let listings = []; 
 
   $('.secondary.menu .item').tab(); 
@@ -913,7 +927,7 @@ getGeolocation();
     let active = $('#dropdown-menu').val(); 
     let thisListing = listings.filter(listing => listing.id === active ); 
     thisListing = thisListing[0];
-    appendListing(thisListing, listings) 
+    appendListing(thisListing, quill, listings) 
     if (thisListing.lat && thisListing.lng) {
       sessionStorage.setItem('listing-lat', thisListing.lat)
       sessionStorage.setItem('listing-lng', thisListing.lng)
@@ -1008,7 +1022,7 @@ $(document).on("click", "button.other-remove", function(e) {
 });
   // getProfile();
 
-  getListings(token, listings)
+  getListings(token, quill, listings)
 
 
   $("body").on("click", "#listings-tab", function() {
@@ -1052,6 +1066,8 @@ $(document).on("click", "button.other-remove", function(e) {
       })
       .catch(err => console.log(err));
   });
+
+  console.log($('#editor').html())
 
 
 
@@ -1118,7 +1134,9 @@ $(document).on("click", "button.other-remove", function(e) {
     window.location.assign('index.html')
   })
 
-  const updates = { social_media: [], listing: {}, hours: [], faq: [] };
+
+
+  const updates = { business_description: {}, social_media: [], listing: {}, hours: [], faq: [] };
 
   $("input.social_media").on("input", function(e) {
     const id = $(e.target).attr("id");
@@ -1171,6 +1189,16 @@ $(document).on("click", "button.other-remove", function(e) {
         .trim();
       console.log(updates);
     }
+
+    $("#submit-button").show();
+  });
+
+  $("div.description").on("input", function(e) {
+      console.log(quill.root.innerHTML)
+      updates.business_description.delta = quill.getContents()
+      updates.business_description.html = quill.root.innerHTML 
+        
+      console.log(updates);
 
     $("#submit-button").show();
   });
@@ -1289,6 +1317,19 @@ $(document).on("click", "button.other-remove", function(e) {
             console.log(err);
           });
       }   
+
+      if (updates.business_description) {
+        updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
+        console.log(updates.business_description)
+          myAxios
+            .put("http://localhost:3000/api/updatedescription", updates.business_description)
+            .then(resp => {
+              console.log(resp); 
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }   
   
 
 

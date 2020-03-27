@@ -474,6 +474,28 @@ router.put('/stagelisting', (req, res) => {
     })
 })
 
+// router.put('/stagelisting/description', (req, res) => {
+//   let data = req.body; 
+//   console.log(data)
+//   Listings.updateDescription(data)
+//     .then(resp => {
+//       console.log(resp)
+//       res.json(resp) 
+//     })
+//     .catch(err => {
+//       console.log(err)
+//     })
+// })
+
+router.put('/updatedescription', async (req, res) => {
+  let description = req.body
+  console.log(req.body)
+    const insert = await Listings.updateDescription(description)
+
+    res.json(insert)
+  
+})
+
 router.put('/updatelisting', (req, res) => {
   let data = req.body; 
   console.log(data)
