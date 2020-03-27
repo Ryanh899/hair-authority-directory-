@@ -1,3 +1,31 @@
+p {
+  font-family: 'lato';
+}
+
+h1 {
+  font-family: 'lato';
+}
+
+h2 {
+  font-family: 'lato';
+}
+
+h3 {
+  font-family: 'lato';
+}
+
+h4 {
+  font-family: 'lato';
+}
+
+h5 {
+  font-family: 'lato';
+}
+
+li {
+  font-family: 'lato';
+}
+
 #listing-page-container {
   margin: 0px;
   width: 100%;

@@ -1,5 +1,6 @@
 
 let API_URL = "http://localhost:3000/api/"
+const S3Url = 'https://ha-images-02.s3-us-west-1.amazonaws.com/'
 
 var myAxios = axios.create({
   headers: {
@@ -92,16 +93,25 @@ function displayOtherPhoto(image, id) {
   $(otherImages).fadeIn();
 }
 
+function displayQlPhoto(quill, image) {
+  console.log(image)
+  // imageSrc = S3Url + image
+  let delta = quill.clipboard.convert(`<img src="${image}" class="ui small image"></img>`); 
+  console.log(delta)
+  quill.updateContents(delta)
+}
+
+
 // read uploaded image
-function readFile(file, id) {
+function readFile(file, id, imagesArr) {
   let FR = new FileReader();
 
   FR.addEventListener("load", function(base64Img) {
     // pass base64 image to be uploaded to jumbotron
     displayPhoto(base64Img.target.result, id);
-    images.push(base64Img.target.result);
+    imagesArr.push(base64Img.target.result);
     // console.log(`images: ${images}`);
-    console.log(images.length);
+    console.log(imagesArr.length);
 
     // check if max images allowed
     // maxPhotos(images.length);
@@ -110,15 +120,32 @@ function readFile(file, id) {
 }
 
 // read uploaded image
-function readOtherFile(file, id) {
+function readQlFile(file, imagesArr, quill) {
+  let FR = new FileReader();
+
+  FR.addEventListener("load", function(base64Img) {
+    // pass base64 image to be uploaded to jumbotron
+    displayQlPhoto(quill, base64Img.target.result);
+    imagesArr.push({ base: base64Img.target.result, file });
+    // console.log(`images: ${images}`);
+    console.log(imagesArr.length);
+
+    // check if max images allowed
+    // maxPhotos(images.length);
+  });
+  FR.readAsDataURL(file);
+}
+
+// read uploaded image
+function readOtherFile(file, id, imagesArr) {
   let FR = new FileReader();
 
   FR.addEventListener("load", function(base64Img) {
     // pass base64 image to be uploaded to jumbotron
     displayOtherPhoto(base64Img.target.result, id);
-    images.push(base64Img.target.result);
+    imagesArr.push(base64Img.target.result);
     // console.log(`images: ${images}`);
-    console.log(images.length);
+    console.log(imagesArr.length);
 
     // check if max images allowed
     // maxPhotos(images.length);
@@ -665,110 +692,180 @@ days.forEach(day => {
 
 
 
-const handleFileUpload = (selector, handler) => {
-  document.querySelector(selector).addEventListener("change", event => {
-    const files = event.currentTarget.files;
-    const size = (files[0].size / 1024 / 1024).toFixed(2);
-    sessionStorage.setItem("imageUp", 0);
-    if (files.length && size < 2) {
-      handler(files[0]);
-    } else {
-      $("#submit6").css("background", "#696969");
-      $("#submit6").off();
-      $(selector).val("");
-      $(".ui.basic.modal").modal("show");
-      return false;
-    }
-  });
-};
 
-handleFileUpload("#put", async file => {
-  const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
-  console.log(file)
-  const urlAndKey = await (
-    await fetch(
-      `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
-    )
-  ).json();
-  console.log(urlAndKey);
-  await fetch(urlAndKey.url, {
-    method: "PUT",
-    body: file
-  })
-    .then(data => {
-      sessionStorage.setItem(
-        "imageUp",
-        Number(sessionStorage.getItem("imageUp")) + 1
-      );
-      console.log(data);
-      let image_path = urlAndKey.key;
-      const storeImage = {
-        listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
-        image_path,
-        featured_image: true
-      };
-      myAxios
-        .post("http://localhost:3000/api/storeimage/feature", storeImage)
-        .then(resp => {
-          console.log(resp);
-          readFile(file, resp.data[0].image_id);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-handleFileUpload("#otherimages", async file => {
-  const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
-  console.log(file)
-  const urlAndKey = await (
-    await fetch(
-      `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
-    )
-  ).json();
-  console.log(urlAndKey);
-  await fetch(urlAndKey.url, {
-    method: "PUT",
-    body: file
-  })
-    .then(data => {
-      sessionStorage.setItem(
-        "imageUp",
-        Number(sessionStorage.getItem("imageUp")) + 1
-      );
-      if (sessionStorage.getItem("imageUp") >= 8) {
-        $("#otherimages").prop("disabled", true);
-      }
-      let image_path = urlAndKey.key;
-      const storeImage = {
-        listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
-        image_path,
-        featured_image: false
-      };
-      myAxios
-        .post("http://localhost:3000/api/storeimage", storeImage)
-        .then(resp => {
-          console.log(resp);
-          readOtherFile(file, resp.data[0].image_id);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
 
 $(document).ready(function() {
 
   const quill = new Quill('#editor', {
+    modules: {
+      toolbar: [
+        [{ 'font': [] }, { 'size': [] }],
+        [ 'bold', 'italic', 'underline', 'strike' ],
+        [{ 'color': [] }],
+        [{ 'header': '1' }, { 'header': '2' }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+        [ 'direction', { 'align': [] }],
+        [ 'link', 'image'],
+        [ 'clean' ]
+  ]
+    },
     theme: 'snow'
   });
+  
+
+let images = []; 
+
+  const handleFileUpload = (selector, handler) => {
+    console.log(selector, handler)
+    document.querySelector(selector).addEventListener("change", event => {
+      const files = event.currentTarget.files;
+      const size = (files[0].size / 1024 / 1024).toFixed(2);
+      sessionStorage.setItem("imageUp", 0);
+      if (files.length && size < 2) {
+        handler(files[0]);
+      } else {
+        $("#submit6").css("background", "#696969");
+        $("#submit6").off();
+        $(selector).val("");
+        $(".ui.basic.modal").modal("show");
+        return false;
+      }
+    });
+  };
+
+  const fileButton = document.querySelector('input#ql-file-input')
+
+  const handleQuillUpload = (selector, input, handler) => {
+    // console.log(selector, handler)
+
+    fileButton.addEventListener("click", event => {
+      // event.preventDefault(); 
+      const files = $('input#ql-file-input').files;
+      if (files && files.length) {
+        const size = (files[0].size / 1024 / 1024).toFixed(2);
+        sessionStorage.setItem("imageUp", 0);
+        if (files.length && size < 2) {
+          handler(files[0]);
+        } else {
+          $("#submit6").css("background", "#696969");
+          $("#submit6").off();
+          $(selector).val("");
+          $(".ui.basic.modal").modal("show");
+          return false;
+        }
+      } else {
+        return false
+      }
+
+    });
+
+    $(fileButton).click(); 
+  };
+
+  // const imageButton = document.querySelector('button.ql-image'); 
+  // $(imageButton).attr('for', 'input#ql-file-input')
+  let toolbar = quill.getModule('toolbar'); 
+  toolbar.addHandler('image', handleQuillUpload)
+  
+  
+  handleFileUpload("#put", async file => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    console.log(file)
+    const urlAndKey = await (
+      await fetch(
+        `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
+      )
+    ).json();
+    console.log(urlAndKey);
+    await fetch(urlAndKey.url, {
+      method: "PUT",
+      body: file
+    })
+      .then(data => {
+        sessionStorage.setItem(
+          "imageUp",
+          Number(sessionStorage.getItem("imageUp")) + 1
+        );
+        console.log(data);
+        let image_path = urlAndKey.key;
+        const storeImage = {
+          listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
+          image_path,
+          featured_image: true
+        };
+        myAxios
+          .post("http://localhost:3000/api/storeimage/feature", storeImage)
+          .then(resp => {
+            console.log(resp);
+            readFile(file, resp.data[0].image_id, images);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+  
+  handleFileUpload("#otherimages", async file => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    console.log(file)
+    const urlAndKey = await (
+      await fetch(
+        `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
+      )
+    ).json();
+    console.log(urlAndKey);
+    await fetch(urlAndKey.url, {
+      method: "PUT",
+      body: file
+    })
+      .then(data => {
+        sessionStorage.setItem(
+          "imageUp",
+          Number(sessionStorage.getItem("imageUp")) + 1
+        );
+        if (sessionStorage.getItem("imageUp") >= 8) {
+          $("#otherimages").prop("disabled", true);
+        }
+        let image_path = urlAndKey.key;
+        const storeImage = {
+          listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
+          image_path,
+          featured_image: false
+        };
+        myAxios
+          .post("http://localhost:3000/api/storeimage", storeImage)
+          .then(resp => {
+            console.log(resp);
+            readOtherFile(file, resp.data[0].image_id, images);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+  
+  handleFileUpload("input#ql-file-input", async file => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    console.log(file); 
+    sessionStorage.setItem(
+      "imageUp",
+      Number(sessionStorage.getItem("imageUp")) + 1
+    );
+    if (sessionStorage.getItem("imageUp") >= 8) {
+      $("#otherimages").prop("disabled", true);
+    }
+    readQlFile(file, images, quill);
+
+  });
+  
+  
+  
 
   let listings = []; 
 
@@ -969,7 +1066,7 @@ getGeolocation();
 
   getProfile()
 
-  let images = [];
+  // let images = [];
 let featurePut = document.getElementById("put");
 
 
@@ -1033,47 +1130,47 @@ $(document).on("click", "button.other-remove", function(e) {
   getListings(token, quill, listings)
 
 
-  $("body").on("click", "#listings-tab", function() {
-    myAxios
-      .get(API_URL + "listings/" + localStorage.getItem("token"), {
-        headers: {
-          "Content-Type": "application/json"
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        }
-      })
-      .then(resp => {
-        $("#listings-div").html("");
-        const response = resp.data;
-        if (response.length === 0) {
-          $("#listings-div").html(`<h1 class="h1" >You have no listings</h1>
-                                           <h2 class="h2">But you could... </h2>
-                                           <button id="add-listing-button" class="ui button">Make a listing</button>`);
-        } else {
-          console.log(response);
-          $("#listings-div").html("");
-          response.forEach(listing => {
-            $("#listings-div").append(`
-                        <div style="margin-bottom: 1rem;" class="listingItem ui grid">
-                            <div class="row">
-                            <div class="six wide middle aligned column">
-                            <p class="listingTitle">
-                              ${listing.business_title}
-                            </p>
-                            <p class="listingSubtitle" >${listing.business_description}</p>
-                            </div>
-                            <div class="six wide column"></div>
-                            <div class="four wide column">
-                                <a id="${listing.id}" class="editButton" ><div style="color: white;" class="listing-buttons " id="${listing.id}"> <i style="pointer-events:none" class="edit icon"></i> Edit</div></a>
-                                <a id="${listing.id}" class="editButton" ><div style="color: white;" class="listing-buttons "> <i style="pointer-events:none" style="color: red;" class="delete icon"></i> Delete</div></a>
-                            </div>
-                            </div>
-                        </div>
-                           `);
-          });
-        }
-      })
-      .catch(err => console.log(err));
-  });
+  // $("body").on("click", "#listings-tab", function() {
+  //   myAxios
+  //     .get(API_URL + "listings/" + localStorage.getItem("token"), {
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //         // 'Content-Type': 'application/x-www-form-urlencoded',
+  //       }
+  //     })
+  //     .then(resp => {
+  //       $("#listings-div").html("");
+  //       const response = resp.data;
+  //       if (response.length === 0) {
+  //         $("#listings-div").html(`<h1 class="h1" >You have no listings</h1>
+  //                                          <h2 class="h2">But you could... </h2>
+  //                                          <button id="add-listing-button" class="ui button">Make a listing</button>`);
+  //       } else {
+  //         console.log(response);
+  //         $("#listings-div").html("");
+  //         response.forEach(listing => {
+  //           $("#listings-div").append(`
+  //                       <div style="margin-bottom: 1rem;" class="listingItem ui grid">
+  //                           <div class="row">
+  //                           <div class="six wide middle aligned column">
+  //                           <p class="listingTitle">
+  //                             ${listing.business_title}
+  //                           </p>
+  //                           <p class="listingSubtitle" >${listing.business_description}</p>
+  //                           </div>
+  //                           <div class="six wide column"></div>
+  //                           <div class="four wide column">
+  //                               <a id="${listing.id}" class="editButton" ><div style="color: white;" class="listing-buttons " id="${listing.id}"> <i style="pointer-events:none" class="edit icon"></i> Edit</div></a>
+  //                               <a id="${listing.id}" class="editButton" ><div style="color: white;" class="listing-buttons "> <i style="pointer-events:none" style="color: red;" class="delete icon"></i> Delete</div></a>
+  //                           </div>
+  //                           </div>
+  //                       </div>
+  //                          `);
+  //         });
+  //       }
+  //     })
+  //     .catch(err => console.log(err));
+  // });
 
   console.log($('#editor').html())
 
@@ -1208,7 +1305,7 @@ $(document).on("click", "button.other-remove", function(e) {
         
       console.log(updates);
 
-    $("#submit-button").show();
+    $("#description-submit-button").show();
   });
 
   $("textarea.main").on("input", function(e) {
@@ -1274,8 +1371,9 @@ $(document).on("click", "button.other-remove", function(e) {
       
   })
 
-  $("body").on("click", "#submit-button", function() {
+  $("body").on("click", "button.submit-button", function(e) {
     console.log(updates);
+    e.preventDefault(); 
     let pendingCheck = sessionStorage.getItem('pendingListing')
     let currentListing = sessionStorage.getItem('currentListing')
     if (Object.values(updates.listing).length && currentListing) {
@@ -1315,7 +1413,7 @@ $(document).on("click", "button.other-remove", function(e) {
     }   
 
     if (updates.hours.length) {
-      updates.social_media.listing_id = sessionStorage.getItem('currentListing')
+      updates.hours.listing_id = sessionStorage.getItem('currentListing')
         myAxios
           .put("http://localhost:3000/api/stagelisting/hours", updates.hours)
           .then(resp => {
@@ -1326,18 +1424,65 @@ $(document).on("click", "button.other-remove", function(e) {
           });
       }   
 
-      if (Object.values(updates.business_description).length) {
-        updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
-        console.log(updates.business_description)
-          myAxios
-            .put("http://localhost:3000/api/updatedescription", updates.business_description)
-            .then(resp => {
-              console.log(resp); 
+      if (Object.values(updates.business_description).length && $(e.target).attr('id') === 'description-submit-button') {
+        let storeS3 = new Promise(async (resolve, reject) => {
+          updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
+          const currentUser = authHelper.parseToken(sessionStorage.getItem('token'))
+          console.log(updates.business_description)
+          const descriptionImages = images.filter(x => x.file)
+          console.log(descriptionImages)
+          if (descriptionImages.length) {
+          let uploadImages = await descriptionImages.map(async (image, index) => {
+              const urlAndKey = await (
+                await fetch(
+                  `/api/s3/sign_put?contentType=${image.file.type}&userId=${currentUser.id}`
+                )
+              ).json();
+              console.log(urlAndKey);
+              await fetch(urlAndKey.url, {
+                method: "PUT",
+                body: image.file
+              })
+                .then(data => {
+                  // let image_path = urlAndKey.key;
+                  // const storeImage = {
+                  //   listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
+                  //   image_path,
+                  //   featured_image: false
+                  // };
+                  // myAxios
+                  //   .post("http://localhost:3000/api/storeimage/delta", storeImage)
+                  //   .then(resp => {
+                  //     console.log(resp);
+                  //   })
+                  //   .catch(err => {
+                  //     console.log(err);
+                  //   });
+                  console.log(data); 
+                })
+                .catch(err => {
+                  console.log(err);
+                });
             })
-            .catch(err => {
-              console.log(err);
-            });
-        }   
+            resolve(uploadImages)
+          } else {
+            resolve()
+          }
+        })
+        
+        storeS3.then(response => {
+        console.log(response)
+        myAxios
+          .put("http://localhost:3000/api/updatedescription", updates.business_description)
+          .then(resp => {
+          console.log(resp)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      })
+
+      }   
   
 
 

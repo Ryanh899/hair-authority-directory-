@@ -358,6 +358,18 @@ router.post('/storeimage', (req, res) => {
     })
 })
 
+router.post('/storeimage/delta', (req, res) => {
+  console.log(req.body)
+  Listings.storeImage__delta(req.body)
+    .then(resp => {
+      console.log(resp)
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
 router.post('/storeimage/feature', (req, res) => {
   console.log(req.body)
   Listings.storeImage__featured(req.body)
