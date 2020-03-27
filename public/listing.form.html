@@ -28,11 +28,10 @@
   href="https://fonts.googleapis.com/css?family=Lato:100,300,400|Raleway:100,400,500,700,800,900&display=swap"
   rel="stylesheet"
 />
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link rel="stylesheet" type="text/css" href="./css/search.listings.css" />
-
-    <link rel="stylesheet" href="./css/form.pages.css" />
-
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./css/styles.css" />
+<link rel="stylesheet" type="text/css" href="./css/search.listings.css" />
+<link rel="stylesheet" href="./css/form.pages.css" />
 </head>
 
 <body>
@@ -571,8 +570,8 @@
                                     <h1 class="form-h1">Description & Mission Statement</h1>
                                     <div class="field">
                                             <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
-                                            <div id="about-div" style="margin-top: 1rem;" class="ui left icon input">
-                                                <textarea name="about" type="text" placeholder="Ex. The history, the story"></textarea>
+                                            <div class="description" id="editor">
+                        
                                             </div>
                                         </div>
                                     <div class="field">
@@ -717,6 +716,7 @@
             <div id="faq" class="section bread">FAQs</div>
         </div> -->
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.630.0.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="./js/upload.images.js" ></script>
     <script src="./resources/browser.s3.js" ></script>
     <script src="./js/form.pages.js"></script>

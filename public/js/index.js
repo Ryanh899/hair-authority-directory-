@@ -69,6 +69,11 @@ var authHelper = {
   }
 };
 
+function scrollToAnchor(id){
+  var div = $(`div#${id}`);
+  $('html,body').animate({scrollTop: div.offset().top},'slow');
+}
+
 // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
 let API_URL = "http://localhost:3000/api/";
 
@@ -86,6 +91,13 @@ $(document).ready(function() {
     sessionStorage.setItem("current-lat", position.coords.latitude);
     sessionStorage.setItem("current-lng", position.coords.longitude);
   }
+
+  $('body').on('click', 'a#about', function (e) {
+    e.preventDefault()
+    scrollToAnchor('why-section')
+  })
+
+
 
   getLocation();
 

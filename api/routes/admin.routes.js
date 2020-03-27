@@ -34,10 +34,12 @@ router.get("/listing/pending/:id", async (req, res) => {
 
     const subscription = await Zoho.subscriptionCheck__listingId(listingId); 
     const listing = await Listings.getById__pending(listingId);
+    const delta = await Listings.getDelta__id(listingId); 
 
     console.log(listing)
     console.log(subscription)
     if (subscription && subscription.length) {
+        listing.delta = delta
         if (listing.professional_id !== null && listing.professional_id) {
             const user = await User.getUserInfo__client(subscription[0].user_id); 
             console.log(user)
@@ -46,6 +48,7 @@ router.get("/listing/pending/:id", async (req, res) => {
             res.json({ listing })
         }
     } else {
+        listing.delta = delta
         res.status(200).json({ listing: listing })
     }
     
@@ -57,10 +60,12 @@ router.get("/listing/pending/:id", async (req, res) => {
 
     const subscription = await Zoho.subscriptionCheck__listingId(listingId); 
     const listing = await Listings.getById__admin(listingId);
+    const delta = await Listings.getDelta__id(listingId); 
 
     console.log(listing)
     console.log(subscription)
     if (subscription && subscription.length) {
+        listing.delta = delta
         if (listing.professional_id !== null && listing.professional_id) {
             const user = await User.getUserInfo__client(subscription[0].user_id); 
             console.log(user)
@@ -73,6 +78,7 @@ router.get("/listing/pending/:id", async (req, res) => {
             res.json({ listing })
         }
     } else {
+        listing.delta = delta
         res.status(200).json({ listing: listing })
     }
     
@@ -84,10 +90,12 @@ router.get("/listing/pending/:id", async (req, res) => {
 
     const subscription = await Zoho.subscriptionCheck__listingId(listingId); 
     const listing = await Listings.getInactiveById__admin(listingId);
+    const delta = await Listings.getDelta__id(listingId); 
 
     console.log(listing)
     console.log(subscription)
     if (subscription && subscription.length) {
+        listing.delta = delta
         if (listing.professional_id !== null && listing.professional_id) {
             const user = await User.getUserInfo__client(subscription[0].user_id); 
             console.log(user)
@@ -100,6 +108,7 @@ router.get("/listing/pending/:id", async (req, res) => {
             res.json({ listing })
         }
     } else {
+        listing.delta = delta
         res.status(200).json({ listing: listing })
     }
     

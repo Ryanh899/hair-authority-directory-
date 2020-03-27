@@ -256,3 +256,19 @@ background: linear-gradient(to right, #1f7a8c, #79bcb8); */
     font-weight: 500;
     font-size: 25px;
 }
+#scrolling-container {
+    overflow: auto;
+    background-color: white;
+    height: 65vh;
+  }
+  
+  .ql-container {
+    border: 1px solid lightgray;
+    font-family: unset !important;
+    font-size: unset !important;
+  }
+  
+  .ql-container .ql-editor {
+    overflow: visible;
+  }
+  

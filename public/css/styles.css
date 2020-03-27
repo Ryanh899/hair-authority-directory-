@@ -582,12 +582,12 @@ body {
   margin-bottom: 1rem;
 }
 
-#search-semantic {
+/* #search-semantic { */
   /* width: 33.3vw; */
   /* border: solid;
   border-color: #1f7a8c;
   border-width: 1.5px; */
-}
+/* } */
 
 #dashboard-column {
   padding: 0px;

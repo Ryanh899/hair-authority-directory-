@@ -104,6 +104,10 @@ $(document).ready(function() {
   sessionStorage.setItem("faq", 1);
   sessionStorage.removeItem("24Hour");
   const allListings = [];
+
+  const quill = new Quill('#editor', {
+    theme: 'snow'
+  });
   
   let hostedCheck = false; 
 
@@ -636,14 +640,27 @@ $(document).ready(function() {
   $("body").on("click", "#submit5", function() {
     event.preventDefault();
     const formData = new FormData(form5);
+    let delta = {}; 
 
-    if (formData.get("ms") !== null || formData.get("ms") !== "")
+    if (formData.get("ms") !== null || formData.get("ms") !== "") {
       finalForm.mission_statement = formData.get("ms");
-    if (formData.get("about") !== null || formData.get("about") !== "")
-      finalForm.business_description = formData.get("about");
+    }
+    if (quill.getContents() !== null || formData.get("about") !== "") {
+      finalForm.business_description = quill.root.innerHTML; 
+      delta.delta = quill.getContents()
+      delta.listing_id = finalForm.id 
+    }
 
     myAxios
       .put("http://localhost:3000/api/stagelisting", finalForm)
+      .then(resp => {
+        if (delta) {
+          console.log(delta)
+          return myAxios.put("http://localhost:3000/api/updatedescription/staged", delta)
+        } else {
+          return resp
+        }
+      })
       .then(resp => {
         console.log(resp);
         $(form5).css("display", "none");

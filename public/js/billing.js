@@ -141,6 +141,7 @@ $(document).ready(function () {
                 else if (plan === 'light-access') {
                   myAxios.post(ZOHO_URL + '/hostedpage/create/existing', { customer_id: customer.data.customer_id, plan: 'd2f4f1f0-1ad5-4c3a-912d-6646a5a46d08'  })
                     .then(response => {
+                      response = response.data.hostedpage
                       window.open(response.url, '_self')
                     })
                     .catch(err => {
@@ -150,6 +151,8 @@ $(document).ready(function () {
                 else if (plan === 'standard-access') {
                   myAxios.post(ZOHO_URL + '/hostedpage/create/existing', { customer_id: customer.data.customer_id, plan: 'ea78d785-2a2c-4b74-b578-fab3509b669c'  })
                     .then(response => {
+                      response = response.data.hostedpage
+                      console.log(response)
                       window.open(response.url, '_self')
                     })
                     .catch(err => {
@@ -159,6 +162,7 @@ $(document).ready(function () {
                 else if (plan === 'premium-access') {
                   myAxios.post(ZOHO_URL + '/hostedpage/create/existing', { customer_id: customer.data.customer_id, plan: '2528891f-8535-41dc-b07e-952b25113bd0'  })
                     .then(response => {
+                      response = response.data.hostedpage
                       window.open(response.url, '_self')
                     })
                     .catch(err => {
@@ -244,7 +248,7 @@ $(document).ready(function () {
                 else if (plan === 'light-access') {
                   myAxios.post(ZOHO_URL + '/hostedpage/claim/existing', { customer_id: customer.data.customer_id, plan: 'd2f4f1f0-1ad5-4c3a-912d-6646a5a46d08'  })
                     .then(response => {
-                      response = response.data.hostedpage.url
+                      response = response.data.hostedpage
                       window.open(response.url, '_self')
                     })
                     .catch(err => {
@@ -255,7 +259,7 @@ $(document).ready(function () {
                 else if (plan === 'standard-access') {
                   myAxios.post(ZOHO_URL + '/hostedpage/claim/existing', { customer_id: customer.data.customer_id, plan: 'ea78d785-2a2c-4b74-b578-fab3509b669c'  })
                     .then(response => {
-                      response = response.data.hostedpage.url
+                      response = response.data.hostedpage
                       window.open(response.url, '_self')
                     })
                     .catch(err => {

@@ -197,10 +197,14 @@ async function appendListing (thisListing, quill, listingArr) {
  
       $(title).attr("value", listing.business_title);
       // $(description).text(listing.business_description);
-      if (listing.delta) {
+      if (listing.delta.length) {
+        console.log(listing.delta)
         quill.setContents(JSON.parse(listing.delta))
       } else {
-        quill.dangerouslyPasteHTML(listing.business_description)
+        let delta = quill.clipboard.convert(listing.business_description); 
+        console.log(delta); 
+
+        quill.setContents(delta)
       }
       $(address).attr("value", listing.street_address);
       $(city).attr("value", listing.city);
@@ -469,10 +473,14 @@ async function getListings (token, quill, listingArr, div, loader) {
 
       $(title).attr("value", listing.business_title);
       // $(description).attr(listing.business_description);
-      if (listing.delta) {
+      if (listing.delta.length) {
+        console.log(listing.delta)
         quill.setContents(JSON.parse(listing.delta))
       } else {
-        quill.dangerouslyPasteHTML(listing.business_description)
+        let delta = quill.clipboard.convert(listing.business_description); 
+        console.log(delta); 
+
+        quill.setContents(delta)
       }
       $(address).attr("value", listing.street_address);
       $(city).attr("value", listing.city);
@@ -1318,7 +1326,7 @@ $(document).on("click", "button.other-remove", function(e) {
           });
       }   
 
-      if (updates.business_description) {
+      if (Object.values(updates.business_description).length) {
         updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
         console.log(updates.business_description)
           myAxios

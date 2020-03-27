@@ -867,7 +867,7 @@ const Listings = {
       });
   },
   getPendingListings__recent(res) {
-    const lastMonth = moment().subtract(60, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    const lastMonth = moment().subtract(30, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth)
     let listings = []; 
     return knex("pending_listings")
@@ -1150,6 +1150,27 @@ const Listings = {
               console.log(err)
             })
   }, 
+  updateDescription__staged (description) {
+  const listingId = description.listing_id; 
+  console.log(description)
+    
+  return knex('quill_deltas').update({ delta: JSON.stringify(description.delta) }).where('listing_id', listingId)
+    .then(updateDelta => {
+      console.log(`updateDelta: ${updateDelta}`); 
+      if ( updateDelta ) {
+        return updateDelta
+      } else {
+        return knex('quill_deltas')
+          .insert({ delta: JSON.stringify(description.delta), listing_id: listingId })
+          .then(insert => {
+            return insert
+          }); 
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  },
   updateStagedListing__table(table, data) {
     return knex(table).insert(data).where('listing_id', data.id)
       .then(response => {
@@ -1276,6 +1297,17 @@ const Listings = {
       .catch(err => {
         console.error(err);
       });
+  },
+  getDelta__id (listing_id) {
+    return knex('quill_deltas')
+      .select()
+      .where('listing_id', listing_id)
+      .then(response => {
+        return response 
+      })
+      .catch(err => {
+        console.log(err)
+      })
   },
   // used to update city in db
   addCityState() {

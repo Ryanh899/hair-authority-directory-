@@ -487,6 +487,16 @@ router.put('/stagelisting', (req, res) => {
 //     })
 // })
 
+router.put('/updatedescription/staged', async (req, res) => {
+  let description = req.body
+  console.log(req.body)
+  console.log('RIGHT')
+    const insert = await Listings.updateDescription__staged(description)
+
+    res.json(insert)
+  
+})
+
 router.put('/updatedescription', async (req, res) => {
   let description = req.body
   console.log(req.body)

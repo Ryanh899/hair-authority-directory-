@@ -121,7 +121,7 @@ const am_pm_to_hours = time => {
 
 // on ready
 $(document).ready(function() {
-  const page = document.querySelector("div#listing-page-container");
+  const page = document.querySelector("div#listing-page-root");
   const loader = document.querySelector("div#loader-div");
   const listingColumn = document.querySelector("div#listing-column");
   const titleSection = document.querySelector("div#title-section");
@@ -132,6 +132,10 @@ $(document).ready(function() {
     // navigator.geolocation.getCurrentPosition(drawMap);
     drawMap();
   }
+
+  const quill = new Quill('#editor', {
+    theme: 'snow',
+  });
 
   // function called by getGeolocation
   async function drawMap(geoPos) {
@@ -544,7 +548,16 @@ $(document).ready(function() {
           `<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`
         );
         $(title).attr("value", listing.business_title);
-        $(description).attr("placeholder", listing.business_description);
+        // $(description).attr("placeholder", listing.business_description);
+        if (listing.delta.length) {
+          console.log(listing.delta[0].delta)
+          quill.setContents(JSON.parse(listing.delta[0].delta))
+        } else {
+          let delta = quill.clipboard.convert(listing.business_description); 
+          console.log(delta); 
+
+          quill.setContents(delta)
+        }
         $(address).attr("value", listing.street_address);
         $(city).attr("value", listing.city);
         $(state).attr("value", listing.state);
@@ -789,7 +802,16 @@ $(document).ready(function() {
             `<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`
           );
           $(title).attr("value", listing.business_title);
-          $(description).attr("placeholder", listing.business_description);
+          // $(description).attr("placeholder", listing.business_description);
+          if (listing.delta.length) {
+            console.log(listing.delta[0].delta)
+            quill.setContents(JSON.parse(listing.delta[0].delta))
+          } else {
+            let delta = quill.clipboard.convert(listing.business_description); 
+            console.log(delta); 
+  
+            quill.setContents(delta)
+          }
           $(address).attr("value", listing.street_address);
           $(city).attr("value", listing.city);
           $(state).attr("value", listing.state);
@@ -1079,7 +1101,16 @@ $(document).ready(function() {
             `<p class="logo-header" style="margin-bottom: .5px;">${listing.business_title}</p>`
           );
           $(title).attr("value", listing.business_title);
-          $(description).attr("placeholder", listing.business_description);
+          // $(description).attr("placeholder", listing.business_description);
+          if (listing.delta.length) {
+            console.log(listing.delta[0].delta)
+            quill.setContents(JSON.parse(listing.delta[0].delta))
+          } else {
+            let delta = quill.clipboard.convert(listing.business_description); 
+            console.log(delta); 
+  
+            quill.setContents(delta)
+          }
           $(address).attr("value", listing.street_address);
           $(city).attr("value", listing.city);
           $(state).attr("value", listing.state);
@@ -1322,7 +1353,7 @@ $(document).ready(function() {
         });
   }
 
-  const updates = { social_media: [], listing: {}, hours: [], faq: [] };
+  const updates = { business_description: {}, social_media: [], listing: {}, hours: [], faq: [] };
 
   $("input.social_media").on("input", function(e) {
     const id = $(e.target).attr("id");
@@ -1366,6 +1397,16 @@ $(document).ready(function() {
 
     $("#submit-button").show();
   });
+
+  $("div.description").on("input", function(e) {
+    console.log(quill.root.innerHTML)
+    updates.business_description.delta = quill.getContents()
+    updates.business_description.html = quill.root.innerHTML 
+      
+    console.log(updates);
+
+  $("#submit-button").show();
+});
 
   $("input.main").on("input", function(e) {
     const id = $(e.target).attr("id");
@@ -1480,6 +1521,33 @@ $(document).ready(function() {
             console.log(err);
           });
       }   
+
+      if (Object.values(updates.business_description).length) {
+        if (currentListing) {
+          updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
+          console.log(updates.business_description)
+            myAxios
+              .put("http://localhost:3000/api/updatedescription", updates.business_description)
+              .then(resp => {
+                console.log(resp); 
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        } else if (pendingListing) {
+          updates.business_description.listing_id = sessionStorage.getItem('pendingListing'); 
+          console.log(updates.business_description)
+            myAxios
+              .put("http://localhost:3000/api/updatedescription/staged", updates.business_description)
+              .then(resp => {
+                console.log(resp); 
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }
+    
+        }   
   
 
 
