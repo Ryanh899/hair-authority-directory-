@@ -130,13 +130,15 @@
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h2">Pending Listings</h1>
                             <div class="btn-toolbar mb-2 mb-md-0">
-                              <div class="btn-group mr-2">
+                                <div class="btn-group mr-2">
+                                    <div class="input-group mb-3">
+                                      <input id="search-pending-listings"  type="text" class="form-control" placeholder="Listing title, category, or customer" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                      <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="search-pending-listings-button">Search</button>
+                                      </div>
+                                    </div>
+                                </div>
                               </div>
-                              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                                <span data-feather="calendar"></span>
-                                This week
-                              </button>
-                            </div>
                           </div>
                           <div class="table-responsive">
                             <table class="table table-striped table-sm">
@@ -160,10 +162,10 @@
                             <div class="btn-toolbar mb-2 mb-md-0">
                               <div class="btn-group mr-2">
                               </div>
-                              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                              <!-- <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                                 <span data-feather="calendar"></span>
                                 This week
-                              </button>
+                              </button> -->
                             </div>
                           </div>
                           <div class="table-responsive">

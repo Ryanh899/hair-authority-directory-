@@ -98,6 +98,18 @@ let authHelper = {
   }
 };
 
+function fillProgressBar (formsCompleted) {
+  let forms = Number(formsCompleted)
+  $('.progress').each(item => {
+    console.log(item)
+    console.log(forms)
+    if (forms-1 >= item) {
+      $('.progress').eq(item).addClass('active')
+      console.log($('.progress').eq(item))
+    }
+  })
+}
+
 let ZOHO_URL = "http://localhost:3000/zoho/";
 
 $(document).ready(function() {
@@ -106,6 +118,18 @@ $(document).ready(function() {
   const allListings = [];
 
   const quill = new Quill('#editor', {
+    modules: {
+      toolbar: [
+        [{ 'font': [] }, { 'size': [] }],
+        [ 'bold', 'italic', 'underline', 'strike' ],
+        [{ 'color': [] }],
+        [{ 'header': '1' }, { 'header': '2' }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+        [ 'direction', { 'align': [] }],
+        [ 'link', 'image'],
+        [ 'clean' ]
+  ]
+    },
     theme: 'snow'
   });
   
@@ -134,6 +158,7 @@ $(document).ready(function() {
           sessionStorage.setItem('customer_id', subscription.customer_id); 
         } else if (response.data.exists && sessionStorage.getItem('formsCompleted')) {
           console.log('SECOND, FORMS COMPLETED')
+          let formsCompleted = sessionStorage.getItem('formsCompleted')
           // if subscription id valid 
           const timeCheck = await authHelper.subId__check()
 
@@ -148,9 +173,8 @@ $(document).ready(function() {
             
             $(`#form-1`).css("display", "none");
             $(`#form-${thisForm}`).css("display", "block");
-            $(".progress")
-              .eq(sessionStorage.getItem("formsCompleted"))
-              .addClass("active");
+            console.log($(".progress").eq(sessionStorage.getItem("formsCompleted")))
+            fillProgressBar(formsCompleted)
           } else {
             console.log('NO TIMECHECK')
             sessionStorage.removeItem('subscription_id');
@@ -195,7 +219,7 @@ $(document).ready(function() {
             $(`#form-1`).css("display", "none");
             $(`#form-${thisForm}`).css("display", "block");
             $('.progress').slice(1, thisForm).addClass('active')
-            $(".progress").eq(sessionStorage.getItem("formsCompleted")).addClass("active");
+            fillProgressBar(sessionStorage.getItem('formsCompleted'))
     } 
   }
 
@@ -427,9 +451,7 @@ $(document).ready(function() {
             sessionStorage.setItem("formsCompleted", 1);
             console.log(sessionStorage.getItem("formsCompleted"));
             console.log($(".progress").eq(1));
-            $(".progress")
-              .eq(sessionStorage.getItem("formsCompleted"))
-              .addClass("active");
+            fillProgressBar(sessionStorage.getItem('formsCompleted'))
             $(form1).css("display", "none");
             $(form2).css("display", "block");
             $("#businessTitle").toggleClass("active");
@@ -446,9 +468,7 @@ $(document).ready(function() {
   } else if (sessionStorage.getItem('formsCompleted') > 1) {
     console.log(sessionStorage.getItem("formsCompleted"));
     console.log($(".progress").eq(1));
-    $(".progress")
-      .eq(sessionStorage.getItem("formsCompleted"))
-      .addClass("active");
+    fillProgressBar(sessionStorage.getItem('formsCompleted'))
     $(form1).css("display", "none");
     $(form2).css("display", "block");
     $("#businessTitle").toggleClass("active");
@@ -512,9 +532,7 @@ $(document).ready(function() {
           $(form2).css("display", "none");
           $(form3).css("display", "block");
           sessionStorage.setItem("formsCompleted", 2);
-          $(".progress")
-            .eq(sessionStorage.getItem("formsCompleted"))
-            .addClass("active");
+          fillProgressBar(sessionStorage.getItem('formsCompleted'))
           $("#storefrontInfo").toggleClass("active");
           $("#storefrontInfo").addClass("completed");
           $("#website").toggleClass("active");
@@ -575,6 +593,13 @@ $(document).ready(function() {
         listing_id: finalForm.id
       });
 
+      if (formData.get("youtube-channel") !== null || formData.get("youtube") !== "")
+      smForm.push({
+        platform: "youtube-channel",
+        url: formData.get("youtube-channel"),
+        listing_id: finalForm.id
+      });
+
     myAxios
       .put("http://localhost:3000/api/stagelisting/social_media", smForm)
       .then(resp => {
@@ -582,9 +607,7 @@ $(document).ready(function() {
         $(form3).css("display", "none");
         $(form4).css("display", "block");
         sessionStorage.setItem("formsCompleted", 3);
-        $(".progress")
-          .eq(sessionStorage.getItem("formsCompleted"))
-          .addClass("active");
+        fillProgressBar(sessionStorage.getItem('formsCompleted'))
         $("#website").toggleClass("active");
         $("#website").addClass("completed");
         $("#contact").toggleClass("active");
@@ -619,9 +642,7 @@ $(document).ready(function() {
           $(form4).css("display", "none");
           $(form5).css("display", "block");
           sessionStorage.setItem("formsCompleted", 4);
-          $(".progress")
-            .eq(sessionStorage.getItem("formsCompleted"))
-            .addClass("active");
+          fillProgressBar(sessionStorage.getItem('formsCompleted'))
           $("#contact").toggleClass("active");
           $("#contact").addClass("completed");
           $("#about").toggleClass("active");
@@ -666,9 +687,7 @@ $(document).ready(function() {
         $(form5).css("display", "none");
         $(form6).css("display", "block");
         sessionStorage.setItem("formsCompleted", 5);
-        $(".progress")
-          .eq(sessionStorage.getItem("formsCompleted"))
-          .addClass("active");
+        fillProgressBar(sessionStorage.getItem('formsCompleted'))
         $("#about").toggleClass("active");
         $("#about").addClass("completed");
         $("#images").toggleClass("active");
@@ -688,9 +707,7 @@ $(document).ready(function() {
     $(form6).css("display", "none");
     $(form7).css("display", "block");
     sessionStorage.setItem("formsCompleted", 6);
-    $(".progress")
-      .eq(sessionStorage.getItem("formsCompleted"))
-      .addClass("active");
+    fillProgressBar(sessionStorage.getItem('formsCompleted'))
     $("#images").toggleClass("active");
     $("#images").addClass("completed");
     $("#faq").toggleClass("active");
@@ -746,9 +763,7 @@ $(document).ready(function() {
           $(form5).css("display", "none");
           $(form6).css("display", "block");
           sessionStorage.setItem("formsCompleted", 7);
-          $(".progress")
-            .eq(sessionStorage.getItem("formsCompleted"))
-            .addClass("active");
+          fillProgressBar(sessionStorage.getItem('formsCompleted'))
           $("#about").toggleClass("active");
           $("#about").addClass("completed");
           $("#images").toggleClass("active");
@@ -1063,8 +1078,9 @@ $(document).ready(function() {
     let thisForm = $(this)
       .attr("id")
       .split("-")[1];
+      console.log(thisForm-2)
 
-    $(".progress").eq(thisForm-1).removeClass("active");
+    $(".progress").eq(thisForm-2).removeClass("active");
     $(`#form-${thisForm}`).css("display", "none");
     $(`#form-${thisForm - 1}`).css("display", "block");
   });

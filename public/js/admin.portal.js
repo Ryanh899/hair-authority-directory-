@@ -178,14 +178,18 @@ function getAllListings(loader, page, listingsArr) {
     });
 }
 
-function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
+function listingSearch (logoSearch, allLoader, allDiv, listings, page, pendingListings, pendingLoader, pendingDiv) {
+  
+  const pendingSearch = sessionStorage.getItem('adminSearchQuery_pending');
+  const listingSearch = sessionStorage.getItem('adminSearchQuery');
+  if (listingSearch) {
   $("#all-table tr").remove();
-
+  let search = listingSearch
   let category = ""; 
   categories.forEach(item => {
     if (search && item.title.toLowerCase() === search.toLowerCase()) {
       category = search;
-    }
+      }
   });
  
   if (category === "" && !logoSearch) {
@@ -202,7 +206,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           $("#listings-column").append(
             `<p id="no-results-text" >There are no results for "${search}" in your area.`
           );
-          $(loader).fadeOut();
+          $(allLoader).fadeOut();
           $(page).fadeIn();
           drawMap(location);
         } else {
@@ -231,7 +235,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           $("#listings-column").append(
             `<p id="no-results-text" >There are no results for "${search}" in your area.`
           );
-          $(loader).fadeOut();
+          $(allLoader).fadeOut();
           $(page).fadeIn();
           drawMap(location)
         } else {
@@ -263,7 +267,7 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
           $("#listings-column").append(
             `<p id="no-results-text" >There are no results for "${search}" in your area.`
           );
-          $(loader).fadeOut();
+          $(allLoader).fadeOut();
           $(page).fadeIn();
           drawMap(location)
         } else {
@@ -278,6 +282,108 @@ function listingSearch (search, logoSearch, allLoader, allDiv, listings) {
         console.log(err);
       });
   }
+  } else if (pendingSearch) {
+    $("#pending-table tr").remove();
+    let category = ""; 
+    let search = pendingSearch
+    categories.forEach(item => {
+      if (search && item.title.toLowerCase() === search.toLowerCase()) {
+        category = search;
+        }
+    });
+  
+  if (category === "" && !logoSearch) {
+    myAxios
+      .get(
+        ADMIN_URL + "searchpending/" + search 
+      )
+      .then(response => {
+        let allListings = response.data
+        console.log(response);
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(allLoader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location);
+        } else {
+          appendPendingListings(allListings, pendingLoader, pendingDiv )
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else if ( logoSearch ) {
+
+    console.log(logoSearch)
+    myAxios
+      .get(
+        ADMIN_URL +
+          "search/logo/" +
+          logoSearch 
+          
+      )
+      .then(response => {
+        let allListings = response.data
+        console.log(response)
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(allLoader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location)
+        } else {
+          appendPendingListings(allListings, pendingLoader, pendingDiv )
+  
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    let newSearch = category.replace(/\//g, '+');
+    console.log(newSearch)
+    myAxios
+      .get(
+        ADMIN_URL +
+          "search/category/" +
+          newSearch 
+      )
+      .then(response => {
+        let allListings = response.data
+        console.log(response)
+        if (response.data.length === 0 || response.status === 304) {
+          $("#listings-column")
+              .append(`<p id="listing-column-title" >Search results for "${search}"</p>`)
+          $("#listings-column").append(
+            `<p id="no-results-text" >There are no results for "${search}" in your area.`
+          );
+          $(allLoader).fadeOut();
+          $(page).fadeIn();
+          drawMap(location)
+        } else {
+          appendPendingListings(allListings, pendingLoader, pendingDiv )
+       
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+  }
+  
 }
 
 function getClaims (claimsDiv, loader, claims) {
@@ -381,8 +487,15 @@ $(document).ready(function() {
   getAllListings(allLoader, allDiv, listings)
 
   if (sessionStorage.getItem('adminSearchQuery')) {
+    // sessionStorage.removeItem('adminSearchQuery_pending')
     const search = sessionStorage.getItem('adminSearchQuery')
-    listingSearch(search, logoSearch, allLoader, allDiv, listings)
+    listingSearch(logoSearch, allLoader, allDiv, listings, page, pendingListings, pendingLoader, pendingDiv)
+}
+
+if (sessionStorage.getItem('adminSearchQuery_pending')) {
+  // sessionStorage.removeItem('adminSearchQuery')
+  const search = sessionStorage.getItem('adminSearchQuery_pending')
+  listingSearch(logoSearch, allLoader, allDiv, listings, page, pendingListings, pendingLoader, pendingDiv)
 }
 
   // $(page).css("display", "none");
@@ -557,7 +670,18 @@ $(document).ready(function() {
       console.log(search);
   
       sessionStorage.setItem("adminSearchQuery", search);
-      listingSearch(search, logoSearch, allLoader, allDiv, listings)
+      listingSearch(logoSearch, allLoader, allDiv, listings, page, pendingListings, pendingLoader, pendingDiv)
+
+      // window.location.assign("search.listings.html");
+    });
+
+    $("body").on("click", "#search-pending-listings-button", function(e) {
+      e.preventDefault()
+      const search = $('input#search-pending-listings').val().trim();
+      console.log(search);
+  
+      sessionStorage.setItem("adminSearchQuery_pending", search);
+      listingSearch(logoSearch, allLoader, allDiv, listings, page, pendingListings, pendingLoader, pendingDiv)
 
       // window.location.assign("search.listings.html");
     });
@@ -568,5 +692,6 @@ $(document).ready(function() {
 
 window.addEventListener('beforeunload', (event) => {
   sessionStorage.removeItem('adminSearchQuery')
+  sessionStorage.removeItem('adminSearchQuery_pending')
 
 });

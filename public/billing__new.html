@@ -45,7 +45,14 @@
     <link rel="stylesheet" type="text/css" href="./css/billing.css" />
   </head>
   <body>
+      
     <div class="ui grid" id="page-container">
+        <div style="display: none; min-height: 100%;" id="billing-loader-div">
+            <div class="ui active inverted dimmer">
+              <div class="ui text loader">Loading</div>
+            </div>
+            <p></p>
+          </div>
         <div id="error-modal" class="ui modal">
             <i class="close icon"></i>
             <div id="error-header" class="header modalHeader"></div>

@@ -11,7 +11,6 @@ const moment = require('moment')
 const crypto = require("crypto")
 const Zoho = require('../models/zoho'); 
 
-const s3 = new AWS.S3(); 
 
 AWS.config.getCredentials(function(err) {
   if (err) console.log(err.stack);
@@ -21,6 +20,15 @@ AWS.config.getCredentials(function(err) {
     console.log("Secret access key:", AWS.config.credentials.secretAccessKey);
   }
 });
+
+AWS.config.update({region: 'us-east-1'});
+
+const s3 = new AWS.S3(); 
+
+
+console.log("region:", AWS.config.region);
+
+
 
 // const googleMapClient = require("@google/maps").createClient({
 //   key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"

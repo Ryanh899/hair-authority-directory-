@@ -301,6 +301,21 @@ const Listings = {
       .whereRaw(`LOWER(business_title) LIKE ?;`, [
         `%${title.toLowerCase()}%`
       ])
+      .limit(150)
+      .then(async response => {
+        return response; 
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+  async getPendingBySearch__admin(title) {
+    return knex("pending_listings")
+      .select()
+      .whereRaw(`LOWER(business_title) LIKE ?;`, [
+        `%${title.toLowerCase()}%`
+      ])
+      .limit(150)
       .then(async response => {
         return response; 
       })
@@ -867,7 +882,7 @@ const Listings = {
       });
   },
   getPendingListings__recent(res) {
-    const lastMonth = moment().subtract(30, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    const lastMonth = moment().subtract(45, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth)
     let listings = []; 
     return knex("pending_listings")

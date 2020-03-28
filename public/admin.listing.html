@@ -50,7 +50,7 @@
   </head>
 
   <body>
-    <div id="loader-div">
+    <div id="page-loader-div">
       <div class="ui active inverted dimmer">
         <div class="ui text loader">Loading</div>
       </div>
@@ -547,33 +547,12 @@
                 
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
-                                <!-- Create toolbar container -->
-                                <!-- <div id="toolbar">
-    
-                                    <select class="ql-header">
-                                        <option value="1">Heading 1<option/>
-                                        <option value="2">Heading 2<option/>
-                                        <option value="3">Heading 3<option/>
-                                        <option value="">Normal<option/>
-                                      </select>
-                                      <span class="ql-formats">
-                                        <button class="ql-list" value="ordered" />
-                                        <button class="ql-list" value="bullet" />
-                                        <button class="ql-indent" value="-1" />
-                                        <button class="ql-indent" value="+1" />
-                                      </span>
-                                      <button class="ql-bold" data-toggle="tooltip" data-placement="bottom" title="Bold"/>
-                                      <button class="ql-italic" data-toggle="tooltip" data-placement="bottom" title="Add italic text <cmd+i>"/>
-                                      <button class="ql-underline" />
-                                
-                                  </div> -->
-                                    <!-- <div id="scrolling-container"> -->
-                                        <div class="description" id="editor">
-                            
-                                          </div>
-                                    <!-- </div> -->
-                                <!-- </div> -->
+                                    <div class="description" id="editor">
+                        
+                                    </div>
+                                    <input type="file" style="display: none;" id="ql-file-input"/>
                             </div>
+                            <button style="display: none;" id="description-submit-button" class="ui button submit-button" >Update Description</button>
                             <div class="field">
                                 <label style="margin-top: 2rem;" id="labels-1">Mission Statement</label>
                                 <div id="ms-div" style="margin-top: 1rem;" class="ui left icon input">
@@ -612,7 +591,7 @@
                                     <button style="display: none;" class="ui button faqSubmit" id="faq2-button">Update</button>
                                 </div>
                             </div>
-                            <div style="display: none;" id="submit-button" class="ui button">Update Listing</div>
+                            <div style="display: none;" id="submit-button" class="ui button submit-button">Update Listing</div>
                         <div id="image-size-modal" class="ui basic modal">
                                 <div class="ui icon header">
                                   <i class="image outline icon"></i>

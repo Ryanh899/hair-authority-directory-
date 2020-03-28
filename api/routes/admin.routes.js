@@ -128,6 +128,20 @@ router.get("/listing/pending/:id", async (req, res) => {
     
   });
 
+  router.get("/searchpending/:title", async (req, res) => {
+    const title = req.params.title;
+    console.log(title);
+
+    try {
+        const listing = await Listings.getPendingBySearch__admin(title);
+        res.json(listing);
+    } catch (error) {
+        console.error(error)
+        res.status(500).json(error);
+    };
+    
+  });
+
   router.get('/claims/pending', (req, res) => {
       Listings.getPendingClaims(res)
   })

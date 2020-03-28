@@ -25,7 +25,7 @@ const Zoho = {
             created_at: now,
             expiry_time: hourFrom
           })
-          .catch(err => console.error(err));
+          .catch(err => console.log(err));
         return resp.data.access_token;
       })
       .catch(err => {
@@ -90,7 +90,7 @@ const Zoho = {
                 cb.status(200).json({ message: "Token Created and Stored" });
             })
             .catch(err => {
-                console.error(err); 
+                console.log(err); 
                 
             })
       })

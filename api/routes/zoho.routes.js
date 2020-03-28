@@ -124,7 +124,7 @@ router.post('/hostedpage/create/existing', async (req, res) => {
       res.status(200).json(resp.body)
     })
     .catch(err => {
-      console.log('err');
+      console.log(err);
     });
 
 })
@@ -174,7 +174,7 @@ router.get("/findCustomer/:userToken", async (req, res) => {
       res.status(200).json(resp.body.customer)
     })
     .catch(err => {
-      console.log('err');
+      console.log(err);
     });
 });
 

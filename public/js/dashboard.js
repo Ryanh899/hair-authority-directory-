@@ -762,8 +762,6 @@ let images = [];
     $(fileButton).click(); 
   };
 
-  // const imageButton = document.querySelector('button.ql-image'); 
-  // $(imageButton).attr('for', 'input#ql-file-input')
   let toolbar = quill.getModule('toolbar'); 
   toolbar.addHandler('image', handleQuillUpload)
   

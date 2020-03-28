@@ -62,14 +62,14 @@
                       <div class="row">
                             <div class="sixteen wide centered column">
                                     <ul class="progressBar" id="progressbar">
-                                            <li  class="progress active">Title, Tagline & Category</li>
-                                            <li  class="progress" >Location & Hours</li>
-                                            <li  class="progress">Social Media</li>
-                                            <li  class="progress">Contact</li>
-                                            <li  class="progress">Description & Mission</li>
-                                            <li class="progress">Images</li>
-                                            <li  class="progress">FAQ's</li>
-                                          </ul>
+                                        <li id="prog-1"  class="progress">Title, Tagline & Category</li>
+                                        <li id="prog-2" class="progress" >Location & Hours</li>
+                                        <li id="prog-3"  class="progress">Social Media</li>
+                                        <li id="prog-4"  class="progress">Contact</li>
+                                        <li id="prog-5"  class="progress">Description & Mission</li>
+                                        <li id="prog-6"  class="progress">Images</li>
+                                        <li id="prog-7"  class="progress">FAQ's</li>
+                                    </ul>
                               </div>
                       </div>
                     <div id="exists-modal" style="padding: 2.5rem;" class="ui modal">
@@ -535,11 +535,19 @@
                                         </div>
                                     </div>
                                     <div class="field">
-                                            <div id="youtube-div" style="margin-top: 1rem;" class="ui transparent left icon input">
-                                                <input name="youtube" type="text" placeholder="  Ex. https://www.youtube.com/">
-                                                <i class="large youtube icon"></i>
-                                            </div>
+                                        <label style="font-family: 'lato';font-weight: 400; font-size: 18px; color: #696969;" for="youtube">Youtube Channel <a href="https://support.google.com/youtube/answer/6180214?hl=en">(Help finding your channel url)</a> </label>
+                                        <div id="youtube-channel-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                                            <input name="youtube-channel" type="text" placeholder="  Ex. https://www.youtube.com/">
+                                            <i class="large youtube icon"></i>
                                         </div>
+                                    </div>
+                                    <div class="field">
+                                        <label style="font-family: 'lato';font-weight: 400; font-size: 18px; color: #696969;" for="youtube">Page Youtube Video (This will play on your page) </label>
+                                        <div id="youtube-div" style="margin-top: 1rem;" class="ui transparent left icon input">
+                                            <input name="youtube" type="text" placeholder="  Ex. https://www.youtube.com/">
+                                            <i class="large youtube icon"></i>
+                                        </div>
+                                    </div>
                                     <div id="prev-3" class="prev-button"> <i class="left arrow icon"></i>Previous</div>
                                     <div id="submit3" class="submit-button">Next <i class="right arrow icon"></i></div>
                                 </form>
@@ -569,7 +577,7 @@
                                 <form id="form-5" class="ui equal width form">
                                     <h1 class="form-h1">Description & Mission Statement</h1>
                                     <div class="field">
-                                            <label style="margin-top: 2rem;" id="labels-1">Description of your Business*</label>
+                                            <label style="margin-top: 2rem; margin-bottom: 1rem;" id="labels-1">Description of your Business*</label>
                                             <div class="description" id="editor">
                         
                                             </div>

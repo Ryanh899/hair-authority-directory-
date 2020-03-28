@@ -122,7 +122,7 @@ const am_pm_to_hours = time => {
 // on ready
 $(document).ready(function() {
   const page = document.querySelector("div#listing-page-root");
-  const loader = document.querySelector("div#loader-div");
+  const loader = document.querySelector("div#page-loader-div");
   const listingColumn = document.querySelector("div#listing-column");
   const titleSection = document.querySelector("div#title-section");
   const form = document.querySelector('form#admin-form')
@@ -134,8 +134,22 @@ $(document).ready(function() {
   }
 
   const quill = new Quill('#editor', {
-    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ 'font': [] }, { 'size': [] }],
+        [ 'bold', 'italic', 'underline', 'strike' ],
+        [{ 'color': [] }],
+        [{ 'header': '1' }, { 'header': '2' }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+        [ 'direction', { 'align': [] }],
+        [ 'link', 'image'],
+        [ 'clean' ]
+  ]
+    },
+    theme: 'snow'
   });
+
+  let images = [];
 
   // function called by getGeolocation
   async function drawMap(geoPos) {
@@ -260,7 +274,6 @@ $(document).ready(function() {
   const pendingListing = sessionStorage.getItem("pendingListing");
   const inactiveListing = sessionStorage.getItem("inactiveListing");
 
-  let images = [];
   let featurePut = document.getElementById("put");
 
   function displayOtherPhoto(image, id) {
@@ -277,6 +290,31 @@ $(document).ready(function() {
     let otherImages = document.querySelectorAll("div.other-image-display");
     $(otherImages).fadeIn();
   }
+
+  function displayQlPhoto(quill, image) {
+    console.log(image)
+    // imageSrc = S3Url + image
+    let delta = quill.clipboard.convert(`<img src="${image}" class="ui small image"></img>`); 
+    console.log(delta)
+    quill.updateContents(delta)
+  }
+
+  // read uploaded image
+function readQlFile(file, imagesArr, quill) {
+  let FR = new FileReader();
+
+  FR.addEventListener("load", function(base64Img) {
+    // pass base64 image to be uploaded to jumbotron
+    displayQlPhoto(quill, base64Img.target.result);
+    imagesArr.push({ base: base64Img.target.result, file });
+    // console.log(`images: ${images}`);
+    console.log(imagesArr.length);
+
+    // check if max images allowed
+    // maxPhotos(images.length);
+  });
+  FR.readAsDataURL(file);
+}
 
   // read uploaded image
   function readFile(file, id) {
@@ -338,20 +376,6 @@ $(document).ready(function() {
    
   }
 
-  //   function displayOtherPhoto(image, id) {
-  //     $("#other-image-append").append(
-  //       `<div style="display: none;" class="image other-image-display">
-  //         <div class="overlay">
-  //             <button id="${id}" type="button" class="ui basic icon button other-remove">
-  //                 <i style="color: red;" class="large x icon" ></i>
-  //             </button>
-  //         </div>
-  //         <img src="${image}" class="ui image">
-  //       </div>`
-  //     );
-  //     let otherImages = document.querySelectorAll("div.other-image-display");
-  //     $(otherImages).fadeIn();
-  //   }
 
   const handleFileUpload = (selector, handler) => {
     document.querySelector(selector).addEventListener("change", event => {
@@ -369,6 +393,40 @@ $(document).ready(function() {
       }
     });
   };
+
+  const fileButton = document.querySelector('input#ql-file-input')
+
+  const handleQuillUpload = (selector, input, handler) => {
+    // console.log(selector, handler)
+
+    fileButton.addEventListener("click", event => {
+      // event.preventDefault(); 
+      const files = $('input#ql-file-input').files;
+      if (files && files.length) {
+        const size = (files[0].size / 1024 / 1024).toFixed(2);
+        sessionStorage.setItem("imageUp", 0);
+        if (files.length && size < 2) {
+          handler(files[0]);
+        } else {
+          $("#submit6").css("background", "#696969");
+          $("#submit6").off();
+          $(selector).val("");
+          $(".ui.basic.modal").modal("show");
+          return false;
+        }
+      } else {
+        return false
+      }
+
+    });
+
+    $(fileButton).click(); 
+  };
+
+  let toolbar = quill.getModule('toolbar'); 
+  toolbar.addHandler('image', handleQuillUpload)
+  
+  
 
   handleFileUpload("#put", async file => {
     const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
@@ -450,6 +508,20 @@ $(document).ready(function() {
       .catch(err => {
         console.log(err);
       });
+  });
+
+  handleFileUpload("input#ql-file-input", async file => {
+    const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
+    console.log(file); 
+    sessionStorage.setItem(
+      "imageUp",
+      Number(sessionStorage.getItem("imageUp")) + 1
+    );
+    if (sessionStorage.getItem("imageUp") >= 8) {
+      $("#otherimages").prop("disabled", true);
+    }
+    readQlFile(file, images, quill);
+
   });
 
   $("body").on("click", "#image-size-ok", function() {
@@ -1405,7 +1477,7 @@ $(document).ready(function() {
       
     console.log(updates);
 
-  $("#submit-button").show();
+  $("#description-submit-button").show();
 });
 
   $("input.main").on("input", function(e) {
@@ -1483,8 +1555,9 @@ $(document).ready(function() {
       
   })
 
-  $("body").on("click", "#submit-button", function() {
+  $("body").on("click", "button.submit-button", function(e) {
     console.log(updates);
+    $(loader).show()
     if (Object.values(updates.listing).length) {
     updates.listing.id = sessionStorage.getItem('currentListing')
       myAxios
@@ -1522,7 +1595,54 @@ $(document).ready(function() {
           });
       }   
 
-      if (Object.values(updates.business_description).length) {
+      if (Object.values(updates.business_description).length && $(e.target).attr('id') === 'description-submit-button') {
+        let storeS3 = new Promise(async (resolve, reject) => {
+          updates.business_description.listing_id = currentListing ? currentListing : pendingListing
+          const currentUser = authHelper.parseToken(sessionStorage.getItem('token'))
+          console.log(updates.business_description)
+          const descriptionImages = images.filter(x => x.file)
+          console.log(descriptionImages)
+          if (descriptionImages.length) {
+          let uploadImages = await descriptionImages.map(async (image, index) => {
+              const urlAndKey = await (
+                await fetch(
+                  `/api/s3/sign_put?contentType=${image.file.type}&userId=${currentUser.id}`
+                )
+              ).json();
+              console.log(urlAndKey);
+              await fetch(urlAndKey.url, {
+                method: "PUT",
+                body: image.file
+              })
+                .then(data => {
+                  // let image_path = urlAndKey.key;
+                  // const storeImage = {
+                  //   listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
+                  //   image_path,
+                  //   featured_image: false
+                  // };
+                  // myAxios
+                  //   .post("http://localhost:3000/api/storeimage/delta", storeImage)
+                  //   .then(resp => {
+                  //     console.log(resp);
+                  //   })
+                  //   .catch(err => {
+                  //     console.log(err);
+                  //   });
+                  console.log(data); 
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            })
+            resolve(uploadImages)
+          } else {
+            resolve()
+          }
+        })
+        
+        storeS3.then(response => {
+        console.log(response)
         if (currentListing) {
           updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
           console.log(updates.business_description)
@@ -1546,10 +1666,37 @@ $(document).ready(function() {
                 console.log(err);
               });
         }
-    
-        }   
-  
+      })
+    }
 
+      // if (Object.values(updates.business_description).length) {
+      //   if (currentListing) {
+      //     updates.business_description.listing_id = sessionStorage.getItem('currentListing'); 
+      //     console.log(updates.business_description)
+      //       myAxios
+      //         .put("http://localhost:3000/api/updatedescription", updates.business_description)
+      //         .then(resp => {
+      //           console.log(resp); 
+      //         })
+      //         .catch(err => {
+      //           console.log(err);
+      //         });
+      //   } else if (pendingListing) {
+      //     updates.business_description.listing_id = sessionStorage.getItem('pendingListing'); 
+      //     console.log(updates.business_description)
+      //       myAxios
+      //         .put("http://localhost:3000/api/updatedescription/staged", updates.business_description)
+      //         .then(resp => {
+      //           console.log(resp); 
+      //         })
+      //         .catch(err => {
+      //           console.log(err);
+      //         });
+      //   }
+    
+      //   }   
+  
+    window.location.reload()
 
   });
 
@@ -1558,14 +1705,18 @@ $(document).ready(function() {
   });
 
   $('body').on('click', '#back-button', function () {
+    $(loader).show()
     window.history.back()
   })
 
   $('body').on('click', 'button.verify-claim', function (e) {
     let subId = $(this).attr('id'); 
+    $(loader).show()
     myAxios.post(ADMIN_URL + 'claims/verify', { subscription: subId })
       .then(resp => {
-        console.log(resp)
+        console.log(resp); 
+        $('body').fadeOut(250); 
+        window.location.assign('admin.portal.html')
       })
       .catch(err => {
         console.log(err)
@@ -1574,9 +1725,12 @@ $(document).ready(function() {
 
   $('body').on('click', 'button.deny-claim', function (e) {
     let subId = $(this).attr('id'); 
+    $(loader).show()
     myAxios.post(ADMIN_URL + 'claims/deny', { subscription: subId })
       .then(resp => {
-        console.log(resp)
+        console.log(resp); 
+        $('body').fadeOut(250); 
+        window.location.assign('admin.portal.html')
       })
       .catch(err => {
         console.log(err)
@@ -1585,11 +1739,13 @@ $(document).ready(function() {
 
   $('body').on('click', 'button.activate', function () {
     const subId = $(this).attr('id')
-
+    $(loader).show()
     if (subId) {
       myAxios.post(ADMIN_URL + 'pending/verify', { subscription: subId})
         .then(resp => {
-          console.log(resp)
+          console.log(resp); 
+        $('body').fadeOut(250); 
+        window.location.assign('admin.portal.html')
         })
         .catch(err => {
           console.error(err)
@@ -1599,11 +1755,13 @@ $(document).ready(function() {
 
   $('body').on('click', 'button.cancel', function () {
     const subId = $(this).attr('id')
-
+    $(loader).show()
     if (subId) {
       myAxios.post(ZOHO_URL + 'subscription/cancel', { subscription_id: subId})
         .then(resp => {
-          console.log(resp)
+          console.log(resp); 
+        $('body').fadeOut(250); 
+        window.location.assign('admin.portal.html')
         })
         .catch(err => {
           console.error(err)
