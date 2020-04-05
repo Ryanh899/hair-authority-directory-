@@ -468,8 +468,9 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
       .then(response => {
         allListings = response.data
         let searchAppend = ''
-        category ? searchAppend = sessionStorage.getItem('logoSearch') : searchAppend = search
+        !category ? searchAppend = sessionStorage.getItem('logoSearch') : searchAppend = search
         console.log(response)
+        console.log(search)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
               .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)

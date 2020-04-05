@@ -77,29 +77,125 @@ function scrollToAnchor(id){
 // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
 let API_URL = "http://localhost:3000/api/";
 
+
+
+
+
 $(document).ready(function() {
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
+ 
+const loader = document.querySelector('div#home-loader')
+$(loader).show()
+
+  // $('body').on('click', 'a#about', function (e) {
+  //   e.preventDefault()
+  //   scrollToAnchor('why-section')
+  // })
+
+  let geocoder; 
+
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+
+}
+
+initialize(); 
+function getCity (lat, lng, city) {
+  return new Promise((resolve, reject) => {
+  let latlng
+    if (!city) {
+      latlng = { 'latLng': new google.maps.LatLng(lat, lng)}
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      latlng = { 'address' : city }
     }
-  }
+    geocoder.geocode(latlng, function(results, status) {
+     if (status == google.maps.GeocoderStatus.OK) {
+     console.log(results)
+       if (results[1]) {
+        //formatted address
+        console.log(results[0].formatted_address)
+       //find country name
+       let city = `${results[1].address_components[2].long_name}, ${results[1].address_components[4].short_name}`
+      //       for (var i=0; i<results[0].address_components.length; i++) {
+      //      for (var b=0;b<results[0].address_components[i].types.length;b++) {
+  
+      //      //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+      //          if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+      //              //this is the object you are looking for
+      //              city= results[0].address_components[i];
+      //              break;
+      //          }
+      //      }
+      //  }
+       //city data
+       resolve(city)
+  
+  
+       } else {
+         resolve() 
+       }
+     } else {
+      resolve() 
+     }
+   });
+  })
+}
+
+function changeLocation (city) {
+  return new Promise((resolve, reject) => {
+    let latlng = { 'address' : city }
+      geocoder.geocode(latlng, function(results, status) {
+       if (status == google.maps.GeocoderStatus.OK) {
+       console.log(results)
+        resolve(results[0]);
+       } else {
+        resolve() 
+       }
+     });
+    })
+}
 
 
-  function showPosition(position) {
+async function showPosition(position, city) {
+  console.log(position); 
+  console.log(city)
+  if (!city) {
     sessionStorage.setItem("current-lat", position.coords.latitude);
     sessionStorage.setItem("current-lng", position.coords.longitude);
-  }
+    const currentAddress = await getCity(position.coords.latitude, position.coords.longitude); 
+    console.log('current address: ' + currentAddress)
+    console.log(currentAddress)
+    $('#location').attr('placeholder', currentAddress); 
+  } else {
 
-  $('body').on('click', 'a#about', function (e) {
-    e.preventDefault()
-    scrollToAnchor('why-section')
-  })
+
+    const currentAddress = await changeLocation(city); 
+
+    sessionStorage.setItem("current-lat", currentAddress.geometry.location.lat());
+    sessionStorage.setItem("current-lng", currentAddress.geometry.location.lng());
+
+    console.log('current address: ' + currentAddress); 
+    console.log(currentAddress); 
+    $('#location').attr('placeholder', currentAddress); 
+  }
+}
+
+
+function getLocation(city) {
+  console.log([...arguments].length)
+  if (navigator.geolocation && ![...arguments].length) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+    $(loader).hide()
+  } else if([...arguments].length) {
+    console.log("Geolocation is not supported by this browser.");
+  }
+}
+
 
 
 
   getLocation();
+
+
 
   if (authHelper.isLoggedIn()) {
     const token = sessionStorage.getItem("token");
@@ -315,10 +411,17 @@ $(document).ready(function() {
     showNoResults: false
   });
 
-  $("body").on("click", "#search-button", function() {
-    const search = document.querySelector("input#search-semantic").value.trim();
-    console.log(search);
+  $("body").on("click", "a#search-button", async function() {
+    $(loader).show()
+    const search = document.querySelector("input#request").value.trim();
+    const location = document.querySelector('input#location').value.trim(); 
+    console.log($('input#request').val())
+    console.log(search)
+    console.log($('input#location').val())
 
+    if (location !== '') {
+      await showPosition(null, location)
+    }
     sessionStorage.setItem("lastLocation", "index");
     sessionStorage.setItem("searchQuery", search);
     window.location.assign("search.listings.html");
