@@ -165,6 +165,7 @@ async function showPosition(position, city) {
     console.log('current address: ' + currentAddress)
     console.log(currentAddress)
     $('#location').attr('placeholder', currentAddress); 
+    $(loader).hide()
   } else {
 
 
@@ -176,6 +177,7 @@ async function showPosition(position, city) {
     console.log('current address: ' + currentAddress); 
     console.log(currentAddress); 
     $('#location').attr('placeholder', currentAddress); 
+    $(loader).hide()
   }
 }
 
@@ -184,7 +186,6 @@ function getLocation(city) {
   console.log([...arguments].length)
   if (navigator.geolocation && ![...arguments].length) {
     navigator.geolocation.getCurrentPosition(showPosition);
-    $(loader).hide()
   } else if([...arguments].length) {
     console.log("Geolocation is not supported by this browser.");
   }
