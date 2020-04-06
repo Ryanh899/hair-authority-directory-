@@ -168,7 +168,6 @@ async function showPosition(position, city) {
     $(loader).hide()
   } else {
 
-
     const currentAddress = await changeLocation(city); 
 
     sessionStorage.setItem("current-lat", currentAddress.geometry.location.lat());
@@ -421,7 +420,8 @@ function getLocation(city) {
     console.log($('input#location').val())
 
     if (location !== '') {
-      await showPosition(null, location)
+      await showPosition(null, location); 
+      sessionStorage.setItem('location', location)
     }
     sessionStorage.setItem("lastLocation", "index");
     sessionStorage.setItem("searchQuery", search);

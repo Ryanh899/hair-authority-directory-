@@ -132,8 +132,110 @@ var authHelper = {
 
 $(document).ready(function() {
 
+  let geocoder; 
 
-  let markerInfo = [];
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+  
+  }
+  
+  initialize(); 
+  function getCity (lat, lng, city) {
+    return new Promise((resolve, reject) => {
+    let latlng
+      if (!city) {
+        latlng = { 'latLng': new google.maps.LatLng(lat, lng)}
+      } else {
+        latlng = { 'address' : city }
+      }
+      geocoder.geocode(latlng, function(results, status) {
+       if (status == google.maps.GeocoderStatus.OK) {
+       console.log(results)
+         if (results[1]) {
+          //formatted address
+          console.log(results[0].formatted_address)
+         //find country name
+         let city = `${results[1].address_components[2].long_name}, ${results[1].address_components[4].short_name}`
+        //       for (var i=0; i<results[0].address_components.length; i++) {
+        //      for (var b=0;b<results[0].address_components[i].types.length;b++) {
+    
+        //      //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+        //          if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+        //              //this is the object you are looking for
+        //              city= results[0].address_components[i];
+        //              break;
+        //          }
+        //      }
+        //  }
+         //city data
+         resolve(city)
+    
+    
+         } else {
+           resolve() 
+         }
+       } else {
+        resolve() 
+       }
+     });
+    })
+  }
+  
+  function changeLocation (city) {
+    return new Promise((resolve, reject) => {
+      let latlng = { 'address' : city }
+        geocoder.geocode(latlng, function(results, status) {
+         if (status == google.maps.GeocoderStatus.OK) {
+         console.log(results)
+          resolve(results[0]);
+         } else {
+          resolve() 
+         }
+       });
+      })
+  }
+  
+  
+  async function showPosition(position, city) {
+    console.log(position); 
+    console.log(city)
+    if (!city) {
+      sessionStorage.setItem("lat", position.coords.latitude);
+      sessionStorage.setItem("lng", position.coords.longitude);
+      const currentAddress = await getCity(position.coords.latitude, position.coords.longitude); 
+      console.log('current address: ' + currentAddress)
+      console.log(currentAddress)
+      $('#location').attr('placeholder', currentAddress); 
+      $(loader).hide()
+    } else {
+  
+      const currentAddress = await changeLocation(city); 
+  
+      sessionStorage.setItem("current-lat", currentAddress.geometry.location.lat());
+      sessionStorage.setItem("current-lng", currentAddress.geometry.location.lng());
+  
+      console.log('current address: ' + currentAddress); 
+      console.log(currentAddress); 
+      $('#location').attr('placeholder', currentAddress); 
+      $(loader).hide()
+    }
+  }
+  
+  
+  function getLocation(city) {
+    console.log([...arguments].length)
+    if (navigator.geolocation && ![...arguments].length) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else if([...arguments].length) {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+  
+  
+  
+  
+    getLocation();
+
   const page = document.querySelector("div#page-container");
   const loader = document.querySelector("div#loader-div");
   // let API_URL = "http://ec2-34-201-189-88.compute-1.amazonaws.com/api/"
@@ -161,11 +263,35 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
   console.log('current location not in SS')
 }
 
-  function drawMap(geoPos) {
-    geolocate = new google.maps.LatLng(
-      geoPos.coords.latitude,
-      geoPos.coords.longitude
-    );
+let markerInfo = [];
+
+async function drawMap(geoPos, city) {
+  markerInfo = []; 
+    let geolocate; 
+    if (geoPos) {
+      geolocate = new google.maps.LatLng(
+        geoPos.coords.latitude,
+        geoPos.coords.longitude
+      );
+    } else {
+      geolocate = await new Promise((resolve, reject) => {
+        let latlng = { 'address' : city }
+        geocoder.geocode(latlng, function(results, status) {
+         if (status == google.maps.GeocoderStatus.OK) {
+         console.log(results)
+         const currentAddress = results[0]; 
+          resolve(new google.maps.LatLng(
+            currentAddress.geometry.location.lat(),
+            currentAddress.geometry.location.lng()
+          ));
+         } else {
+           resolve()
+         }
+       });
+      })
+      
+    }
+    console.log(geolocate)
     let mapProp = {
       center: geolocate,
       zoom: 9, 
@@ -231,12 +357,30 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
     window.history.back(); 
   });  
 
-  $("body").on("click", "#search-button", function() {
-    const search = document.querySelector("input#search-search").value.trim();
-    console.log(search);
+  // $("body").on("click", "#search-button", function() {
+  //   const search = document.querySelector("input#search-search").value.trim();
+  //   console.log(search);
 
+  //   sessionStorage.setItem("searchQuery", search);
+  //   window.location.assign("search.listings.html");
+  // });
+
+  $("body").on("click", "a#search-button", async function() {
+    $(loader).show()
+    const search = document.querySelector("input#request").value.trim();
+    const location = document.querySelector('input#location').value.trim(); 
+    console.log(search); 
+    console.log(location)
+
+    if (location !== '') {
+      await showPosition(null, location); 
+      sessionStorage.setItem('location', location); 
+    }
+    sessionStorage.setItem("lastLocation", "index");
     sessionStorage.setItem("searchQuery", search);
-    window.location.assign("search.listings.html");
+
+    searchListings()
+    // window.location.assign("search.listings.html");
   });
 
   $("body").on("click", "#home-button", function() {
@@ -246,6 +390,28 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
     window.location.assign("index.html");
   });
 
+  
+
+  // function getLocation() {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(showPosition);
+  //   } else {
+  //     console.log("Geolocation is not supported by this browser.");
+  //   }
+  // }
+
+  // function showPosition(position) {
+  //   sessionStorage.setItem("lat", position.coords.latitude);
+  //   sessionStorage.setItem("lng", position.coords.longitude);
+  // }
+
+
+
+  function searchListings () {
+    $("#listings-column").html('')
+
+  let allListings = []; 
+  
   let search = sessionStorage.getItem("searchQuery");
   const logoSearch = sessionStorage.getItem('logoSearch')
 
@@ -259,22 +425,6 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
     }
   });
 
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
-  }
-
-  function showPosition(position) {
-    sessionStorage.setItem("lat", position.coords.latitude);
-    sessionStorage.setItem("lng", position.coords.longitude);
-  }
-
-
-
-  let allListings = []; 
   if (category === "" && !logoSearch) {
     myAxios
       .get(
@@ -291,9 +441,15 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
           $("#listings-column").append(
             `<p id="no-results-text" >There are no results for "${searchAppend}" in your area.`
           );
+          $('#request').attr('placeholder', searchAppend)
           $(loader).fadeOut();
           $(page).fadeIn();
-          drawMap(location)
+          if (sessionStorage.getItem('location')) {
+            $('#location').attr('placeholder', sessionStorage.getItem('location'))
+            drawMap(null, sessionStorage.getItem('location'))
+          } else {
+            drawMap(location)
+          }
         } else {
           let searchAppend = ''
         sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category
@@ -354,8 +510,13 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
           response.data.forEach(item => {
             markerInfo.push(item);
           });
-
+        if (sessionStorage.getItem('location')) {
+          $('#location').attr('placeholder', sessionStorage.getItem('location'))
+          drawMap(null, sessionStorage.getItem('location'))
+        } else {
           drawMap(location)
+        }
+          
         }
       })
       .catch(err => {
@@ -385,7 +546,12 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
           );
           $(loader).fadeOut();
           $(page).fadeIn();
-          drawMap(location)
+          if (sessionStorage.getItem('location')) {
+            $('#location').attr('placeholder', sessionStorage.getItem('location'))
+            drawMap(null, sessionStorage.getItem('location'))
+          } else {
+            drawMap(location)
+          }
         } else {
           $("#listings-column")
               .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
@@ -445,7 +611,12 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
           response.data.forEach(item => {
             markerInfo.push(item);
           });
-          drawMap(location)
+          if (sessionStorage.getItem('location')) {
+            $('#location').attr('placeholder', sessionStorage.getItem('location'))
+            drawMap(null, sessionStorage.getItem('location'))
+          } else {
+            drawMap(location)
+          }
         }
       })
       .catch(err => {
@@ -479,7 +650,12 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
           );
           $(loader).fadeOut();
           $(page).fadeIn();
-          drawMap(location)
+          if (sessionStorage.getItem('location')) {
+            $('#location').attr('placeholder', sessionStorage.getItem('location'))
+            drawMap(null, sessionStorage.getItem('location'))
+          } else {
+            drawMap(location)
+          }
         } else {
           $("#listings-column")
               .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
@@ -539,7 +715,12 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
           response.data.forEach(item => {
             markerInfo.push(item);
           });
-          drawMap(location)
+          if (sessionStorage.getItem('location')) {
+            $('#location').attr('placeholder', sessionStorage.getItem('location'))
+            drawMap(null, sessionStorage.getItem('location'))
+          } else {
+            drawMap(location)
+          }
         }
       })
       .catch(err => {
@@ -549,6 +730,9 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
         console.log(err);
       });
   }
+}
+
+searchListings()
 
   if (authHelper.isLoggedIn()) {
     const token = sessionStorage.getItem("token");
@@ -782,7 +966,7 @@ if (sessionStorage.getItem('current-lat') && sessionStorage.getItem('current-lng
     }
   });
 
-  $("body").on("click", "a", function(e) {
+  $("body").on("click", "a.listingTitle-search", function(e) {
     const id = $(this).attr("id");
     // filter arr of all listings on page to find clicked on listing and get the id
     let getCoords = allListings.filter(x => x.id === id); 
