@@ -134,6 +134,8 @@ $(document).ready(function() {
 
   let geocoder; 
 
+  let distance = 80467; 
+
   function initialize() {
     geocoder = new google.maps.Geocoder();
   
@@ -203,6 +205,9 @@ $(document).ready(function() {
       sessionStorage.setItem("lat", position.coords.latitude);
       sessionStorage.setItem("lng", position.coords.longitude);
       const currentAddress = await getCity(position.coords.latitude, position.coords.longitude); 
+
+      location.coords.latitude = sessionStorage.getItem('lat')
+      location.coords.longitude = sessionStorage.getItem('lng')
       console.log('current address: ' + currentAddress)
       console.log(currentAddress)
       $('#location').attr('placeholder', currentAddress); 
@@ -213,6 +218,11 @@ $(document).ready(function() {
   
       sessionStorage.setItem("current-lat", currentAddress.geometry.location.lat());
       sessionStorage.setItem("current-lng", currentAddress.geometry.location.lng());
+      sessionStorage.setItem("lat", currentAddress.geometry.location.lat());
+      sessionStorage.setItem("lng", currentAddress.geometry.location.lng());
+
+      location.coords.latitude = sessionStorage.getItem('current-lat')
+      location.coords.longitude = sessionStorage.getItem('current-lng')
   
       console.log('current address: ' + currentAddress); 
       console.log(currentAddress); 
@@ -367,7 +377,8 @@ async function drawMap(geoPos, city) {
 
   $("body").on("click", "a#search-button", async function() {
     $(loader).show()
-    const search = document.querySelector("input#request").value.trim();
+    let search; 
+    document.querySelector("input#request").value.trim() ? search = document.querySelector("input#request").value.trim() : search = sessionStorage.getItem('searchQuery')
     const location = document.querySelector('input#location').value.trim(); 
     console.log(search); 
     console.log(location)
@@ -390,6 +401,17 @@ async function drawMap(geoPos, city) {
     window.location.assign("index.html");
   });
 
+  $("body").on("click", "button.distanceButtons", function() {
+    if ($(this).attr('id') !== distance) {
+      $(this).addClass('active'); 
+      $(`#${distance}`).removeClass('active'); 
+
+      distance = $(this).attr('id'); 
+      console.log(distance)
+    }
+    
+  });
+
   
 
   // function getLocation() {
@@ -404,14 +426,13 @@ async function drawMap(geoPos, city) {
   //   sessionStorage.setItem("lat", position.coords.latitude);
   //   sessionStorage.setItem("lng", position.coords.longitude);
   // }
-
-
+  let allListings = []; 
 
   function searchListings () {
-    $("#listings-column").html('')
+  $("#listings-column").html('')
 
-  let allListings = []; 
-  
+  allListings = []; 
+    
   let search = sessionStorage.getItem("searchQuery");
   const logoSearch = sessionStorage.getItem('logoSearch')
 
@@ -428,7 +449,7 @@ async function drawMap(geoPos, city) {
   if (category === "" && !logoSearch) {
     myAxios
       .get(
-        API_URL + "search/" + search + "/" + location.coords.latitude + "+" + location.coords.longitude
+        API_URL + "search/" + search + "/" + location.coords.latitude + "+" + location.coords.longitude + '/' + distance
       )
       .then(response => {
         allListings = response.data
@@ -531,7 +552,7 @@ async function drawMap(geoPos, city) {
           "search/logo/" +
           logoSearch +
           "/" +
-          location.coords.latitude + "+" + location.coords.longitude
+          location.coords.latitude + "+" + location.coords.longitude + '/' + distance
       )
       .then(response => {
         allListings = response.data
@@ -634,7 +655,7 @@ async function drawMap(geoPos, city) {
           "search/category/" +
           newSearch +
           "/" +
-          location.coords.latitude + "+" + location.coords.longitude
+          location.coords.latitude + "+" + location.coords.longitude + '/' + distance
       )
       .then(response => {
         allListings = response.data

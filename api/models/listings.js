@@ -166,7 +166,7 @@ const Listings = {
         currentLocation.state,
         null
       ])
-      .limit(50)
+      // .limit(50)
       .then(response => {
         return response;
       })
@@ -190,11 +190,12 @@ const Listings = {
       })
     );
   },
-  async getByCategory__single(category, currentLocation) {
+  async getByCategory__single(category, currentLocation, distance) {
     console.log(category.toLowerCase());
+    const miles = distance; 
     const listings = await knex("listings")
       .select()
-      .limit(50)
+      // .limit(50)
       .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [
         `%${category.toLowerCase()}%`,
         currentLocation.state.toLowerCase(),
@@ -213,7 +214,7 @@ const Listings = {
           { lat: listing.lat, lng: listing.lng, city: listing.city },
           currentLocation
         );
-        if (distance && distance.value < 1609340) {
+        if (distance && distance.value < miles) {
           console.log("LESS");
           resolve(listing);
         } else {
@@ -265,10 +266,11 @@ const Listings = {
               console.log(err)
             })
   },
-  async getBySearch(title, currentLocation) {
+  async getBySearch(title, currentLocation, distance) {
+    const miles = distance; 
     const listings = await knex("listings")
       .select()
-      .limit(50)
+      // .limit(50)
       .whereRaw(`LOWER(business_title) LIKE ? and LOWER(state) = ?`, [
         `%${title.toLowerCase()}%`,
         currentLocation.state.toLowerCase()
@@ -285,7 +287,7 @@ const Listings = {
           { lat: listing.lat, lng: listing.lng, city: listing.city },
           currentLocation
         );
-        if (distance && distance.value < 16093400) {
+        if (distance && distance.value < miles) {
           console.log("LESS");
           resolve(listing);
         } else {
@@ -323,7 +325,8 @@ const Listings = {
         console.log(err);
       });
   },
-  async getByLogo(tagline, currentLocation) {
+  async getByLogo(tagline, currentLocation, distance) {
+    const miles = distance; 
     const listings = await knex("listings")
       .select()
       .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) = ?`, [
@@ -343,7 +346,7 @@ const Listings = {
           { lat: listing.lat, lng: listing.lng, city: listing.city },
           currentLocation
         );
-        if (distance && distance.value < 16093400) {
+        if (distance && distance.value < miles) {
           console.log("LESS");
           resolve(listing);
         } else {

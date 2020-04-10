@@ -131,9 +131,12 @@ function getCity (lat, lng, city) {
   
   
        } else {
+         console.log('else')
          resolve() 
        }
      } else {
+      console.log('else')
+      
       resolve() 
      }
    });

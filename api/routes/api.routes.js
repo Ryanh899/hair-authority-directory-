@@ -122,8 +122,9 @@ router.put("/updateProfile", async (req, res) => {
   User.updateProfessionalInfo(updateInfo, res);
 });
 
-router.get("/search/category/:category/:location", async (req, res) => {
+router.get("/search/category/:category/:location/:distance", async (req, res) => {
   const category = req.params.category.replace(/\+/g, "/");
+  const distance = req.params.distance; 
   console.log(category);
   let location = req.params.location.split("+");
   if (location[0] === null || location[1] === null) {
@@ -143,7 +144,8 @@ router.get("/search/category/:category/:location", async (req, res) => {
   };
   const searchPromises = await Listings.getByCategory__single(
     category,
-    location
+    location, 
+    distance
   );
   Promise.all(searchPromises)
     .then(results => {
@@ -164,9 +166,9 @@ router.get("/search/category/:category/:location", async (req, res) => {
 uniqueArray = a =>
   [...new Set(a.map(o => JSON.stringify(o)))].map(s => JSON.parse(s));
 
-router.get("/search/:query/:location", async (req, res) => {
+router.get("/search/:query/:location/:distance", async (req, res) => {
   const query = req.params.query.toLowerCase();
-
+  const distance = req.params.distance; 
   let location = req.params.location.split("+");
   if (location[0] === "null" || location[1] === "null") {
     return res.status(404).json({
@@ -184,7 +186,7 @@ router.get("/search/:query/:location", async (req, res) => {
   };
   console.log(query);
   console.log(location);
-  const searchPromises = await Listings.getBySearch(query, location);
+  const searchPromises = await Listings.getBySearch(query, location, distance);
   Promise.all(searchPromises)
     .then(results => {
       console.log("SEARCH PROMISES .THEN=>");
@@ -201,9 +203,9 @@ router.get("/search/:query/:location", async (req, res) => {
     });
 });
 
-router.get("/search/logo/:query/:location", async (req, res) => {
+router.get("/search/logo/:query/:location/:distance", async (req, res) => {
   const query = req.params.query.toLowerCase();
-
+  const distance = req.params.distance; 
   let location = req.params.location.split("+");
   if (location[0] === "null" || location[1] === "null") {
     return res.status(404).json({
@@ -221,7 +223,7 @@ router.get("/search/logo/:query/:location", async (req, res) => {
   };
   console.log(query);
   console.log(location);
-  const searchPromises = await Listings.getByLogo(query, location);
+  const searchPromises = await Listings.getByLogo(query, location, distance);
   Promise.all(searchPromises)
     .then(results => {
       console.log("SEARCH PROMISES .THEN=>");
