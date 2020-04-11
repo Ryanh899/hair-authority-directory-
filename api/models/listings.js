@@ -192,14 +192,18 @@ const Listings = {
   },
   async getByCategory__single(category, currentLocation, distance) {
     console.log(category.toLowerCase());
-    const miles = distance; 
+    const miles = Number(distance); 
+    let state; 
+    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'
+    let limit; 
+    state !== '%' ? limit = 100 : limit = 100; 
+    console.log(state, limit, miles)
     const listings = await knex("listings")
       .select()
-      // .limit(50)
-      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [
+      .limit(limit)
+      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) like ?`, [
         `%${category.toLowerCase()}%`,
-        currentLocation.state.toLowerCase(),
-        null
+        state
       ])
       .then(response => {
         console.log(response.length);
@@ -267,15 +271,21 @@ const Listings = {
             })
   },
   async getBySearch(title, currentLocation, distance) {
-    const miles = distance; 
+    const miles = Number(distance); 
+    let state; 
+    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'
+    let limit; 
+    state !== '%' ? limit = 100 : limit = 100; 
+    console.log(state, limit, title)
     const listings = await knex("listings")
       .select()
-      // .limit(50)
-      .whereRaw(`LOWER(business_title) LIKE ? and LOWER(state) = ?`, [
+      .limit(limit)
+      .whereRaw(`LOWER(business_title) LIKE ? and LOWER(state) like ?`, [
         `%${title.toLowerCase()}%`,
-        currentLocation.state.toLowerCase()
+        state
       ])
       .then(async response => {
+        console.log(response)
         return uniqueArray(response);
       })
       .catch(err => {
@@ -326,12 +336,14 @@ const Listings = {
       });
   },
   async getByLogo(tagline, currentLocation, distance) {
-    const miles = distance; 
+    const miles = Number(distance); 
+    let state; 
+    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '*'
     const listings = await knex("listings")
       .select()
       .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) = ?`, [
         `%${tagline.toLowerCase()}%`,
-        currentLocation.state.toLowerCase()
+        state
       ])
       .then(async response => {
         console.log(tagline)

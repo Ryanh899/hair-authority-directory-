@@ -184,13 +184,13 @@ router.get("/search/:query/:location/:distance", async (req, res) => {
     city: city[0].city.toLowerCase(),
     state: city[0].administrativeLevels.level1short
   };
-  console.log(query);
-  console.log(location);
+  // console.log(query);
+  // console.log(location);
   const searchPromises = await Listings.getBySearch(query, location, distance);
   Promise.all(searchPromises)
     .then(results => {
-      console.log("SEARCH PROMISES .THEN=>");
-      console.log(results);
+      // console.log("SEARCH PROMISES .THEN=>");
+      // console.log(results);
       return results;
     })
     .catch(err => {

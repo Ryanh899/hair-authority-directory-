@@ -130,6 +130,12 @@ var authHelper = {
   }
 };
 
+function pageNumbers (listings) {
+    if (listings.length > 50) {
+      
+    }
+}
+
 $(document).ready(function() {
 
   let geocoder; 
