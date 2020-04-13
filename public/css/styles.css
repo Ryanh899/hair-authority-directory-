@@ -1273,11 +1273,9 @@ body {
 /*************** Search-Box start here ************/
 
 .search {
-  /* width: 1000px; */
   font-size: 0;
   line-height: normal;
   margin-bottom: 10px;
-  /* margin-left: .5rem; */
 }
 
 /***** Categories box style ****

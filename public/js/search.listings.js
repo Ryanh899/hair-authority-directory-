@@ -132,7 +132,7 @@ var authHelper = {
 
 function pageNumbers (listings) {
     if (listings.length > 50) {
-      
+
     }
 }
 
@@ -315,6 +315,7 @@ async function drawMap(geoPos, city) {
       zoomControl: true
     };
     let map = new google.maps.Map(document.getElementById("map"), mapProp);
+    console.log(markerInfo)
     if (markerInfo.length > 0) {
       markerInfo.forEach(item => {
         let marker = new google.maps.Marker({

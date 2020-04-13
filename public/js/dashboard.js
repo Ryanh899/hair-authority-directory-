@@ -224,7 +224,7 @@ async function appendListing (thisListing, quill, listingArr) {
  
       $(title).attr("value", listing.business_title);
       // $(description).text(listing.business_description);
-      if (listing.delta.length) {
+      if (listing.delta && listing.delta.length) {
         console.log(listing.delta)
         quill.setContents(JSON.parse(listing.delta))
       } else {
@@ -390,9 +390,11 @@ days.forEach(day => {
         }
       });
       // then filter those images for undefined
-      let filteredImgs = images.filter(
-        x => x.thisImage !== undefined && !x.feature_image
-      );
+      let filteredImgs = images.filter(x => {
+        if (x !== undefined) {
+          x.thisImage !== undefined && !x.feature_image
+        }
+        });
 
      
 
@@ -500,7 +502,7 @@ async function getListings (token, quill, listingArr, div, loader) {
 
       $(title).attr("value", listing.business_title);
       // $(description).attr(listing.business_description);
-      if (listing.delta.length) {
+      if (listing.delta && listing.delta.length) {
         console.log(listing.delta)
         quill.setContents(JSON.parse(listing.delta))
       } else {
@@ -670,10 +672,14 @@ days.forEach(day => {
           return { image_id, thisImage, feature_image };
         }
       });
+
+      console.log(images)
       // then filter those images for undefined
-      let filteredImgs = images.filter(
-        x => x.thisImage !== undefined && !x.feature_image
-      );
+      let filteredImgs = images.filter(x => {
+      if (x !== undefined) {
+        x.thisImage !== undefined && !x.feature_image
+      }
+      });
 
       console.log(filteredImgs);
 

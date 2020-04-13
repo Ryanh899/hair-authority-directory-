@@ -113,7 +113,7 @@ $(document).ready(function() {
   const carousel = document.querySelector("ul#content");
 
   // hide the page and let the loader run
-  $(page).fadeOut()
+  $(page).fadeOut(); 
 
   // function to initiate map
   function getGeolocation() {
@@ -528,6 +528,8 @@ $(document).ready(function() {
       .catch(err => {
         console.log(err);
       });
+  } else {
+    window.history.back()
   }
 
   $("body").on("click", "#back-button", function() {

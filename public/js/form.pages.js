@@ -773,10 +773,10 @@ $(document).ready(function() {
           sessionStorage.removeItem('faq')
           sessionStorage.removeItem('imageUp')
           sessionStorage.removeItem('formsCompleted')
-          sessionStorage.removeItem('plan')
+          // sessionStorage.removeItem('plan')
 
           sessionStorage.setItem("lastLocation", "listing.form");
-          window.location.assign("index.html");
+          window.location.assign("thank-you.html");
         })
         .catch(err => {
           console.log(err);
@@ -786,9 +786,9 @@ $(document).ready(function() {
       sessionStorage.removeItem('faq')
       sessionStorage.removeItem('imageUp')
       sessionStorage.removeItem('formsCompleted')
-      sessionStorage.removeItem('plan')
+      // sessionStorage.removeItem('plan')
       alert('You will be emailed when your business is verified')
-      window.location.assign('index.html')
+      window.location.assign('thank-you.html')
     }
   });
 

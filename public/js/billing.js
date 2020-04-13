@@ -102,6 +102,11 @@ $(document).ready(function () {
     // 4. get succesful results, subscription info, plan info, card info, customer info, invoice and payment info
     // 5. get customer id, balance, payment_id, plan_code and put in zoho status table
 
+    if (authHelper.claim__check()) {
+      $('#free-access').prop('disabled', true); 
+      $('#free-col').css('display', 'none')
+    }
+
     if ( !authHelper.isLoggedIn() ) {
       console.log('Not logged in')
       showErrModal('#error-modal', '#error-header', '#error-description', 'Account Error', 'You must be signed in to create a subscription')
