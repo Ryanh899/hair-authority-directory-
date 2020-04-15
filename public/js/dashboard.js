@@ -93,6 +93,27 @@ function displayOtherPhoto(image, id) {
   $(otherImages).fadeIn();
 }
 
+function displayPhotos(arr) {
+  $(
+    "#other-image-append"
+  ).html('')
+  arr.forEach(image => {
+    $("#other-image-append").append(
+      `<div style="display: none;" class="image other-image-display">
+        <div class="overlay">
+            <button id="${image.image_id}" type="button" class="ui basic icon button other-remove">
+                <i style="color: red;" class="large x icon" ></i>
+            </button>
+        </div>
+        <img src="${image.thisImage}" class="ui image">
+      </div>`
+    );
+    let otherImages = document.querySelectorAll("div.other-image-display");
+    $(otherImages).fadeIn();
+  })
+}
+
+
 function displayQlPhoto(quill, image) {
   console.log(image)
   // imageSrc = S3Url + image
@@ -391,8 +412,8 @@ days.forEach(day => {
       });
       // then filter those images for undefined
       let filteredImgs = images.filter(x => {
-        if (x !== undefined) {
-          x.thisImage !== undefined && !x.feature_image
+        if (x && !x.feature_image) {
+          return x 
         }
         });
 
@@ -400,9 +421,7 @@ days.forEach(day => {
 
       console.log(filteredImgs);
 
-      filteredImgs.forEach(image => {
-        displayOtherPhoto(image.thisImage, image.image_id);
-      });
+        displayPhotos(filteredImgs);
 }
 
 const am_pm_to_hours = time => {
@@ -676,16 +695,14 @@ days.forEach(day => {
       console.log(images)
       // then filter those images for undefined
       let filteredImgs = images.filter(x => {
-      if (x !== undefined) {
-        x.thisImage !== undefined && !x.feature_image
-      }
-      });
+        if (x && !x.feature_image) {
+          return x 
+        }
+        });
 
       console.log(filteredImgs);
 
-      filteredImgs.forEach(image => {
-        displayOtherPhoto(image.thisImage, image.image_id);
-      });
+      displayPhotos(filteredImgs);
 
       $('div.listing-menu-drop').dropdown(options); 
       $('.ui.dropdown.main').dropdown(); 

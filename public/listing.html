@@ -56,6 +56,11 @@
       </div>
       <p></p>
     </div>
+    <div id="image-modal" class="ui modal">
+      <div id="image-content" class="image content">
+        <img id="image-src" class="ui fluid image">
+      </div>
+    </div>
     <div class="ui grid" id="listing-page-container">
       <div class="row" id="top-menu-row">
         <div class="ui grid" id="landing-grid">
@@ -95,7 +100,7 @@
           </div>
         </div>
       </div>
-      <div class="sixteen wide column">
+      <div id="images-column" class="sixteen wide column">
         <div
           style="width: 100%; padding-right: 1rem; padding-left: 1rem;"
           class="ui grid container"
@@ -108,22 +113,28 @@
           </div>
         </div>
       </div>
-      <div style="padding-bottom: 0px; " class="row">
-        <div class="two wide column"></div>
+      <div id="title-section-row" class="row">
         <div
           id="header-image"
-          style="background: #f5f5f5; padding-bottom: 0px;padding-top: 1rem;"
-          class="ten wide segemnt column"
+          style="background: #f5f5f5; padding: 3rem;"
+          class="sixteen wide segemnt column"
         >
-          <div id="title-section"></div>
+        <div class="ui breadcrumb">
+          <a class="section" href="index.html">Home</a>
+          <div class="divider"> / </div>
+          <a id="back-crumb" class="section">Search</a>
+          <div id="last-divider" class="divider"> / </div>
         </div>
-        <div class="four wide column"></div>
+          <div id="title-section">
+            
+          </div>
+        </div>
       </div>
       <!-- listing content section  -->
       <div style="padding-top: 0px;" id="first-row" class="row">
         <!-- RAIL  -->
-        <div class="two wide column"></div>
-        <div id="listing-column" class="ten wide segment column">
+        <div class="one wide column"></div>
+        <div id="listing-column" class="ten wide column raised segment">
           <div id="right-rail" class="ui right very close rail">
               
             <div class="ui raised segment">
@@ -178,13 +189,10 @@
               class="ui bottom attached raised center aligned segment"
             ></div>
           </div>
-          <div id="services-section"></div>
+          <!-- <div id="services-section"></div> -->
           <div id="about-section">
-            <!-- <hr
-              id="about-hr"
-              style="height: .25rem; background: black; color: black;"
-            /> -->
-            <p id="section-header"></p>
+            <p class="section-title" style="color: black; margin-bottom: .25rem; margin-top: 1rem; font-size: 25px; text-decoration: underline;" >Description</p>
+            <p id="description-content"></p>
           </div>
           <div
             id="youtube-section"
@@ -210,6 +218,7 @@
     <script type="text/javascript" src="./css/slick/slick.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.8/dist/semantic.min.js"></script>
     <script src="./js/listing.page.js" type="text/javascript"></script>
+    <script src="./js/nav-auth.js" type="text/javascript" ></script>
     <script src="./js/image.slider.js" type="text/javascript"></script>
   </body>
 </html>

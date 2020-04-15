@@ -915,7 +915,7 @@ function readQlFile(file, imagesArr, quill) {
               );
             } else {
               $("#user-segment").append(
-                `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
+                `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button ${listing.claimed ? 'unverify-claim' : 'verify-claim'}" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
               );
             }
              
@@ -1758,6 +1758,22 @@ function readQlFile(file, imagesArr, quill) {
     $(loader).show()
     if (subId) {
       myAxios.post(ZOHO_URL + 'subscription/cancel', { subscription_id: subId})
+        .then(resp => {
+          console.log(resp); 
+        $('body').fadeOut(250); 
+        window.location.assign('admin.portal.html')
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+  })
+
+  $('body').on('click', 'button.unverify-claim', function () {
+    const subId = $(this).attr('id')
+    $(loader).show()
+    if (subId) {
+      myAxios.post(ADMIN_URL + 'claims/unverify', { subscription: subId})
         .then(resp => {
           console.log(resp); 
         $('body').fadeOut(250); 

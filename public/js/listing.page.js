@@ -287,7 +287,7 @@ $(document).ready(function() {
             thisImage.style.padding = "1rem 0 0 1rem";
             thisImage.style.margin = "auto 0 0 0";
             // class name
-            thisImage.className = "ui large fluid image";
+            thisImage.className = "ui image carousel-images";
 
             return thisImage;
           }
@@ -320,6 +320,9 @@ $(document).ready(function() {
         if (!listing.claimed) {
           $('#right-rail').prepend(`<button id="claim-button" style="background: orange; color: white;" class="ui button" >Claim Your Business</button>`)
         }
+
+          
+        $('#last-divider').append(`<div class="active section" style="color: black; font-size: 18px; font-family:lato; font-weight: 500;">${listing.business_title}</div>`)
 
         // prepend title to title section
         $(titleSection).prepend(
@@ -409,9 +412,10 @@ $(document).ready(function() {
 
         // if description append else hide the section
         if (listing.business_description) {
-          $("#section-header").append(
-            `<p id="listing_description" >${listing.business_description}</p>`
-          );
+          // $("#section-header").append(
+          //   `<p id="listing_description" >${listing.business_description}</p>`
+          // );
+          $('#description-content').html(listing.business_description)
         } else {
           $("#about-section").css("display", "none");
         }
@@ -499,28 +503,30 @@ $(document).ready(function() {
               }
             }
           } else {
-            let vidId = getChannelIdFromUrl(listing.youtube);
+            let vidId = listing.youtube.split('?')[1]
             console.log(vidId);
+            $("#youtube-col").append(
+              `<div id="youtube-embed" class="ui embed youtube" data-url="https://www.youtube.com/embed/${vidId}&origin=http://localhost:3000/" data-placeholder="../images/DTIgRSrWsAUn0BW.jpg" ></div>`
+            );
+            $("#youtube-embed").embed();
           }
         }
 
-        if (listing.faqs) {
+        if (listing.faqs && listing.faqs[0].faq_answer !== 'N/A') {
           $('#faq-section').append(`
           <div id="faq" class="sixteen wide column">
-            <hr
-            class="style14"
-            />
-            <p id="section-header">FAQ's</p>
+            <p id="section-title">FAQ's</p>
           </div>`)
-          listing.faqs.forEach((faq, index) => {
-            $("#faq").append(
-              `<p class="faq-header" >Question #${index + 1}</p>`
-            );
-            $("#faq").append(`<p class="hours-text" >${faq.faq}</p>`);
-            $("#faq").append(`<p class="faq-header" >Answer</p>`);
-            $("#faq").append(`<p class="hours-text" >${faq.faq_answer}</p>`);
+          listing.faqs.forEach((faq, index) => { 
+            if (faq.faq_answer !== 'N/A') {
+              $("#faq").append(
+                `<p class="faq-header" >Question #${index + 1}</p>`
+              );
+              $("#faq").append(`<p class="hours-text" >${faq.faq}</p>`);
+              $("#faq").append(`<p class="faq-header" >Answer</p>`);
+              $("#faq").append(`<p class="hours-text" >${faq.faq_answer}</p>`);
+            }
           });
-          $("#faq").append(`<hr class="style14" />`);
         }
 
         // END OF .THEN FROM AXIOS
@@ -536,6 +542,19 @@ $(document).ready(function() {
     sessionStorage.removeItem("listing-address");
     window.history.back();
   });
+
+  $("body").on("click", "#back-crumb", function() {
+    sessionStorage.removeItem("listing-address");
+    window.history.back();
+  });
+
+  $('body').on('click', 'img.carousel-images', function () {
+    console.log('clicked')
+    let clickedImage = $(this).attr('src'); 
+    console.log(clickedImage)
+    $('#image-src').attr('src', clickedImage);
+    $('#image-modal').modal('show')
+  })
 
   $("body").on("click", "#claim-button", function() {
     const currentListing = sessionStorage.getItem('currentListing')

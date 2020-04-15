@@ -202,6 +202,19 @@ router.post('/claims/deny', async (req, res) => {
 
 })
 
+router.post('/claims/unverify', async (req, res) => {
+    // get sub id from client
+    const subscription_id = req.body.subscription 
+    // check if sub exists
+    const subscription = await Zoho.subscriptionCheck__id(subscription_id); 
+    // if subscription exists
+    if (subscription.length) {
+        // gets from pending, inserts into listings w/ prof_id + claim, deletes from pending, sends resp
+        Zoho.unverifyClaim(subscription_id, res)
+    }
+
+})
+
 router.get('/listings/inactive', (req, res) => {
     Listings.getInactiveListings(res)
 })

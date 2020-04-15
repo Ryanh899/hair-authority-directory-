@@ -313,7 +313,6 @@ const Listings = {
       .whereRaw(`LOWER(business_title) LIKE ?;`, [
         `%${title.toLowerCase()}%`
       ])
-      .limit(150)
       .then(async response => {
         return response; 
       })
