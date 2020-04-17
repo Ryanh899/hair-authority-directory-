@@ -419,6 +419,16 @@ const Listings = {
             if (faqs.length > 0) {
               listing.faqs = faqs;
             }
+            return knex("subscriptions")
+              .select()
+              .where("listing_id", listing.id);
+          })
+          .then(subscription => {
+            if (subscription.length) {
+              listing.plan = subscription[0].plan_code; 
+              listing.status = subscription[0].status; 
+            }
+
             return cb.json(listing);
           })
           .catch(err => {

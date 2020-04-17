@@ -140,7 +140,9 @@ $(document).ready(function() {
 
   let geocoder; 
 
-  let distance = 80467; 
+  let distance = sessionStorage.getItem('distance') || 80467; 
+
+  $(`#${distance}`).addClass('active')
 
   function initialize() {
     geocoder = new google.maps.Geocoder();
@@ -414,6 +416,8 @@ async function drawMap(geoPos, city) {
       $(`#${distance}`).removeClass('active'); 
 
       distance = $(this).attr('id'); 
+      sessionStorage.setItem('distance', distance); 
+
       console.log(distance)
     }
     
@@ -461,7 +465,8 @@ async function drawMap(geoPos, city) {
       .then(response => {
         allListings = response.data
         let searchAppend = ''
-        sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category
+        sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category; 
+        $('input.request').val(searchAppend)
         console.log(response);
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -480,7 +485,8 @@ async function drawMap(geoPos, city) {
           }
         } else {
           let searchAppend = ''
-        sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category
+        sessionStorage.getItem('searchQuery') ? searchAppend = sessionStorage.getItem('searchQuery') : searchAppend = category; 
+        $('input.request').val(searchAppend)
           $("#listings-column")
               .append(`<p id="listing-column-title" >Search results for "${searchAppend}"</p>`)
           response.data.forEach(listing => {
@@ -565,6 +571,7 @@ async function drawMap(geoPos, city) {
         allListings = response.data
         let searchAppend = ''
         sessionStorage.getItem('logoSearch') ? searchAppend = sessionStorage.getItem('logoSearch') : searchAppend = search
+        $('input.request').val(searchAppend)
         console.log(response)
         if (response.data.length === 0 || response.status === 304) {
           $("#listings-column")
@@ -668,6 +675,7 @@ async function drawMap(geoPos, city) {
         allListings = response.data
         let searchAppend = ''
         !category ? searchAppend = sessionStorage.getItem('logoSearch') : searchAppend = search
+        $('input.request').val(searchAppend)
         console.log(response)
         console.log(search)
         if (response.data.length === 0 || response.status === 304) {

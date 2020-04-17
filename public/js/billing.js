@@ -63,16 +63,18 @@ var myAxios = axios.create({
   
       if (claim) {
         now = new Date();
-        expiration = new Date(claim.timestamp);
+        expiration = new Date(claim.timeStamp);
         expiration.setMinutes(expiration.getMinutes() + 30);
-  
+        console.log(expiration)
         // ditch the content if too old
         if (now.getTime() > expiration.getTime()) {
+          sessionStorage.removeItem('claimListing')
             return false
         } else {
           return true
         }
       } else {
+        sessionStorage.removeItem('claimListing')
         return false 
       }
     }
@@ -112,10 +114,11 @@ $(document).ready(function () {
       showErrModal('#error-modal', '#error-header', '#error-description', 'Account Error', 'You must be signed in to create a subscription')
     }
 
-    $('body').on('click', '.continue-button', function (e) {
+    $('body').on('click', '.continue-button', async function (e) {
         let plan = this.id; 
         $('#billing-loader-div').css('display', 'block')
-        const claimCheck = authHelper.claim__check()
+        const claimCheck = await authHelper.claim__check(); 
+        console.log('claim check:', claimCheck)
 
         sessionStorage.setItem('plan', plan)
         sessionStorage.setItem('lastLocation', 'billing__new')
@@ -124,7 +127,7 @@ $(document).ready(function () {
           myAxios.get(`http://localhost:3000/zoho/findcustomer/user/${token}`)
             .then(customer => {
               console.log(customer)
-              if (customer.data || customer.data.length) {
+              if (customer.data && customer.data.length) {
                 const customer_id = customer.data.customer_id
                 const token = sessionStorage.getItem('token')
                 if (plan === 'free-access' ) {
@@ -177,6 +180,7 @@ $(document).ready(function () {
                 }
 
               } else if (!customer.data || !customer.data.length) {
+                console.log('new lsiting, not existing customer')
                 if (plan === 'free-access' ) {
                   myAxios.post('http://localhost:3000/zoho/subscription/createfree/new', { token })
                     .then(resp => {
@@ -220,6 +224,7 @@ $(document).ready(function () {
           
           // if its a claim
           } else if ( authHelper.isLoggedIn() && claimCheck ) {
+            console.log('Claim')
             // get listing to be claimed 
             const claim = JSON.parse(sessionStorage.getItem('claimListing')).value
             // get user token 

@@ -83,16 +83,18 @@ let authHelper = {
 
     if (claim) {
       now = new Date();
-      expiration = new Date(claim.timestamp);
+      expiration = new Date(claim.timeStamp);
       expiration.setMinutes(expiration.getMinutes() + 30);
 
       // ditch the content if too old
       if (now.getTime() > expiration.getTime()) {
+        sessionStorage.removeItem('claimListing')
           return false
       } else {
         return true
       }
     } else {
+      sessionStorage.removeItem('claimListing')
       return false 
     }
   }
@@ -139,7 +141,7 @@ $(document).ready(function() {
     hostedCheck = authHelper.zohoRedirectCheck()
   } else {
     alert('youll be emailed when your claim is verified'); 
-    window.location.assign('index.html')
+    window.location.assign('thank-you.html')
   }
 
   if (hostedCheck) {
@@ -593,9 +595,9 @@ $(document).ready(function() {
         listing_id: finalForm.id
       });
 
-      if (formData.get("youtube-channel") !== null || formData.get("youtube") !== "")
+      if (formData.get("youtube-channel") !== null || formData.get("youtube-channel") !== "")
       smForm.push({
-        platform: "youtube-channel",
+        platform: "youtube_channel",
         url: formData.get("youtube-channel"),
         listing_id: finalForm.id
       });
