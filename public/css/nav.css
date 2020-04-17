@@ -163,5 +163,15 @@
     padding: 0px;
     line-height: 1em;
   }
+
+
+#back-button {
+  font-family: "lato", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  height: 101%;
+  display: table;
+  width: 100%;
+}
 /* list business click  */
 

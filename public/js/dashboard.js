@@ -115,10 +115,8 @@ function displayPhotos(arr) {
 
 
 function displayQlPhoto(quill, image) {
-  console.log(image)
   // imageSrc = S3Url + image
   let delta = quill.clipboard.convert(`<img src="${image}" class="ui small image"></img>`); 
-  console.log(delta)
   quill.updateContents(delta)
 }
 
@@ -131,8 +129,6 @@ function readFile(file, id, imagesArr) {
     // pass base64 image to be uploaded to jumbotron
     displayPhoto(base64Img.target.result, id);
     imagesArr.push(base64Img.target.result);
-    // console.log(`images: ${images}`);
-    console.log(imagesArr.length);
 
     // check if max images allowed
     // maxPhotos(images.length);
@@ -149,7 +145,6 @@ function readQlFile(file, imagesArr, quill) {
     displayQlPhoto(quill, base64Img.target.result);
     imagesArr.push({ base: base64Img.target.result, file });
     // console.log(`images: ${images}`);
-    console.log(imagesArr.length);
 
     // check if max images allowed
     // maxPhotos(images.length);
@@ -166,7 +161,6 @@ function readOtherFile(file, id, imagesArr) {
     displayOtherPhoto(base64Img.target.result, id);
     imagesArr.push(base64Img.target.result);
     // console.log(`images: ${images}`);
-    console.log(imagesArr.length);
 
     // check if max images allowed
     // maxPhotos(images.length);
@@ -176,10 +170,8 @@ function readOtherFile(file, id, imagesArr) {
 
 // display photo to top of jumbotron
 function displayPhoto(image, id) {
-  console.log(image)
   let imageSplit = image.split('/')
   let exists = imageSplit[imageSplit.length-1]
-  console.log(exists)
   // $('#other-append').append(`<img src="${image}" alt="image" class="ui small image">`);
   $(
     "#feature-append"
@@ -220,9 +212,50 @@ function getMenuParams (listings) {
   })
 }
 
+function tierControl (plan_code) {
+  // light plan
+  // EXCLUDES: youtube, tagline, social media, faq, hours
+  if (plan_code === 'd2f4f1f0-1ad5-4c3a-912d-6646a5a46d08') {
+      $('#tagline').attr('disabled', true)
+      $('#tagline-field').append(`<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>`)
+
+      $('div.sm-field').append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+      $('input.social_media').attr('disabled', true); 
+
+      $('input.hours').attr('disabled', true); 
+      $('#hours-div').append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+
+      $('input.faq').attr('disabled',true); 
+      $('textarea.answer').attr('disabled', true); 
+      for (let i = 0; i < 3; i++) {
+        $(`#${i}faq`).append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+      }
+  } else if (plan_code === 'ea78d785-2a2c-4b74-b578-fab3509b669c') {
+    $('input.hours').attr('disabled', true); 
+      $('#hours-div').append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+
+      $('input.faq').attr('disabled',true); 
+      $('textarea.answer').attr('disabled', true); 
+      for (let i = 0; i < 3; i++) {
+        $(`#${i}faq`).append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+      }
+  }
+}
+
 async function appendListing (thisListing, quill, listingArr) {
   sessionStorage.setItem('currentListing', thisListing.id)
   let listing = thisListing
+
+  if (listing.subscription) {
+    const subValues = Object.values(listing.subscription);
+    $('#subscription-segment').html('')
+    Object.keys(listing.subscription).forEach((item, index) => {
+      if (subValues[index]!==null)
+      $("#subscription-segment").append(
+        `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+      );
+    });
+  }
 
       const title = document.querySelector("input#business_title");
       const description = document.querySelector(
@@ -246,11 +279,9 @@ async function appendListing (thisListing, quill, listingArr) {
       $(title).attr("value", listing.business_title);
       // $(description).text(listing.business_description);
       if (listing.delta && listing.delta.length) {
-        console.log(listing.delta)
         quill.setContents(JSON.parse(listing.delta))
       } else {
         let delta = quill.clipboard.convert(listing.business_description); 
-        console.log(delta); 
 
         quill.setContents(delta)
       }
@@ -360,7 +391,6 @@ days.forEach(day => {
          const faq0 = document.querySelector("input#faq0");
          const answer = document.querySelector("textarea#answer0");
 
-         console.log(listing.faqs[0].faq_answer)
          $(faq0).val(listing.faqs[0].faq);
          $(answer).val(listing.faqs[0].faq_answer);
        }
@@ -388,7 +418,6 @@ days.forEach(day => {
         );
         const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
         const featureId = listing.images.filter(x => !x.feature_image );
-        console.log(featureId);
         displayPhoto(featureImage, featureId[0].image_id);
       }
 
@@ -397,7 +426,6 @@ days.forEach(day => {
         x => x.image_path !== "true" && x.image_path !== ""
       );
 
-      console.log(filteredImg);
 
       // map images into an arr of dom elements
       const images = await filteredImg.map(image => {
@@ -419,15 +447,16 @@ days.forEach(day => {
 
      
 
-      console.log(filteredImgs);
 
         displayPhotos(filteredImgs);
+
+        console.log(listing.subscription.plan_code )
+        tierControl(listing.subscription.plan_code)
 }
 
 const am_pm_to_hours = time => {
   let realTime = time.split('').splice(1, 4)
   let amPm = time.split('').splice(5, 2).join('').toUpperCase()
-  console.log(realTime, amPm)
   time = `${realTime.join('')} ${amPm}`
   let hours = Number(time.match(/^(\d+)/)[1]);
   let minutes = Number(time.match(/:(\d+)/)[1]);
@@ -444,11 +473,16 @@ const am_pm_to_hours = time => {
 }
 
 
+
+
 async function getListings (token, quill, listingArr, div, loader) {
   myAxios.get(API_URL + 'dashboard/listings/' + token)
     .then(async response => {
       console.log(response)
-      const listings = response.data; 
+      const listings = response.data.listings; 
+      const subscriptions = response.data.subscriptions; 
+
+
       sessionStorage.setItem('currentListing', listings[0].id)
       listings.forEach(listing => {
         listingArr.push(listing)
@@ -492,13 +526,19 @@ async function getListings (token, quill, listingArr, div, loader) {
         
       // })
       let options = {}; 
-      console.log(listingArr)
       options.values = getMenuParams(listingArr)
-      console.log(options)
      
-      console.log($('input#dropdown-menu').val())
+      const listing = listings[0];
 
-      const listing = response.data[0];
+      if (listing.subscription) {
+        const subValues = Object.values(listing.subscription);
+        Object.keys(listing.subscription).forEach((item, index) => {
+          $("#subscription-segment").append(
+            `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+          );
+        });
+      }
+      
 
       const title = document.querySelector("input#business_title");
       const description = document.querySelector(
@@ -522,11 +562,9 @@ async function getListings (token, quill, listingArr, div, loader) {
       $(title).attr("value", listing.business_title);
       // $(description).attr(listing.business_description);
       if (listing.delta && listing.delta.length) {
-        console.log(listing.delta)
         quill.setContents(JSON.parse(listing.delta))
       } else {
         let delta = quill.clipboard.convert(listing.business_description); 
-        console.log(delta); 
 
         quill.setContents(delta)
       }
@@ -552,7 +590,7 @@ const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 $('#hours-div').html('')
 days.forEach(day => {
   const fields = document.createElement('div')
-  fields.className = 'fields'
+  fields.className = 'fields hours-fields'
   fields.id = day
   
   const opening_field = document.createElement("div");
@@ -641,7 +679,6 @@ days.forEach(day => {
          const faq0 = document.querySelector("input#faq0");
          const answer = document.querySelector("textarea#answer0");
 
-         console.log(listing.faqs[0].faq_answer)
          $(faq0).val(listing.faqs[0].faq);
          $(answer).val(listing.faqs[0].faq_answer);
        }
@@ -669,7 +706,6 @@ days.forEach(day => {
         );
         const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
         const featureId = listing.images.filter(x => !x.feature_image );
-        console.log(featureId);
         displayPhoto(featureImage, featureId[0].image_id);
       }
 
@@ -678,7 +714,6 @@ days.forEach(day => {
         x => x.image_path !== "true" && x.image_path !== ""
       );
 
-      console.log(filteredImg);
 
       // map images into an arr of dom elements
       const images = await filteredImg.map(image => {
@@ -692,7 +727,6 @@ days.forEach(day => {
         }
       });
 
-      console.log(images)
       // then filter those images for undefined
       let filteredImgs = images.filter(x => {
         if (x && !x.feature_image) {
@@ -700,12 +734,13 @@ days.forEach(day => {
         }
         });
 
-      console.log(filteredImgs);
 
       displayPhotos(filteredImgs);
 
       $('div.listing-menu-drop').dropdown(options); 
       $('.ui.dropdown.main').dropdown(); 
+      console.log(listing.subscription.plan_code )
+      tierControl(listing.subscription.plan_code)
     
     })
     .catch(err => {
@@ -739,7 +774,6 @@ $(document).ready(function() {
 let images = []; 
 
   const handleFileUpload = (selector, handler) => {
-    console.log(selector, handler)
     document.querySelector(selector).addEventListener("change", event => {
       const files = event.currentTarget.files;
       const size = (files[0].size / 1024 / 1024).toFixed(2);
@@ -759,7 +793,6 @@ let images = [];
   const fileButton = document.querySelector('input#ql-file-input')
 
   const handleQuillUpload = (selector, input, handler) => {
-    // console.log(selector, handler)
 
     fileButton.addEventListener("click", event => {
       // event.preventDefault(); 
@@ -791,7 +824,6 @@ let images = [];
   
   handleFileUpload("#put", async file => {
     const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
-    console.log(file)
     const urlAndKey = await (
       await fetch(
         `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
@@ -807,7 +839,6 @@ let images = [];
           "imageUp",
           Number(sessionStorage.getItem("imageUp")) + 1
         );
-        console.log(data);
         let image_path = urlAndKey.key;
         const storeImage = {
           listing_id: sessionStorage.getItem("currentListing") || sessionStorage.getItem('pendingListing'),
@@ -831,7 +862,6 @@ let images = [];
   
   handleFileUpload("#otherimages", async file => {
     const currentUser = authHelper.parseToken(sessionStorage.getItem("token"));
-    console.log(file)
     const urlAndKey = await (
       await fetch(
         `/api/s3/sign_put?contentType=${file.type}&userId=${currentUser.id}`
@@ -902,7 +932,6 @@ let images = [];
 
 // function to initiate map
 function getGeolocation() {
-  console.log("map");
   // navigator.geolocation.getCurrentPosition(drawMap);
   drawMap();
 }
@@ -954,7 +983,6 @@ async function drawMap(geoPos) {
     // hit the google api with the address to get coordinates
     geocoder.geocode({ address: full_address }, function(results, status) {
       if (status == "OK") {
-        console.log(results);
         geolocate = results[0].geometry.location;
         // create map props for map generator
         let mapProp = {
@@ -1193,7 +1221,6 @@ $(document).on("click", "button.other-remove", function(e) {
   //     .catch(err => console.log(err));
   // });
 
-  console.log($('#editor').html())
 
 
 

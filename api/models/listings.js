@@ -1255,7 +1255,7 @@ const Listings = {
             console.error(err)
           })
   },
-  getById__userId (userId, res) {
+  getById__userId (userId, subscriptions, res) {
     console.log(userId)
     return new Promise((resolve, reject) => {
       knex("listings")
@@ -1276,6 +1276,7 @@ const Listings = {
       console.log(listings)
       listings.forEach((listing, index) => {
         const thisListing = listing; 
+        thisListing.subscription = subscriptions.filter(s => s.listing_id===thisListing.id)[0] 
         console.log(thisListing); 
         console.log('response from promise')
         return knex("images")
@@ -1325,7 +1326,8 @@ const Listings = {
             userListings.push(thisListing)
             let length = listings.length
             if (index === length - 1) {
-              res.json(userListings)
+
+              res.json({ listings: userListings })
             }
           })
           .catch(err => {

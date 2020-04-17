@@ -595,7 +595,8 @@ console.log(user)
   // if subscription exists 
   if (subscriptions.length) {
     // get listing info 
-    const listings = await Listings.getById__userId(user.id, res); 
+    const filterSubscriptions = await subscriptions.filter(x => x.status !== 'cancelled')
+    const listings = await Listings.getById__userId(user.id, filterSubscriptions, res); 
 
   } else {
     res.status(401).json({ error: 'User has no subscription' })

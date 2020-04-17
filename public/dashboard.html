@@ -89,14 +89,14 @@
 
             <form id="admin-form" style="padding-top: .5rem;" class="ui equal width form">
               <p class="input_text">Edit your business information here <i style="color: #696969;" class="small down arrow icon" ></i></p>
-                <div class="field">
+                <div id="title-field" class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Business Title</label>
                     <div id="businessTitle-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="main input_text" id="business_title" name="businessTitle" type="text" >
                         <i class="building outline icon"></i>
                     </div>
                 </div>
-                <div class="field">
+                <div id="tagline-field" class="field">
                     <label style="margin-top: 2rem;" id="labels-1">Tagline or Slogan</label>
                     <div id="businessDescription-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="main input_text" id="tagline" name="tagline" type="text">
@@ -506,37 +506,43 @@
                         <i class="search icon"></i>
                     </div>
                 </div>
-                <div class="field">
+                <div class="sm-field field">
                     <label style="margin-top: 2rem;" id="labels-1">Social Media</label>
                     <div id="instagram-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="social_media input_text" id="instagram" name="instagram" type="text" >
                         <i class="large instagram icon"></i>
                     </div>
                 </div>
-                <div class="field">
+                <div class="sm-field field">
                     <div id="facebook-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="social_media input_text" id="facebook" name="facebook" type="text" >
                         <i class="large facebook icon"></i>
                     </div>
                 </div>
-                <div class="field">
+                <div class="sm-field field">
                     <div id="twitter-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="social_media input_text" id="twitter" name="twitter" type="text" >
                         <i class="large twitter icon"></i>
                     </div>
                 </div>
-                <div class="field">
+                <div class="sm-field field">
                     <div id="linkedIn-div" style="margin-top: 1rem;" class="ui  left icon input">
                         <input class="social_media input_text" id="linkedin" name="linkedin" type="text">
                         <i class="large linkedin icon"></i>
                     </div>
                 </div>
-                <div class="field">
+                <div class="sm-field field">
                         <div id="youtube-div" style="margin-top: 1rem;" class="ui  left icon input">
                             <input class="social_media input_text" id="youtube" name="youtube" type="text" >
                             <i class="large youtube icon"></i>
                         </div>
                     </div>
+                    <div class="sm-field field">
+                      <div id="youtubeChannel-div" style="margin-top: 1rem;" class="ui  left icon input">
+                          <input class="social_media input_text" id="youtube-channel" name="youtube-channel" type="text" >
+                          <i class="large youtube icon"></i>
+                      </div>
+                  </div>
                 
     
                 <div class="field">
@@ -616,6 +622,9 @@
                 </form>
               </div>
               <div class="five wide column">
+                  <div id="subscription-segment" class="ui raised segment">
+                      <p class="logo-header" style="font-size: 25px; color: #696969;">Subscription Info</p>
+                  </div>
                   <div class="ui raised segment" id="map-container">
                       <div id="map"></div>
                   </div>
