@@ -1439,7 +1439,7 @@ $(document).on("click", "button.other-remove", function(e) {
   })
 
   // on update click
-  $(document).on("click", "a.updateSub", function(e) {
+  $(document).on("click", ".updateSub", function(e) {
     e.preventDefault();
     // set update to the current listing id (user token in storage)
     sessionStorage.setItem('update', JSON.stringify({ timeStamp: new Date(), value: sessionStorage.getItem('currentListing') })); 
