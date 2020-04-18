@@ -119,6 +119,13 @@ const am_pm_to_hours = time => {
   return `${sHours}:${sMinutes}`;
 }
 
+function showErrModal (modal, header, description, errHeader, errMessage) {
+  $(header).text(errHeader)
+  $(description).text(errMessage)
+
+  $(modal).modal('show')
+}
+
 // on ready
 $(document).ready(function() {
   const page = document.querySelector("div#listing-page-root");
@@ -718,6 +725,8 @@ function readQlFile(file, imagesArr, quill) {
   const deactivate = document.querySelector('button.cancel'); 
 
     if (subscription) {
+      $('#dual-buttons').css('display', ''); 
+      $('#fluid-cancel').css('display', 'none')
       const subValues = Object.values(subscription__client);
       Object.keys(subscription__client).forEach((item, index) => {
         $("#subscription-segment").append(
@@ -915,7 +924,7 @@ function readQlFile(file, imagesArr, quill) {
               );
             } else {
               $("#user-segment").append(
-                `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button ${listing.claimed ? 'unverify-claim' : 'verify-claim'}" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
+                `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button ${listing.claimed ? 'unverify-claim' : 'verify-claim'}" >${listing.claimed ? 'Remove User' : 'Verify Claim'}</button> </p> `
               );
             }
              
@@ -1008,7 +1017,7 @@ function readQlFile(file, imagesArr, quill) {
   
    //activate button
   const activate = document.querySelector('button.activate'); 
-  const cancel = document.querySelector('button.cancel'); 
+  const cancel = document.querySelector('button.fluid-cancel'); 
 
     if (subscription) {
       const subValues = Object.values(subscription__client);
@@ -1017,8 +1026,8 @@ function readQlFile(file, imagesArr, quill) {
           `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
         );
       });
-      activate.id = subscription.subscription_id
       cancel.id = subscription.subscription_id
+      
     }
   
           if (listing.tagline) {
@@ -1209,7 +1218,7 @@ function readQlFile(file, imagesArr, quill) {
               }
             });
             $("#user-segment").append(
-              `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Unclaim' : 'Verify Claim'}</button> </p> `
+              `<p class="userInfo" ><strong>Claimed</strong>: ${listing.claimed}  <button id='${subscription.subscription_id}' class="ui compact button verify-claim" >${listing.claimed ? 'Remove User' : 'Verify Claim'}</button> </p> `
             );
           } else {
             $("#user-segment").append(
@@ -1303,6 +1312,8 @@ function readQlFile(file, imagesArr, quill) {
   const cancel = document.querySelector('button.cancel'); 
 
     if (subscription) {
+      $('#fluid-cancel').css('display', 'none'); 
+      $('#fluid-activate').css('display', '')
       const subValues = Object.values(subscription__client);
       Object.keys(subscription__client).forEach((item, index) => {
         $("#subscription-segment").append(
@@ -1310,7 +1321,6 @@ function readQlFile(file, imagesArr, quill) {
         );
       });
       activate.id = subscription.subscription_id
-      cancel.id = subscription.subscription_id
     }
   
           if (listing.tagline) {
@@ -1710,6 +1720,7 @@ function readQlFile(file, imagesArr, quill) {
   })
 
   $('body').on('click', 'button.verify-claim', function (e) {
+    // showErrModal('#error-modal', '#error-header', '#error-description', 'Are You Sure?', 'Click continue to verify claim.')
     let subId = $(this).attr('id'); 
     $(loader).show()
     myAxios.post(ADMIN_URL + 'claims/verify', { subscription: subId })
@@ -1724,6 +1735,7 @@ function readQlFile(file, imagesArr, quill) {
   }); 
 
   $('body').on('click', 'button.deny-claim', function (e) {
+    // showErrModal('#error-modal', '#error-header', '#error-description', 'Are You Sure?', 'Click continue to deny claim.')
     let subId = $(this).attr('id'); 
     $(loader).show()
     myAxios.post(ADMIN_URL + 'claims/deny', { subscription: subId })
@@ -1738,7 +1750,8 @@ function readQlFile(file, imagesArr, quill) {
   }); 
 
   $('body').on('click', 'button.activate', function () {
-    const subId = $(this).attr('id')
+    // showErrModal('#error-modal', '#error-header', '#error-description', 'Are You Sure?', 'Click continue to activate listing.')
+    const subId = $(this).attr('id'); 
     $(loader).show()
     if (subId) {
       myAxios.post(ADMIN_URL + 'pending/verify', { subscription: subId})
@@ -1754,6 +1767,7 @@ function readQlFile(file, imagesArr, quill) {
   })
 
   $('body').on('click', 'button.cancel', function () {
+    // showErrModal('#error-modal', '#error-header', '#error-description', 'Are You Sure?', 'Click continue to cancel listing.')
     const subId = $(this).attr('id')
     $(loader).show()
     if (subId) {
@@ -1770,6 +1784,7 @@ function readQlFile(file, imagesArr, quill) {
   })
 
   $('body').on('click', 'button.unverify-claim', function () {
+    // showErrModal('#error-modal', '#error-header', '#error-description', 'Are You Sure?', 'Click continue to remove user from listing.')
     const subId = $(this).attr('id')
     $(loader).show()
     if (subId) {

@@ -56,6 +56,15 @@
       </div>
       <p></p>
     </div>
+    <div id="error-modal" class="ui modal">
+        <i class="close icon"></i>
+        <div id="error-header" class="header modalHeader"></div>
+          <div id="error-description" class="description modalDescription"></div>
+        <div class="fluid actions">
+            <div style="width: 48%;" class="ui button modal-cancel modalDescription">Cancel</div>
+            <div style="width: 48%;" class="ui button modal-continue modalDescription">Continue</div>
+        </div>
+    </div>
     <div class="ui grid" id="form-page-container">
             <div class="row" id="top-menu-row">
                     <div class="ui grid" id="landing-grid">
@@ -609,11 +618,13 @@
                     <p class="logo-header" style="font-size: 25px; color: #696969;">User Info</p>
                 </div>
                 <div class="bottom attached raised segment">
-                    <div class="ui fluid buttons">
+                    <div id="dual-buttons" style="display: none;" class="ui fluid buttons">
                       <button class="ui positive button activate">Activate</button>
                         <div class="or"></div>
                       <button class="ui red button cancel">Cancel</button>
                     </div>
+                    <button id="fluid-cancel" class="ui red fluid button cancel">Cancel</button>
+                    <button style="display: none;" id="fluid-activate" class="ui fluid green button activate">Activate</button>
                 </div>
                 <div id="subscription-segment" class="ui raised segment">
                     <p class="logo-header" style="font-size: 25px; color: #696969;">Subscription Info</p>

@@ -216,35 +216,43 @@ function tierControl (plan_code) {
   // light plan
   // EXCLUDES: youtube, tagline, social media, faq, hours
   if (plan_code === 'd2f4f1f0-1ad5-4c3a-912d-6646a5a46d08') {
+    console.log('light plan')
       $('#tagline').attr('disabled', true)
-      $('#tagline-field').append(`<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>`)
+      $('#tagline-upgrade').html(`<p class="upgrade-text"><a class="updateSub" >Upgrade</a> your subscription to display</p>`)
 
-      $('div.sm-field').append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+      $('.sm-upgrade').html('<p class="upgrade-text"><a class="updateSub">Upgrade</a> your subscription to display</p>')
       $('input.social_media').attr('disabled', true); 
 
       $('input.hours').attr('disabled', true); 
-      $('#hours-div').append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+      $('div.hours-upgrade').html('<p class="upgrade-text"><a class="updateSub">Upgrade</a> your subscription to display</p>')
 
       $('input.faq').attr('disabled',true); 
       $('textarea.answer').attr('disabled', true); 
-      for (let i = 0; i < 3; i++) {
-        $(`#${i}faq`).append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
-      }
+      $('div.faq-upgrade').html(`<p class="upgrade-text"><a class="updateSub" >Upgrade</a> your subscription to display</p>`)
   } else if (plan_code === 'ea78d785-2a2c-4b74-b578-fab3509b669c') {
-    $('input.hours').attr('disabled', true); 
-      $('#hours-div').append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
+    console.log('standard plan')
+      $('input.hours').attr('disabled', true); 
+      $('div.hours-upgrade').html('<p class="upgrade-text"><a class="updateSub">Upgrade</a> your subscription to display</p>')
 
       $('input.faq').attr('disabled',true); 
       $('textarea.answer').attr('disabled', true); 
-      for (let i = 0; i < 3; i++) {
-        $(`#${i}faq`).append('<p class="upgrade-text"><a>Upgrade</a> your subscription to display</p>')
-      }
+      $('div.faq-upgrade').html(`<p class="upgrade-text"><a class="updateSub" >Upgrade</a> your subscription to display</p>`)
+  } else if (plan_code === '2528891f-8535-41dc-b07e-952b25113bd0' || plan_code === 'free-trial') {
+    console.log('full access')
+    $('.upgrade-text').css('display', 'none'); 
+    $('input.faq').attr('disabled', false); 
+    $('textarea.answer').attr('disabled', false); 
+  } else {
+    console.log('no plan code')
   }
 }
 
 async function appendListing (thisListing, quill, listingArr) {
-  sessionStorage.setItem('currentListing', thisListing.id)
+
   let listing = thisListing
+
+  sessionStorage.setItem('currentListing', listing.id)
+  sessionStorage.setItem('plan', listing.subscription.plan_code)
 
   if (listing.subscription) {
     const subValues = Object.values(listing.subscription);
@@ -526,221 +534,231 @@ async function getListings (token, quill, listingArr, div, loader) {
         
       // })
       let options = {}; 
-      options.values = getMenuParams(listingArr)
-     
-      const listing = listings[0];
+      options.values = getMenuParams(listingArr); 
 
-      if (listing.subscription) {
-        const subValues = Object.values(listing.subscription);
-        Object.keys(listing.subscription).forEach((item, index) => {
-          $("#subscription-segment").append(
-            `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
-          );
-        });
-      }
-      
+      console.log(options)
 
-      const title = document.querySelector("input#business_title");
-      const description = document.querySelector(
-        "div#editor"
-      );
-      const address = document.querySelector("input#street_address");
-      const city = document.querySelector("input#city");
-      const state = document.querySelector("input#state");
-      const zip = document.querySelector("input#zip");
-      const category = document.querySelector("input#category");
-      const categoryAppend = document.querySelector("label.categoryAppend");
-      const categoryDefault = document.querySelector("#category");
-      const fullAddress = document.querySelector('input#full_address')
-      const tagline = document.querySelector('input#tagline')
-      const missionStatement = document.querySelector(
-        "textarea#mission_statement"
-      );
-      const about = document.querySelector("textarea#about");
-      const form = document.querySelector("form#admin-form");
-
-      $(title).attr("value", listing.business_title);
-      // $(description).attr(listing.business_description);
-      if (listing.delta && listing.delta.length) {
-        quill.setContents(JSON.parse(listing.delta))
-      } else {
-        let delta = quill.clipboard.convert(listing.business_description); 
-
-        quill.setContents(delta)
-      }
-      $(address).attr("value", listing.street_address);
-      $(city).attr("value", listing.city);
-      $(state).attr("value", listing.state);
-      $(zip).attr("value", listing.zip);
-      $(fullAddress).attr("value", listing.full_address);
-      $(missionStatement).attr("placeholder", listing.mission_statement);
-      $(about).attr("value", listing.about);
-      $(tagline).attr('value', listing.tagline)
-      $(categoryAppend).html(
-        `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >Category: ${listing.category}</p>`
-      );
-      $('#category').attr('placeholder', listing.category)
-      
-      $('#dropdown-column').dropdown(options); 
-      
-      $('.dropdown.main').dropdown(); 
-
-
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-$('#hours-div').html('')
-days.forEach(day => {
-  const fields = document.createElement('div')
-  fields.className = 'fields hours-fields'
-  fields.id = day
-  
-  const opening_field = document.createElement("div");
-  opening_field.className = "field";
-  opening_field.id = day + 'opening-div'
-
-  const opening_label = document.createElement("label");
-  opening_label.textContent = `${day} open:`;
-  opening_label.id = "labels-1";
-  $(opening_label).css("font-size", "16px");
-
-  const opening_input = document.createElement("input");
-  opening_input.className = day + " ui search dropdown hours";
-  opening_input.id = day + '-opening'
-  opening_input.type = 'time'
-  opening_input.name = "opening-hours-" + day.toLowerCase();
-  if (listing[day]) {
-    opening_input.defaultValue = am_pm_to_hours(listing[day].opening_hours)
-  }
-
-  const closing_field = document.createElement("div");
-  closing_field.className = "field";
-  closing_field.id = day + 'closing-field'
-
-  const closing_label = document.createElement("label");
-  closing_label.textContent = `${day} close:`;
-  closing_label.id = "labels-1";
-  $(closing_label).css("font-size", "16px");
-
-  const closing_input = document.createElement("input");
-  closing_input.className = day + " ui search dropdown hours";
-  closing_input.id = day + '-closing'
-  closing_input.type = 'time'
-  closing_input.name = "closing-hours-" + day.toLowerCase();
-  if (listing[day]) {
-    closing_input.defaultValue = am_pm_to_hours(listing[day].closing_hours)
-  }
-
-  const hoursDiv = document.querySelector('div#hours-div')
-  
-  $(hoursDiv).append(fields); 
-  $(fields).append(opening_field, closing_field)
-  $(opening_field).append(opening_label, opening_input)
-  $(closing_field).append(closing_label, closing_input)
-});
-
-
-
-
-
-      if (listing.website) {
-        const website = document.querySelector("input#website");
-        $(website).attr("value", listing.website);
-      }
-      if (listing.instagram) {
-        const instagram = document.querySelector("input#instagram");
-        $(instagram).attr("value", listing.instagram);
-      }
-      if (listing.facebook) {
-        const facebook = document.querySelector("input#facebook");
-        $(facebook).attr("value", listing.facebook);
-      }
-      if (listing.twitter) {
-        const twitter = document.querySelector("input#twitter");
-        $(twitter).attr("value", listing.twitter);
-      }
-      if (listing.linkedin) {
-        const linkedin = document.querySelector("input#linkedin");
-        $(linkedin).attr("value", listing.linkedin);
-      }
-      if (listing.youtube) {
-        const youtube = document.querySelector("input#youtube");
-        $(youtube).attr("value", listing.youtube);
-      }
-      if (listing.phone) {
-        const phone = document.querySelector("input#phone");
-        $(phone).attr("value", listing.phone);
-      }
-      if (listing.email) {
-        const email = document.querySelector("input#email");
-        $(email).attr("value", listing.email);
-      }
-      if (listing.faqs) {
-        if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
-        ) {
-         const faq0 = document.querySelector("input#faq0");
-         const answer = document.querySelector("textarea#answer0");
-
-         $(faq0).val(listing.faqs[0].faq);
-         $(answer).val(listing.faqs[0].faq_answer);
-       }
-       if (listing.faqs[1] && listing.faqs[1].faq !== '') {
-         const faq1 = document.querySelector("input#faq1");
-         const answer = document.querySelector("textarea#answer1");
-
-         $('#1faq').show()
-         $(faq1).attr("value", listing.faqs[1].faq);
-         $(answer).attr("value", listing.faqs[1].faq_answer);
-       }
-       if (listing.faqs[2] && listing.faqs[2].faq !== '') {
-         const faq2 = document.querySelector("input#faq2");
-         const answer = document.querySelector("textarea#answer2");
-
-         $('#2faq').show()
-         $(faq2).attr("value", listing.faqs[2].faq);
-         $(answer).attr("value", listing.faqs[2].faq_answer);
-       }
-      }
-
-      if (listing.feature_image && listing.feature_image !== null) {
-        const featureImageSegment = document.querySelector(
-          "div#feature_image"
-        );
-        const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
-        const featureId = listing.images.filter(x => !x.feature_image );
-        displayPhoto(featureImage, featureId[0].image_id);
-      }
-
-      // filter images for null values
-      let filteredImg = listing.images.filter(
-        x => x.image_path !== "true" && x.image_path !== ""
-      );
-
-
-      // map images into an arr of dom elements
-      const images = await filteredImg.map(image => {
-        if (image.image_path !== "false") {
-          let image_id = image.image_id;
-          let feature_image = image.featured_image;
-
-          let thisImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
-
-          return { image_id, thisImage, feature_image };
-        }
-      });
-
-      // then filter those images for undefined
-      let filteredImgs = images.filter(x => {
-        if (x && !x.feature_image) {
-          return x 
-        }
-        });
-
-
-      displayPhotos(filteredImgs);
-
-      $('div.listing-menu-drop').dropdown(options); 
+      $('div#dropdown-column').dropdown(options); 
       $('.ui.dropdown.main').dropdown(); 
-      console.log(listing.subscription.plan_code )
-      tierControl(listing.subscription.plan_code)
+
+      const firstListing = listings[0]; 
+      console.log('PASSED TO APPEND', listings)
+      console.log(firstListing)
+
+      appendListing(firstListing, quill, listings) 
+     
+//       const listing = listings[0];
+
+//       if (listing.subscription) {
+//         const subValues = Object.values(listing.subscription);
+//         Object.keys(listing.subscription).forEach((item, index) => {
+//           $("#subscription-segment").append(
+//             `<p class="userInfo" ><strong>${item}</strong>: ${subValues[index]} `
+//           );
+//         });
+//       }
+      
+
+//       const title = document.querySelector("input#business_title");
+//       const description = document.querySelector(
+//         "div#editor"
+//       );
+//       const address = document.querySelector("input#street_address");
+//       const city = document.querySelector("input#city");
+//       const state = document.querySelector("input#state");
+//       const zip = document.querySelector("input#zip");
+//       const category = document.querySelector("input#category");
+//       const categoryAppend = document.querySelector("label.categoryAppend");
+//       const categoryDefault = document.querySelector("#category");
+//       const fullAddress = document.querySelector('input#full_address')
+//       const tagline = document.querySelector('input#tagline')
+//       const missionStatement = document.querySelector(
+//         "textarea#mission_statement"
+//       );
+//       const about = document.querySelector("textarea#about");
+//       const form = document.querySelector("form#admin-form");
+
+//       $(title).attr("value", listing.business_title);
+//       // $(description).attr(listing.business_description);
+//       if (listing.delta && listing.delta.length) {
+//         quill.setContents(JSON.parse(listing.delta))
+//       } else {
+//         let delta = quill.clipboard.convert(listing.business_description); 
+
+//         quill.setContents(delta)
+//       }
+//       $(address).attr("value", listing.street_address);
+//       $(city).attr("value", listing.city);
+//       $(state).attr("value", listing.state);
+//       $(zip).attr("value", listing.zip);
+//       $(fullAddress).attr("value", listing.full_address);
+//       $(missionStatement).attr("placeholder", listing.mission_statement);
+//       $(about).attr("value", listing.about);
+//       $(tagline).attr('value', listing.tagline)
+//       $(categoryAppend).html(
+//         `<p style="font-family: 'Lato'; font-weight: 400; font-size: 16px; margin-top: .5rem; margin-bottom: .5rem; color: black;" >Category: ${listing.category}</p>`
+//       );
+//       $('#category').attr('placeholder', listing.category)
+      
+//       $('#dropdown-column').dropdown(options); 
+      
+//       $('.dropdown.main').dropdown(); 
+
+
+// const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+// $('#hours-div').html('')
+// days.forEach(day => {
+//   const fields = document.createElement('div')
+//   fields.className = 'fields hours-fields'
+//   fields.id = day
+  
+//   const opening_field = document.createElement("div");
+//   opening_field.className = "field";
+//   opening_field.id = day + 'opening-div'
+
+//   const opening_label = document.createElement("label");
+//   opening_label.textContent = `${day} open:`;
+//   opening_label.id = "labels-1";
+//   $(opening_label).css("font-size", "16px");
+
+//   const opening_input = document.createElement("input");
+//   opening_input.className = day + " ui search dropdown hours";
+//   opening_input.id = day + '-opening'
+//   opening_input.type = 'time'
+//   opening_input.name = "opening-hours-" + day.toLowerCase();
+//   if (listing[day]) {
+//     opening_input.defaultValue = am_pm_to_hours(listing[day].opening_hours)
+//   }
+
+//   const closing_field = document.createElement("div");
+//   closing_field.className = "field";
+//   closing_field.id = day + 'closing-field'
+
+//   const closing_label = document.createElement("label");
+//   closing_label.textContent = `${day} close:`;
+//   closing_label.id = "labels-1";
+//   $(closing_label).css("font-size", "16px");
+
+//   const closing_input = document.createElement("input");
+//   closing_input.className = day + " ui search dropdown hours";
+//   closing_input.id = day + '-closing'
+//   closing_input.type = 'time'
+//   closing_input.name = "closing-hours-" + day.toLowerCase();
+//   if (listing[day]) {
+//     closing_input.defaultValue = am_pm_to_hours(listing[day].closing_hours)
+//   }
+
+//   const hoursDiv = document.querySelector('div#hours-div')
+  
+//   $(hoursDiv).append(fields); 
+//   $(fields).append(opening_field, closing_field)
+//   $(opening_field).append(opening_label, opening_input)
+//   $(closing_field).append(closing_label, closing_input)
+// });
+
+
+
+
+
+//       if (listing.website) {
+//         const website = document.querySelector("input#website");
+//         $(website).attr("value", listing.website);
+//       }
+//       if (listing.instagram) {
+//         const instagram = document.querySelector("input#instagram");
+//         $(instagram).attr("value", listing.instagram);
+//       }
+//       if (listing.facebook) {
+//         const facebook = document.querySelector("input#facebook");
+//         $(facebook).attr("value", listing.facebook);
+//       }
+//       if (listing.twitter) {
+//         const twitter = document.querySelector("input#twitter");
+//         $(twitter).attr("value", listing.twitter);
+//       }
+//       if (listing.linkedin) {
+//         const linkedin = document.querySelector("input#linkedin");
+//         $(linkedin).attr("value", listing.linkedin);
+//       }
+//       if (listing.youtube) {
+//         const youtube = document.querySelector("input#youtube");
+//         $(youtube).attr("value", listing.youtube);
+//       }
+//       if (listing.phone) {
+//         const phone = document.querySelector("input#phone");
+//         $(phone).attr("value", listing.phone);
+//       }
+//       if (listing.email) {
+//         const email = document.querySelector("input#email");
+//         $(email).attr("value", listing.email);
+//       }
+//       if (listing.faqs) {
+//         if (listing.faqs[0] && listing.faqs[0].faq !== 'tom'
+//         ) {
+//          const faq0 = document.querySelector("input#faq0");
+//          const answer = document.querySelector("textarea#answer0");
+
+//          $(faq0).val(listing.faqs[0].faq);
+//          $(answer).val(listing.faqs[0].faq_answer);
+//        }
+//        if (listing.faqs[1] && listing.faqs[1].faq !== '') {
+//          const faq1 = document.querySelector("input#faq1");
+//          const answer = document.querySelector("textarea#answer1");
+
+//          $('#1faq').show()
+//          $(faq1).attr("value", listing.faqs[1].faq);
+//          $(answer).attr("value", listing.faqs[1].faq_answer);
+//        }
+//        if (listing.faqs[2] && listing.faqs[2].faq !== '') {
+//          const faq2 = document.querySelector("input#faq2");
+//          const answer = document.querySelector("textarea#answer2");
+
+//          $('#2faq').show()
+//          $(faq2).attr("value", listing.faqs[2].faq);
+//          $(answer).attr("value", listing.faqs[2].faq_answer);
+//        }
+//       }
+
+//       if (listing.feature_image && listing.feature_image !== null) {
+//         const featureImageSegment = document.querySelector(
+//           "div#feature_image"
+//         );
+//         const featureImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${listing.feature_image}`;
+//         const featureId = listing.images.filter(x => !x.feature_image );
+//         displayPhoto(featureImage, featureId[0].image_id);
+//       }
+
+//       // filter images for null values
+//       let filteredImg = listing.images.filter(
+//         x => x.image_path !== "true" && x.image_path !== ""
+//       );
+
+
+//       // map images into an arr of dom elements
+//       const images = await filteredImg.map(image => {
+//         if (image.image_path !== "false") {
+//           let image_id = image.image_id;
+//           let feature_image = image.featured_image;
+
+//           let thisImage = `https://ha-images-02.s3-us-west-1.amazonaws.com/${image.image_path}`;
+
+//           return { image_id, thisImage, feature_image };
+//         }
+//       });
+
+//       // then filter those images for undefined
+//       let filteredImgs = images.filter(x => {
+//         if (x && !x.feature_image) {
+//           return x 
+//         }
+//         });
+
+
+//       displayPhotos(filteredImgs);
+
+
+//       console.log(listing.subscription.plan_code )
+//       tierControl(listing.subscription.plan_code)
     
     })
     .catch(err => {
@@ -1081,6 +1099,7 @@ getGeolocation();
     let active = $('#dropdown-menu').val(); 
     let thisListing = listings.filter(listing => listing.id === active ); 
     thisListing = thisListing[0];
+    console.log(thisListing)
     appendListing(thisListing, quill, listings) 
     if (thisListing.lat && thisListing.lng) {
       sessionStorage.setItem('listing-lat', thisListing.lat)
@@ -1418,6 +1437,15 @@ $(document).on("click", "button.other-remove", function(e) {
 
       
   })
+
+  // on update click
+  $(document).on("click", "a.updateSub", function(e) {
+    e.preventDefault();
+    // set update to the current listing id (user token in storage)
+    sessionStorage.setItem('update', JSON.stringify({ timeStamp: new Date(), value: sessionStorage.getItem('currentListing') })); 
+    // send to billing page
+    window.location.assign('billing__update.html')
+  });
 
   $("body").on("click", "button.submit-button", function(e) {
     console.log(updates);

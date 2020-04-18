@@ -460,6 +460,7 @@ router.post('/stagelisting', async (req, res) => {
     title: req.body.business_title, 
     subscription_id: req.body.subscription_id, 
     customer_id: req.body.customer_id, 
+    card_id: req.body.card_id,
     user
   }
 
@@ -603,5 +604,6 @@ console.log(user)
   }
 
 })
+
 
 module.exports = router;

@@ -155,7 +155,8 @@ $(document).ready(function() {
           console.log('FIRST')
           const subscription = response.data[0]
           console.log(subscription)
-  
+          
+          sessionStorage.setItem('card_id', subscription.card_id)
           sessionStorage.setItem('subscription_id', JSON.stringify({ timeStamp: new Date(), value: subscription.subscription_id})); 
           sessionStorage.setItem('customer_id', subscription.customer_id); 
         } else if (response.data.exists && sessionStorage.getItem('formsCompleted')) {
@@ -168,6 +169,7 @@ $(document).ready(function() {
             console.log('TIMECHECK')
             const subscription = response.data.subCheck[0]
 
+            sessionStorage.setItem('card_id', subscription.card_id)
             sessionStorage.setItem('subscription_id', JSON.stringify({ timeStamp: new Date(), value: subscription.subscription_id})); 
             sessionStorage.setItem('customer_id', subscription.customer_id); 
   
@@ -190,6 +192,7 @@ $(document).ready(function() {
           console.log('no timecheck + no forms completed')
           const subscription = response.data.subCheck[0]
 
+            sessionStorage.setItem('card_id', subscription.card_id)
             sessionStorage.setItem('subscription_id', JSON.stringify({ timeStamp: new Date(), value: subscription.subscription_id})); 
             sessionStorage.setItem('customer_id', subscription.customer_id); 
         } else {
@@ -213,6 +216,7 @@ $(document).ready(function() {
   
             window.location.assign('sign-in.html')
     } else if (subCheck && sessionStorage.getItem('formsCompleted')) {
+      sessionStorage.setItem('card_id', sessionStorage.getItem('card_id'))
       sessionStorage.setItem('subscription_id', JSON.stringify({ timeStamp: new Date(), value: JSON.parse(sessionStorage.getItem('subscription_id')).value})); 
       sessionStorage.setItem('customer_id', sessionStorage.getItem('customer_id'));
 
@@ -371,6 +375,7 @@ $(document).ready(function() {
       $("#category-div").css("border", "solid");
       $("#category-div").css("border-color", "red");
     } else {
+      const card_id = sessionStorage.getItem('card_id'); 
       const subscriptionId = JSON.parse(sessionStorage.getItem("subscription_id")).value;
       const customerId = sessionStorage.getItem("customer_id");
       const token = sessionStorage.getItem("token");
@@ -379,6 +384,7 @@ $(document).ready(function() {
           business_title: formData.get("businessTitle"),
           subscription_id: subscriptionId,
           customer_id: customerId,
+          card_id,
           token
         })
         .then(resp => {

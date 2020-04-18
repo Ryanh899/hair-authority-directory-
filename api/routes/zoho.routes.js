@@ -282,6 +282,7 @@ router.post('/hostedpage/retrieve/new', async (req, res) => {
           plan_code: info.data.subscription.plan.plan_code, 
           customer_id: info.data.subscription.customer.customer_id, 
           status: info.data.subscription.status, 
+          card_id: info.data.subscription.card.card_id,
           user_id: user.id
         }
         console.log(subInfo)
@@ -356,13 +357,14 @@ router.post('/subscription/createfree/new', async (req, res) => {
     })
     .then(async resp => {
       console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
       const subInfo = {
         subscription_id: pickInfo.subscription_id, 
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
-        user_id: customer.id
+        user_id: customer.id, 
+        card_id: pickInfo.card.card_id
       }
       console.log(subInfo)
       const addSubscription = await Zoho.addSubscription__free(subInfo)
@@ -430,13 +432,14 @@ router.post('/subscription/createfree/existing', async (req, res) => {
     })
     .then(async resp => {
       console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
       const subInfo = {
         subscription_id: pickInfo.subscription_id, 
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
-        user_id: customer.id
+        user_id: customer.id, 
+        card_id: pickInfo.card.card_id
       }
       console.log(subInfo)
       const addSubscription = await Zoho.addSubscription__free(subInfo)
@@ -514,14 +517,15 @@ if ( listingTitle && listingTitle.length ) {
     })
     .then(async resp => {
       console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
       const subInfo = {
         subscription_id: pickInfo.subscription_id, 
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
         user_id: customer.id, 
-        listing_id: listingId
+        listing_id: listingId, 
+        card_id: pickInfo.card.card_id
       }
       const claimInfo = _.pick(subInfo, 'user_id', 'subscription_id', 'listing_id')
 
@@ -609,14 +613,15 @@ if ( listingTitle && listingTitle.length) {
     })
     .then(async resp => {
       console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
       const subInfo = {
         subscription_id: pickInfo.subscription_id, 
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
         user_id: customer.id, 
-        listing_id: listingId
+        listing_id: listingId, 
+        card_id: pickInfo.card.card_id
       }
       const claimInfo = _.pick(subInfo, 'user_id', 'subscription_id', 'listing_id')
 
@@ -882,13 +887,14 @@ router.post('/subscription/createfree/existing', async (req, res) => {
     })
     .then(async resp => {
       console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
       const subInfo = {
         subscription_id: pickInfo.subscription_id, 
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
-        user_id: customer.id
+        user_id: customer.id, 
+        card_id: pickInfo.card.card_id
       }
       console.log(subInfo)
       const addSubscription = await Zoho.addSubscription__free(subInfo)
@@ -964,6 +970,73 @@ router.post('/subscription/cancel', async (req, res) => {
       res.status(err.status).json(err.response); 
     });
 })
+
+router.put('/subscription/update', async (req, res) => {
+
+  //declare access token
+  let accessToken; 
+
+  // check for access token => Arr or false 
+  let checkToken = await Zoho.checkAccessToken()
+  console.log(checkToken)
+
+  // if token exists and is valid 
+  if (checkToken && checkToken.length) {
+    // access token equals this token 
+    accessToken = checkToken[0].access_token; 
+    // else 
+  } else {
+    // generate new token
+    accessToken = await Zoho.getAccessToken(); 
+  }
+
+  console.log(accessToken)
+  // get customer info from req
+  console.log(req.body)
+  const listing_id = req.body.listingId; 
+  const user = jwt.decode(req.body.token); 
+  const plan = req.body.plan; 
+
+  const subscription = await Zoho.subscriptionCheck__listingId(listing_id); 
+  console.log(subscription)
+
+  if (subscription.length) {
+    Superagent.put(`https://subscriptions.zoho.com/api/v1/subscriptions/${subscription[0].subscription_id}`)
+    .set(
+      "Authorization",
+      `Zoho-oauthtoken ${accessToken}`
+    )
+    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+    .set("Content-Type", "application/json;charset=UTF-8")
+    .send(`{
+      "plan": {
+        "plan_code": "${plan}",
+      },
+      "auto_collect": true,
+    }`
+    )
+    .on('error', (err) => {
+      let error = JSON.parse(err.response.text)
+      const errCode = error.code; 
+      if (errCode == 3004) {
+        console.log('invalid page id')
+        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+      }
+    })
+    .then(async resp => {
+      console.log(resp.body);
+      return knex('subscriptions').update('plan_code', plan).where('subscription_id', subscription[0].subscription_id)
+    })
+    .then(resp => {
+      res.json(resp)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(err.status).json(err.response); 
+    });
+  }
+})
+
 
 
 module.exports = router;

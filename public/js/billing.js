@@ -179,7 +179,58 @@ $(document).ready(function () {
                     })
                 }
 
-              } else if (!customer.data || !customer.data.length) {
+              } else if (customer.data || customer.data.length) {
+                const customer_id = customer.data.customer_id
+                const token = sessionStorage.getItem('token')
+                if (plan === 'free-access' ) {
+                  myAxios.post('http://localhost:3000/zoho/subscription/createfree/existing', { customer_id, token })
+                    .then(subscription => {
+                      console.log(subscription)
+                      if (subscription.status === 200) {
+                        sessionStorage.setItem('subscription_id', JSON.stringify({ timeStamp: new Date(), value: subscription.data[0].subscription_id}))
+                        sessionStorage.setItem('customer_id', subscription.data[0].customer_id)
+                        sessionStorage.setItem('plan', 'free-trial')
+                        window.location.assign('listing.form.html')
+                      } else {
+                        alert('There was an error')
+                      }
+                    })
+                    .catch(err => {
+                      console.log(err)
+                    })
+                }
+                else if (plan === 'light-access') {
+                  myAxios.post(ZOHO_URL + '/hostedpage/create/existing', { customer_id: customer.data.customer_id, plan: 'd2f4f1f0-1ad5-4c3a-912d-6646a5a46d08'  })
+                    .then(response => {
+                      response = response.data.hostedpage
+                      window.open(response.url, '_self')
+                    })
+                    .catch(err => {
+                      console.log(err)
+                    })
+                }
+                else if (plan === 'standard-access') {
+                  myAxios.post(ZOHO_URL + '/hostedpage/create/existing', { customer_id: customer.data.customer_id, plan: 'ea78d785-2a2c-4b74-b578-fab3509b669c'  })
+                    .then(response => {
+                      response = response.data.hostedpage
+                      console.log(response)
+                      window.open(response.url, '_self')
+                    })
+                    .catch(err => {
+                      console.log(err)
+                    })
+                }
+                else if (plan === 'premium-access') {
+                  myAxios.post(ZOHO_URL + '/hostedpage/create/existing', { customer_id: customer.data.customer_id, plan: '2528891f-8535-41dc-b07e-952b25113bd0'  })
+                    .then(response => {
+                      response = response.data.hostedpage
+                      window.open(response.url, '_self')
+                    })
+                    .catch(err => {
+                      console.log(err)
+                    })
+                }
+              } else if (!customer.data && !customer.data.length) {
                 console.log('new lsiting, not existing customer')
                 if (plan === 'free-access' ) {
                   myAxios.post('http://localhost:3000/zoho/subscription/createfree/new', { token })
@@ -204,7 +255,7 @@ $(document).ready(function () {
               } else if (sessionStorage.getItem('token') === null ) {
                 alert('You must be signed in to create a subscription')
                 window.location.assign('sign-in.html')
-              }
+              } 
             })
             .catch(err => {
               console.log(err)
