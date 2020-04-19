@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'))
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 app.use("/auth", authRoutes);
 app.use('/zoho', zohoRoutes)
