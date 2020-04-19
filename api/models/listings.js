@@ -39,6 +39,17 @@ const Listings = {
       .where("professional_id", userInfo.id)
       .catch(err => console.log(err));
   },
+  get100Listings(res) {
+    return knex('listings')
+        .select('*')
+        .limit(100)
+        .then(response => {
+          res.json(response); 
+        })
+        .catch(err => {
+          res.json(err)
+        })
+  }, 
   async addToListings_Pending(listing) {
     console.log(listing);
     let insert = new Promise((resolve, reject) => {

@@ -58,6 +58,12 @@ const trimForm = function(obj) {
   return obj;
 };
 
+router.get("/listings", async (req, res) => {
+  console.log("params token:", req.params.token);
+
+  Listings.get100Listings(res); 
+});
+
 router.get("/listings/:token", async (req, res) => {
   console.log("params token:", req.params.token);
   // const user = _.pick(req.body, 'id', 'email')
