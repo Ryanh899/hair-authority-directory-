@@ -9,16 +9,16 @@ const morgan = require('morgan')
 const zohoRoutes = require('./api/routes/zoho.routes'); 
 const cors = require('cors'); 
 
-const whitelist = ['https://hairauthoritydirectory.s3.amazonaws.com', 'https://hairauthoritydirectory.com', 'https://subscriptions.zoho.com/', 'https://accounts.zoho.com/']
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
+// const whitelist = ['https://hairauthoritydirectory.s3.amazonaws.com', 'https://hairauthoritydirectory.com', 'https://subscriptions.zoho.com', 'https://accounts.zoho.com']
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 
 const PORT = process.env.PORT || 3000;
 
@@ -36,7 +36,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use(morgan('dev'))
 
