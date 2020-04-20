@@ -9,7 +9,7 @@ const morgan = require('morgan')
 const zohoRoutes = require('./api/routes/zoho.routes'); 
 const cors = require('cors'); 
 
-const whitelist = ['https://hairauthoritydirectory.s3.amazonaws.com', 'https://hairauthoritydirectory.com']
+const whitelist = ['https://hairauthoritydirectory.s3.amazonaws.com', 'https://hairauthoritydirectory.com', 'https://subscriptions.zoho.com/', 'https://accounts.zoho.com/']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
