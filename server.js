@@ -36,6 +36,10 @@ app.use("/api", apiRoutes);
 // app.use(adminAuth)
 app.use('/admin', adminRoutes)
 
+app.get('/', (req, res) => {
+  res.send('Welcome to my API')
+})
+
 
 app.listen(PORT, () => {
   console.log("app listening on port ", PORT);

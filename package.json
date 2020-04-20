@@ -36,12 +36,12 @@
     "morgan": "^1.9.1",
     "mysql2": "^2.1.0",
     "node-geocoder": "^3.25.0",
-    "pg": "^7.17.1",
+    "pg": "^7.18.2",
     "superagent": "^5.2.2",
     "uuid": "^7.0.2",
     "uuid-parse": "^1.1.0"
   },
   "devDependencies": {
-    "pm2": "^4.2.3"
+    "pm2": "^4.3.0"
   }
 }
