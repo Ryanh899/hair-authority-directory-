@@ -44,7 +44,7 @@ app.use(morgan('dev'))
 
 app.use("/auth", authRoutes);
 app.use('/zoho', zohoRoutes)
-// app.use(basicAuth);
+app.use(basicAuth);
 app.use("/api", apiRoutes);
 // app.use(adminAuth)
 app.use('/admin', adminRoutes)
