@@ -16,8 +16,6 @@ AWS.config.getCredentials(function(err) {
   if (err) console.log(err.stack);
   // credentials not loaded
   else {
-    console.log("Access key:", AWS.config.credentials.accessKeyId);
-    console.log("Secret access key:", AWS.config.credentials.secretAccessKey);
   }
 });
 
@@ -59,19 +57,15 @@ const trimForm = function(obj) {
 };
 
 router.get("/listings", async (req, res) => {
-  console.log("params token:", req.params.token);
 
   Listings.get100Listings(res); 
 });
 
 router.get("/listings/:token", async (req, res) => {
-  console.log("params token:", req.params.token);
-  // const user = _.pick(req.body, 'id', 'email')
   const user = jwt.decode(req.params.token);
   const listings = Listings.getListings(user);
   listings
     .then(response => {
-      console.log(response);
       res.json(response);
     })
     .catch(err => console.log(err));
@@ -81,9 +75,7 @@ router.post("/newListing", async (req, res) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     const decodedInfo = jwt.decode(token);
-    console.log(decodedInfo);
     let listing = req.body.data;
-    console.log(listing);
     listing.professional_id = decodedInfo.id;
     if (decodedInfo.isProfessionalUser) {
       Listings.addToPending(listing);
@@ -104,13 +96,11 @@ router.get("/user/profile/:token", async (req, res) => {
 
 router.get("/listing/:id", (req, res) => {
   const listing = req.params.id;
-  console.log(listing);
   Listings.getById(listing, res);
 });
 
 router.get("/listing/title/:title", async (req, res) => {
   const listing = req.params.title;
-  console.log(listing);
   const searchResults = await Listings.getByTitle__promise(listing); 
 
   res.json(searchResults)
@@ -124,14 +114,12 @@ router.put("/updateListing/:id", (req, res) => {
 
 router.put("/updateProfile", async (req, res) => {
   const updateInfo = req.body;
-  console.log(updateInfo);
   User.updateProfessionalInfo(updateInfo, res);
 });
 
 router.get("/search/category/:category/:location/:distance", async (req, res) => {
   const category = req.params.category.replace(/\+/g, "/");
   const distance = req.params.distance; 
-  console.log(category);
   let location = req.params.location.split("+");
   if (location[0] === null || location[1] === null) {
     res.status(401).json({
@@ -141,7 +129,6 @@ router.get("/search/category/:category/:location/:distance", async (req, res) =>
   const city = await geocoder
     .reverse({ lat: Number(location[0]), lon: Number(location[1]) })
     .catch(err => console.log(err));
-  console.log(city);
   location = {
     lat: location[0],
     lng: location[1],
@@ -155,8 +142,6 @@ router.get("/search/category/:category/:location/:distance", async (req, res) =>
   );
   Promise.all(searchPromises)
     .then(results => {
-      console.log("SEARCH PROMISES .THEN=>");
-      console.log(results);
       return results;
     })
     .catch(err => {
@@ -190,13 +175,9 @@ router.get("/search/:query/:location/:distance", async (req, res) => {
     city: city[0].city.toLowerCase(),
     state: city[0].administrativeLevels.level1short
   };
-  // console.log(query);
-  // console.log(location);
   const searchPromises = await Listings.getBySearch(query, location, distance);
   Promise.all(searchPromises)
     .then(results => {
-      // console.log("SEARCH PROMISES .THEN=>");
-      // console.log(results);
       return results;
     })
     .catch(err => {
@@ -227,13 +208,9 @@ router.get("/search/logo/:query/:location/:distance", async (req, res) => {
     city: city[0].city.toLowerCase(),
     state: city[0].administrativeLevels.level1short
   };
-  console.log(query);
-  console.log(location);
   const searchPromises = await Listings.getByLogo(query, location, distance);
   Promise.all(searchPromises)
     .then(results => {
-      console.log("SEARCH PROMISES .THEN=>");
-      console.log(results);
       return results;
     })
     .catch(err => {
@@ -248,10 +225,8 @@ router.get("/search/logo/:query/:location/:distance", async (req, res) => {
 
 
 router.post("/saveListing/:id", async (req, res) => {
-  console.log(req.body);
   const listingId = req.params.id;
   const user = await jwt.decode(req.body.token);
-  console.log(user);
   const userId = user.id;
 
   if (user.isClientUser) {
@@ -269,7 +244,6 @@ router.post("/saveListing/:id", async (req, res) => {
 
 router.get("/savedListings/:token", (req, res) => {
   const user = jwt.decode(req.params.token);
-  console.log(user);
   if (user.isClientUser) {
     Listings.getSavedListings(user.id, res);
   } else if (user.isProfessionalUser) {

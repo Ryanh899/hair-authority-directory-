@@ -736,7 +736,7 @@ router.post('/hostedpage/claim/existing', async (req, res) => {
 
 
 
-  const thankYouUrl = 'http://localhost:3000/thank-you.html'
+  const thankYouUrl = 'https://hairauthoritydirectory.s3.amazonaws.com/thank-you.html'
 
   Superagent.post(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
     .set(
@@ -793,8 +793,6 @@ router.post('/hostedpage/claim/new', async (req, res) => {
     // generate new token
     accessToken = await Zoho.getAccessToken(); 
   }
-
-  const thankYouUrl = 'http://localhost:3000/thank-you.html'
 
   Superagent.post(`https://subscriptions.zoho.com/api/v1/hostedpages/newsubscription`)
     .set(
