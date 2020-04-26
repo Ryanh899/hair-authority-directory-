@@ -339,7 +339,7 @@ router.get("/s3/sign_put", (req, res) => {
     ACL: 'public-read'
 		// can not set restrictions to the length of the content
   });
-  console.log(`S3 SIGN PUT URL: ${url}`)
+  console.log(`S3 SIGN PUT URL: ${url}`); 
 	res.json({url, key});
 });
 
