@@ -310,6 +310,7 @@ const Listings = {
     miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'; 
     const listings = await knex("listings")
       .select()
+      .limit(100)
       .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) LIKE ?`, [
         `%${tagline.toLowerCase()}%`,
         state
