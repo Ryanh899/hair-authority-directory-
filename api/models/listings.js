@@ -168,39 +168,6 @@ const Listings = {
         });
     }
   },
-  async getByCategory__search(category, currentLocation) {
-    let catSplit = category.split(",");
-    const listings = await knex("listings")
-      .select()
-      .whereRaw(`LOWER(category) LIKE ? and LOWER(state) = ? or ?`, [
-        `%${catSplit[0].toLowerCase()}%`,
-        currentLocation.state,
-        null
-      ])
-      // .limit(50)
-      .then(response => {
-        return response;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    return Promise.all(
-      await listings.map((listing, index) => {
-        return new Promise(async (resolve, reject) => {
-          await GeoCode.findDistance(
-            { lat: listing.lat, lng: listing.lng },
-            currentLocation
-          )
-            .then(distance => {
-              console.log(distance);
-              if (distance < 160) resolve(listing);
-              else reject(new Error());
-            })
-            .catch(err => console.log(err));
-        });
-      })
-    );
-  },
   async getByCategory__single(category, currentLocation, distance) {
     console.log(category.toLowerCase());
     const miles = Number(distance); 
@@ -208,7 +175,6 @@ const Listings = {
     miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'
     let limit; 
     state !== '%' ? limit = 100 : limit = 100; 
-    console.log(state, limit, miles)
     const listings = await knex("listings")
       .select()
       .limit(limit)
@@ -217,7 +183,6 @@ const Listings = {
         state
       ])
       .then(response => {
-        console.log(response.length);
         return response;
       })
       .catch(err => {
@@ -230,10 +195,8 @@ const Listings = {
           currentLocation
         );
         if (distance && distance.value < miles) {
-          console.log("LESS");
           resolve(listing);
         } else {
-          console.log("GREATER");
           resolve(0);
         }
       });
@@ -287,7 +250,6 @@ const Listings = {
     miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'
     let limit; 
     state !== '%' ? limit = 100 : limit = 100; 
-    console.log(state, limit, title)
     const listings = await knex("listings")
       .select()
       .limit(limit)
@@ -296,7 +258,6 @@ const Listings = {
         state
       ])
       .then(async response => {
-        console.log(response)
         return uniqueArray(response);
       })
       .catch(err => {
@@ -309,10 +270,8 @@ const Listings = {
           currentLocation
         );
         if (distance && distance.value < miles) {
-          console.log("LESS");
           resolve(listing);
         } else {
-          console.log("GREATER");
           resolve(0);
         }
       });
@@ -348,15 +307,14 @@ const Listings = {
   async getByLogo(tagline, currentLocation, distance) {
     const miles = Number(distance); 
     let state; 
-    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'
+    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'; 
     const listings = await knex("listings")
       .select()
-      .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) = ?`, [
+      .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) LIKE ?`, [
         `%${tagline.toLowerCase()}%`,
         state
       ])
       .then(async response => {
-        console.log(tagline)
         return uniqueArray(response);
       })
       .catch(err => {
@@ -369,10 +327,8 @@ const Listings = {
           currentLocation
         );
         if (distance && distance.value < miles) {
-          console.log("LESS");
           resolve(listing);
         } else {
-          console.log("GREATER");
           resolve(0);
         }
       });
@@ -404,7 +360,6 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(social => {
-            console.log(social);
             let sm = social;
             sm.forEach(platform => {
               listing[platform.platform] = platform.url;
@@ -414,7 +369,6 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(hours => {
-            console.log(hours);
             hours.forEach(day => {
               listing[day.day] = {
                 opening_hours: day.opening_hours,
@@ -426,7 +380,6 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(faqs => {
-            console.log(faqs);
             if (faqs.length > 0) {
               listing.faqs = faqs;
             }
@@ -456,8 +409,6 @@ const Listings = {
         .select()
         .where("id", id)
         .then(resp => {
-          console.log('first promise')
-          console.log(resp)
           resolve(resp);
         })
         .catch(err => {
@@ -468,8 +419,6 @@ const Listings = {
     .then(async listing => {
         listing = listing[0]
         const thisListing = listing; 
-        console.log(thisListing); 
-        console.log('response from promise')
         return knex("images")
           .select()
           .where("listing_id", listing.id)
@@ -480,7 +429,6 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(social => {
-            // console.log(social);
             let sm = social;
             sm.forEach(platform => {
               thisListing[platform.platform] = platform.url;
@@ -490,7 +438,6 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(hours => {
-            // console.log(hours);
             hours.forEach(day => {
               thisListing[day.day] = {
                 opening_hours: day.opening_hours,
@@ -502,7 +449,6 @@ const Listings = {
               .where("listing_id", listing.id);
           })
           .then(faqs => {
-            // console.log(faqs);
             if (faqs.length > 0) {
               thisListing.faqs = faqs;
             }
