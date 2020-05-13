@@ -348,7 +348,7 @@ const Listings = {
   async getByLogo(tagline, currentLocation, distance) {
     const miles = Number(distance); 
     let state; 
-    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '*'
+    miles <= 160934 ? state = currentLocation.state.toLowerCase() : state = '%'
     const listings = await knex("listings")
       .select()
       .whereRaw(`LOWER(tagline) LIKE ? and LOWER(state) = ?`, [
@@ -918,7 +918,7 @@ const Listings = {
   },
   getPendingListings__recent(res) {
     const lastMonth = moment().subtract(45, "days").format("YYYY-MM-DD[T]HH:mm:ss");
-    console.log(lastMonth)
+    console.log(lastMonth); 
     let listings = []; 
     return knex("pending_listings")
       .select("*")
