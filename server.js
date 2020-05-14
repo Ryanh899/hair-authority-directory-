@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 }); 
 
 app.use("/auth", authRoutes);
-app.use('/zoho', zohoRoutes); 
+app.use("/api", apiRoutes);
 
 app.use(basicAuth);
 app.use(function(err, req, res, next) {
@@ -60,8 +60,8 @@ app.use(function(err, req, res, next) {
 next();
 });
 
-app.use("/api", apiRoutes);
 // app.use(adminAuth)
+app.use('/zoho', zohoRoutes); 
 app.use('/admin', adminRoutes)
 
 

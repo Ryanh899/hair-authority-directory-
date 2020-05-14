@@ -25,17 +25,6 @@ AWS.config.update({region: 'us-east-1'});
 const s3 = new AWS.S3(); 
 
 
-console.log("region:", AWS.config.region);
-
-
-
-// const googleMapClient = require("@google/maps").createClient({
-//   key: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo"
-// });
-
-// var distance = require("google-distance");
-// distance.apiKey = "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo";
-
 const options = {
   provider: "google",
 
