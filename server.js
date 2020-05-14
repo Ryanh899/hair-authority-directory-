@@ -47,6 +47,9 @@ app.get('/', (req, res) => {
   res.send('Welcome to my API')
 }); 
 
+app.use("/auth", authRoutes);
+app.use('/zoho', zohoRoutes); 
+
 app.use(basicAuth);
 app.use(function(err, req, res, next) {
   if(err.name === 'UnauthorizedError') {
@@ -56,9 +59,6 @@ app.use(function(err, req, res, next) {
   }
 next();
 });
-
-app.use("/auth", authRoutes);
-app.use('/zoho', zohoRoutes)
 
 app.use("/api", apiRoutes);
 // app.use(adminAuth)
