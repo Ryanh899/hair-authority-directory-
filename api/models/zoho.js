@@ -79,7 +79,7 @@ const Zoho = {
     // REMOVE BECAUSE TMI
     axios
       .post(
-        "https://accounts.zoho.com/oauth/v2/token?grant_type=authorization_code&client_id=1000.SIX3ISK8PM6ID3DVC2INO65G2YYPWH&client_secret=7f56c4ed10eb417b432e9c1327f423f4b2095da15f&redirect_uri=http://localhost:3000/zoho/generateRefresh/&code=1000.72cc6180a2ed4ce449171360723c6f00.84caa3d6be7713d2b015317ac4223a1f"
+        `https://accounts.zoho.com/oauth/v2/token?grant_type=authorization_code&client_id=${keys.zohoClientId}&client_secret=${keys.zohoClientSecret}&redirect_uri=https://hadirectoryapi.com/zoho/generateRefresh/&code=${keys.zohoCode}`
       )
       .then(resp => {
         // access token,refresh token, api_domain, token_type, expires in

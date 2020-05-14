@@ -16,5 +16,6 @@ module.exports = {
     prodDbUser: process.env.AWS_USER,
     zohoRefresh: process.env.ZOHO_REFRESH_TOKEN, 
     zohoClientId: process.env.ZOHO_CLIENT_ID, 
-    zohoClientSecret: process.env.ZOHO_CLIENT_SECRET
+    zohoClientSecret: process.env.ZOHO_CLIENT_SECRET,
+    zohoCode: process.env.ZOHO_PROD_CODE
 };

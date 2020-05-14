@@ -42,16 +42,26 @@ app.use(morgan('dev'))
 
 // app.use(express.static("public"));
 
+app.use(basicAuth);
+app.use(function(err, req, res, next) {
+  if(err.name === 'UnauthorizedError') {
+    res.status(err.status).send({message:err.code});
+    console.error(err);
+    return;
+  }
+next();
+});
+
 app.use("/auth", authRoutes);
 app.use('/zoho', zohoRoutes)
-// app.use(basicAuth);
+
 app.use("/api", apiRoutes);
 // app.use(adminAuth)
 app.use('/admin', adminRoutes)
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API')
-})
+}); 
 
 
 app.listen(PORT, () => {

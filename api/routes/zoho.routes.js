@@ -19,54 +19,54 @@ const knex = require('../config/knex/knex');
 //   expires_in: 3600
 // };
 
-router.post("/createCustomer", (req, res) => {
-  Superagent.post("https://subscriptions.zoho.com/api/v1/customers")
-    .set(
-      "Authorization",
-      "Zoho-oauthtoken 1000.10239f998b12e692387859a5f7e0050b.e1ffe25b0def6e2a41ae950cd538b64e"
-    )
-    .set("X-com-zoho-subscriptions-organizationid", "710064782")
-    .set("Content-Type", "application/json;charset=UTF-8")
-    .send(
-      `{
-            "display_name": "Bowman Furniture",
-            "salutation": "Mr.",
-            "first_name": "Benjamin",
-            "last_name": "George",
-            "email": "benjamin.george@bowmanfurniture.com",
-            "company_name": "Bowman Furniture",
-            "phone": 23467278,
-            "mobile": 938237475,
-            "department": "Marketing",
-            "designation": "Evangelist",
-            "website": "www.bowmanfurniture.com",
-            "billing_address": {
-                "attention": "Benjamin George",
-                "street": "Harrington Bay Street",
-                "city": "Salt Lake City",
-                "state": "CA",
-                "zip": 92612,
-                "country": "U.S.A",
-                "fax": 4527389
-            },
-            "shipping_address": {
-                "attention": "Benjamin George",
-                "street": "Harrington Bay Street",
-                "city": "Salt Lake City",
-                "state": "CA",
-                "zip": 92612,
-                "country": "U.S.A",
-                "fax": 4527389
-            }
-        }`
-    )
-    .then(resp => {
-      console.log(resp);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
+// router.post("/createCustomer", (req, res) => {
+//   Superagent.post("https://subscriptions.zoho.com/api/v1/customers")
+//     .set(
+//       "Authorization",
+//       "Zoho-oauthtoken 1000.10239f998b12e692387859a5f7e0050b.e1ffe25b0def6e2a41ae950cd538b64e"
+//     )
+//     .set("X-com-zoho-subscriptions-organizationid", "710064782")
+//     .set("Content-Type", "application/json;charset=UTF-8")
+//     .send(
+//       `{
+//             "display_name": "Bowman Furniture",
+//             "salutation": "Mr.",
+//             "first_name": "Benjamin",
+//             "last_name": "George",
+//             "email": "benjamin.george@bowmanfurniture.com",
+//             "company_name": "Bowman Furniture",
+//             "phone": 23467278,
+//             "mobile": 938237475,
+//             "department": "Marketing",
+//             "designation": "Evangelist",
+//             "website": "www.bowmanfurniture.com",
+//             "billing_address": {
+//                 "attention": "Benjamin George",
+//                 "street": "Harrington Bay Street",
+//                 "city": "Salt Lake City",
+//                 "state": "CA",
+//                 "zip": 92612,
+//                 "country": "U.S.A",
+//                 "fax": 4527389
+//             },
+//             "shipping_address": {
+//                 "attention": "Benjamin George",
+//                 "street": "Harrington Bay Street",
+//                 "city": "Salt Lake City",
+//                 "state": "CA",
+//                 "zip": 92612,
+//                 "country": "U.S.A",
+//                 "fax": 4527389
+//             }
+//         }`
+//     )
+//     .then(resp => {
+//       console.log(resp);
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// });
 
 router.post("/generateRefresh", (req, res) => {
   // params need to be passed in url
@@ -130,53 +130,53 @@ router.post('/hostedpage/create/existing', async (req, res) => {
 })
 
 //for all requests, if access code invalid refreshAccessToken
-router.get("/findCustomer/:userToken", async (req, res) => {
-  // params need to be passed in url
+// router.get("/findCustomer/:userToken", async (req, res) => {
+//   // params need to be passed in url
 
-  // decode user token for user info
-  const user = jwt.decode(req.params.userToken)
+//   // decode user token for user info
+//   const user = jwt.decode(req.params.userToken)
 
-  //declare access token
-  let accessToken; 
+//   //declare access token
+//   let accessToken; 
 
-  // check for access token => Arr or false 
-  let checkToken = await Zoho.checkAccessToken()
+//   // check for access token => Arr or false 
+//   let checkToken = await Zoho.checkAccessToken()
 
-  // if token exists and is valid 
-  if (checkToken && checkToken.length) {
-    // access token equals this token 
-    accessToken = checkToken[0].access_token; 
-    // else 
-  } else {
-    // generate new token
-    accessToken = await Zoho.getAccessToken(); 
-  }
+//   // if token exists and is valid 
+//   if (checkToken && checkToken.length) {
+//     // access token equals this token 
+//     accessToken = checkToken[0].access_token; 
+//     // else 
+//   } else {
+//     // generate new token
+//     accessToken = await Zoho.getAccessToken(); 
+//   }
 
-  console.log(accessToken)
-  console.log(user)
-  Superagent.get(`https://subscriptions.zoho.com/api/v1/customers/2192028000000070004`)
-    .set(
-      "Authorization",
-      `Zoho-oauthtoken ${accessToken}`
-    )
-    .set("X-com-zoho-subscriptions-organizationid", "710064782")
-    .set("Content-Type", "application/json;charset=UTF-8")
-    .on('error', (err) => {
-      let error = JSON.parse(err.response.text)
-      const errCode = error.code; 
-      if (errCode == 3004) {
-        console.log('invalid customer id')
-        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
-      }
-    })
-    .then(resp => {
-      console.log(resp.body.customer);
-      res.status(200).json(resp.body.customer)
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
+//   console.log(accessToken)
+//   console.log(user)
+//   Superagent.get(`https://subscriptions.zoho.com/api/v1/customers/2192028000000070004`)
+//     .set(
+//       "Authorization",
+//       `Zoho-oauthtoken ${accessToken}`
+//     )
+//     .set("X-com-zoho-subscriptions-organizationid", "710064782")
+//     .set("Content-Type", "application/json;charset=UTF-8")
+//     .on('error', (err) => {
+//       let error = JSON.parse(err.response.text)
+//       const errCode = error.code; 
+//       if (errCode == 3004) {
+//         console.log('invalid customer id')
+//         return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+//       }
+//     })
+//     .then(resp => {
+//       console.log(resp.body.customer);
+//       res.status(200).json(resp.body.customer)
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// });
 
 router.get("/findCustomer/user/:token", async (req, res) => {
   // params need to be passed in url
@@ -213,7 +213,7 @@ router.get("/findCustomer/user/:token", async (req, res) => {
       "Authorization",
       `Zoho-oauthtoken ${accessToken}`
     )
-    .set("X-com-zoho-subscriptions-organizationid", "710064782")
+    .set("X-com-zoho-subscriptions-organizationid", `${process.env.ORGANIZATION_ID}`)
     .set("Content-Type", "application/json;charset=UTF-8")
     .on('error', (err) => {
       let error = JSON.parse(err.response.text)
@@ -342,7 +342,7 @@ router.post('/subscription/createfree/new', async (req, res) => {
           "email": "${customer.email}",
         },
       "plan": {
-          "plan_co0de": "free-trial",
+          "plan_code": "free-trial",
       },
       "is_portal_enabled": true,
       "auto_collect": false
