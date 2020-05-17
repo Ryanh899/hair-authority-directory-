@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/auth.routes");
-const jwt = require("express-jwt");
+const jwt = require("jsonwebtoken");
 const apiRoutes = require('./api/routes/api.routes'); 
 const adminRoutes = require('./api/routes/admin.routes'); 
 const morgan = require('morgan')
@@ -22,12 +22,23 @@ const corsOptions = {
 
 const PORT = process.env.PORT || 3000;
 
-const basicAuth = jwt({
-  secret: process.env.PRIVATE_KEY
-});
-const adminAuth = jwt({
-  secret: process.env.ADMIN_KEY
-})
+// token authentication middleware
+function authenticateToken(req, res, next) {
+  // Gather the jwt access token from the request header
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if (token == null) return res.sendStatus(401) // if there isn't any token
+
+  jwt.verify(token, process.env.PRIVATE_KEY , ( err, user ) => {
+    if (err) {
+      console.log(err)
+      return res.sendStatus(403)
+    }
+    req.user = user
+    next() // pass the execution off to whatever request the client intended
+  })
+}
+
 //express middleware
 app.use(
   express.urlencoded({
@@ -36,7 +47,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use(morgan('dev'))
 
@@ -50,19 +61,9 @@ app.get('/', (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/api", apiRoutes);
 
-app.use(basicAuth);
-app.use(function(err, req, res, next) {
-  if(err.name === 'UnauthorizedError') {
-    res.status(err.status).send({message:err.code});
-    console.log(err.message);
-    return;
-  }
-next();
-});
-
-// app.use(adminAuth)
+// put auth back in zoho 
 app.use('/zoho', zohoRoutes); 
-app.use('/admin', adminRoutes)
+app.use('/admin', authenticateToken, adminRoutes)
 
 
 

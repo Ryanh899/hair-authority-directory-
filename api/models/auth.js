@@ -8,7 +8,6 @@ const keys = require('../config/env-config');
 module.exports = {
     async register(userInfo, cb) {
         const userTest = await User.findEmail(userInfo.email);
-        console.log(userTest)
             if (userTest.length === 0) {
                 const salt = Auth.generateSalt();
                 const hash = Auth.generateHash(salt, userInfo.password);
@@ -22,7 +21,7 @@ module.exports = {
                         last_name: userInfo.last_name
                     })
                     .then(response => {
-                        console.log('user created', response); 
+                        console.log('user created'); 
                         cb.status(200).send(response)
                     })
                     .catch(err => {
@@ -31,13 +30,12 @@ module.exports = {
                     })
             } else {
                 console.log('user already exists')
-                cb.status(401).send({ error: 'user already exists' })
+                cb.status(400).send({ error: 'user already exists' })
             }
     },
     async logIn(attemptedUser, cb) {
         const userInfo = await User.findEmail(attemptedUser.email)
         if (userInfo && userInfo.length !== 0) {
-            console.log(userInfo); 
             const attemptedHash = Auth.generateHash(userInfo.salt, attemptedUser.password); 
             if (attemptedHash === userInfo.hash) {
                 const toSend = _.pick(userInfo, 'id', 'email')
@@ -62,7 +60,7 @@ module.exports = {
             }
         } else {
             console.log('user does not exist error')
-            cb.status(401).send({ error: 'user does not exist' })
+            cb.status(400).send({ error: 'user does not exist' })
         }
     }
 }

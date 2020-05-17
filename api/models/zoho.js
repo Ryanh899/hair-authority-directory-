@@ -7,26 +7,101 @@ const Superagent = require("superagent");
 moment().format();
 
 const Zoho = {
-  getAccessToken() {
+  getAccessToken__query() {
+    const refreshToken = knex('zoho_auth').select('refresh_token').then(resp => resp[0]).catch(err => console.error(err)); 
+    // hit zoho to generate access with passed in refresh
     return axios
       .post(
-        `https://accounts.zoho.com/oauth/v2/token?refresh_token=${keys.zohoRefresh}&client_id=${keys.zohoClientId}&client_secret=${keys.zohoClientSecret}&grant_type=refresh_token`
+        `https://accounts.zoho.com/oauth/v2/token?refresh_token=${refreshToken}&client_id=${keys.zohoClientId}&client_secret=${keys.zohoClientSecret}&grant_type=refresh_token`
       )
-      .then(resp => {
+      .then(async resp => {
         console.log(resp.data);
-        // set env variable for access code
         const now = moment();
-        const hourFrom = moment(now).add(1, "hours");
-        knex("zoho_auth")
-          .insert({
-            client_id: keys.zohoClientId,
-            refresh_token: keys.zohoRefresh,
-            access_token: resp.data.access_token,
-            created_at: now,
-            expiry_time: hourFrom
-          })
-          .catch(err => console.log(err));
-        return resp.data.access_token;
+        const expiryTime = moment().minute(30);
+        await knex("zoho_auth")
+                .insert({
+                  client_id: keys.zohoClientId,
+                  refresh_token: refreshToken,
+                  access_token: resp.data.access_token,
+                  created_at: now,
+                  expiry_time: expiryTime
+                })
+                .returning('id', 'access_token')
+                .then(async data => {
+                  await knex('zoho_auth').where({ id: (data[0].id-1) }).delete(); 
+                  return data[0].access_token
+                })
+                .catch(err => console.log(err));
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  },
+  async getAccessToken__passed(refreshToken) {
+    let accessToken; 
+    return axios
+      .post(
+        `https://accounts.zoho.com/oauth/v2/token?refresh_token=${refreshToken}&client_id=${keys.zohoClientId}&client_secret=${keys.zohoClientSecret}&grant_type=refresh_token`
+      )
+      .then(async resp => {
+        accessToken = resp.data.access_token; 
+        const now = moment().format("YYYY-MM-DD[T]HH:mm:ss");
+        const expiryTime = moment(now).add(30, 'm').format("YYYY-MM-DD[T]HH:mm:ss");
+        return knex("zoho_auth")
+                .insert({
+                  client_id: keys.zohoClientId,
+                  refresh_token: refreshToken,
+                  access_token: resp.data.access_token,
+                  created_at: now,
+                  expiry_time: expiryTime
+                })
+                .returning('id', 'access_token')
+                .catch(err => console.log(err));
+      })
+      .then(async data => {
+        const previous = data[0] - 1
+        return knex('zoho_auth').where({ id: previous }).delete(); 
+      })
+      .then(done => {
+        return accessToken;
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  },
+  async getAccessToken () {
+    // get refresh
+    const refreshToken = await knex('zoho_auth').select(); 
+    let accessToken; 
+    // hit zoho to generate access with passed in refresh
+    return axios
+      .post(
+        `https://accounts.zoho.com/oauth/v2/token?refresh_token=${refreshToken[0].refresh_token}&client_id=${keys.zohoClientId}&client_secret=${keys.zohoClientSecret}&grant_type=refresh_token`
+      )
+      .then(async resp => {
+        accessToken = resp.data.access_token
+        const now = moment().format("YYYY-MM-DD[T]HH:mm:ss");
+        const expiryTime = moment(now).add(30, 'm').format("YYYY-MM-DD[T]HH:mm:ss");
+        const insert = await knex("zoho_auth")
+                .insert({
+                  client_id: keys.zohoClientId,
+                  refresh_token: refreshToken[0].refresh_token,
+                  access_token: resp.data.access_token,
+                  created_at: now,
+                  expiry_time: expiryTime
+                })
+                .returning('id', 'access_token')
+                .then(async data => {
+                  const previous = data[0] - 1
+                  return knex('zoho_auth').where({ id: previous }).delete(); 
+                })
+                .then(done => {
+                  return accessToken; 
+                })
+                .catch(err => console.log(err));
+                return insert; 
+      }).then(access => {
+        return access
       })
       .catch(err => {
         console.error(err);
@@ -47,58 +122,71 @@ const Zoho = {
     console.log(tokens)
     if (tokens) {
       validTokens = await tokens.filter(token => {
-        const isoStartDate = moment().format(
+        const currentTime = moment().format(
           "YYYY-MM-DD[T]HH:mm:ss"
         );
-        const isoEndDate = moment(token.expiry_time, "DD/MM/YYYY").format(
+        const expiryTime = moment(token.expiry_time, "DD/MM/YYYY").format(
           "YYYY-MM-DD[T]HH:mm:ss"
         );
-        console.log(isoEndDate, isoStartDate);
-        let duration = moment(isoEndDate).diff(moment(isoStartDate), "hours");
+        console.log(currentTime, expiryTime);
+        let duration = moment(currentTime).isAfter(expiryTime, 'minute');
         console.log("duration");
         console.log(duration);
-        if (duration >= 1 || duration <= 0) {
-          knex("zoho_auth")
-            .where("id", token.id)
-            .del()
-            .catch(err => console.error(err));
-          return;
+        if (!duration) {
+          // if expired return false 
+          return false
         } else {
-          console.log('Else', token)
+          // else return the token / resp
+          console.log('Valid Token:', token)
           return token;
         }
       });
     } else {
-      console.log('ELSE ')
+      console.log('ELSE')
       return false;
     }
     return validTokens;
   },
-  generateRefreshToken(cb) {
-    // params need to be passed in url
-    // REMOVE BECAUSE TMI
+  generateAccessCode (res) {
+    // generate access code by hitting zoho api 
     axios
-      .post(
-        `https://accounts.zoho.com/oauth/v2/token?grant_type=authorization_code&client_id=${keys.zohoClientId}&client_secret=${keys.zohoClientSecret}&redirect_uri=https://hadirectoryapi.com/zoho/generateRefresh/&code=${keys.zohoCode}`
-      )
+      .post(`https://accounts.zoho.com/oauth/v2/auth?scope=ZohoSubscriptions.invoices.CREATE,ZohoSubscriptions.invoices.READ,ZohoSubscriptions.invoices.UPDATE,ZohoSubscriptions.invoices.DELETE,ZohoSubscriptions.customers.CREATE,ZohoSubscriptions.customers.UPDATE,ZohoSubscriptions.customers.READ,ZohoSubscriptions.customers.DELETE&client_id=${keys.zohoClientId}&response_type=code&redirect_uri=https://hadirectoryapi.com/zoho/generateRefresh&access_type=offline`)
       .then(resp => {
-        // access token,refresh token, api_domain, token_type, expires in
-        console.log(resp.data);
-        return knex('extra_refresh')
-            .insert('refresh_token', resp.data.refresh_token)
-            .then(res => {
-                cb.status(200).json({ message: "Token Created and Stored" });
-            })
-            .catch(err => {
-                console.log(err); 
-                
-            })
+        return res.send(resp)
+      }).catch(err => {
+        console.log(err)
       })
-      .catch(err => {
-        console.log(err);
-        cb.status(400).json({ error: err })
-      });
   }, 
+  async zohoOAuth () {
+    // check for / get access, refresh, expiry from db 
+    const data = await knex('zoho_auth')
+                  .select()
+                  .then(resp => {
+                    console.log('current tokens: ', resp)
+                    return resp
+                  })
+                  .catch(err => console.error(err)); 
+    
+    // validate access token if exists
+    if (data && data.length) {
+      // formatting current and expiry time to compare
+      const currentTime = moment().format("YYYY-MM-DD[T]HH:mm:ss");
+      const expiryTime = moment(data[0].expiry_time).format("YYYY-MM-DD[T]HH:mm:ss"); 
+
+      console.log('current time is after expiry: ', moment(currentTime).isAfter(expiryTime) )
+      // switched to generate new token
+      // if the current time is after the expiry time 
+      if ( moment(currentTime).isAfter(expiryTime) && data[0].refresh_token ) {
+        // token is expired 
+        return { refreshToken: data[0].refresh_token }; 
+      } else {
+        // token is valid 
+        return { accessToken: data[0].access_token }; 
+      }
+    } else {
+      return false
+    }
+  },
   getSubscription (userId) {
     return knex("subscriptions")
       .select()

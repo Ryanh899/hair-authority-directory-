@@ -11,7 +11,6 @@ const moment = require('moment')
 const crypto = require("crypto")
 const Zoho = require('../models/zoho'); 
 
-
 AWS.config.getCredentials(function(err) {
   if (err) console.log(err.stack);
   // credentials not loaded
@@ -47,8 +46,9 @@ const trimForm = function(obj) {
 };
 
 router.get("/listings", async (req, res) => {
+  
+    Listings.get100Listings(res); 
 
-  Listings.get100Listings(res); 
 });
 
 router.get("/listings/:token", async (req, res) => {
@@ -61,10 +61,14 @@ router.get("/listings/:token", async (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post("/newListing", async (req, res) => {
-  if (req.headers.authorization) {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedInfo = jwt.decode(token);
+router.post("/newListing", async ( req, res ) => {
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    const decodedInfo = decoded; 
     let listing = req.body.data;
     listing.professional_id = decodedInfo.id;
     if (decodedInfo.isProfessionalUser) {
@@ -74,14 +78,21 @@ router.post("/newListing", async (req, res) => {
       Listings.addToPending(listing);
       res.status(200).send("Listing added to pending");
     }
-  }
+})
 });
 
 router.get("/user/profile/:token", async (req, res) => {
-  const userToken = jwt.decode(req.params.token);
-  const user = await User.getProfessionalProfile(userToken);
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, async function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const userToken = decoded;
+      const user = await User.getProfessionalProfile(userToken);
 
-  res.json(user);
+      res.json(user);
+    })
 });
 
 router.get("/listing/:id", (req, res) => {
@@ -97,14 +108,28 @@ router.get("/listing/title/:title", async (req, res) => {
 });
 
 router.put("/updateListing/:id", (req, res) => {
-  const id = req.params.id;
-  const listing = req.body;
-  Listings.updateListing(listing, id);
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const id = req.params.id;
+      const listing = req.body;
+      Listings.updateListing(listing, id);
+    }); 
 });
 
 router.put("/updateProfile", async (req, res) => {
-  const updateInfo = req.body;
-  User.updateProfessionalInfo(updateInfo, res);
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const updateInfo = req.body;
+      User.updateProfessionalInfo(updateInfo, res);
+    })
 });
 
 router.get("/search/category/:category/:location/:distance", async (req, res) => {
@@ -215,52 +240,73 @@ router.get("/search/logo/:query/:location/:distance", async (req, res) => {
 
 
 router.post("/saveListing/:id", async (req, res) => {
-  const listingId = req.params.id;
-  const user = await jwt.decode(req.body.token);
-  const userId = user.id;
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, async function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const listingId = req.params.id;
+      const user = decoded
+      const userId = user.id;
 
-  if (user.isClientUser) {
-    Listings.saveListing(listingId, userId, res);
-  } else if (user.isProfessionalUser) {
-    Listings.saveListing_professional(listingId, userId, res);
-  } else if (user.isAdminUser) {
-    Listings.saveListing_admin(listingId, userId, res);
-  } else {
-    res.status(401).json({
-      message: "user type not specified"
-    });
-  }
+      if (user.isClientUser) {
+        Listings.saveListing(listingId, userId, res);
+      } else if (user.isProfessionalUser) {
+        Listings.saveListing_professional(listingId, userId, res);
+      } else if (user.isAdminUser) {
+        Listings.saveListing_admin(listingId, userId, res);
+      } else {
+        res.status(401).json({
+          message: "user type not specified"
+        });
+      }
+})
 });
 
 router.get("/savedListings/:token", (req, res) => {
-  const user = jwt.decode(req.params.token);
-  if (user.isClientUser) {
-    Listings.getSavedListings(user.id, res);
-  } else if (user.isProfessionalUser) {
-    Listings.getSavedListings_professional(user.id, res);
-  } else if (user.isAdminUser) {
-    Listings.getSavedListings_admin(user.id, res);
-  } else {
-    res.status(401).json({
-      err: "User status not provided"
-    });
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const user = decoded;
+      if (user.isClientUser) {
+        Listings.getSavedListings(user.id, res);
+      } else if (user.isProfessionalUser) {
+        Listings.getSavedListings_professional(user.id, res);
+      } else if (user.isAdminUser) {
+        Listings.getSavedListings_admin(user.id, res);
+      } else {
+        res.status(401).json({
+          err: "User status not provided"
+        });
   }
+})
 });
 
 router.delete("/savedListings/delete/:listingId/:token", (req, res) => {
-  const listingId = req.params.listingId;
-  const user = jwt.decode(req.params.token);
-  if (user.isClientUser) {
-    Listings.deleteSavedListing(listingId, user.id, res);
-  } else if (user.isProfessionalUser) {
-    Listings.deleteSavedListing_professional(listingId, user.id, res);
-  } else if (user.isAdminUser) {
-    Listings.deleteSavedListing_admin(listingId, user.id, res);
-  } else {
-    res.status(401).json({
-      err: "User status not provided"
-    });
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const listingId = req.params.listingId;
+      const user = decoded; 
+      if (user.isClientUser) {
+        Listings.deleteSavedListing(listingId, user.id, res);
+      } else if (user.isProfessionalUser) {
+        Listings.deleteSavedListing_professional(listingId, user.id, res);
+      } else if (user.isAdminUser) {
+        Listings.deleteSavedListing_admin(listingId, user.id, res);
+      } else {
+        res.status(401).json({
+          err: "User status not provided"
+        });
   }
+})
 });
 
 router.get("/updateCity", async (req, res) => {
@@ -286,48 +332,67 @@ const policy = { "expiration": "2020-12-31T12:00:00.000Z",
 const getRandomFilename = () =>	crypto.randomBytes(16).toString("hex");
 
 router.get("/s3/sign_put", (req, res) => {
-	const contentType = req.query.contentType;
-	if (!contentType.startsWith("image/")) {
-		throw new Error("must be image/");
-  }
-  const random = crypto.randomBytes(16).toString("hex");
-  // NEED TO DO AUTH HERE
-	const userid = req.query.userId // some kind of auth
-  const year = moment().format('YYYY'); 
-  const month = moment().format('M'); 
-  const key = `uploads/${year}/${month}/${userid}-${getRandomFilename()}`
-	const url = s3.getSignedUrl("putObject", {
-		Bucket: process.env.BUCKETNAME,
-		Key: key, // add a part with the userid!
-    ContentType: contentType,
-    ACL: 'public-read'
-		// can not set restrictions to the length of the content
-  });
-  console.log(`S3 SIGN PUT URL: ${url}`); 
-	res.json({url, key});
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const contentType = req.query.contentType;
+      if (!contentType.startsWith("image/")) {
+        throw new Error("must be image/");
+      }
+      const random = crypto.randomBytes(16).toString("hex");
+      // NEED TO DO AUTH HERE
+      const userid = req.query.userId // some kind of auth
+      const year = moment().format('YYYY'); 
+      const month = moment().format('M'); 
+      const key = `uploads/${year}/${month}/${userid}-${getRandomFilename()}`
+      const url = s3.getSignedUrl("putObject", {
+        Bucket: process.env.BUCKETNAME,
+        Key: key, // add a part with the userid!
+        ContentType: contentType,
+        ACL: 'public-read'
+        // can not set restrictions to the length of the content
+      });
+      console.log(`S3 SIGN PUT URL: ${url}`); 
+      res.json({url, key});
+})
 });
 
 router.get("/s3/sign_post", (req, res) => {
-	const userid = req.body.userId; // some kind of auth
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const userid = req.body.userId; // some kind of auth
 
-	const data = s3.createPresignedPost({
-		Bucket: process.env.BUCKETNAME,
-		Fields: {
-			key: getRandomFilename(), // totally random
-		},
-		Conditions: [
-			["content-length-range", 	0, 1000000], // content length restrictions: 0-1MB
-			["starts-with", "$Content-Type", "image/"], // content type restriction
-			["eq", "$x-amz-meta-userid", userid], // tag with userid <= the user can see this!
-		]
-	});
+      const data = s3.createPresignedPost({
+        Bucket: process.env.BUCKETNAME,
+        Fields: {
+          key: getRandomFilename(), // totally random
+        },
+        Conditions: [
+          ["content-length-range", 	0, 1000000], // content length restrictions: 0-1MB
+          ["starts-with", "$Content-Type", "image/"], // content type restriction
+          ["eq", "$x-amz-meta-userid", userid], // tag with userid <= the user can see this!
+        ]
+      });
 
-	data.fields["x-amz-meta-userid"] = userid; // Don't forget to add this field too
-	res.json(data);
+      data.fields["x-amz-meta-userid"] = userid; // Don't forget to add this field too
+      res.json(data);
+})
 });
 
 router.post('/storeimage', (req, res) => {
-  console.log(req.body)
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
   Listings.storeImage(req.body)
     .then(resp => {
       console.log(resp)
@@ -336,40 +401,59 @@ router.post('/storeimage', (req, res) => {
     .catch(err => {
       console.log(err)
     })
+  })
 })
 
 router.post('/storeimage/delta', (req, res) => {
-  console.log(req.body)
-  Listings.storeImage__delta(req.body)
-    .then(resp => {
-      console.log(resp)
-      res.json(resp)
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      Listings.storeImage__delta(req.body)
+        .then(resp => {
+          console.log(resp)
+          res.json(resp)
+        })
+        .catch(err => {
+          console.log(err)
     })
-    .catch(err => {
-      console.log(err)
-    })
+  })
 })
 
 router.post('/storeimage/feature', (req, res) => {
-  console.log(req.body)
-  Listings.storeImage__featured(req.body)
-    .then(resp => {
-      console.log(resp)
-      return Listings.storeImage(req.body)
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      Listings.storeImage__featured(req.body)
+        .then(resp => {
+          console.log(resp)
+          return Listings.storeImage(req.body)
+        })
+        .then(resp => {
+          res.json(resp)
+        })
+        .catch(err => {
+          console.log(err)
     })
-    .then(resp => {
-      res.json(resp)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  })
 })
 
 
 
 router.delete('/removeimage/:id', (req, res) => {
-  const imageId = req.params.id
-  const removeLocal = new Promise((resolve, reject) => {
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const imageId = req.params.id
+      const removeLocal = new Promise((resolve, reject) => {
       Listings.removeImage(imageId)
       .then(resp => {
         resolve(resp)
@@ -391,12 +475,19 @@ router.delete('/removeimage/:id', (req, res) => {
     .catch(err => {
       console.log(err)
     })
+  })
 })
 
 router.delete('/removeimage/feature/:id', (req, res) => {
-  const imageId = req.params.id
-  let imageKey = []; 
-  const removeLocal = new Promise((resolve, reject) => {
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      const imageId = req.params.id
+      let imageKey = []; 
+      const removeLocal = new Promise((resolve, reject) => {
       Listings.removeImage(imageId)
         .then(resp => {
           imageKey.push(resp[0].image_path)
@@ -421,50 +512,59 @@ router.delete('/removeimage/feature/:id', (req, res) => {
     .catch(err => {
       console.log(err)
     })
+  })
 })
 
 router.post('/stagelisting', async (req, res) => {
-  console.log(req.body)
-  const user = jwt.decode(req.body.token)
-  const subInfo = {
-    title: req.body.business_title, 
-    subscription_id: req.body.subscription_id, 
-    customer_id: req.body.customer_id, 
-    card_id: req.body.card_id,
-    user
-  }
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, async function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    const user = decoded; 
+    const subInfo = {
+      title: req.body.business_title, 
+      subscription_id: req.body.subscription_id, 
+      customer_id: req.body.customer_id, 
+      card_id: req.body.card_id,
+      user
+    }
 
-  const titleCheck = await Listings.getByTitle__promise(subInfo); 
-  console.log('TITLECHECK')
-  console.log(titleCheck)
-  if (!titleCheck.length) {
-    console.log('STAGE LISTING')
-    Listings.stageListing(subInfo)
-    .then(resp => {
-      console.log(resp); 
-      res.json(resp); 
-    })
-    .catch(err => {
-      console.log(err); 
-    })
-  } else {
-    console.log('DONT STAGE')
-    res.json({ exists: true, listings: titleCheck})
-  }
-
+    const titleCheck = await Listings.getByTitle__promise(subInfo); 
+    if (!titleCheck.length) {
+      Listings.stageListing(subInfo)
+      .then(resp => {
+        console.log(resp); 
+        res.json(resp); 
+      })
+      .catch(err => {
+        console.log(err); 
+      })
+    } else {
+      console.log('DONT STAGE')
+      res.json({ exists: true, listings: titleCheck})
+    }
+  })
 })
 
 router.put('/stagelisting', (req, res) => {
-  let data = req.body; 
-  console.log(data)
-  Listings.updateStagedListing(data)
-    .then(resp => {
-      console.log(resp)
-      res.json(resp) 
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    let data = req.body; 
+    Listings.updateStagedListing(data)
+      .then(resp => {
+        console.log(resp)
+        res.json(resp) 
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  })
 })
 
 // router.put('/stagelisting/description', (req, res) => {
@@ -481,98 +581,139 @@ router.put('/stagelisting', (req, res) => {
 // })
 
 router.put('/updatedescription/staged', async (req, res) => {
-  let description = req.body
-  console.log(req.body)
-  console.log('RIGHT')
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, async function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    let description = req.body
     const insert = await Listings.updateDescription__staged(description)
 
     res.json(insert)
-  
+    })
 })
 
 router.put('/updatedescription', async (req, res) => {
-  let description = req.body
-  console.log(req.body)
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, async function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    let description = req.body
     const insert = await Listings.updateDescription(description)
 
     res.json(insert)
-  
+    })
 })
 
 router.put('/updatelisting', (req, res) => {
-  let data = req.body; 
-  console.log(data)
-  Listings.updateListing(data)
-    .then(resp => {
-      console.log(resp)
-      res.json(resp) 
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    let data = req.body; 
+    Listings.updateListing(data)
+      .then(resp => {
+        console.log(resp)
+        res.json(resp) 
+      })
+      .catch(err => {
+        console.log(err)
     })
-    .catch(err => {
-      console.log(err)
-    })
+  })
 })
 
 router.put('/stagelisting/:table', (req, res) => {
-  const table = req.params.table; 
-  const data = req.body; 
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    const table = req.params.table; 
+    const data = req.body; 
 
-  Listings.updateStagedListing__table(table, data)
-    .then(resp => {
-      res.json(resp)
+    Listings.updateStagedListing__table(table, data)
+      .then(resp => {
+        res.json(resp)
+      })
+      .catch(err => {
+        console.log(err)
     })
-    .catch(err => {
-      console.log(err)
-    })
+  })
 })
 
 // for forms that have data in multiple tables
 router.post('/stagelisting/:table/:form', async (req, res) => {
-  console.log(req.body)
-  const table = req.params.table; 
-  const primaryData = req.body[0];
-  const metaData = req.body[1];  
-  const listing_id = primaryData.id; 
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+      console.log(req.body)
+      const table = req.params.table; 
+      const primaryData = req.body[0];
+      const metaData = req.body[1];  
+      const listing_id = primaryData.id; 
 
-  let primaryUpdate = new Promise((resolve, reject) => {
-    resolve(Listings.updateStagedListing(primaryData))
-  }) 
+      let primaryUpdate = new Promise((resolve, reject) => {
+        resolve(Listings.updateStagedListing(primaryData))
+      }) 
 
-  primaryUpdate.then(resp => {
-    Listings.updateStagedListing__table(table, metaData)
-      .then(secondResp => {
-        console.log(resp)
-        console.log(secondResp); 
-        res.json(secondResp)
+      primaryUpdate.then(resp => {
+        Listings.updateStagedListing__table(table, metaData)
+          .then(secondResp => {
+            console.log(resp)
+            console.log(secondResp); 
+            res.json(secondResp)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       })
       .catch(err => {
         console.log(err)
-      })
-  })
-  .catch(err => {
-    console.log(err)
+    })
   })
 })
 
 router.put('/updatestatus', (req, res) => {
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
   console.log(req.body)
   res.json({message: 'test'})
+    })
 })   
 
 router.get('/dashboard/listings/:token', async (req, res) => {
-  const user = jwt.decode(req.params.token); 
-console.log(user)
-  // get subscription
-  const subscriptions = await Zoho.subscriptionCheck__userId(user.id); 
-  // if subscription exists 
-  if (subscriptions.length) {
-    // get listing info 
-    const filterSubscriptions = await subscriptions.filter(x => x.status !== 'cancelled')
-    const listings = await Listings.getById__userId(user.id, filterSubscriptions, res); 
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.PRIVATE_KEY, async function(err, decoded) {
+    if ( err ) {
+      console.log(err.message)
+      res.status(400).send(err.message); 
+      return
+     }
+    const user = decoded; 
+    // get subscription
+    const subscriptions = await Zoho.subscriptionCheck__userId(user.id); 
+    // if subscription exists 
+    if (subscriptions.length) {
+      // get listing info 
+      const filterSubscriptions = await subscriptions.filter(x => x.status !== 'cancelled')
+      const listings = await Listings.getById__userId(user.id, filterSubscriptions, res); 
 
-  } else {
-    res.status(401).json({ error: 'User has no subscription' })
-  }
-
+    } else {
+      res.status(401).json({ error: 'User has no subscription' })
+    }
+  })
 })
 
 
