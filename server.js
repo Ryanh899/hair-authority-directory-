@@ -15,7 +15,7 @@ const corsOptions = {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
-      // callback(new Error('Not allowed by CORS'))
+      callback(new Error('Not allowed by CORS'))
     }
   }
 }
@@ -49,7 +49,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors(corsOptions))
 
 app.use(morgan('dev'))
 
