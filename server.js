@@ -15,7 +15,7 @@ const corsOptions = {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
-      callback(new Error('Not allowed by CORS'))
+      // callback(new Error('Not allowed by CORS'))
     }
   }
 }
@@ -25,9 +25,11 @@ const PORT = process.env.PORT || 3000;
 // token authentication middleware
 function authenticateToken(req, res, next) {
   // Gather the jwt access token from the request header
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
+  const authHeader = req.headers['authorization']; 
+  console.log(authHeader)
+  const token = authHeader && authHeader.split(' ')[1]; 
   if (token == null) return res.sendStatus(401) // if there isn't any token
+  console.log(token)
 
   jwt.verify(token, process.env.PRIVATE_KEY , ( err, user ) => {
     if (err) {
@@ -47,12 +49,9 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use(morgan('dev'))
-
-// app.use(express.static("public"));
-
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API')
@@ -63,7 +62,7 @@ app.use("/api", apiRoutes);
 
 // put auth back in zoho 
 app.use('/zoho', authenticateToken, zohoRoutes); 
-app.use('/admin', authenticateToken, adminRoutes)
+app.use('/admin', authenticateToken, adminRoutes); 
 
 
 
