@@ -4,14 +4,7 @@ const Auth = require('../models/auth');
 const _ = require('lodash'); 
 
 router.post('/register', (req, res) => {
-    // const userInfo = _.pick(req.body, 'email', 'password', 'first_name', 'last_name', 'phone'); 
-    const userInfo = { 
-        email: 'ryanh899@gmail.com', 
-        password: 'testing', 
-        first_name: 'John', 
-        last_name: "Stamos", 
-        phone: '9999999999'
-     }
+    const userInfo = _.pick(req.body, 'email', 'password', 'first_name', 'last_name', 'phone'); 
     console.log(userInfo)
     Auth.register(userInfo, res); 
 });     
