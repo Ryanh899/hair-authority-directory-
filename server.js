@@ -47,7 +47,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors(corsOptions))
 
 app.use(morgan('dev'))
 
@@ -62,7 +62,7 @@ app.use("/auth", authRoutes);
 app.use("/api", apiRoutes);
 
 // put auth back in zoho 
-app.use('/zoho', zohoRoutes); 
+app.use('/zoho', authenticateToken, zohoRoutes); 
 app.use('/admin', authenticateToken, adminRoutes)
 
 
