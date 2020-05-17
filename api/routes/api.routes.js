@@ -716,5 +716,9 @@ router.get('/dashboard/listings/:token', async (req, res) => {
   })
 })
 
+router.put('/udateRefresh', (req, res) => {
+  Listings.updateRefresh(res)
+})
+
 
 module.exports = router;

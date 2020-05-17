@@ -1332,6 +1332,18 @@ const Listings = {
             });
         });
       });
+  }, 
+  updateRefresh () {
+    knex('zoho_auth')
+        .update('refresh_token', '1000.64704926490f15a58e75adeb02f6a7f4.cef1f6b36c234910192a10596555d94a')
+        .where({ id: 356 })
+        .then(resp => {
+          console.log(resp)
+          return res.send(resp)
+        })
+        .catch(err => {
+          console.log(err)
+        })
   }
 };
 
