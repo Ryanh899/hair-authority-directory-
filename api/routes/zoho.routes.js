@@ -195,7 +195,8 @@ router.post('/subscription/createfree/new', async (req, res) => {
 
   getAccessToken()
   .then(async accessToken => {
-    console.log(req.body)
+    console.log('req body: ',req.body); 
+    console.log('access token: ', accessToken)
     const customerId = jwt.decode(req.body.token); 
   
     console.log(customerId)
@@ -249,12 +250,12 @@ router.post('/subscription/createfree/new', async (req, res) => {
       })
       .catch(err => {
         console.log(err);
-        res.status(err.status).json(err.response); 
+        res.json(err.response); 
       });
   })    
     .catch(err => {
     console.log(err);
-    res.status(err.status).json(err)
+    res.json(err)
   });
   
 })
