@@ -173,7 +173,9 @@ const Zoho = {
       const currentTime = moment().format("YYYY-MM-DD[T]HH:mm:ss");
       const expiryTime = moment(data[0].expiry_time).format("YYYY-MM-DD[T]HH:mm:ss"); 
 
-      console.log('current time is after expiry: ', moment(currentTime).isAfter(expiryTime) )
+      console.log('current time is after expiry: ', moment(currentTime).isAfter(expiryTime) ); 
+      console.log(`current time: ${currentTime}`); 
+      console.log(`expiry time: ${expiryTime}`); 
       // switched to generate new token
       // if the current time is after the expiry time 
       if ( moment(currentTime).isAfter(expiryTime) && data[0].refresh_token ) {
