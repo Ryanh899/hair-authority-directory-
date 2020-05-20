@@ -22,7 +22,7 @@ router.post('/user-professional', async (req, res) => {
         User.userToProfessional(user, res)
     } else {
         console.log('user not found')
-        res.status(400).json({ message: 'user not found' })
+        res.status(404).json({ message: 'user not found' })
     }
 
 }); 
@@ -38,7 +38,7 @@ router.post('/professional-admin', async (req, res) => {
         User.professionalToAdmin(user, res)
     } else {
         console.log('user not found')
-        res.status(400).json({ message: 'user not found' })
+        res.status(404).json({ message: 'user not found' })
     }
 
 }); 

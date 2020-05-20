@@ -182,7 +182,7 @@ router.post('/hostedpage/retrieve/new', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err).json(err)
+      res.status(404).json(err)
     });
   })
   .catch(err => {
@@ -312,12 +312,12 @@ router.post('/subscription/createfree/new', async (req, res) => {
 //     })
 //     .catch(err => {
 //       console.log(err);
-//       res.status(err).json(err.response); 
+//       res.status(404).json(err.response); 
 //     });
 //   })    
 //     .catch(err => {
 //     console.log(err);
-//     res.status(err).json(err)
+//     res.status(404).json(err)
 //   });
 // })
 
@@ -393,7 +393,7 @@ if ( listingTitle && listingTitle.length ) {
       })
       .catch(err => {
         console.log(err);
-        res.status(err).json(err.response); 
+        res.status(404).json(err.response); 
       });
     } else {
       res.status(401).json({ message: "This business has already been claimed" })
@@ -401,7 +401,7 @@ if ( listingTitle && listingTitle.length ) {
   })
   .catch(err => {
     console.log(err);
-    res.status(err).json(err)
+    res.status(404).json(err)
   });
 })
 
@@ -479,7 +479,7 @@ if ( listingTitle && listingTitle.length) {
     })
     .catch(err => {
       console.log(err);
-      res.status(err).json(err.response); 
+      res.status(404).json(err.response); 
     });
   } else {
     res.status(401).json({ message: "This business has already been claimed" })
@@ -487,7 +487,7 @@ if ( listingTitle && listingTitle.length) {
 })
 .catch(err => {
   console.log(err);
-  res.status(err).json(err)
+  res.status(404).json(err)
 });
 })
 
@@ -549,12 +549,12 @@ router.post('/hostedpage/retrieve/claim', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err).json(err)
+      res.status(404).json(err)
     });
   })
   .catch(err => {
     console.log(err);
-    res.status(err).json(err)
+    res.status(404).json(err)
   });
 })
 
@@ -602,7 +602,7 @@ router.post('/hostedpage/claim/existing', async (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(err).json(err)
+    res.status(404).json(err)
   });
 })
 
@@ -655,7 +655,7 @@ router.post('/hostedpage/claim/new', async (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(err).json(err)
+    res.status(404).json(err)
   });
 })
 
@@ -713,7 +713,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err).json(err.response); 
+      res.status(404).json(err.response); 
     });
   })
 
@@ -765,12 +765,12 @@ router.post('/subscription/cancel', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err).json(err.response); 
+      res.status(404).json(err.response); 
     });
   })
   .catch(err => {
     console.log(err);
-    res.status(err).json(err.response); 
+    res.status(404).json(err.response); 
   });
 })
 
@@ -821,13 +821,13 @@ router.put('/subscription/update', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err).json(err.response); 
+      res.status(404).json(err.response); 
     });
   }
 })  
   .catch(err => {
   console.log(err);
-  res.status(err).json(err.response); 
+  res.status(404).json(err.response); 
 });
 
 
