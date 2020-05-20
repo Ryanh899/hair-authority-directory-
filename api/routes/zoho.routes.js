@@ -182,7 +182,7 @@ router.post('/hostedpage/retrieve/new', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err)
+      res.status(err).json(err)
     });
   })
   .catch(err => {
@@ -232,14 +232,13 @@ router.post('/subscription/createfree/new', async (req, res) => {
       })
       .then(async resp => {
         console.log(resp.body);
-        const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
+        const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
         const subInfo = {
           subscription_id: pickInfo.subscription_id, 
           plan_code: pickInfo.plan.plan_code, 
           customer_id: pickInfo.customer.customer_id, 
           status: pickInfo.status, 
           user_id: customer.id, 
-          card_id: pickInfo.card.card_id
         }
         console.log(subInfo)
         const addSubscription = await Zoho.addSubscription__free(subInfo)
@@ -259,68 +258,68 @@ router.post('/subscription/createfree/new', async (req, res) => {
   
 })
 
-router.post('/subscription/createfree/existing', async (req, res) => {
+// router.post('/subscription/createfree/existing', async (req, res) => {
 
-  getAccessToken()
-  .then(accessToken => {
+//   getAccessToken()
+//   .then(accessToken => {
 
-  const customerId = req.body.customer_id; 
-  const customer = jwt.decode(req.body.token); 
+//   const customerId = req.body.customer_id; 
+//   const customer = jwt.decode(req.body.token); 
 
 
 
-  console.log(customerId)
+//   console.log(customerId)
 
-  Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
-    .set(
-      "Authorization",
-      `Zoho-oauthtoken ${accessToken}`
-    )
-    .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
-    .set("Content-Type", "application/json;charset=UTF-8")
-    .send(`{
-      "customer_id": "${customerId}",
-      "plan": {
-          "plan_code": "free-trial",
-      },
-      "is_portal_enabled": true,
-      "auto_collect": false
-  }`)
-    .on('error', (err) => {
-      let error = JSON.parse(err.response.text)
-      const errCode = error.code; 
-      if (errCode == 3004) {
-        console.log('invalid page id')
-        return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
-      }
-    })
-    .then(async resp => {
-      console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
-      const subInfo = {
-        subscription_id: pickInfo.subscription_id, 
-        plan_code: pickInfo.plan.plan_code, 
-        customer_id: pickInfo.customer.customer_id, 
-        status: pickInfo.status, 
-        user_id: customer.id, 
-        card_id: pickInfo.card.card_id
-      }
-      console.log(subInfo)
-      const addSubscription = await Zoho.addSubscription__free(subInfo)
+//   Superagent.post(`https://subscriptions.zoho.com/api/v1/subscriptions`)
+//     .set(
+//       "Authorization",
+//       `Zoho-oauthtoken ${accessToken}`
+//     )
+//     .set("X-com-zoho-subscriptions-organizationid", process.env.ORGANIZATION_ID)
+//     .set("Content-Type", "application/json;charset=UTF-8")
+//     .send(`{
+//       "customer_id": "${customerId}",
+//       "plan": {
+//           "plan_code": "free-trial",
+//       },
+//       "is_portal_enabled": true,
+//       "auto_collect": false
+//   }`)
+//     .on('error', (err) => {
+//       let error = JSON.parse(err.response.text)
+//       const errCode = error.code; 
+//       if (errCode == 3004) {
+//         console.log('invalid page id')
+//         return res.status(404).json({ error: 'Invalid customer Id', code: 3004 })
+//       }
+//     })
+//     .then(async resp => {
+//       console.log(resp.body);
+//       const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
+//       const subInfo = {
+//         subscription_id: pickInfo.subscription_id, 
+//         plan_code: pickInfo.plan.plan_code, 
+//         customer_id: pickInfo.customer.customer_id, 
+//         status: pickInfo.status, 
+//         user_id: customer.id, 
+//         card_id: pickInfo.card.card_id
+//       }
+//       console.log(subInfo)
+//       const addSubscription = await Zoho.addSubscription__free(subInfo)
 
-      res.json(addSubscription)
+//       res.json(addSubscription)
 
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(err.status).json(err.response); 
-    });
-  })    
-    .catch(err => {
-    console.log(err);
-    res.status(err.status).json(err)
-  });
-})
+//     })
+//     .catch(err => {
+//       console.log(err);
+//       res.status(err).json(err.response); 
+//     });
+//   })    
+//     .catch(err => {
+//     console.log(err);
+//     res.status(err).json(err)
+//   });
+// })
 
 // router.post('/subscription/hostedpage', (req, res) => {
 
@@ -394,7 +393,7 @@ if ( listingTitle && listingTitle.length ) {
       })
       .catch(err => {
         console.log(err);
-        res.status(err.status).json(err.response); 
+        res.status(err).json(err.response); 
       });
     } else {
       res.status(401).json({ message: "This business has already been claimed" })
@@ -402,7 +401,7 @@ if ( listingTitle && listingTitle.length ) {
   })
   .catch(err => {
     console.log(err);
-    res.status(err.status).json(err)
+    res.status(err).json(err)
   });
 })
 
@@ -480,7 +479,7 @@ if ( listingTitle && listingTitle.length) {
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err.response); 
+      res.status(err).json(err.response); 
     });
   } else {
     res.status(401).json({ message: "This business has already been claimed" })
@@ -488,7 +487,7 @@ if ( listingTitle && listingTitle.length) {
 })
 .catch(err => {
   console.log(err);
-  res.status(err.status).json(err)
+  res.status(err).json(err)
 });
 })
 
@@ -550,12 +549,12 @@ router.post('/hostedpage/retrieve/claim', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err)
+      res.status(err).json(err)
     });
   })
   .catch(err => {
     console.log(err);
-    res.status(err.status).json(err)
+    res.status(err).json(err)
   });
 })
 
@@ -603,7 +602,7 @@ router.post('/hostedpage/claim/existing', async (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(err.status).json(err)
+    res.status(err).json(err)
   });
 })
 
@@ -656,7 +655,7 @@ router.post('/hostedpage/claim/new', async (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(err.status).json(err)
+    res.status(err).json(err)
   });
 })
 
@@ -698,14 +697,13 @@ router.post('/subscription/createfree/existing', async (req, res) => {
     })
     .then(async resp => {
       console.log(resp.body);
-      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status', 'card.card_id' )
+      const pickInfo = _.pick(resp.body.subscription, 'subscription_id', 'plan.plan_code', 'customer.customer_id', 'status' )
       const subInfo = {
         subscription_id: pickInfo.subscription_id, 
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
         user_id: customer.id, 
-        card_id: pickInfo.card.card_id
       }
       console.log(subInfo)
       const addSubscription = await Zoho.addSubscription__free(subInfo)
@@ -715,7 +713,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err.response); 
+      res.status(err).json(err.response); 
     });
   })
 
@@ -767,12 +765,12 @@ router.post('/subscription/cancel', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err.response); 
+      res.status(err).json(err.response); 
     });
   })
   .catch(err => {
     console.log(err);
-    res.status(err.status).json(err.response); 
+    res.status(err).json(err.response); 
   });
 })
 
@@ -823,13 +821,13 @@ router.put('/subscription/update', async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(err.status).json(err.response); 
+      res.status(err).json(err.response); 
     });
   }
 })  
   .catch(err => {
   console.log(err);
-  res.status(err.status).json(err.response); 
+  res.status(err).json(err.response); 
 });
 
 
