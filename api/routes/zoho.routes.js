@@ -212,17 +212,16 @@ router.post('/subscription/createfree/new', async (req, res) => {
       .send(`{
         "customer": {
             "display_name": "${customer.first_name} ${customer.last_name}",
-            "salutation": "Mr.",
             "first_name": "${customer.first_name}",
             "last_name": "${customer.last_name}",
             "email": "${customer.email}",
-          },
+        },
         "plan": {
             "plan_code": "free-trial",
         },
         "is_portal_enabled": true,
         "auto_collect": false
-    }`)
+      }`)
       .on('error', (err) => {
         let error = JSON.parse(err.response.text)
         const errCode = error.code; 

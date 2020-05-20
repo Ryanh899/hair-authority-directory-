@@ -1335,8 +1335,8 @@ const Listings = {
   }, 
   updateRefresh () {
     knex('zoho_auth')
-        .update('access_token', '1000.64704926490f15a58e75adeb02f6a7f4.cef1f6b36c234910192a10596555d94a')
-        .where({ id: 361 })
+        .update('refresh_token', '1000.d7e00deddf7f05e10418b81d136b75d2.77082775b38c2061ee0764a7f0bb6bc9')
+        .where({ id: 368 })
         .then(resp => {
           console.log(resp)
           return res.send(resp)
