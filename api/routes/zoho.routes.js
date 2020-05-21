@@ -703,7 +703,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
-        user_id: customer.id, 
+        user_id: customerId, 
       }
       console.log(subInfo)
       const addSubscription = await Zoho.addSubscription__free(subInfo)
