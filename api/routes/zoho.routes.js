@@ -667,6 +667,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
   // get customer info from req
   console.log(req.body)
   const customerId = req.body.customer_id; 
+  const user = jwt.decode(req.body.token); 
 
 
 
@@ -703,7 +704,7 @@ router.post('/subscription/createfree/existing', async (req, res) => {
         plan_code: pickInfo.plan.plan_code, 
         customer_id: pickInfo.customer.customer_id, 
         status: pickInfo.status, 
-        user_id: customerId, 
+        user_id: user.id, 
       }
       console.log(subInfo)
       const addSubscription = await Zoho.addSubscription__free(subInfo)
