@@ -28,7 +28,7 @@ const options = {
 
   // Optional depending on the providers
   httpAdapter: "https", // Default
-  apiKey: "AIzaSyBzwFcR1tSuszjACQkI67oXrQevIpBIuFo", // for Mapquest, OpenCage, Google Premier
+  apiKey: process.env.GOOGLE_DEV_API_KEY, // for Mapquest, OpenCage, Google Premier
   formatter: null // 'gpx', 'string', ...
 };
 
@@ -629,7 +629,20 @@ router.put("/stagelisting", (req, res) => {
         return;
       }
       let data = req.body;
-      Listings.updateStagedListing(data)
+      if (data.specialSkills) {
+        Listings.updateSpecialSkills(data.id, data.specialSkills)
+        .then(resp => {
+          console.log(resp);
+          return Listings.updateStagedListing(data)
+        })
+        .then(resp => {
+          res.json(resp);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      } else {
+        Listings.updateStagedListing(data)
         .then(resp => {
           console.log(resp);
           res.json(resp);
@@ -637,6 +650,7 @@ router.put("/stagelisting", (req, res) => {
         .catch(err => {
           console.log(err);
         });
+      }
     }
   );
 });
@@ -666,7 +680,9 @@ router.put("/updatedescription/staged", async (req, res) => {
       }
       let description = req.body;
       const insert = await Listings.updateDescription__staged(description);
-
+      if (description.specialSkills) {
+        await Listings.updateSpecialSkills(description.listing_id, description.specialSkills); 
+      }
       res.json(insert);
     }
   );
@@ -823,6 +839,7 @@ router.get("/dashboard/listings/:token", async (req, res) => {
     }
   );
 });
+
 
 router.put("/udateRefresh", (req, res) => {
   Listings.updateRefresh(res);

@@ -864,7 +864,7 @@ const Listings = {
       });
   },
   getPendingListings__recent(res) {
-    const lastMonth = moment().subtract(45, "days").format("YYYY-MM-DD[T]HH:mm:ss");
+    const lastMonth = moment().subtract(300, "days").format("YYYY-MM-DD[T]HH:mm:ss");
     console.log(lastMonth); 
     let listings = []; 
     return knex("pending_listings")
@@ -898,7 +898,12 @@ const Listings = {
                 return listing
               }
           });
-        res.json(newListings) 
+        return newListings;
+      }).then(async listingsObj => {
+        const count = await knex('pending_listings').count('id'); 
+        listingsObj.push(count); 
+        console.log(listingsObj)
+        res.json(listingsObj)
       })
       .catch(err => {
         res.json(err)
@@ -1032,6 +1037,7 @@ const Listings = {
       .select()
       .limit('100')
       .then(response => {
+        // console.log(response)
         const ids = response.map(listing => {
           const bytes = uuidParse.parse(listing.id); 
           const string = uuidParse.unparse(bytes); 
@@ -1040,10 +1046,10 @@ const Listings = {
         response.forEach(listing => {
           listings.push(listing)
         })
-        console.log(ids)
+        // console.log(ids)
         return knex('subscriptions').select().whereIn('listing_id', ids)
       }).then(async response => {
-        console.log(response)
+        // console.log(response)
           const subs = response.map(x => x.listing_id)
           const newListings = await listings.map(listing => {
               if (subs.includes(listing.id)) {
@@ -1054,7 +1060,12 @@ const Listings = {
                 return listing
               }
           });
-        res.json(newListings) 
+        return newListings
+      }).then(async listingsObj => {
+        const count = await knex('listings').count('id'); 
+        listingsObj.push(count); 
+        console.log(listingsObj)
+        res.json(listingsObj)
       })
       .catch(err => {
         res.json(err)
@@ -1344,6 +1355,19 @@ const Listings = {
         .catch(err => {
           console.log(err)
         })
+  }, 
+  updateSpecialSkills(id, skills) {
+      const skillArr = JSON.stringify(skills); 
+      knex('special_skills')
+        .insert({[id]: skillArr})
+        .then(response => {
+          console.log(response)
+          return response; 
+        })
+        .catch(err => {
+          console.log(err); 
+        })
+      
   }
 };
 
