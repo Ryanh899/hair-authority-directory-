@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Ryanh899/hair-authority-directory-#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.0",
+    "async": "^3.2.0",
     "aws-sdk": "^2.635.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
@@ -40,7 +41,8 @@
     "pg": "^7.18.2",
     "superagent": "^5.2.2",
     "uuid": "^7.0.2",
-    "uuid-parse": "^1.1.0"
+    "uuid-parse": "^1.1.0",
+    "validator": "^13.1.1"
   },
   "devDependencies": {
     "pm2": "^4.3.0"

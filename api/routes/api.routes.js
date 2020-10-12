@@ -332,15 +332,17 @@ router.get("/s3/sign_put", (req, res) => {
   const year = moment().format('YYYY'); 
   const month = moment().format('M'); 
   const key = `uploads/${year}/${month}/${userid}-${getRandomFilename()}`
-	const url = s3.getSignedUrl("putObject", {
+	s3.getSignedUrl("putObject", {
 		Bucket: process.env.BUCKETNAME,
 		Key: key, // add a part with the userid!
     ContentType: contentType,
     ACL: 'public-read'
 		// can not set restrictions to the length of the content
+  }, (err, url) => {
+    if (err) return console.log(err);
+    console.log(`S3 SIGN PUT URL: ${url}`); 
+    res.json({ url: url });
   });
-  console.log(`S3 SIGN PUT URL: ${url}`); 
-	res.json({url, key});
 });
 
 router.get("/s3/sign_post", (req, res) => {
