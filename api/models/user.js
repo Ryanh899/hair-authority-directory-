@@ -31,7 +31,7 @@ const User = {
       }
 
       return user;
-    } else {
+    } else { 
       let admin_user = await knex("admin_users")
         .select()
         .where("email", userInfo);

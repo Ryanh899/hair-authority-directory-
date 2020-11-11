@@ -5,6 +5,39 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash'); 
 const keys = require('../config/env-config'); 
 
+class Auth {
+    register ( userInfo, cb ) {
+        const userTest = await User.findEmail(userInfo.email);
+        console.log(userTest)
+            if (userTest.length === 0) {
+                const salt = Auth.generateSalt();
+                const hash = Auth.generateHash(salt, userInfo.password);
+                return knex('users')
+                    .insert({
+                        email: userInfo.email.toLowerCase(),
+                        salt: salt,
+                        hash: hash, 
+                        phone: userInfo.phone, 
+                        first_name: userInfo.first_name, 
+                        last_name: userInfo.last_name
+                    })
+                    .then(response => {
+                        console.log('user created', response); 
+                        cb.status(200).send(response)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        throw err
+                    })
+            } else {
+                console.log('user already exists')
+                cb.status(401).send({ error: 'user already exists' })
+            }
+    }
+
+
+}
+
 module.exports = {
     async register(userInfo, cb) {
         const userTest = await User.findEmail(userInfo.email);
